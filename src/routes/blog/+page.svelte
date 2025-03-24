@@ -2,7 +2,7 @@
 <script>
   import PageGroup from '$lib/cms/PageGroup.svelte';
   
-  const pages = [{"title":"Hello World","description":"Our first blog post","date":"2025-03-24T00:00:00.000Z","path":"hello-world.md","slug":"hello-world","url":"/blog/hello-world"}];
+  const pages = [{"title":"Hello World","description":"Our first blog post","date":"2025-03-24T00:00:00.000Z","path":"hello-world.md","slug":"hello-world","url":"/blog/hello-world"},{"title":"TRUTH - A New Paradigm in AI Philosophy","description":"Exploring how TRUTH is revolutionizing our approach to philosophical questions through advanced language modeling","path":"truth.md","slug":"truth","url":"/blog/truth"}];
 </script>
 
 <div class="container mx-auto px-4 py-8">
