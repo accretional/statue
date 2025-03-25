@@ -1,0 +1,29 @@
+{
+  "pageGroups": [
+    {
+      "name": "blog",
+      "title": "Blog",
+      "sourceDir": "content/blog",
+      "format": "markdown",
+      "outputDir": "blog",
+      "listable": true
+    },
+    {
+      "name": "docs",
+      "title": "Documentation",
+      "sourceDir": "content/docs",
+      "format": "markdown",
+      "outputDir": "docs",
+      "listable": true,
+      "hierarchical": true
+    },
+    {
+      "name": "pages",
+      "title": "Pages",
+      "sourceDir": "content/pages",
+      "format": "markdown",
+      "outputDir": "",
+      "listable": false
+    }
+  ]
+} 

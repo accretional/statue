@@ -1,0 +1,13 @@
+
+<script>
+  import Wrapper from '$lib/cms/Wrapper.svelte';
+  
+  const metadata = {"title":"Pricing Plans","description":"Choose the perfect plan for your needs"};
+  const content = "<h1>Pricing Plans</h1>\n<p>Choose the plan that best fits your needs. All plans include our core features.</p>\n<h2>Basic Plan</h2>\n<p><strong>$9/month</strong></p>\n<ul>\n<li>Up to 5 projects</li>\n<li>Basic analytics</li>\n<li>Email support</li>\n<li>10GB storage</li>\n</ul>\n<h2>Pro Plan</h2>\n<p><strong>$29/month</strong></p>\n<ul>\n<li>Unlimited projects</li>\n<li>Advanced analytics</li>\n<li>Priority support</li>\n<li>100GB storage</li>\n<li>Custom domain</li>\n</ul>\n<h2>Enterprise Plan</h2>\n<p><strong>Contact us</strong></p>\n<ul>\n<li>Everything in Pro</li>\n<li>Dedicated support</li>\n<li>Custom integrations</li>\n<li>Unlimited storage</li>\n<li>SLA guarantee</li>\n</ul>\n<h2>Frequently Asked Questions</h2>\n<h3>Can I upgrade or downgrade my plan?</h3>\n<p>Yes, you can change your plan at any time. Changes will be reflected in your next billing cycle.</p>\n<h3>Is there a free trial?</h3>\n<p>Yes, all paid plans come with a 14-day free trial. No credit card required.</p>\n<h3>What payment methods do you accept?</h3>\n<p>We accept all major credit cards and PayPal. Enterprise customers can opt for invoice-based billing. </p>\n";
+</script>
+
+<Wrapper 
+  title="Pricing Plans"
+  content={content}
+  metadata={metadata}
+/>
