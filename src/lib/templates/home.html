@@ -13,8 +13,9 @@
       <nav>
         <ul class="flex space-x-6">
           <li><a href="/" class="hover:text-blue-600">Home</a></li>
-          <li><a href="/blog" class="hover:text-blue-600">Blog</a></li>
-          <li><a href="/docs" class="hover:text-blue-600">Docs</a></li>
+          {{#each navbarItems}}
+            <li><a href="{{url}}" class="hover:text-blue-600">{{title}}</a></li>
+          {{/each}}
         </ul>
       </nav>
     </div>
@@ -29,13 +30,11 @@
         
         <h2 class="text-2xl font-semibold mb-4">Browse Content</h2>
         <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3 mt-6">
-          {{#each pageGroups}}
-            {{#if listable}}
-              <a href="/{{outputDir}}" class="bg-white p-6 rounded-lg shadow-sm border hover:shadow-md transition-shadow">
-                <h3 class="text-xl font-semibold mb-2">{{title}}</h3>
-                <p class="text-gray-600">Browse all {{title}} content</p>
-              </a>
-            {{/if}}
+          {{#each navbarItems}}
+            <a href="{{url}}" class="bg-white p-6 rounded-lg shadow-sm border hover:shadow-md transition-shadow">
+              <h3 class="text-xl font-semibold mb-2">{{title}}</h3>
+              <p class="text-gray-600">Browse all {{title}} content</p>
+            </a>
           {{/each}}
         </div>
       </div>

@@ -3,15 +3,60 @@ import path from 'path';
 import { marked } from 'marked';
 import matter from 'gray-matter';
 
-export function loadConfig() {
-  const configPath = path.resolve('src/_pagegroups/config.json');
+// Content klasöründeki tüm alt dizinleri otomatik tespit edip döndürür
+function detectContentDirectories() {
+  const contentPath = path.resolve('content');
+  const directories = [];
   
-  if (!fs.existsSync(configPath)) {
-    throw new Error('CMS config file not found at ' + configPath);
+  if (fs.existsSync(contentPath)) {
+    const items = fs.readdirSync(contentPath);
+    
+    items.forEach(item => {
+      const itemPath = path.join(contentPath, item);
+      if (fs.statSync(itemPath).isDirectory()) {
+        directories.push({
+          name: item,
+          path: `content/${item}`,
+          title: formatTitle(item),
+          outputDir: item === 'pages' ? '' : item
+        });
+      }
+    });
   }
   
-  const configData = fs.readFileSync(configPath, 'utf-8');
-  const config = JSON.parse(configData);
+  return directories;
+}
+
+export function loadConfig() {
+  const configPath = path.resolve('src/_pagegroups/config.json');
+  let config = {
+    pageGroups: []
+  };
+  
+  if (fs.existsSync(configPath)) {
+    try {
+      const configData = fs.readFileSync(configPath, 'utf-8');
+      config = JSON.parse(configData);
+    } catch (error) {
+      console.warn(`Warning: Could not parse config file: ${error.message}`);
+    }
+  } else {
+    console.log('Config file not found, using auto-detected content directories');
+  }
+  
+  // Config dosyası yoksa veya pageGroups tanımlı değilse, otomatik olarak dizinleri tespit et
+  if (!config.pageGroups || config.pageGroups.length === 0) {
+    const detectedDirs = detectContentDirectories();
+    config.pageGroups = detectedDirs.map(dir => ({
+      name: dir.name,
+      title: dir.title,
+      sourceDir: dir.path,
+      format: 'markdown',
+      outputDir: dir.outputDir,
+      listable: true,
+      hierarchical: dir.name === 'docs' // Docs için hiyerarşik görünüm aktif
+    }));
+  }
   
   // Initialize empty pages array for each page group
   config.pageGroups.forEach((group) => {
@@ -245,7 +290,9 @@ export function generateStaticPages(pageGroup, outputBaseDir) {
       author: page.metadata.author,
       backLink: pageGroup.listable ? `/${pageGroup.outputDir}` : null,
       backLinkText: pageGroup.title,
-      currentYear: new Date().getFullYear()
+      currentYear: new Date().getFullYear(),
+      // Tüm sayfa gruplarını navbar için ekleyelim
+      navbarItems: generateNavbarItems(outputBaseDir)
     };
     
     // HTML içeriğini şablondan oluştur
@@ -257,55 +304,74 @@ export function generateStaticPages(pageGroup, outputBaseDir) {
   });
   
   // Listable true ise, indeks sayfası oluştur
-  if (pageGroup.listable) {
-    // Liste sayfası için verileri hazırla
-    const organizedPages = {};
-    
-    if (pageGroup.hierarchical) {
-      // Hiyerarşik görünüm için sayfaları organize et
-      pageGroup.pages.forEach(page => {
-        const pathParts = page.path.split('/');
-        // Son kısmı (dosya adını) kaldır
-        pathParts.pop();
-        
-        const parentPath = pathParts.join('/');
-        
-        if (!organizedPages[parentPath]) {
-          organizedPages[parentPath] = {
-            path: parentPath,
-            pages: []
-          };
-        }
-        
-        organizedPages[parentPath].pages.push({
-          title: page.metadata.title || formatTitle(page.slug),
-          url: page.url,
-          description: page.metadata.description,
-          date: page.metadata.date
-        });
-      });
-    }
-    
-    const listData = {
-      title: pageGroup.title,
-      hierarchical: pageGroup.hierarchical,
-      organizedPages: Object.values(organizedPages),
-      pages: pageGroup.pages.map(p => ({
-        title: p.metadata.title || formatTitle(p.slug),
-        url: p.url,
-        description: p.metadata.description,
-        date: p.metadata.date
-      })),
-      currentYear: new Date().getFullYear()
-    };
-    
-    // HTML içeriğini şablondan oluştur
-    const templatePath = path.resolve('src/lib/templates/list.html');
-    const listPageContent = renderTemplate(templatePath, listData);
-    
-    // HTML dosyasını yaz
-    fs.writeFileSync(path.join(outputDir, 'index.html'), listPageContent);
+  if (pageGroup.listable || pageGroup.pages.length === 0) {
+    // Klasörde md dosyası olmasa bile indeks sayfası oluştur
+    createIndexPage(pageGroup, outputDir, outputBaseDir);
   }
+}
+
+// Navbar için menü öğeleri oluştur
+function generateNavbarItems(outputBaseDir) {
+  // Content klasöründeki tüm dizinleri tespit et
+  const contentDirs = detectContentDirectories();
+  
+  return contentDirs.map(dir => ({
+    title: dir.title,
+    url: `/${dir.outputDir}`
+  }));
+}
+
+// Klasör için indeks sayfası oluştur
+function createIndexPage(pageGroup, outputDir, outputBaseDir) {
+  // Liste sayfası için verileri hazırla
+  const organizedPages = {};
+  
+  if (pageGroup.hierarchical) {
+    // Hiyerarşik görünüm için sayfaları organize et
+    pageGroup.pages.forEach(page => {
+      const pathParts = page.path.split('/');
+      // Son kısmı (dosya adını) kaldır
+      pathParts.pop();
+      
+      const parentPath = pathParts.join('/');
+      
+      if (!organizedPages[parentPath]) {
+        organizedPages[parentPath] = {
+          path: parentPath,
+          pages: []
+        };
+      }
+      
+      organizedPages[parentPath].pages.push({
+        title: page.metadata.title || formatTitle(page.slug),
+        url: page.url,
+        description: page.metadata.description,
+        date: page.metadata.date
+      });
+    });
+  }
+  
+  const listData = {
+    title: pageGroup.title,
+    hierarchical: pageGroup.hierarchical,
+    organizedPages: Object.values(organizedPages),
+    pages: pageGroup.pages.map(p => ({
+      title: p.metadata.title || formatTitle(p.slug),
+      url: p.url,
+      description: p.metadata.description,
+      date: p.metadata.date
+    })),
+    currentYear: new Date().getFullYear(),
+    // Tüm sayfa gruplarını navbar için ekleyelim
+    navbarItems: generateNavbarItems(outputBaseDir)
+  };
+  
+  // HTML içeriğini şablondan oluştur
+  const templatePath = path.resolve('src/lib/templates/list.html');
+  const listPageContent = renderTemplate(templatePath, listData);
+  
+  // HTML dosyasını yaz
+  fs.writeFileSync(path.join(outputDir, 'index.html'), listPageContent);
 }
 
 // Ana sayfa oluşturma
@@ -314,7 +380,9 @@ function generateHomepage(config, outputBaseDir) {
   
   const homeData = {
     pageGroups: config.pageGroups,
-    currentYear: new Date().getFullYear()
+    currentYear: new Date().getFullYear(),
+    // Tüm sayfa gruplarını navbar için ekleyelim
+    navbarItems: generateNavbarItems(outputBaseDir)
   };
   
   const homeContent = renderTemplate(templatePath, homeData);

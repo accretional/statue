@@ -13,8 +13,9 @@
       <nav>
         <ul class="flex space-x-6">
           <li><a href="/" class="hover:text-blue-600">Home</a></li>
-          <li><a href="/blog" class="hover:text-blue-600">Blog</a></li>
-          <li><a href="/docs" class="hover:text-blue-600">Docs</a></li>
+          {{#each navbarItems}}
+            <li><a href="{{url}}" class="hover:text-blue-600">{{title}}</a></li>
+          {{/each}}
         </ul>
       </nav>
     </div>
@@ -43,25 +44,32 @@
           </div>
         {{/each}}
       {{else}}
-        <ul class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {{#each pages}}
-            <li class="bg-white p-4 rounded shadow-sm border">
-              <a href="{{url}}" class="block hover:bg-blue-50 transition-colors rounded p-2 -m-2">
-                <h3 class="font-semibold text-lg">{{title}}</h3>
-                
-                {{#if description}}
-                  <p class="text-gray-600 mt-1">{{description}}</p>
-                {{/if}}
-                
-                {{#if date}}
-                  <div class="text-gray-500 text-sm mt-2">
-                    {{formatDate date}}
-                  </div>
-                {{/if}}
-              </a>
-            </li>
-          {{/each}}
-        </ul>
+        {{#if pages.length}}
+          <ul class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {{#each pages}}
+              <li class="bg-white p-4 rounded shadow-sm border">
+                <a href="{{url}}" class="block hover:bg-blue-50 transition-colors rounded p-2 -m-2">
+                  <h3 class="font-semibold text-lg">{{title}}</h3>
+                  
+                  {{#if description}}
+                    <p class="text-gray-600 mt-1">{{description}}</p>
+                  {{/if}}
+                  
+                  {{#if date}}
+                    <div class="text-gray-500 text-sm mt-2">
+                      {{formatDate date}}
+                    </div>
+                  {{/if}}
+                </a>
+              </li>
+            {{/each}}
+          </ul>
+        {{else}}
+          <div class="bg-white p-6 rounded-lg shadow-sm border text-center">
+            <p class="text-gray-600">No content found in this section yet.</p>
+            <p class="text-gray-600 mt-2">Add some Markdown files in the corresponding content directory.</p>
+          </div>
+        {{/if}}
       {{/if}}
     </div>
   </div>

@@ -26,8 +26,9 @@
       <nav>
         <ul class="flex space-x-6">
           <li><a href="/" class="hover:text-blue-600">Home</a></li>
-          <li><a href="/blog" class="hover:text-blue-600">Blog</a></li>
-          <li><a href="/docs" class="hover:text-blue-600">Docs</a></li>
+          {{#each navbarItems}}
+            <li><a href="{{url}}" class="hover:text-blue-600">{{title}}</a></li>
+          {{/each}}
         </ul>
       </nav>
     </div>
