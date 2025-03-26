@@ -77,93 +77,291 @@ function getAllFiles(dir, fileList = []) {
   return fileList;
 }
 
-export function generatePageGroupPages(pageGroup, outputBaseDir) {
+// Temel şablon işleme fonksiyonu
+function renderTemplate(templatePath, data) {
+  let template = fs.readFileSync(templatePath, 'utf-8');
+  
+  // Basit handlebars benzeri değişken değiştirme
+  template = template.replace(/\{\{([^}]+)\}\}/g, (match, key) => {
+    key = key.trim();
+    
+    // Koşullu ifade kontrolü
+    if (key.startsWith('if ')) {
+      // Bu temel template engine koşulları desteklemiyor,
+      // bu yüzden gerçek değeri doğrudan döndürüyoruz
+      return '';
+    }
+    
+    // each döngüsü için - basit implementasyon
+    if (key.startsWith('each ')) {
+      return '';
+    }
+    
+    // #if, #each kapatma taglerini temizle
+    if (key.startsWith('/if') || key.startsWith('/each')) {
+      return '';
+    }
+    
+    // formatDate helper'ı
+    if (key.startsWith('formatDate ')) {
+      const datePath = key.replace('formatDate ', '');
+      const dateValue = getNestedValue(data, datePath);
+      if (dateValue) {
+        return new Date(dateValue).toLocaleDateString();
+      }
+      return '';
+    }
+    
+    // formatTitle helper'ı
+    if (key.startsWith('formatTitle ')) {
+      const slug = key.replace('formatTitle ', '');
+      if (data[slug]) {
+        return formatTitle(data[slug]);
+      }
+      return formatTitle(slug);
+    }
+    
+    // Yıl için
+    if (key === 'currentYear') {
+      return new Date().getFullYear().toString();
+    }
+    
+    // Nested değerler için
+    return getNestedValue(data, key) || '';
+  });
+  
+  // Koşullu blokları işle
+  template = processConditionalBlocks(template, data);
+  
+  // Each bloklarını işle
+  template = processEachBlocks(template, data);
+  
+  return template;
+}
+
+// Nested değerleri alma yardımcı fonksiyonu
+function getNestedValue(obj, path) {
+  const keys = path.split('.');
+  let result = obj;
+  
+  for (const key of keys) {
+    if (result === undefined || result === null) {
+      return '';
+    }
+    result = result[key];
+  }
+  
+  return result !== undefined ? result : '';
+}
+
+// Koşullu blokları işleme
+function processConditionalBlocks(template, data) {
+  const ifRegex = /\{\{#if ([^}]+)\}\}([\s\S]*?)\{\{\/if\}\}/g;
+  
+  return template.replace(ifRegex, (match, condition, content) => {
+    condition = condition.trim();
+    const value = getNestedValue(data, condition);
+    
+    if (value) {
+      return processConditionalBlocks(content, data); // İç içe if'ler için recursive olarak işle
+    }
+    return '';
+  });
+}
+
+// Each bloklarını işleme
+function processEachBlocks(template, data) {
+  const eachRegex = /\{\{#each ([^}]+)\}\}([\s\S]*?)\{\{\/each\}\}/g;
+  
+  return template.replace(eachRegex, (match, arrayPath, itemTemplate) => {
+    const array = getNestedValue(data, arrayPath);
+    
+    if (!Array.isArray(array)) {
+      return '';
+    }
+    
+    // Her öğe için şablonu işle ve sonuçları birleştir
+    return array.map(item => {
+      // "this" kullanımı için destek ekleyin
+      const itemData = { ...data, this: item };
+      let result = itemTemplate;
+      
+      // Öğe için temel değişkenleri işle
+      result = result.replace(/\{\{([^}]+)\}\}/g, (m, key) => {
+        key = key.trim();
+        
+        // Koşullu ve each ifadeleri burada atla
+        if (key.startsWith('if ') || key.startsWith('/if') || 
+            key.startsWith('each ') || key.startsWith('/each')) {
+          return m;
+        }
+        
+        // Öğe özelliklerine erişim
+        if (key.includes('.')) {
+          return getNestedValue(itemData, key) || '';
+        }
+        
+        return item[key] !== undefined ? item[key] : '';
+      });
+      
+      // İç içe koşullu ve each bloklarını işle
+      result = processConditionalBlocks(result, item);
+      result = processEachBlocks(result, item);
+      
+      return result;
+    }).join('');
+  });
+}
+
+// Slug'dan başlık formatı oluşturma helper fonksiyonu
+function formatTitle(slug) {
+  return slug
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
+// Statik HTML dosyalarını doğrudan build klasörüne yazma
+export function generateStaticPages(pageGroup, outputBaseDir) {
   const outputDir = path.join(outputBaseDir, pageGroup.outputDir);
   
-  // Ensure output directory exists
+  // Output dizininin varlığını sağla
   fs.mkdirSync(outputDir, { recursive: true });
   
-  // Generate a page for each content file
+  // Her içerik dosyası için bir sayfa oluştur
   pageGroup.pages.forEach(page => {
     const pageOutputDir = path.join(outputDir, path.dirname(page.path));
     fs.mkdirSync(pageOutputDir, { recursive: true });
     
+    // Sayfa için klasör oluştur (clean URL'ler için)
     const pagePath = path.join(pageOutputDir, path.basename(page.path, '.md'));
     fs.mkdirSync(pagePath, { recursive: true });
     
-    // Create +page.svelte
-    const pageContent = `
-<script>
-  import Wrapper from '$lib/cms/Wrapper.svelte';
-  
-  const metadata = ${JSON.stringify(page.metadata)};
-  const content = ${JSON.stringify(page.content)};
-</script>
-
-<Wrapper 
-  title="${page.metadata.title || ''}"
-  content={content}
-  metadata={metadata}
-/>
-`;
-    fs.writeFileSync(path.join(pagePath, '+page.svelte'), pageContent);
+    // Sayfanın verilerini oluştur
+    const pageData = {
+      title: page.metadata.title || formatTitle(page.slug),
+      content: page.content,
+      date: page.metadata.date,
+      author: page.metadata.author,
+      backLink: pageGroup.listable ? `/${pageGroup.outputDir}` : null,
+      backLinkText: pageGroup.title,
+      currentYear: new Date().getFullYear()
+    };
     
-    // Create +page.js
-    const pageJs = `
-export const prerender = true;
-export const ssr = true;
-`;
-    fs.writeFileSync(path.join(pagePath, '+page.js'), pageJs);
+    // HTML içeriğini şablondan oluştur
+    const templatePath = path.resolve('src/lib/templates/page.html');
+    const pageContent = renderTemplate(templatePath, pageData);
+    
+    // HTML dosyasını yaz
+    fs.writeFileSync(path.join(pagePath, 'index.html'), pageContent);
   });
   
-  // Generate a list page
+  // Listable true ise, indeks sayfası oluştur
   if (pageGroup.listable) {
-    const listPageDir = path.join(outputDir);
-    fs.mkdirSync(listPageDir, { recursive: true });
+    // Liste sayfası için verileri hazırla
+    const organizedPages = {};
     
-    // Create +page.svelte
-    const listPageContent = `
-<script>
-  import PageGroup from '$lib/cms/PageGroup.svelte';
-  
-  const pages = ${JSON.stringify(pageGroup.pages.map(p => ({
-    title: p.metadata.title,
-    description: p.metadata.description,
-    date: p.metadata.date,
-    path: p.path,
-    slug: p.slug,
-    url: p.url
-  })))};
-</script>
-
-<div class="container mx-auto px-4 py-8">
-  <h1 class="text-3xl font-bold mb-8">${pageGroup.title}</h1>
-  
-  <PageGroup 
-    pages={pages} 
-    hierarchical={${pageGroup.hierarchical ? 'true' : 'false'}} 
-  />
-</div>
-`;
-    fs.writeFileSync(path.join(listPageDir, '+page.svelte'), listPageContent);
+    if (pageGroup.hierarchical) {
+      // Hiyerarşik görünüm için sayfaları organize et
+      pageGroup.pages.forEach(page => {
+        const pathParts = page.path.split('/');
+        // Son kısmı (dosya adını) kaldır
+        pathParts.pop();
+        
+        const parentPath = pathParts.join('/');
+        
+        if (!organizedPages[parentPath]) {
+          organizedPages[parentPath] = {
+            path: parentPath,
+            pages: []
+          };
+        }
+        
+        organizedPages[parentPath].pages.push({
+          title: page.metadata.title || formatTitle(page.slug),
+          url: page.url,
+          description: page.metadata.description,
+          date: page.metadata.date
+        });
+      });
+    }
     
-    // Create +page.js
-    const listPageJs = `
-export const prerender = true;
-export const ssr = true;
-`;
-    fs.writeFileSync(path.join(listPageDir, '+page.js'), listPageJs);
+    const listData = {
+      title: pageGroup.title,
+      hierarchical: pageGroup.hierarchical,
+      organizedPages: Object.values(organizedPages),
+      pages: pageGroup.pages.map(p => ({
+        title: p.metadata.title || formatTitle(p.slug),
+        url: p.url,
+        description: p.metadata.description,
+        date: p.metadata.date
+      })),
+      currentYear: new Date().getFullYear()
+    };
+    
+    // HTML içeriğini şablondan oluştur
+    const templatePath = path.resolve('src/lib/templates/list.html');
+    const listPageContent = renderTemplate(templatePath, listData);
+    
+    // HTML dosyasını yaz
+    fs.writeFileSync(path.join(outputDir, 'index.html'), listPageContent);
   }
+}
+
+// Ana sayfa oluşturma
+function generateHomepage(config, outputBaseDir) {
+  const templatePath = path.resolve('src/lib/templates/home.html');
+  
+  const homeData = {
+    pageGroups: config.pageGroups,
+    currentYear: new Date().getFullYear()
+  };
+  
+  const homeContent = renderTemplate(templatePath, homeData);
+  fs.writeFileSync(path.join(outputBaseDir, 'index.html'), homeContent);
 }
 
 export function buildCMS() {
   const config = loadConfig();
+  const outputDir = 'build';
   
-  // Process all page groups
+  // Build dizinini temizle ve yeniden oluştur
+  if (fs.existsSync(outputDir)) {
+    fs.rmSync(outputDir, { recursive: true, force: true });
+  }
+  fs.mkdirSync(outputDir, { recursive: true });
+  
+  // Statik dosyaları kopyala
+  if (fs.existsSync('static')) {
+    copyDirectorySync('static', outputDir);
+  }
+  
+  // Tüm sayfa gruplarını işle
   config.pageGroups.forEach(pageGroup => {
     processPageGroup(pageGroup);
-    generatePageGroupPages(pageGroup, 'src/routes');
+    generateStaticPages(pageGroup, outputDir);
   });
   
+  // Ana sayfa oluştur
+  generateHomepage(config, outputDir);
+  
   console.log('CMS build completed successfully.');
+}
+
+// Dizin kopyalama yardımcı fonksiyonu
+function copyDirectorySync(source, destination) {
+  fs.mkdirSync(destination, { recursive: true });
+  
+  const files = fs.readdirSync(source);
+  
+  files.forEach(file => {
+    const sourcePath = path.join(source, file);
+    const destPath = path.join(destination, file);
+    
+    if (fs.statSync(sourcePath).isDirectory()) {
+      copyDirectorySync(sourcePath, destPath);
+    } else {
+      fs.copyFileSync(sourcePath, destPath);
+    }
+  });
 } 

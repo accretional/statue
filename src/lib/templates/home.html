@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+  <header class="bg-white shadow-sm">
+    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+      <a href="/" class="text-xl font-bold text-blue-600">My Site</a>
+      <nav>
+        <ul class="flex space-x-6">
+          <li><a href="/" class="hover:text-blue-600">Home</a></li>
+          <li><a href="/blog" class="hover:text-blue-600">Blog</a></li>
+          <li><a href="/docs" class="hover:text-blue-600">Docs</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container mx-auto px-4 py-12">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="text-4xl font-bold mb-8">Welcome to Your Site</h1>
+      
+      <div class="prose max-w-none">
+        <p class="text-xl mb-8">This site was generated with Statue - static site generator.</p>
+        
+        <h2 class="text-2xl font-semibold mb-4">Browse Content</h2>
+        <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3 mt-6">
+          {{#each pageGroups}}
+            {{#if listable}}
+              <a href="/{{outputDir}}" class="bg-white p-6 rounded-lg shadow-sm border hover:shadow-md transition-shadow">
+                <h3 class="text-xl font-semibold mb-2">{{title}}</h3>
+                <p class="text-gray-600">Browse all {{title}} content</p>
+              </a>
+            {{/if}}
+          {{/each}}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-gray-100 mt-12 py-8">
+    <div class="container mx-auto px-4 text-center text-gray-500">
+      <p>© {{currentYear}} My Site. Generated with Statue static site generator.</p>
+    </div>
+  </footer>
+</body>
+</html> 

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{title}}</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+  <header class="bg-white shadow-sm">
+    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+      <a href="/" class="text-xl font-bold text-blue-600">My Site</a>
+      <nav>
+        <ul class="flex space-x-6">
+          <li><a href="/" class="hover:text-blue-600">Home</a></li>
+          <li><a href="/blog" class="hover:text-blue-600">Blog</a></li>
+          <li><a href="/docs" class="hover:text-blue-600">Docs</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  
+  <div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-8">{{title}}</h1>
+    
+    <div class="space-y-6">
+      {{#if hierarchical}}
+        {{#each organizedPages}}
+          <div class="mb-6">
+            {{#if path}}
+              <h3 class="text-xl font-semibold mb-2">{{formatTitle path}}</h3>
+            {{/if}}
+            <ul class="space-y-2 ml-4">
+              {{#each pages}}
+                <li>
+                  <a href="{{url}}" class="text-blue-600 hover:underline flex items-center">
+                    <span class="mr-2">📄</span>
+                    {{title}}
+                  </a>
+                </li>
+              {{/each}}
+            </ul>
+          </div>
+        {{/each}}
+      {{else}}
+        <ul class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {{#each pages}}
+            <li class="bg-white p-4 rounded shadow-sm border">
+              <a href="{{url}}" class="block hover:bg-blue-50 transition-colors rounded p-2 -m-2">
+                <h3 class="font-semibold text-lg">{{title}}</h3>
+                
+                {{#if description}}
+                  <p class="text-gray-600 mt-1">{{description}}</p>
+                {{/if}}
+                
+                {{#if date}}
+                  <div class="text-gray-500 text-sm mt-2">
+                    {{formatDate date}}
+                  </div>
+                {{/if}}
+              </a>
+            </li>
+          {{/each}}
+        </ul>
+      {{/if}}
+    </div>
+  </div>
+
+  <footer class="bg-gray-100 mt-12 py-8">
+    <div class="container mx-auto px-4 text-center text-gray-500">
+      <p>© {{currentYear}} My Site. Generated with Statue static site generator.</p>
+    </div>
+  </footer>
+</body>
+</html> 
