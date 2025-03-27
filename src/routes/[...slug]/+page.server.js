@@ -9,6 +9,10 @@ export function load({ params }) {
   // URL'nin başına slash ekle
   const url = `/${params.slug}`;
   
+  // DEBUG: URL parametresini ve oluşturulan URL'yi konsola yaz
+  console.log('Params slug:', params.slug);
+  console.log('Generated URL:', url);
+  
   // Sorunlu rotaları devre dışı bırak
   if (url.includes('/blog/[slug]') || url.includes('/docs/[slug]')) {
     throw new Error('Bu rot/a kullanılamaz');
@@ -16,6 +20,13 @@ export function load({ params }) {
   
   // İçeriği bul
   const content = getContentByUrl(url);
+  
+  // DEBUG: Bulunan içeriği konsola yaz
+  console.log('Found content:', content ? 'YES' : 'NO');
+  if (content) {
+    console.log('Content URL:', content.url);
+    console.log('Content Directory:', content.directory);
+  }
   
   // Navigasyon bağlantıları için content klasöründeki klasörleri al
   const directories = getContentDirectories();

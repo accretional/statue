@@ -13,7 +13,7 @@ const config = {
       // Statik site çıktı klasörü
       pages: 'build',
       assets: 'build',
-      fallback: null, // Gerçek statik site için null
+      fallback: 'index.html', // Gerçek statik site için null yerine index.html kullanıyoruz
       precompress: false,
       strict: true
     }),
@@ -31,6 +31,8 @@ const config = {
         '/', 
         '/statik',
         '/statik/hakkimizda',
+        '/pages',
+        '/pages/pricing',
         '/blog',
         '/docs',
         '/ornek'

@@ -139,7 +139,22 @@ const getAllContent = () => {
 // Belirli bir URL için içerik getir
 const getContentByUrl = (url) => {
   const allContent = getAllContent();
-  return allContent.find(entry => entry.url === url);
+  
+  // URL'den sondaki slash'ı (/) kaldır
+  const normalizedUrl = url.endsWith('/') ? url.slice(0, -1) : url;
+  
+  console.log('Normalized URL for lookup:', normalizedUrl);
+  
+  // İçerik URL'lerini kontrol et ve eşleşen içeriği bul
+  const result = allContent.find(entry => {
+    // İçerik URL'sinden de trailing slash'ı kaldır
+    const entryUrl = entry.url.endsWith('/') ? entry.url.slice(0, -1) : entry.url;
+    console.log(`Comparing: "${entryUrl}" vs "${normalizedUrl}"`);
+    return entryUrl === normalizedUrl;
+  });
+  
+  console.log('Match result:', result ? `Found: ${result.url}` : 'Not found');
+  return result;
 };
 
 // Belirli bir klasördeki içeriği getir

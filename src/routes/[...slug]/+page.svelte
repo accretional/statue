@@ -41,6 +41,12 @@
 
 {#if data.notFound}
   <!-- İçerik bulunamadı, Svelte rotanın işlenmesine izin ver -->
+  <div class="bg-red-100 p-4 rounded-md my-8 max-w-prose mx-auto">
+    <h2 class="text-xl font-bold text-red-700">DEBUG: İçerik bulunamadı</h2>
+    <p class="my-2">URL: {$page.url.pathname}</p>
+    <p class="my-2">Params: {JSON.stringify($page.params)}</p>
+    <p class="my-2">Data: {JSON.stringify(data)}</p>
+  </div>
 {:else if content}
   <NavigationBar navbarItems={directories} {activePath} />
 
@@ -76,6 +82,13 @@
       <p>© {new Date().getFullYear()} Statue SSG. SvelteKit ile geliştirilmiş statik site.</p>
     </div>
   </footer>
+{:else}
+  <div class="bg-yellow-100 p-4 rounded-md my-8 max-w-prose mx-auto">
+    <h2 class="text-xl font-bold text-yellow-700">DEBUG: İçerik tanımlanmamış veya boş</h2>
+    <p class="my-2">URL: {$page.url.pathname}</p>
+    <p class="my-2">Params: {JSON.stringify($page.params)}</p>
+    <p class="my-2">Data: {JSON.stringify(data)}</p>
+  </div>
 {/if}
 
 <style>
