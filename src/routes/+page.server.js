@@ -1,14 +1,14 @@
 import { getContentDirectories, getContentByDirectory } from '$lib/cms/content-processor';
 
-// Bu sayfanın önceden render edilip statik sayfa olmasını sağla
+// Ensure this page is pre-rendered as a static page
 export const prerender = true;
 
 /** @type {import('./$types').PageServerLoad} */
 export function load() {
-  // İçerik dizinlerini al
+  // Get content directories
   const directories = getContentDirectories();
   
-  // Ana dizindeki içerikleri bul (root klasöründekiler)
+  // Find content in the root directory
   const rootContent = getContentByDirectory('root');
   
   return {

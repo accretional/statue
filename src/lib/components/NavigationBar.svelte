@@ -3,7 +3,7 @@
   export let activePath = '';
 </script>
 
-<nav class="bg-blue-600 text-white shadow-md">
+<nav class="bg-green-600 text-white shadow-md">
   <div class="container mx-auto px-4">
     <div class="flex items-center justify-between py-3">
       <div>
@@ -13,15 +13,15 @@
       <div class="flex space-x-4">
         <a 
           href="/" 
-          class="py-2 px-3 {activePath === '/' ? 'bg-blue-700 rounded' : 'hover:bg-blue-700 hover:rounded'}"
+          class="py-2 px-3 {activePath === '/' ? 'bg-green-700 rounded-lg' : 'hover:bg-green-700 hover:rounded-lg'}"
         >
-          Ana Sayfa
+          Home
         </a>
         
         {#each navbarItems as item}
           <a 
             href={item.url} 
-            class="py-2 px-3 {activePath === item.url ? 'bg-blue-700 rounded' : 'hover:bg-blue-700 hover:rounded'}"
+            class="py-2 px-3 {activePath === item.url ? 'bg-green-700 rounded-lg' : 'hover:bg-green-700 hover:rounded-lg'}"
           >
             {item.title}
           </a>

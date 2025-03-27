@@ -1,8 +1,8 @@
-// İstemci tarafında çalışacak dosya - navigasyon için
-// Tüm veri işleme işlemleri +page.server.js dosyasında yapılacak
+// Client side file - for navigation
+// All data processing is done in the +page.server.js file
 
 /** @type {import('./$types').PageLoad} */
 export function load({ data }) {
-  // Server tarafından yüklenen verileri doğrudan geçir
+  // Pass data loaded from server directly
   return data;
 } 
