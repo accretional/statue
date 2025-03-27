@@ -2,19 +2,23 @@
 	"name": "statue",
 	"private": true,
 	"version": "0.0.1",
-	"description": "A simple static site generator for markdown content",
+	"description": "A simple static site generator for markdown content with SvelteKit",
 	"type": "module",
 	"scripts": {
-		"dev": "node scripts/build-lib.js && vite preview",
-		"build": "node scripts/build-lib.js",
+		"dev": "vite dev",
+		"build": "vite build",
 		"preview": "vite preview"
 	},
 	"devDependencies": {
+		"@sveltejs/adapter-static": "^3.0.0",
+		"@sveltejs/kit": "^2.0.0",
+		"@sveltejs/vite-plugin-svelte": "^3.0.0",
 		"@types/node": "^22.13.13",
 		"autoprefixer": "^10.4.21",
 		"gray-matter": "^4.0.3",
 		"marked": "^15.0.7",
 		"postcss": "^8.5.3",
+		"svelte": "^4.2.7",
 		"tailwindcss": "^4.0.15",
 		"typescript": "^5.0.0",
 		"vite": "^6.0.0"
@@ -22,7 +26,8 @@
 	"keywords": [
 		"static-site-generator",
 		"markdown",
-		"ssg"
+		"ssg",
+		"sveltekit"
 	],
 	"author": "",
 	"license": "MIT"

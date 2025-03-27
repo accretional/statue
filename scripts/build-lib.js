@@ -11,17 +11,20 @@ const rootDir = path.resolve(__dirname, '..');
 
 console.log('Building static site from content folder...');
 
-try {
-  // build klasörünü temizleme
-  const buildDir = path.join(rootDir, 'build');
-  if (fs.existsSync(buildDir)) {
-    fs.rmSync(buildDir, { recursive: true, force: true });
+// Async IIFE kullanarak async/await yapısını kuruyoruz
+(async () => {
+  try {
+    // build klasörünü temizleme
+    const buildDir = path.join(rootDir, 'build');
+    if (fs.existsSync(buildDir)) {
+      fs.rmSync(buildDir, { recursive: true, force: true });
+    }
+    
+    // CMS build işlemini çalıştır (artık async)
+    await buildCMS();
+    console.log('Static site build completed successfully!');
+  } catch (error) {
+    console.error('Failed to build static site:', error);
+    process.exit(1);
   }
-  
-  // CMS build işlemini çalıştır
-  buildCMS();
-  console.log('Static site build completed successfully!');
-} catch (error) {
-  console.error('Failed to build static site:', error);
-  process.exit(1);
-} 
+})(); 

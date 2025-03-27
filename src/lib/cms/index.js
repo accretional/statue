@@ -2,6 +2,11 @@ import fs from 'fs';
 import path from 'path';
 import { marked } from 'marked';
 import matter from 'gray-matter';
+// ... existing code ...
+
+// Svelte bileşenlerini derlemek için gereken modülleri import et
+import { svelte } from '@sveltejs/vite-plugin-svelte';
+import { build } from 'vite';
 
 // Content klasöründeki tüm alt dizinleri otomatik tespit edip döndürür
 function detectContentDirectories() {
@@ -267,14 +272,18 @@ function formatTitle(slug) {
 }
 
 // Statik HTML dosyalarını doğrudan build klasörüne yazma
-export function generateStaticPages(pageGroup, outputBaseDir) {
+export async function generateStaticPages(pageGroup, outputBaseDir) {
   const outputDir = path.join(outputBaseDir, pageGroup.outputDir);
   
   // Output dizininin varlığını sağla
   fs.mkdirSync(outputDir, { recursive: true });
+
+  // Tüm sayfalar için geçici bir dosya oluştur
+  const tempDir = path.resolve('.tmp', 'pages', pageGroup.name);
+  fs.mkdirSync(tempDir, { recursive: true });
   
   // Her içerik dosyası için bir sayfa oluştur
-  pageGroup.pages.forEach(page => {
+  for (const page of pageGroup.pages) {
     const pageOutputDir = path.join(outputDir, path.dirname(page.path));
     fs.mkdirSync(pageOutputDir, { recursive: true });
     
@@ -290,23 +299,78 @@ export function generateStaticPages(pageGroup, outputBaseDir) {
       author: page.metadata.author,
       backLink: pageGroup.listable ? `/${pageGroup.outputDir}` : null,
       backLinkText: pageGroup.title,
+      activePath: page.url,
       currentYear: new Date().getFullYear(),
       // Tüm sayfa gruplarını navbar için ekleyelim
       navbarItems: generateNavbarItems(outputBaseDir)
     };
     
-    // HTML içeriğini şablondan oluştur
-    const templatePath = path.resolve('src/lib/templates/page.html');
-    const pageContent = renderTemplate(templatePath, pageData);
-    
-    // HTML dosyasını yaz
-    fs.writeFileSync(path.join(pagePath, 'index.html'), pageContent);
-  });
+    try {
+      // Svelte entry file oluştur
+      const entryContent = `
+        import ContentPage from '../../../src/lib/components/ContentPage.svelte';
+        
+        new ContentPage({
+          target: document.body,
+          props: ${JSON.stringify(pageData)}
+        });
+      `;
+      
+      const entryPath = path.join(tempDir, `${page.slug}.js`);
+      fs.writeFileSync(entryPath, entryContent);
+      
+      // Vite ile Svelte bileşenini derle
+      await build({
+        root: process.cwd(),
+        publicDir: false,
+        build: {
+          outDir: path.join(outputBaseDir, 'assets', 'pages', pageGroup.name),
+          emptyOutDir: false,
+          rollupOptions: {
+            input: entryPath,
+            output: {
+              entryFileNames: `${page.slug}.js`,
+              chunkFileNames: 'chunks/[name]-[hash].js',
+              assetFileNames: 'css/[name]-[hash].[ext]'
+            }
+          }
+        },
+        plugins: [svelte()]
+      });
+      
+      // HTML içeriğini oluştur
+      const pageHtml = `
+        <!DOCTYPE html>
+        <html lang="tr">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>${pageData.title}</title>
+          <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+          <script type="module" src="/assets/pages/${pageGroup.name}/${page.slug}.js" defer></script>
+        </head>
+        <body>
+          <!-- Svelte bileşeni buraya mount edilecek -->
+        </body>
+        </html>
+      `;
+      
+      fs.writeFileSync(path.join(pagePath, 'index.html'), pageHtml);
+    } catch (error) {
+      console.error(`Failed to build Svelte component for page ${page.slug}:`, error);
+      
+      // Hata durumunda eski şablonu kullan
+      console.log(`Falling back to template-based page generation for ${page.slug}...`);
+      const templatePath = path.resolve('src/lib/templates/page.html');
+      const pageContent = renderTemplate(templatePath, pageData);
+      fs.writeFileSync(path.join(pagePath, 'index.html'), pageContent);
+    }
+  }
   
   // Listable true ise, indeks sayfası oluştur
   if (pageGroup.listable || pageGroup.pages.length === 0) {
     // Klasörde md dosyası olmasa bile indeks sayfası oluştur
-    createIndexPage(pageGroup, outputDir, outputBaseDir);
+    await createIndexPage(pageGroup, outputDir, outputBaseDir);
   }
 }
 
@@ -322,7 +386,7 @@ function generateNavbarItems(outputBaseDir) {
 }
 
 // Klasör için indeks sayfası oluştur
-function createIndexPage(pageGroup, outputDir, outputBaseDir) {
+async function createIndexPage(pageGroup, outputDir, outputBaseDir) {
   // Liste sayfası için verileri hazırla
   const organizedPages = {};
   
@@ -362,20 +426,80 @@ function createIndexPage(pageGroup, outputDir, outputBaseDir) {
       date: p.metadata.date
     })),
     currentYear: new Date().getFullYear(),
+    activePath: `/${pageGroup.outputDir}`,
     // Tüm sayfa gruplarını navbar için ekleyelim
     navbarItems: generateNavbarItems(outputBaseDir)
   };
   
-  // HTML içeriğini şablondan oluştur
-  const templatePath = path.resolve('src/lib/templates/list.html');
-  const listPageContent = renderTemplate(templatePath, listData);
-  
-  // HTML dosyasını yaz
-  fs.writeFileSync(path.join(outputDir, 'index.html'), listPageContent);
+  try {
+    // Svelte bileşeni için geçici dosya oluştur
+    const tempDir = path.resolve('.tmp', 'indexes');
+    fs.mkdirSync(tempDir, { recursive: true });
+    
+    // Svelte entry file oluştur
+    const entryContent = `
+      import ContentList from '../../../src/lib/components/ContentList.svelte';
+      
+      new ContentList({
+        target: document.body,
+        props: ${JSON.stringify(listData)}
+      });
+    `;
+    
+    const entryPath = path.join(tempDir, `${pageGroup.name}-index.js`);
+    fs.writeFileSync(entryPath, entryContent);
+    
+    // Vite ile Svelte bileşenini derle
+    await build({
+      root: process.cwd(),
+      publicDir: false,
+      build: {
+        outDir: path.join(outputBaseDir, 'assets', 'indexes'),
+        emptyOutDir: false,
+        rollupOptions: {
+          input: entryPath,
+          output: {
+            entryFileNames: `${pageGroup.name}-index.js`,
+            chunkFileNames: 'chunks/[name]-[hash].js',
+            assetFileNames: 'css/[name]-[hash].[ext]'
+          }
+        }
+      },
+      plugins: [svelte()]
+    });
+    
+    // HTML içeriğini oluştur
+    const listHtml = `
+      <!DOCTYPE html>
+      <html lang="tr">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>${listData.title}</title>
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+        <script type="module" src="/assets/indexes/${pageGroup.name}-index.js" defer></script>
+      </head>
+      <body>
+        <!-- Svelte bileşeni buraya mount edilecek -->
+      </body>
+      </html>
+    `;
+    
+    fs.writeFileSync(path.join(outputDir, 'index.html'), listHtml);
+  } catch (error) {
+    console.error(`Failed to build Svelte component for index page of ${pageGroup.name}:`, error);
+    
+    // Hata durumunda eski şablonu kullan
+    console.log(`Falling back to template-based index page generation for ${pageGroup.name}...`);
+    const templatePath = path.resolve('src/lib/templates/list.html');
+    const listPageContent = renderTemplate(templatePath, listData);
+    fs.writeFileSync(path.join(outputDir, 'index.html'), listPageContent);
+  }
 }
 
 // Ana sayfa oluşturma
-function generateHomepage(config, outputBaseDir) {
+async function generateHomepage(config, outputBaseDir) {
+  // Eski şablon tabanlı yaklaşım
   const templatePath = path.resolve('src/lib/templates/home.html');
   
   const homeData = {
@@ -385,11 +509,74 @@ function generateHomepage(config, outputBaseDir) {
     navbarItems: generateNavbarItems(outputBaseDir)
   };
   
-  const homeContent = renderTemplate(templatePath, homeData);
-  fs.writeFileSync(path.join(outputBaseDir, 'index.html'), homeContent);
+  // Svelte bileşeni için geçici dosya oluştur
+  const tempDir = path.resolve('.tmp');
+  fs.mkdirSync(tempDir, { recursive: true });
+  
+  // Svelte entry point dosyası oluştur
+  const entryContent = `
+    import HomePage from '../src/lib/components/HomePage.svelte';
+    
+    new HomePage({
+      target: document.body,
+      props: ${JSON.stringify(homeData)}
+    });
+  `;
+  
+  const entryPath = path.join(tempDir, 'main.js');
+  fs.writeFileSync(entryPath, entryContent);
+  
+  // Svelte bileşenini derle
+  try {
+    await build({
+      root: process.cwd(),
+      publicDir: 'static',
+      build: {
+        outDir: path.join(outputBaseDir, 'assets'),
+        emptyOutDir: false,
+        rollupOptions: {
+          input: entryPath,
+          output: {
+            entryFileNames: 'js/home-bundle.js',
+            chunkFileNames: 'js/[name]-[hash].js',
+            assetFileNames: 'css/[name]-[hash].[ext]'
+          }
+        }
+      },
+      plugins: [svelte()]
+    });
+    
+    // HTML içeriğini oluştur - Svelte komponenti için gerekli olan
+    const homeHtml = `
+      <!DOCTYPE html>
+      <html lang="tr">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Statue SSG</title>
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+        <script type="module" src="/assets/js/home-bundle.js" defer></script>
+      </head>
+      <body>
+        <!-- Svelte bileşeni buraya mount edilecek -->
+      </body>
+      </html>
+    `;
+    
+    fs.writeFileSync(path.join(outputBaseDir, 'index.html'), homeHtml);
+    console.log('Homepage with Svelte components built successfully.');
+  } catch (error) {
+    console.error('Failed to build Svelte components:', error);
+    
+    // Hata durumunda eski şablonu kullan
+    console.log('Falling back to template-based homepage generation...');
+    const homeContent = renderTemplate(templatePath, homeData);
+    fs.writeFileSync(path.join(outputBaseDir, 'index.html'), homeContent);
+  }
 }
 
-export function buildCMS() {
+// buildCMS fonksiyonunu async yapalım
+export async function buildCMS() {
   const config = loadConfig();
   const outputDir = 'build';
   
@@ -410,8 +597,8 @@ export function buildCMS() {
     generateStaticPages(pageGroup, outputDir);
   });
   
-  // Ana sayfa oluştur
-  generateHomepage(config, outputDir);
+  // Ana sayfa oluştur (artık async)
+  await generateHomepage(config, outputDir);
   
   console.log('CMS build completed successfully.');
 }
