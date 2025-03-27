@@ -56,7 +56,7 @@
     <!-- Bu dizine ait içerikler -->
     {#if currentDirContent && currentDirContent.length > 0}
       <div class="mb-8">
-        <h2 class="text-xl font-bold mb-4">Bu Dizindeki İçerikler</h2>
+        <h2 class="text-xl font-bold mb-4">Contents in This Directory</h2>
         <ul class="space-y-4">
           {#each currentDirContent as page}
             <li class="border-l-4 border-blue-500 pl-4">
