@@ -1,7 +1,6 @@
 <script>
   import NavigationBar from '$lib/components/NavigationBar.svelte';
   
-  // Yüklenen içerik
   export let data;
   
   $: directories = data.directories;

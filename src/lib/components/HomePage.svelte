@@ -1,7 +1,7 @@
 <script>
   import NavigationBar from './NavigationBar.svelte';
   
-  // Page groups retrieved from Content directories
+  // Content dizinlerinden alınan sayfa grupları
   export let pageGroups = [];
   export let navbarItems = [];
 </script>
@@ -11,17 +11,17 @@
 
   <div class="container mx-auto px-4 py-8">
     <div class="max-w-prose mx-auto">
-      <h1 class="text-3xl font-bold mb-6">Site Created with Statue SSG</h1>
+      <h1 class="text-3xl font-bold mb-6">Statue SSG ile Oluşturulmuş Site</h1>
       
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
         {#each pageGroups as group}
           <div class="bg-white p-6 rounded-lg shadow-sm">
             <h2 class="text-xl font-bold mb-3">{group.title}</h2>
             <p class="text-gray-600 mb-4">
-              {group.pages ? `${group.pages.length} pages` : 'No content'}
+              {group.pages ? `${group.pages.length} sayfa` : 'İçerik yok'}
             </p>
             <a href={`/${group.outputDir}`} class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-              View {group.title} Pages
+              {group.title} Sayfalarını Görüntüle
             </a>
           </div>
         {/each}
@@ -31,7 +31,7 @@
 
   <footer class="bg-gray-100 mt-12 py-8">
     <div class="container mx-auto px-4 text-center text-gray-500">
-      <p>© {new Date().getFullYear()} Statue SSG. Static site developed with Svelte.</p>
+      <p>© {new Date().getFullYear()} Statue SSG. Svelte ile geliştirilmiş statik site.</p>
     </div>
   </footer>
 </main>
