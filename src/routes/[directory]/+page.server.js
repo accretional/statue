@@ -1,29 +1,29 @@
 import { getContentDirectories, getContentByDirectory, getSubDirectories } from '$lib/cms/content-processor';
 
-// Bu sayfanın önceden render edilip statik sayfa olmasını sağla
+// Make this page prerendered as a static page
 export const prerender = true;
 
 /** @type {import('./$types').PageServerLoad} */
 export function load({ params }) {
-  // Dizin adını al
+  // Get directory name
   const directoryName = params.directory;
   
-  // blog/ veya docs/ dizinleri için en üst düzey rotayı göster,
-  // ama alt seviye "[slug]" rotalarını gösterme
+  // Show top-level route for blog/ or docs/ directories,
+  // but don't show lower-level "[slug]" routes
   if (directoryName === 'blog' || directoryName === 'docs') {
-    // Bu dizindeki içeriği almaya devam et, ama alt dizinleri filtreleyeceğiz
+    // Continue to get content from this directory, but we'll filter subdirectories
   }
   
-  // Tüm dizinleri al
+  // Get all directories
   const directories = getContentDirectories();
   
-  // Belirli dizindeki içeriği al (alt dizinlerdeki içerikler dahil)
+  // Get content from the specific directory (including content in subdirectories)
   const directoryContent = getContentByDirectory(directoryName);
   
-  // Bu dizinin alt dizinlerini bul
+  // Find subdirectories of this directory
   const subDirectories = getSubDirectories(directoryName);
   
-  // Dizin bilgilerini al
+  // Get directory information
   const currentDirectory = directories.find(dir => dir.name === directoryName) || {
     name: directoryName,
     title: directoryName.charAt(0).toUpperCase() + directoryName.slice(1)
