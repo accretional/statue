@@ -4,27 +4,27 @@ import path from 'path';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-  // Using vitePreprocess for preprocessor
+  // Preprocessor için vitePreprocess kullanıyoruz
   preprocess: vitePreprocess(),
 
   kit: {
-    // Static site generator
+    // Statik site üreteci
     adapter: adapter({
-      // Static site output folder
+      // Statik site çıktı klasörü
       pages: 'build',
       assets: 'build',
-      fallback: 'index.html', // Using index.html instead of null for real static site
+      fallback: 'index.html', // Gerçek statik site için null yerine index.html kullanıyoruz
       precompress: false,
       strict: true
     }),
     
-    // Defining custom alias to handle Content folder
+    // Content klasörünü handle etmek için özel alias tanımlıyoruz
     alias: {
       $content: path.resolve('./content'),
       $lib: path.resolve('./src/lib')
     },
     
-    // Static site pre-processing options
+    // Statik site ön-işleme seçenekleri
     prerender: {
       crawl: true,
       entries: [
