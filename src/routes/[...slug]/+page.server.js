@@ -1,44 +1,44 @@
 import { getContentByUrl } from '$lib/cms/content-processor';
 import { getContentDirectories } from '$lib/cms/content-processor';
 
-// Make this page prerendered as a static page
+// Bu sayfanın önceden render edilip statik sayfa olmasını sağla
 export const prerender = true;
 
 /** @type {import('./$types').PageServerLoad} */
 export function load({ params }) {
-  // Add slash to the beginning of the URL
+  // URL'nin başına slash ekle
   const url = `/${params.slug}`;
   
-  // DEBUG: Log URL parameter and generated URL to console
+  // DEBUG: URL parametresini ve oluşturulan URL'yi konsola yaz
   console.log('Params slug:', params.slug);
   console.log('Generated URL:', url);
   
-  // Disable problematic routes
+  // Sorunlu rotaları devre dışı bırak
   if (url.includes('/blog/[slug]') || url.includes('/docs/[slug]')) {
-    throw new Error('This route is unavailable');
+    throw new Error('Bu rot/a kullanılamaz');
   }
   
-  // Find content
+  // İçeriği bul
   const content = getContentByUrl(url);
   
-  // DEBUG: Log the found content to console
+  // DEBUG: Bulunan içeriği konsola yaz
   console.log('Found content:', content ? 'YES' : 'NO');
   if (content) {
     console.log('Content URL:', content.url);
     console.log('Content Directory:', content.directory);
   }
   
-  // Get folders in the content directory for navigation links
+  // Navigasyon bağlantıları için content klasöründeki klasörleri al
   const directories = getContentDirectories();
   
-  // If content is not found
+  // Content bulunamadıysa
   if (!content) {
-    // Allow SvelteKit to redirect to a route
-    // If there's a Svelte component it will be shown, otherwise it will return 404
+    // SvelteKit rotasına yönlendirme yapmasına izin ver
+    // Eğer Svelte bileşeni varsa o gösterilecek, yoksa 404 döndürecek
     return { notFound: true, directories };
   }
   
-  // Return content
+  // İçeriği dön
   return {
     content,
     directories
