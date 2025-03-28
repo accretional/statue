@@ -1,32 +1,32 @@
-// Node.js spesifik modülleri yalnızca sunucu tarafında çalışmalıdır
-// Bu dosya yalnızca sunucu tarafında (+page.server.js veya +layout.server.js) içe aktarılmalıdır
+// Node.js specific modules should only run on the server side
+// This file should only be imported on the server side (+page.server.js or +layout.server.js)
 
-// Tarayıcıda çalışmayı engellemek için önlemler
+// Measures to prevent browser execution
 import { browser } from '$app/environment';
 
-// Node.js modülleri 
+// Node.js modules
 import fs from 'fs';
 import path from 'path';
 import { marked } from 'marked';
 import matter from 'gray-matter';
 
-// Bu hata kontrolü, bu modülün tarayıcıda kullanılmaya çalışıldığında erken uyarı vermek içindir
+// This error check is to provide an early warning when this module is attempted to be used in the browser
 if (browser) {
-  console.error('content-processor.js yalnızca sunucu tarafında kullanılmalıdır!');
-  throw new Error('Content processor istemci tarafında çalıştırılamaz!');
+  console.error('content-processor.js should only be used on the server side!');
+  throw new Error('Content processor cannot run on the client side!');
 }
 
-// Content klasöründeki tüm markdown dosyalarını ve klasörleri tarar
+// Scans all markdown files and folders in the content directory
 const scanContentDirectory = () => {
   const contentPath = path.resolve('content');
   const contentEntries = [];
   
   if (!fs.existsSync(contentPath)) {
-    console.warn('Content klasörü bulunamadı!');
+    console.warn('Content folder not found!');
     return contentEntries;
   }
   
-  // Recursive olarak content klasörünü tara
+  // Recursively scan the content folder
   function scanDir(dirPath, relativePath = '') {
     const entries = fs.readdirSync(dirPath);
     
@@ -36,10 +36,10 @@ const scanContentDirectory = () => {
       const stats = fs.statSync(fullPath);
       
       if (stats.isDirectory()) {
-        // Klasör ise içini tara
+        // If it's a folder, scan its contents
         scanDir(fullPath, entryRelativePath);
       } else if (stats.isFile() && entry.endsWith('.md')) {
-        // Markdown dosyalarını listeye ekle
+        // Add markdown files to the list
         const slug = entry.replace('.md', '');
         const url = relativePath 
           ? `/${relativePath}/${slug}`.replace(/\\/g, '/') 
@@ -49,11 +49,11 @@ const scanContentDirectory = () => {
         const { data, content: markdownContent } = matter(content);
         const html = marked.parse(markdownContent);
         
-        // Directory'yi düzelt - tam path'i kullan
+        // Fix directory - use full path
         let directory = relativePath.replace(/\\/g, '/');
         
-        // İçerik ağacını oluşturmak için ana dizin bilgisini ekle
-        // Örneğin: blog/kategoriler/js -> blog
+        // Add main directory information to create content tree
+        // Example: blog/categories/js -> blog
         const mainDirectory = directory.split('/')[0] || 'root';
         
         contentEntries.push({
@@ -62,7 +62,7 @@ const scanContentDirectory = () => {
           url,
           directory,
           mainDirectory,
-          // Path'in derinliği
+          // Depth of the path
           depth: directory === '' ? 0 : directory.split('/').length,
           content: html,
           metadata: {
@@ -77,19 +77,19 @@ const scanContentDirectory = () => {
     }
   }
   
-  // Content klasörünü taramaya başla
+  // Start scanning the content folder
   scanDir(contentPath);
   
   return contentEntries;
 };
 
-// Content klasöründeki klasörleri tespit eden fonksiyon
+// Function that detects folders in the content directory
 const getContentDirectories = () => {
   const contentPath = path.resolve('content');
   const directories = [];
   
   if (!fs.existsSync(contentPath)) {
-    console.warn('Content klasörü bulunamadı!');
+    console.warn('Content folder not found!');
     return directories;
   }
   
@@ -110,14 +110,14 @@ const getContentDirectories = () => {
   return directories;
 };
 
-// Markdown içeriğini belirli bir başlığa kadar kısaltan fonksiyon
+// Function that shortens markdown content up to a specific length
 const truncateContent = (content, maxLength = 200) => {
   if (content.length <= maxLength) return content;
   
   return content.substring(0, maxLength) + '...';
 };
 
-// Slug'dan başlık oluşturma fonksiyonu
+// Function to create a title from a slug
 const formatTitle = (slug) => {
   return slug
     .split('-')
@@ -125,10 +125,10 @@ const formatTitle = (slug) => {
     .join(' ');
 };
 
-// Tüm içeriği bir kere tarayıp önbelleğe almak için
+// To scan all content once and cache it
 let cachedContent = null;
 
-// Tüm içeriği getir (önbellek kullanarak)
+// Get all content (using cache)
 const getAllContent = () => {
   if (cachedContent) return cachedContent;
   
@@ -136,18 +136,18 @@ const getAllContent = () => {
   return cachedContent;
 };
 
-// Belirli bir URL için içerik getir
+// Get content for a specific URL
 const getContentByUrl = (url) => {
   const allContent = getAllContent();
   
-  // URL'den sondaki slash'ı (/) kaldır
+  // Remove trailing slash (/) from URL
   const normalizedUrl = url.endsWith('/') ? url.slice(0, -1) : url;
   
   console.log('Normalized URL for lookup:', normalizedUrl);
   
-  // İçerik URL'lerini kontrol et ve eşleşen içeriği bul
+  // Check content URLs and find matching content
   const result = allContent.find(entry => {
-    // İçerik URL'sinden de trailing slash'ı kaldır
+    // Remove trailing slash from content URL as well
     const entryUrl = entry.url.endsWith('/') ? entry.url.slice(0, -1) : entry.url;
     console.log(`Comparing: "${entryUrl}" vs "${normalizedUrl}"`);
     return entryUrl === normalizedUrl;
@@ -157,45 +157,45 @@ const getContentByUrl = (url) => {
   return result;
 };
 
-// Belirli bir klasördeki içeriği getir
+// Get content from a specific directory
 const getContentByDirectory = (directory) => {
   const allContent = getAllContent();
   
-  // Ana dizinler için doğrudan eşleşme yapıyoruz
+  // Direct matching for main directories
   if (directory === 'root') {
     return allContent.filter(entry => entry.directory === 'root');
   }
   
-  // Alt dizinler de dahil olmak üzere belirtilen dizinle başlayan tüm içerikleri getir
+  // Get all content that starts with the specified directory, including subdirectories
   return allContent.filter(entry => {
-    // 1. Tam eşleşme durumu (ör: 'blog' için tam olarak 'blog' dizini)
-    // 2. Alt klasör eşleşmesi (ör: 'blog' için 'blog/kategori' dizini)
+    // 1. Exact match case (e.g., 'blog' directory for 'blog')
+    // 2. Subdirectory match (e.g., 'blog/category' directory for 'blog')
     return entry.directory === directory || entry.directory.startsWith(directory + '/');
   });
 };
 
-// Önbelleği temizle (geliştirme modunda gerekli olabilir)
+// Clear cache (might be necessary in development mode)
 const clearContentCache = () => {
   cachedContent = null;
 };
 
-// Alt klasörleri bulan fonksiyon - belirli bir dizin için alt dizinleri döndürür
+// Function to find subdirectories - returns subdirectories for a specific directory
 const getSubDirectories = (directory) => {
   const allContent = getAllContent();
   const subdirs = new Set();
   
-  // Ana dizin değilse, ilgili içerikleri filtrele
+  // If not the main directory, filter relevant content
   const contents = allContent.filter(entry => 
     entry.directory !== 'root' && 
     (entry.directory === directory || entry.directory.startsWith(directory + '/'))
   );
   
-  // İçeriklerden alt dizinleri çıkar
+  // Extract subdirectories from contents
   contents.forEach(entry => {
-    // Ana dizini atlayarak yalnızca alt dizinleri al
+    // Get only subdirectories by skipping the main directory
     const relativePath = entry.directory.replace(directory + '/', '');
     if (relativePath && relativePath.includes('/')) {
-      // İlk alt dizin seviyesini al (ör: 'blog/kategori/js' -> 'kategori')
+      // Get the first subdirectory level (e.g., 'blog/category/js' -> 'category')
       const firstLevel = relativePath.split('/')[0];
       subdirs.add(firstLevel);
     }
@@ -209,7 +209,7 @@ const getSubDirectories = (directory) => {
   }));
 };
 
-// Fonksiyonları dışa aktar
+// Export functions
 export {
   scanContentDirectory,
   getContentDirectories,
