@@ -3,7 +3,7 @@ import path from 'path';
 import { marked } from 'marked';
 import matter from 'gray-matter';
 
-// Content klasöründeki tüm alt dizinleri otomatik tespit eden fonksiyon
+// Function that automatically detects all subdirectories in the content folder
 function detectContentDirectories() {
   const contentPath = path.resolve('content');
   const directories = [];
@@ -27,7 +27,7 @@ function detectContentDirectories() {
   return directories;
 }
 
-// Slug'dan başlık formatı oluşturan yardımcı fonksiyon
+// Helper function that creates a title format from slug
 function formatTitle(slug) {
   return slug
     .split('-')
@@ -35,33 +35,33 @@ function formatTitle(slug) {
     .join(' ');
 }
 
-// Markdown içeriği işleyen fonksiyon
+// Function that processes Markdown content
 function processMarkdown(content) {
   return marked.parse(content);
 }
 
-// Tüm sayfa gruplarını yükleyen fonksiyon
+// Function that loads all page groups
 export async function loadPageGroups() {
-  // Content dizinlerini tespit et
+  // Detect content directories
   const contentDirs = detectContentDirectories();
   
-  // Her dizin için bir sayfa grubu oluştur
+  // Create a page group for each directory
   const pageGroups = contentDirs.map(dir => ({
     name: dir.name,
     title: dir.title,
     sourceDir: dir.path,
     outputDir: dir.outputDir,
     listable: true,
-    hierarchical: dir.name === 'docs', // Docs için hiyerarşik görünüm aktif
+    hierarchical: dir.name === 'docs', // Hierarchical view active for Docs
     pages: []
   }));
   
-  // Her sayfa grubu için içeriği yükle
+  // Load content for each page group
   for (const pageGroup of pageGroups) {
     await loadPagesForGroup(pageGroup);
   }
   
-  // Navbar öğelerini oluştur
+  // Create navbar items
   const navbarItems = contentDirs.map(dir => ({
     title: dir.title,
     url: `/${dir.outputDir}`
@@ -73,12 +73,12 @@ export async function loadPageGroups() {
   };
 }
 
-// Bir sayfa grubu için tüm sayfaları yükleyen fonksiyon
+// Function that loads all pages for a page group
 async function loadPagesForGroup(pageGroup) {
   const sourceDir = path.resolve(pageGroup.sourceDir);
   
   if (!fs.existsSync(sourceDir)) {
-    console.warn(`Kaynak dizin ${sourceDir} (${pageGroup.name} sayfa grubu) bulunamadı.`);
+    console.warn(`Source directory ${sourceDir} (${pageGroup.name} page group) not found.`);
     return;
   }
   
@@ -106,7 +106,7 @@ async function loadPagesForGroup(pageGroup) {
   }
 }
 
-// Bir dizindeki tüm dosyaları listeyen yardımcı fonksiyon
+// Helper function that lists all files in a directory
 function getAllFiles(dir, fileList = []) {
   const files = fs.readdirSync(dir);
   
@@ -123,7 +123,7 @@ function getAllFiles(dir, fileList = []) {
   return fileList;
 }
 
-// Belirli bir sayfa grubundaki bir sayfayı yükleyen fonksiyon
+// Function that loads a page by slug in a specific page group
 export async function loadPageBySlug(groupName, slug) {
   const { pageGroups } = await loadPageGroups();
   const pageGroup = pageGroups.find(group => group.name === groupName);
@@ -136,7 +136,7 @@ export async function loadPageBySlug(groupName, slug) {
   return page;
 }
 
-// Bir sayfa grubundaki tüm sayfaları yükleyen fonksiyon
+// Function that loads all pages in a page group
 export async function loadPageGroup(groupName) {
   const { pageGroups, navbarItems } = await loadPageGroups();
   const pageGroup = pageGroups.find(group => group.name === groupName);
@@ -145,13 +145,13 @@ export async function loadPageGroup(groupName) {
     return null;
   }
   
-  // Hiyerarşik görünüm için sayfaları organize et
+  // Organize pages for hierarchical view
   const organizedPages = {};
   
   if (pageGroup.hierarchical) {
     pageGroup.pages.forEach(page => {
       const pathParts = page.path.split('/');
-      // Son kısmı (dosya adını) kaldır
+      // Remove the last part (file name)
       pathParts.pop();
       
       const parentPath = pathParts.join('/');
