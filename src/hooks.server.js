@@ -2,24 +2,24 @@ import { getAllContent, getContentDirectories } from '$lib/cms/content-processor
 
 /** @type {import('@sveltejs/kit').Handle} */
 export async function handle({ event, resolve }) {
-  // İçerik yollarını statik site üretimi için topla
+  // Collect content paths for static site generation
   if (event.url.pathname === '/api/content-paths') {
-    // Content klasöründeki tüm içeriği tara
+    // Scan all content in the Content folder
     const allContent = getAllContent();
     const directories = getContentDirectories();
     
-    // Tüm içerik URL'lerini ve dizin URL'lerini birleştir
+    // Combine all content URLs and directory URLs
     let contentPaths = allContent.map(content => content.url);
     const directoryPaths = directories.map(dir => dir.url);
     
-    // Sorunlu URL'leri filtrele ([slug] içerenleri kaldır)
+    // Filter problematic URLs (remove those containing [slug])
     contentPaths = contentPaths.filter(path => !path.includes('[slug]'));
     
-    // Tüm olası yolları içeren bir liste oluştur
+    // Create a list containing all possible paths
     const allPaths = [
       ...contentPaths,
       ...directoryPaths,
-      '/' // Ana sayfa
+      '/' // Home page
     ];
     
     return new Response(JSON.stringify(allPaths), {
@@ -29,29 +29,29 @@ export async function handle({ event, resolve }) {
     });
   }
   
-  // Normal rota işleme
+  // Normal route processing
   return await resolve(event);
 }
 
 /** @type {import('@sveltejs/kit').HandleServerError} */
 export function handleError({ error }) {
-  console.error('Sunucu hatası oluştu:', error);
+  console.error('Server error occurred:', error);
 
   return {
-    message: 'Sunucu hatası oluştu, detaylar için loglara bakın'
+    message: 'A server error occurred, check logs for details'
   };
 }
 
-// Tüm statik olarak oluşturulacak sayfaların bir listesini oluştur
+// Create a list of all pages that will be statically generated
 /** @type {import('@sveltejs/kit').PrerenderExtendEntries} */
 export async function entries() {
   const allContent = getAllContent();
   
-  // Sorunlu URL'leri filtrele
+  // Filter problematic URLs
   const contentPaths = allContent
     .map(content => content.url)
     .filter(url => !url.includes('[slug]'));
   
-  // Content URL'lerini döndür
+  // Return content URLs
   return contentPaths;
 } 

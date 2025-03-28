@@ -1,26 +1,26 @@
-// Node.js ile CMS modülünü build eden script
+// Script that builds the CMS module with Node.js
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { buildCMS } from '../src/lib/cms/index.js';
 
-// ES modules için __dirname eşdeğeri
+// __dirname equivalent for ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 
 console.log('Building static site from content folder...');
 
-// Async IIFE kullanarak async/await yapısını kuruyoruz
+// Using Async IIFE to set up async/await structure
 (async () => {
   try {
-    // build klasörünü temizleme
+    // cleaning build folder
     const buildDir = path.join(rootDir, 'build');
     if (fs.existsSync(buildDir)) {
       fs.rmSync(buildDir, { recursive: true, force: true });
     }
     
-    // CMS build işlemini çalıştır (artık async)
+    // Run CMS build process (now async)
     await buildCMS();
     console.log('Static site build completed successfully!');
   } catch (error) {
