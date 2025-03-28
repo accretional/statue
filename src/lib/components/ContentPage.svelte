@@ -20,13 +20,13 @@
         <h1 class="text-3xl font-bold">{title}</h1>
         {#if date}
         <div class="text-gray-500 mt-2">
-          Yayınlanma: {new Date(date).toLocaleDateString('tr-TR')}
-          {#if author}yazarı: {author}{/if}
+          Published: {new Date(date).toLocaleDateString('en-US')}
+          {#if author}author: {author}{/if}
         </div>
         {/if}
         {#if backLink}
         <div class="mt-4">
-          <a href={backLink} class="text-blue-600 hover:underline">← {backLinkText} sayfasına dön</a>
+          <a href={backLink} class="text-blue-600 hover:underline">← Back to {backLinkText}</a>
         </div>
         {/if}
       </header>
@@ -39,7 +39,7 @@
 
   <footer class="bg-gray-100 mt-12 py-8">
     <div class="container mx-auto px-4 text-center text-gray-500">
-      <p>© {new Date().getFullYear()} Statue SSG. Svelte ile geliştirilmiş statik site.</p>
+      <p>© {new Date().getFullYear()} Statue SSG. Static site developed with Svelte.</p>
     </div>
   </footer>
 </main>
