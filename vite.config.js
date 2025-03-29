@@ -3,14 +3,14 @@ import { defineConfig } from 'vite';
 import { fileURLToPath } from 'url';
 import path from 'path';
 
-// __dirname özelliğini ESM için yeniden oluşturalım
+// Let's recreate __dirname property for ESM
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default defineConfig({
   plugins: [sveltekit()],
   
-  // Özel yollar tanımlama
+  // Define custom paths
   resolve: {
     alias: {
       '$content': path.resolve(__dirname, 'content'),
@@ -19,10 +19,10 @@ export default defineConfig({
     }
   },
   
-  // Statik kaynak klasörü
+  // Static resource folder
   publicDir: 'static',
   
-  // Geliştirme sunucusu
+  // Development server
   server: {
     port: 3000,
     open: true
