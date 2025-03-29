@@ -4,11 +4,11 @@ import { marked } from 'marked';
 import matter from 'gray-matter';
 // ... existing code ...
 
-// Svelte bileşenlerini derlemek için gereken modülleri import et
+// Import modules needed to compile Svelte components
 import { svelte } from '@sveltejs/vite-plugin-svelte';
 import { build } from 'vite';
 
-// Content klasöründeki tüm alt dizinleri otomatik tespit edip döndürür
+// Automatically detects all subdirectories in the content folder and returns them
 function detectContentDirectories() {
   const contentPath = path.resolve('content');
   const directories = [];
@@ -49,7 +49,7 @@ export function loadConfig() {
     console.log('Config file not found, using auto-detected content directories');
   }
   
-  // Config dosyası yoksa veya pageGroups tanımlı değilse, otomatik olarak dizinleri tespit et
+  // If config file doesn't exist or pageGroups is not defined, automatically detect directories
   if (!config.pageGroups || config.pageGroups.length === 0) {
     const detectedDirs = detectContentDirectories();
     config.pageGroups = detectedDirs.map(dir => ({
@@ -59,7 +59,7 @@ export function loadConfig() {
       format: 'markdown',
       outputDir: dir.outputDir,
       listable: true,
-      hierarchical: dir.name === 'docs' // Docs için hiyerarşik görünüm aktif
+      hierarchical: dir.name === 'docs' // Hierarchical view active for Docs
     }));
   }
   
@@ -127,32 +127,32 @@ function getAllFiles(dir, fileList = []) {
   return fileList;
 }
 
-// Temel şablon işleme fonksiyonu
+// Basic template processing function
 function renderTemplate(templatePath, data) {
   let template = fs.readFileSync(templatePath, 'utf-8');
   
-  // Basit handlebars benzeri değişken değiştirme
+  // Simple handlebars-like variable replacement
   template = template.replace(/\{\{([^}]+)\}\}/g, (match, key) => {
     key = key.trim();
     
-    // Koşullu ifade kontrolü
+    // Conditional expression check
     if (key.startsWith('if ')) {
-      // Bu temel template engine koşulları desteklemiyor,
-      // bu yüzden gerçek değeri doğrudan döndürüyoruz
+      // This basic template engine doesn't support conditions,
+      // so we return the real value directly
       return '';
     }
     
-    // each döngüsü için - basit implementasyon
+    // For each loop - simple implementation
     if (key.startsWith('each ')) {
       return '';
     }
     
-    // #if, #each kapatma taglerini temizle
+    // Clean up #if, #each closing tags
     if (key.startsWith('/if') || key.startsWith('/each')) {
       return '';
     }
     
-    // formatDate helper'ı
+    // formatDate helper
     if (key.startsWith('formatDate ')) {
       const datePath = key.replace('formatDate ', '');
       const dateValue = getNestedValue(data, datePath);
@@ -162,7 +162,7 @@ function renderTemplate(templatePath, data) {
       return '';
     }
     
-    // formatTitle helper'ı
+    // formatTitle helper
     if (key.startsWith('formatTitle ')) {
       const slug = key.replace('formatTitle ', '');
       if (data[slug]) {
@@ -171,25 +171,25 @@ function renderTemplate(templatePath, data) {
       return formatTitle(slug);
     }
     
-    // Yıl için
+    // For year
     if (key === 'currentYear') {
       return new Date().getFullYear().toString();
     }
     
-    // Nested değerler için
+    // For nested values
     return getNestedValue(data, key) || '';
   });
   
-  // Koşullu blokları işle
+  // Process conditional blocks
   template = processConditionalBlocks(template, data);
   
-  // Each bloklarını işle
+  // Process each blocks
   template = processEachBlocks(template, data);
   
   return template;
 }
 
-// Nested değerleri alma yardımcı fonksiyonu
+// Helper function to get nested values
 function getNestedValue(obj, path) {
   const keys = path.split('.');
   let result = obj;
@@ -204,7 +204,7 @@ function getNestedValue(obj, path) {
   return result !== undefined ? result : '';
 }
 
-// Koşullu blokları işleme
+// Processing conditional blocks
 function processConditionalBlocks(template, data) {
   const ifRegex = /\{\{#if ([^}]+)\}\}([\s\S]*?)\{\{\/if\}\}/g;
   
@@ -213,13 +213,13 @@ function processConditionalBlocks(template, data) {
     const value = getNestedValue(data, condition);
     
     if (value) {
-      return processConditionalBlocks(content, data); // İç içe if'ler için recursive olarak işle
+      return processConditionalBlocks(content, data); // Process nested ifs recursively
     }
     return '';
   });
 }
 
-// Each bloklarını işleme
+// Processing each blocks
 function processEachBlocks(template, data) {
   const eachRegex = /\{\{#each ([^}]+)\}\}([\s\S]*?)\{\{\/each\}\}/g;
   
@@ -230,23 +230,23 @@ function processEachBlocks(template, data) {
       return '';
     }
     
-    // Her öğe için şablonu işle ve sonuçları birleştir
+    // Process template for each item and combine results
     return array.map(item => {
-      // "this" kullanımı için destek ekleyin
+      // Add support for "this" usage
       const itemData = { ...data, this: item };
       let result = itemTemplate;
       
-      // Öğe için temel değişkenleri işle
+      // Process basic variables for the item
       result = result.replace(/\{\{([^}]+)\}\}/g, (m, key) => {
         key = key.trim();
         
-        // Koşullu ve each ifadeleri burada atla
+        // Skip conditional and each expressions here
         if (key.startsWith('if ') || key.startsWith('/if') || 
             key.startsWith('each ') || key.startsWith('/each')) {
           return m;
         }
         
-        // Öğe özelliklerine erişim
+        // Access to item properties
         if (key.includes('.')) {
           return getNestedValue(itemData, key) || '';
         }
@@ -254,7 +254,7 @@ function processEachBlocks(template, data) {
         return item[key] !== undefined ? item[key] : '';
       });
       
-      // İç içe koşullu ve each bloklarını işle
+      // Process nested conditional and each blocks
       result = processConditionalBlocks(result, item);
       result = processEachBlocks(result, item);
       
@@ -263,7 +263,7 @@ function processEachBlocks(template, data) {
   });
 }
 
-// Slug'dan başlık formatı oluşturma helper fonksiyonu
+// Helper function to create title format from slug
 function formatTitle(slug) {
   return slug
     .split('-')
@@ -271,27 +271,27 @@ function formatTitle(slug) {
     .join(' ');
 }
 
-// Statik HTML dosyalarını doğrudan build klasörüne yazma
+// Writing static HTML files directly to the build folder
 export async function generateStaticPages(pageGroup, outputBaseDir) {
   const outputDir = path.join(outputBaseDir, pageGroup.outputDir);
   
-  // Output dizininin varlığını sağla
+  // Ensure output directory exists
   fs.mkdirSync(outputDir, { recursive: true });
 
-  // Tüm sayfalar için geçici bir dosya oluştur
+  // Create a temporary file for all pages
   const tempDir = path.resolve('.tmp', 'pages', pageGroup.name);
   fs.mkdirSync(tempDir, { recursive: true });
   
-  // Her içerik dosyası için bir sayfa oluştur
+  // Create a page for each content file
   for (const page of pageGroup.pages) {
     const pageOutputDir = path.join(outputDir, path.dirname(page.path));
     fs.mkdirSync(pageOutputDir, { recursive: true });
     
-    // Sayfa için klasör oluştur (clean URL'ler için)
+    // Create folder for the page (for clean URLs)
     const pagePath = path.join(pageOutputDir, path.basename(page.path, '.md'));
     fs.mkdirSync(pagePath, { recursive: true });
     
-    // Sayfanın verilerini oluştur
+    // Create the page data
     const pageData = {
       title: page.metadata.title || formatTitle(page.slug),
       content: page.content,
@@ -301,12 +301,12 @@ export async function generateStaticPages(pageGroup, outputBaseDir) {
       backLinkText: pageGroup.title,
       activePath: page.url,
       currentYear: new Date().getFullYear(),
-      // Tüm sayfa gruplarını navbar için ekleyelim
+      // Add all page groups for navbar
       navbarItems: generateNavbarItems(outputBaseDir)
     };
     
     try {
-      // Svelte entry file oluştur
+      // Create Svelte entry file
       const entryContent = `
         import ContentPage from '../../../src/lib/components/ContentPage.svelte';
         
@@ -319,7 +319,7 @@ export async function generateStaticPages(pageGroup, outputBaseDir) {
       const entryPath = path.join(tempDir, `${page.slug}.js`);
       fs.writeFileSync(entryPath, entryContent);
       
-      // Vite ile Svelte bileşenini derle
+      // Compile Svelte component with Vite
       await build({
         root: process.cwd(),
         publicDir: false,
@@ -338,10 +338,10 @@ export async function generateStaticPages(pageGroup, outputBaseDir) {
         plugins: [svelte()]
       });
       
-      // HTML içeriğini oluştur
+      // Create HTML content
       const pageHtml = `
         <!DOCTYPE html>
-        <html lang="tr">
+        <html lang="en">
         <head>
           <meta charset="UTF-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -350,7 +350,7 @@ export async function generateStaticPages(pageGroup, outputBaseDir) {
           <script type="module" src="/assets/pages/${pageGroup.name}/${page.slug}.js" defer></script>
         </head>
         <body>
-          <!-- Svelte bileşeni buraya mount edilecek -->
+          <!-- Svelte component will be mounted here -->
         </body>
         </html>
       `;
@@ -359,7 +359,7 @@ export async function generateStaticPages(pageGroup, outputBaseDir) {
     } catch (error) {
       console.error(`Failed to build Svelte component for page ${page.slug}:`, error);
       
-      // Hata durumunda eski şablonu kullan
+      // Use old template in case of error
       console.log(`Falling back to template-based page generation for ${page.slug}...`);
       const templatePath = path.resolve('src/lib/templates/page.html');
       const pageContent = renderTemplate(templatePath, pageData);
@@ -367,16 +367,16 @@ export async function generateStaticPages(pageGroup, outputBaseDir) {
     }
   }
   
-  // Listable true ise, indeks sayfası oluştur
+  // If listable is true, create an index page
   if (pageGroup.listable || pageGroup.pages.length === 0) {
-    // Klasörde md dosyası olmasa bile indeks sayfası oluştur
+    // Create index page even if there are no md files in the folder
     await createIndexPage(pageGroup, outputDir, outputBaseDir);
   }
 }
 
-// Navbar için menü öğeleri oluştur
+// Create menu items for navbar
 function generateNavbarItems(outputBaseDir) {
-  // Content klasöründeki tüm dizinleri tespit et
+  // Detect all directories in the content folder
   const contentDirs = detectContentDirectories();
   
   return contentDirs.map(dir => ({
@@ -385,16 +385,16 @@ function generateNavbarItems(outputBaseDir) {
   }));
 }
 
-// Klasör için indeks sayfası oluştur
+// Create index page for folder
 async function createIndexPage(pageGroup, outputDir, outputBaseDir) {
-  // Liste sayfası için verileri hazırla
+  // Prepare data for list page
   const organizedPages = {};
   
   if (pageGroup.hierarchical) {
-    // Hiyerarşik görünüm için sayfaları organize et
+    // Organize pages for hierarchical view
     pageGroup.pages.forEach(page => {
       const pathParts = page.path.split('/');
-      // Son kısmı (dosya adını) kaldır
+      // Remove last part (file name)
       pathParts.pop();
       
       const parentPath = pathParts.join('/');
@@ -427,16 +427,16 @@ async function createIndexPage(pageGroup, outputDir, outputBaseDir) {
     })),
     currentYear: new Date().getFullYear(),
     activePath: `/${pageGroup.outputDir}`,
-    // Tüm sayfa gruplarını navbar için ekleyelim
+    // Add all page groups for navbar
     navbarItems: generateNavbarItems(outputBaseDir)
   };
   
   try {
-    // Svelte bileşeni için geçici dosya oluştur
+    // Create temporary file for Svelte component
     const tempDir = path.resolve('.tmp', 'indexes');
     fs.mkdirSync(tempDir, { recursive: true });
     
-    // Svelte entry file oluştur
+    // Create Svelte entry file
     const entryContent = `
       import ContentList from '../../../src/lib/components/ContentList.svelte';
       
@@ -449,7 +449,7 @@ async function createIndexPage(pageGroup, outputDir, outputBaseDir) {
     const entryPath = path.join(tempDir, `${pageGroup.name}-index.js`);
     fs.writeFileSync(entryPath, entryContent);
     
-    // Vite ile Svelte bileşenini derle
+    // Compile Svelte component with Vite
     await build({
       root: process.cwd(),
       publicDir: false,
@@ -468,10 +468,10 @@ async function createIndexPage(pageGroup, outputDir, outputBaseDir) {
       plugins: [svelte()]
     });
     
-    // HTML içeriğini oluştur
+    // Create HTML content
     const listHtml = `
       <!DOCTYPE html>
-      <html lang="tr">
+      <html lang="en">
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -480,7 +480,7 @@ async function createIndexPage(pageGroup, outputDir, outputBaseDir) {
         <script type="module" src="/assets/indexes/${pageGroup.name}-index.js" defer></script>
       </head>
       <body>
-        <!-- Svelte bileşeni buraya mount edilecek -->
+        <!-- Svelte component will be mounted here -->
       </body>
       </html>
     `;
@@ -489,7 +489,7 @@ async function createIndexPage(pageGroup, outputDir, outputBaseDir) {
   } catch (error) {
     console.error(`Failed to build Svelte component for index page of ${pageGroup.name}:`, error);
     
-    // Hata durumunda eski şablonu kullan
+    // Use old template in case of error
     console.log(`Falling back to template-based index page generation for ${pageGroup.name}...`);
     const templatePath = path.resolve('src/lib/templates/list.html');
     const listPageContent = renderTemplate(templatePath, listData);
@@ -497,23 +497,23 @@ async function createIndexPage(pageGroup, outputDir, outputBaseDir) {
   }
 }
 
-// Ana sayfa oluşturma
+// Homepage creation
 async function generateHomepage(config, outputBaseDir) {
-  // Eski şablon tabanlı yaklaşım
+  // Old template-based approach
   const templatePath = path.resolve('src/lib/templates/home.html');
   
   const homeData = {
     pageGroups: config.pageGroups,
     currentYear: new Date().getFullYear(),
-    // Tüm sayfa gruplarını navbar için ekleyelim
+    // Add all page groups for navbar
     navbarItems: generateNavbarItems(outputBaseDir)
   };
   
-  // Svelte bileşeni için geçici dosya oluştur
+  // Create temporary file for Svelte component
   const tempDir = path.resolve('.tmp');
   fs.mkdirSync(tempDir, { recursive: true });
   
-  // Svelte entry point dosyası oluştur
+  // Create Svelte entry point file
   const entryContent = `
     import HomePage from '../src/lib/components/HomePage.svelte';
     
@@ -526,7 +526,7 @@ async function generateHomepage(config, outputBaseDir) {
   const entryPath = path.join(tempDir, 'main.js');
   fs.writeFileSync(entryPath, entryContent);
   
-  // Svelte bileşenini derle
+  // Compile Svelte component
   try {
     await build({
       root: process.cwd(),
@@ -546,10 +546,10 @@ async function generateHomepage(config, outputBaseDir) {
       plugins: [svelte()]
     });
     
-    // HTML içeriğini oluştur - Svelte komponenti için gerekli olan
+    // Create HTML content - required for Svelte component
     const homeHtml = `
       <!DOCTYPE html>
-      <html lang="tr">
+      <html lang="en">
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -558,7 +558,7 @@ async function generateHomepage(config, outputBaseDir) {
         <script type="module" src="/assets/js/home-bundle.js" defer></script>
       </head>
       <body>
-        <!-- Svelte bileşeni buraya mount edilecek -->
+        <!-- Svelte component will be mounted here -->
       </body>
       </html>
     `;
@@ -568,42 +568,42 @@ async function generateHomepage(config, outputBaseDir) {
   } catch (error) {
     console.error('Failed to build Svelte components:', error);
     
-    // Hata durumunda eski şablonu kullan
+    // Use old template in case of error
     console.log('Falling back to template-based homepage generation...');
     const homeContent = renderTemplate(templatePath, homeData);
     fs.writeFileSync(path.join(outputBaseDir, 'index.html'), homeContent);
   }
 }
 
-// buildCMS fonksiyonunu async yapalım
+// Make buildCMS function async
 export async function buildCMS() {
   const config = loadConfig();
   const outputDir = 'build';
   
-  // Build dizinini temizle ve yeniden oluştur
+  // Clean and recreate build directory
   if (fs.existsSync(outputDir)) {
     fs.rmSync(outputDir, { recursive: true, force: true });
   }
   fs.mkdirSync(outputDir, { recursive: true });
   
-  // Statik dosyaları kopyala
+  // Copy static files
   if (fs.existsSync('static')) {
     copyDirectorySync('static', outputDir);
   }
   
-  // Tüm sayfa gruplarını işle
+  // Process all page groups
   config.pageGroups.forEach(pageGroup => {
     processPageGroup(pageGroup);
     generateStaticPages(pageGroup, outputDir);
   });
   
-  // Ana sayfa oluştur (artık async)
+  // Create homepage (now async)
   await generateHomepage(config, outputDir);
   
   console.log('CMS build completed successfully.');
 }
 
-// Dizin kopyalama yardımcı fonksiyonu
+// Helper function for directory copying
 function copyDirectorySync(source, destination) {
   fs.mkdirSync(destination, { recursive: true });
   
