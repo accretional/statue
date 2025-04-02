@@ -1,13 +1,24 @@
 {
-	"name": "statue",
-	"private": true,
-	"version": "0.0.1",
-	"description": "A simple static site generator for markdown content with SvelteKit",
+	"name": "statue-ssg",
+	"version": "0.0.4",
+	"description": "A simple static site generator for markdown content with SvelteKit integration",
 	"type": "module",
+	"main": "dist/index.js",
+	"bin": {
+		"statue-ssg": "dist/cli.js"
+	},
+	"files": [
+		"dist",
+		"LICENSE",
+		"README.md"
+	],
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
-		"preview": "vite preview"
+		"preview": "vite preview",
+		"prepublishOnly": "npm run package && npm run package:cli",
+		"package": "rimraf dist && node scripts/build-package.js",
+		"package:cli": "node scripts/build-cli.js"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-static": "^3.0.0",
@@ -15,20 +26,47 @@
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
 		"@types/node": "^22.13.13",
 		"autoprefixer": "^10.4.21",
+		"chalk": "^5.4.1",
+		"commander": "^13.1.0",
+		"esbuild": "^0.20.2",
+		"fs-extra": "^11.3.0",
 		"gray-matter": "^4.0.3",
 		"marked": "^15.0.7",
 		"postcss": "^8.5.3",
+		"rimraf": "^5.0.10",
 		"svelte": "^4.2.7",
 		"tailwindcss": "^4.0.15",
 		"typescript": "^5.0.0",
 		"vite": "^6.0.0"
 	},
+	"dependencies": {
+		"gray-matter": "^4.0.3",
+		"marked": "^15.0.7"
+	},
+	"peerDependencies": {
+		"commander": "^13.0.0",
+		"chalk": "^5.0.0",
+		"fs-extra": "^11.0.0"
+	},
 	"keywords": [
 		"static-site-generator",
 		"markdown",
 		"ssg",
-		"sveltekit"
+		"sveltekit",
+		"static-site",
+		"content-management"
 	],
-	"author": "",
-	"license": "MIT"
+	"author": "Your Name <your.email@example.com>",
+	"license": "MIT",
+	"publishConfig": {
+		"access": "public"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/yourusername/statue-ssg.git"
+	},
+	"bugs": {
+		"url": "https://github.com/yourusername/statue-ssg/issues"
+	},
+	"homepage": "https://github.com/yourusername/statue-ssg#readme"
 }
