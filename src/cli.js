@@ -6,10 +6,10 @@ import chalk from 'chalk';
 import { generateStaticSite } from './index.js';
 import { execSync } from 'child_process';
 
-// Handle __dirname in ESM
+// __dirname in ESM
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// Set up CLI
+// CLI setup
 const program = new Command();
 
 program
@@ -54,15 +54,10 @@ program
         process.exit(1);
       }
       
-      // Read package.json to verify it's a SvelteKit project
+      // Verify it's a SvelteKit project
       const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
       if (!pkg.dependencies?.['@sveltejs/kit'] && !pkg.devDependencies?.['@sveltejs/kit']) {
         console.warn(chalk.yellow('Warning: This doesn\'t appear to be a SvelteKit project.'));
-        const proceed = true; // In a real CLI, you would prompt the user here
-        if (!proceed) {
-          console.log(chalk.blue('Setup cancelled.'));
-          process.exit(0);
-        }
       }
       
       console.log(chalk.green('Setting up Statue SSG in your project...'));
@@ -70,20 +65,14 @@ program
       // Find the postinstall.js script
       const postinstallPath = path.resolve(__dirname, '..', 'postinstall.js');
       if (fs.existsSync(postinstallPath)) {
-        // Run the postinstall script
         try {
           console.log(chalk.blue('Running setup script...'));
-          // We're using require() to execute the script directly
-          require(postinstallPath);
-        } catch (e) {
-          // If direct execution fails, try running with node
-          try {
-            console.log(chalk.blue('Trying alternative method...'));
-            execSync(`node "${postinstallPath}"`, { stdio: 'inherit' });
-          } catch (err) {
-            console.error(chalk.red('Error executing postinstall script:'), err.message);
-            process.exit(1);
-          }
+          // Run with Node.js (instead of require())
+          execSync(`node "${postinstallPath}"`, { stdio: 'inherit' });
+        } catch (err) {
+          console.error(chalk.red('Error running setup script:'), err.message);
+          console.log(chalk.yellow('For manual setup: node node_modules/statue-ssg/postinstall.js'));
+          process.exit(1);
         }
       } else {
         console.error(chalk.red('Error: Setup script not found.'));
@@ -106,13 +95,13 @@ program
     
     try {
       if (options.sveltekit) {
-        // SvelteKit entegrasyonu ile başlat
-        console.log(chalk.green('SvelteKit entegrasyonu ile Statue SSG başlatılıyor...'));
+        // Start with SvelteKit integration
+        console.log(chalk.green('Initializing Statue SSG with SvelteKit integration...'));
         
-        // Önce klasör yapısını kontrol et
+        // Check folder structure first
         if (!fs.existsSync(path.join(targetDir, 'package.json'))) {
-          console.log(chalk.yellow('Mevcut bir SvelteKit projesinde değilsiniz.'));
-          console.log(chalk.blue('Önce bir SvelteKit projesi oluşturun:'));
+          console.log(chalk.yellow('You are not in a SvelteKit project.'));
+          console.log(chalk.blue('First create a SvelteKit project:'));
           console.log(chalk.white('npm create svelte@latest my-app'));
           console.log(chalk.white('cd my-app'));
           console.log(chalk.white('npm install'));
@@ -120,40 +109,38 @@ program
           process.exit(0);
         }
         
-        // postinstall.js veya entegrasyon scriptini çalıştır
+        // Run postinstall.js command
         try {
-          console.log(chalk.blue('Statue SSG dosyaları kopyalanıyor...'));
+          console.log(chalk.blue('Copying Statue SSG files...'));
           const postinstallPath = path.join(__dirname, '..', 'postinstall.js');
           
           if (fs.existsSync(postinstallPath)) {
-            // Node.js ile script'i çalıştır
-            execSync(`node ${postinstallPath}`, { stdio: 'inherit' });
+            execSync(`node "${postinstallPath}"`, { stdio: 'inherit' });
           } else {
-            console.error(chalk.red('postinstall.js dosyası bulunamadı.'));
-            console.log(chalk.yellow('Manuel olarak kurulum yapılıyor...'));
+            console.error(chalk.red('postinstall.js file not found.'));
+            console.log(chalk.yellow('Setting up manually...'));
             
-            // Manual olarak kurulum dizinlerini oluştur
+            // Create directories manually
             fs.ensureDirSync(path.join(targetDir, 'content'));
             fs.ensureDirSync(path.join(targetDir, 'content/blog'));
             fs.ensureDirSync(path.join(targetDir, 'content/docs'));
             fs.ensureDirSync(path.join(targetDir, 'content/static'));
             
-            console.log(chalk.green('✅ İçerik klasörleri oluşturuldu.'));
+            console.log(chalk.green('✅ Content folders created.'));
           }
         } catch (err) {
-          console.error(chalk.red('Entegrasyon sırasında hata oluştu:'), err.message);
+          console.error(chalk.red('Error during integration:'), err.message);
         }
         
-        console.log(chalk.green('✅ SvelteKit entegrasyonu tamamlandı!'));
+        console.log(chalk.green('✅ SvelteKit integration completed!'));
         console.log();
-        console.log('Sonraki adımlar:');
-        console.log('  1. Bağımlılıkları yükleyin:', chalk.bold('npm install'));
-        console.log('  2. Geliştirme sunucusunu başlatın:', chalk.bold('npm run dev'));
-        console.log('  3. content/ dizinindeki içeriği düzenleyin');
+        console.log('Next steps:');
+        console.log('  1. Install dependencies:', chalk.bold('npm install'));
+        console.log('  2. Start development server:', chalk.bold('npm run dev'));
+        console.log('  3. Edit content in the content/ directory');
       }
       else {
-        // Standard statue-ssg başlat (eski fonksiyonalite)
-        // Create directory structure
+        // Start standalone Statue SSG
         fs.ensureDirSync(targetDir);
         fs.ensureDirSync(path.join(targetDir, 'content'));
         fs.ensureDirSync(path.join(targetDir, 'content/blog'));
@@ -204,15 +191,15 @@ This is an example markdown file.
           fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
         }
         
-        console.log(chalk.green('✅ Statue SSG projesi başlatıldı!'));
+        console.log(chalk.green('✅ Statue SSG project initialized!'));
         console.log();
-        console.log('Sonraki adımlar:');
-        console.log('  1. Bağımlılıkları yükleyin:', chalk.bold('npm install'));
-        console.log('  2. Statik siteyi oluşturun:', chalk.bold('npm run build'));
-        console.log('  3. content/ dizinindeki içeriği düzenleyin');
+        console.log('Next steps:');
+        console.log('  1. Install dependencies:', chalk.bold('npm install'));
+        console.log('  2. Build the static site:', chalk.bold('npm run build'));
+        console.log('  3. Edit content in the content/ directory');
       }
     } catch (err) {
-      console.error(chalk.red('Hata:'), err.message);
+      console.error(chalk.red('Error:'), err.message);
       process.exit(1);
     }
   });

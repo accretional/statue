@@ -1,7 +1,7 @@
 {
 	"name": "statue-ssg",
-	"version": "0.1.2",
-	"description": "Statue: Svelte Static Site Generator with CMS features, launch your SaaS website in seconds",
+	"version": "0.1.3",
+	"description": "Statue: SvelteKit-based CMS that converts markdown content into beautiful static websites",
 	"type": "module",
 	"main": "dist/index.js",
 	"bin": {
@@ -22,8 +22,6 @@
 		"preview": "vite preview",
 		"prepublishOnly": "npm run build && npm run build:cli",
 		"postinstall": "node postinstall.js",
-		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
 		"format": "prettier --plugin-search-dir . --write .",
 		"release": "npm run build && npm run build:cli && npm publish"
@@ -71,10 +69,10 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/semihpolat/statue-ssg.git"
+		"url": "git+https://github.com/accretional/statue.git"
 	},
 	"bugs": {
-		"url": "https://github.com/semihpolat/statue-ssg/issues"
+		"url": "https://github.com/accretional/statue/issues"
 	},
-	"homepage": "https://github.com/semihpolat/statue-ssg#readme"
+	"homepage": "https://github.com/accretional/statue#readme"
 }

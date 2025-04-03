@@ -1,9 +1,9 @@
 # Statue SSG Template
 
-Bu klasör, statue-ssg npm paketi yüklendiğinde veya `statue-ssg init -s` komutu çalıştırıldığında kullanıcının projesine kopyalanacak dosyaları içerir.
+This folder contains files that will be copied to the user's project when the statue-ssg npm package is installed or when the `statue-ssg init -s` command is run.
 
-## İçerik
+## Contents
 
-- `/src`: SvelteKit kaynak dosyaları
-- `/content`: Markdown içerik dosyaları
-- Yapılandırma dosyaları (svelte.config.js, vite.config.js, tailwind.config.js)
+- `/src`: SvelteKit source files
+- `/content`: Markdown content files
+- Configuration files (svelte.config.js, vite.config.js, tailwind.config.js)

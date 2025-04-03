@@ -14,7 +14,7 @@ const rootDir = path.resolve(__dirname, '..');
 const templateDir = path.join(rootDir, 'template');
 fs.ensureDirSync(templateDir);
 
-console.log(chalk.green('✨ Template klasörü hazırlanıyor...'));
+console.log(chalk.green('✨ Preparing template folder...'));
 
 // Kaynak dosyaları ve hedef yollarını tanımla
 const filesToCopy = [
@@ -39,12 +39,12 @@ for (const file of filesToCopy) {
       
       // Klasör veya dosyayı kopyala
       fs.copySync(srcPath, destPath);
-      console.log(chalk.green(`✓ ${file.src} kopyalandı`));
+      console.log(chalk.green(`✓ ${file.src} copied`));
     } catch (err) {
-      console.error(chalk.red(`✗ ${file.src} kopyalanırken hata: ${err.message}`));
+      console.error(chalk.red(`✗ Error while copying ${file.src}: ${err.message}`));
     }
   } else {
-    console.warn(chalk.yellow(`! ${file.src} bulunamadı, atlanıyor`));
+    console.warn(chalk.yellow(`! ${file.src} not found, skipping`));
   }
 }
 
@@ -85,16 +85,16 @@ console.log(chalk.green('✓ template/package.json oluşturuldu'));
 // README oluştur
 const readmeContent = `# Statue SSG Template
 
-Bu klasör, statue-ssg npm paketi yüklendiğinde veya \`statue-ssg init -s\` komutu çalıştırıldığında kullanıcının projesine kopyalanacak dosyaları içerir.
+This folder contains files that will be copied to the user's project when the statue-ssg npm package is installed or when the \`statue-ssg init -s\` command is run.
 
-## İçerik
+## Contents
 
-- \`/src\`: SvelteKit kaynak dosyaları
-- \`/content\`: Markdown içerik dosyaları
-- Yapılandırma dosyaları (svelte.config.js, vite.config.js, tailwind.config.js)
+- \`/src\`: SvelteKit source files
+- \`/content\`: Markdown content files
+- Configuration files (svelte.config.js, vite.config.js, tailwind.config.js)
 `;
 
 fs.writeFileSync(path.join(templateDir, 'README.md'), readmeContent);
-console.log(chalk.green('✓ template/README.md oluşturuldu'));
+console.log(chalk.green('✓ template/README.md created'));
 
-console.log(chalk.green.bold('✅ Template klasörü hazırlandı!')); 
+console.log(chalk.green.bold('✅ Template folder prepared!')); 

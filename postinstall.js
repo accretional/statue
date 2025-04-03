@@ -5,29 +5,29 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import chalk from 'chalk';
 
-// ESM ile __dirname elde etmek
+// Get __dirname with ESM
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Kullanıcının proje dizini (çalışılan dizin)
+// User's project directory (working directory)
 const targetDir = process.cwd();
-console.log(chalk.green('Statue SSG dosyaları kopyalanıyor...'));
-console.log(chalk.blue(`Hedef dizin: ${targetDir}`));
+console.log(chalk.green('Copying Statue SSG files...'));
+console.log(chalk.blue(`Target directory: ${targetDir}`));
 
-// Kaynak klasörleri (templatedeki dosyalar)
+// Source folders (files in template)
 const sourceTemplate = path.join(__dirname, 'template');
 
-// Hedef klasörler (kullanıcının projesindeki dizinler)
+// Target folders (directories in user's project)
 const targetSrc = path.join(targetDir, 'src');
 const targetContent = path.join(targetDir, 'content');
 
-// src klasörünü kopyala
+// Copy src folder
 try {
   if (!fs.existsSync(targetSrc)) {
     fs.ensureDirSync(targetSrc);
   }
   
-  // src klasörü içindeki her şeyi kopyala
+  // Copy everything in src folder
   fs.copySync(
     path.join(sourceTemplate, 'src'), 
     targetSrc, 
@@ -36,12 +36,12 @@ try {
       errorOnExist: false
     }
   );
-  console.log(chalk.green('✓ src klasörü başarıyla kopyalandı'));
+  console.log(chalk.green('✓ src folder copied successfully'));
 } catch (err) {
-  console.error(chalk.red('src klasörü kopyalanırken bir hata oluştu:'), err);
+  console.error(chalk.red('An error occurred while copying src folder:'), err);
 }
 
-// content klasörünü kopyala
+// Copy content folder
 try {
   if (!fs.existsSync(targetContent)) {
     fs.ensureDirSync(targetContent);
@@ -53,15 +53,15 @@ try {
         errorOnExist: false
       }
     );
-    console.log(chalk.green('✓ content klasörü başarıyla kopyalandı'));
+    console.log(chalk.green('✓ content folder copied successfully'));
   } else {
-    console.log(chalk.yellow('! content klasörü zaten mevcut, içerik kopyalanmadı'));
+    console.log(chalk.yellow('! content folder already exists, content not copied'));
   }
 } catch (err) {
-  console.error(chalk.red('content klasörü kopyalanırken bir hata oluştu:'), err);
+  console.error(chalk.red('An error occurred while copying content folder:'), err);
 }
 
-// root dosyalarını kopyala (svelte.config.js, tailwind.config.js vs.)
+// Copy root files (svelte.config.js, tailwind.config.js etc.)
 try {
   const rootFiles = ['svelte.config.js', 'tailwind.config.js', 'vite.config.js'];
   
@@ -71,29 +71,29 @@ try {
     
     if (fs.existsSync(sourcePath) && !fs.existsSync(targetPath)) {
       fs.copySync(sourcePath, targetPath);
-      console.log(chalk.green(`✓ ${file} başarıyla kopyalandı`));
+      console.log(chalk.green(`✓ ${file} copied successfully`));
     } else if (fs.existsSync(targetPath)) {
-      console.log(chalk.yellow(`! ${file} zaten mevcut, üzerine yazılmadı`));
+      console.log(chalk.yellow(`! ${file} already exists, not overwritten`));
     }
   });
 } catch (err) {
-  console.error(chalk.red('Konfigürasyon dosyaları kopyalanırken bir hata oluştu:'), err);
+  console.error(chalk.red('An error occurred while copying configuration files:'), err);
 }
 
-// package.json içine gerekli bağımlılıkları ekle
+// Add required dependencies to package.json
 try {
   const targetPackageJsonPath = path.join(targetDir, 'package.json');
   if (fs.existsSync(targetPackageJsonPath)) {
-    // Kullanıcının package.json dosyasını oku
+    // Read user's package.json file
     const packageJson = JSON.parse(fs.readFileSync(targetPackageJsonPath, 'utf8'));
     
-    // Gerekli bağımlılıklar
+    // Required dependencies
     const dependencies = {
       'marked': '^4.2.4',
       'gray-matter': '^4.0.3'
     };
     
-    // Eksik bağımlılıkları ekle
+    // Add missing dependencies
     let dependenciesAdded = false;
     for (const [dep, version] of Object.entries(dependencies)) {
       if (!packageJson.dependencies || !packageJson.dependencies[dep]) {
@@ -103,22 +103,22 @@ try {
       }
     }
     
-    // Değişiklikler yapıldıysa package.json'ı güncelle
+    // Update package.json if changes were made
     if (dependenciesAdded) {
       fs.writeFileSync(targetPackageJsonPath, JSON.stringify(packageJson, null, 2));
-      console.log(chalk.green('✓ package.json güncellendi, gerekli bağımlılıklar eklendi'));
-      console.log(chalk.blue('Lütfen şimdi şu komutu çalıştırın: npm install'));
+      console.log(chalk.green('✓ package.json updated, required dependencies added'));
+      console.log(chalk.blue('Please run the following command now: npm install'));
     } else {
-      console.log(chalk.green('✓ Gerekli tüm bağımlılıklar zaten mevcut'));
+      console.log(chalk.green('✓ All required dependencies are already present'));
     }
   }
 } catch (err) {
-  console.error(chalk.red('package.json güncellenirken bir hata oluştu:'), err);
+  console.error(chalk.red('An error occurred while updating package.json:'), err);
 }
 
-console.log(chalk.green.bold('✨ Statue SSG kurulumu tamamlandı!'));
-console.log(chalk.blue('Başlamak için:'));
-console.log(chalk.white('1. Eğer bildirilen bağımlılıklar eklendiyse: npm install'));
-console.log(chalk.white('2. Geliştirme sunucusunu başlatın: npm run dev'));
-console.log(chalk.white('3. İçeriğinizi content/ klasörüne ekleyin'));
-console.log(chalk.white('4. Statik sitenizi oluşturun: npm run build')); 
+console.log(chalk.green.bold('✨ Statue SSG installation completed!'));
+console.log(chalk.blue('To get started:'));
+console.log(chalk.white('1. If dependencies were added: npm install'));
+console.log(chalk.white('2. Start the development server: npm run dev'));
+console.log(chalk.white('3. Add your content to the content/ folder'));
+console.log(chalk.white('4. Build your static site: npm run build')); 

@@ -1,4 +1,3 @@
-
 import fs from 'fs-extra';
 import path from 'path';
 import { execSync } from 'child_process';
@@ -34,15 +33,8 @@ export async function generateStaticSite({
     // Clean output directory
     fs.ensureDirSync(outputDir);
     fs.emptyDirSync(outputDir);
-
-    // If using a custom template, use it - otherwise use the default SvelteKit app
-    const useCustomTemplate = template && fs.existsSync(template);
     
-    if (verbose && useCustomTemplate) {
-      console.log(`🔧 Using custom template: ${template}`);
-    }
-    
-    // Process all content
+    // Process all content (preload)
     const allContent = getAllContent();
     const directories = getContentDirectories();
     
@@ -51,25 +43,15 @@ export async function generateStaticSite({
       console.log(`📁 Found ${directories.length} directories`);
     }
 
-    // Build routes
-    for (const item of allContent) {
-      const outputPath = path.join(outputDir, item.url);
-      fs.ensureDirSync(path.dirname(outputPath));
-      
-      // Generate HTML for this item
-      const html = generateHtmlForContent(item, allContent, directories);
-      
-      // Write HTML file
-      fs.writeFileSync(`${outputPath}.html`, html);
-      
-      if (verbose) {
-        console.log(`✅ Generated: ${item.url}.html`);
-      }
+    // Using SvelteKit's build process
+    try {
+      console.log('🔨 Starting SvelteKit build process...');
+      execSync('npx vite build', { stdio: 'inherit' });
+      console.log('✅ SvelteKit build completed');
+    } catch (error) {
+      console.error('❌ Error during SvelteKit build:', error.message);
+      throw new Error('SvelteKit build failed');
     }
-    
-    // Generate index.html
-    const indexHtml = generateIndexHtml(directories, allContent);
-    fs.writeFileSync(path.join(outputDir, 'index.html'), indexHtml);
     
     // Copy static assets if they exist
     const staticDir = path.join(inputDir, 'static');
@@ -78,7 +60,7 @@ export async function generateStaticSite({
       console.log('📁 Copied static assets');
     }
     
-    console.log(`✨ Static site generated successfully in ${outputDir}`);
+    console.log(`✨ Static site successfully generated: ${outputDir}`);
   } catch (error) {
     console.error('❌ Error generating static site:', error);
     throw error;
