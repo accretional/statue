@@ -1,14 +1,17 @@
 {
 	"name": "statue-ssg",
-	"version": "0.0.4",
-	"description": "A simple static site generator for markdown content with SvelteKit integration",
+	"version": "0.1.2",
+	"description": "Statue: Svelte Static Site Generator with CMS features, launch your SaaS website in seconds",
 	"type": "module",
 	"main": "dist/index.js",
 	"bin": {
-		"statue-ssg": "dist/cli.js"
+		"statue-ssg": "bin/cli.js"
 	},
 	"files": [
 		"dist",
+		"bin",
+		"template",
+		"postinstall.js",
 		"LICENSE",
 		"README.md"
 	],
@@ -16,9 +19,11 @@
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
-		"prepublishOnly": "npm run package && npm run package:cli",
+		"prepublishOnly": "npm run package && npm run package:cli && npm run prepare:template",
 		"package": "rimraf dist && node scripts/build-package.js",
-		"package:cli": "node scripts/build-cli.js"
+		"package:cli": "node scripts/build-cli.js",
+		"prepare:template": "node scripts/prepare-template.js",
+		"postinstall": "node postinstall.js"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-static": "^3.0.0",
@@ -56,17 +61,17 @@
 		"static-site",
 		"content-management"
 	],
-	"author": "Your Name <your.email@example.com>",
+	"author": "Semih Polat",
 	"license": "MIT",
 	"publishConfig": {
 		"access": "public"
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/yourusername/statue-ssg.git"
+		"url": "git+https://github.com/semihpolat/statue-ssg.git"
 	},
 	"bugs": {
-		"url": "https://github.com/yourusername/statue-ssg/issues"
+		"url": "https://github.com/semihpolat/statue-ssg/issues"
 	},
-	"homepage": "https://github.com/yourusername/statue-ssg#readme"
+	"homepage": "https://github.com/semihpolat/statue-ssg#readme"
 }

@@ -1,10 +1,11 @@
+#!/usr/bin/env node
+
 import fs from 'fs-extra';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { Command } from 'commander';
 import chalk from 'chalk';
 import { generateStaticSite } from './index.js';
-import { execSync } from 'child_process';
 
 // Handle __dirname in ESM
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -15,7 +16,7 @@ const program = new Command();
 program
   .name('statue-ssg')
   .description('Convert markdown content to a static website')
-  .version('0.1.2');
+  .version('0.0.1');
 
 program
   .command('build')
