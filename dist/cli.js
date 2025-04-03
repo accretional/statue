@@ -1,6 +1,10 @@
-#!/usr/bin/env node
-
-#!/usr/bin/env node
+var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x, {
+  get: (a, b) => (typeof require !== "undefined" ? require : a)[b]
+}) : x)(function(x) {
+  if (typeof require !== "undefined")
+    return require.apply(this, arguments);
+  throw Error('Dynamic require of "' + x + '" is not supported');
+});
 
 // src/cli.js
 import fs3 from "fs-extra";
@@ -313,9 +317,10 @@ function generateIndexHtml(directories, allContent) {
 }
 
 // src/cli.js
+import { execSync } from "child_process";
 var __dirname = path3.dirname(fileURLToPath(import.meta.url));
 var program = new Command();
-program.name("statue-ssg").description("Convert markdown content to a static website").version("0.0.1");
+program.name("statue-ssg").description("Convert markdown content to a static website").version("0.1.2");
 program.command("build").description("Build a static site from markdown content").option("-i, --input <directory>", "input content directory", "content").option("-o, --output <directory>", "output directory", "build").option("-t, --template <path>", "custom template directory").option("-v, --verbose", "verbose output").action(async (options) => {
   console.log(chalk.bold.green("Statue SSG - Static Site Generator"));
   try {
@@ -331,15 +336,92 @@ program.command("build").description("Build a static site from markdown content"
     process.exit(1);
   }
 });
-program.command("init").description("Initialize a new Statue SSG project").option("-d, --directory <name>", "project directory name", ".").action((options) => {
+program.command("setup").description("Set up Statue SSG in your SvelteKit project").action(() => {
+  var _a, _b;
+  try {
+    const pkgPath = path3.join(process.cwd(), "package.json");
+    if (!fs3.existsSync(pkgPath)) {
+      console.error(chalk.red("Error: No package.json found. Please run this command in a SvelteKit project."));
+      process.exit(1);
+    }
+    const pkg = JSON.parse(fs3.readFileSync(pkgPath, "utf8"));
+    if (!((_a = pkg.dependencies) == null ? void 0 : _a["@sveltejs/kit"]) && !((_b = pkg.devDependencies) == null ? void 0 : _b["@sveltejs/kit"])) {
+      console.warn(chalk.yellow("Warning: This doesn't appear to be a SvelteKit project."));
+      const proceed = true;
+      if (!proceed) {
+        console.log(chalk.blue("Setup cancelled."));
+        process.exit(0);
+      }
+    }
+    console.log(chalk.green("Setting up Statue SSG in your project..."));
+    const postinstallPath = path3.resolve(__dirname, "..", "postinstall.js");
+    if (fs3.existsSync(postinstallPath)) {
+      try {
+        console.log(chalk.blue("Running setup script..."));
+        __require(postinstallPath);
+      } catch (e) {
+        try {
+          console.log(chalk.blue("Trying alternative method..."));
+          execSync(`node "${postinstallPath}"`, { stdio: "inherit" });
+        } catch (err) {
+          console.error(chalk.red("Error executing postinstall script:"), err.message);
+          process.exit(1);
+        }
+      }
+    } else {
+      console.error(chalk.red("Error: Setup script not found."));
+      console.log(chalk.yellow("Try running: node node_modules/statue-ssg/postinstall.js"));
+      process.exit(1);
+    }
+  } catch (err) {
+    console.error(chalk.red("Error during setup:"), err.message);
+    process.exit(1);
+  }
+});
+program.command("init").description("Initialize a new Statue SSG project").option("-d, --directory <n>", "project directory name", ".").option("-s, --sveltekit", "initialize with SvelteKit integration").action((options) => {
   const targetDir = path3.resolve(process.cwd(), options.directory);
   try {
-    fs3.ensureDirSync(targetDir);
-    fs3.ensureDirSync(path3.join(targetDir, "content"));
-    fs3.ensureDirSync(path3.join(targetDir, "content/blog"));
-    fs3.ensureDirSync(path3.join(targetDir, "content/docs"));
-    fs3.ensureDirSync(path3.join(targetDir, "content/static"));
-    const exampleContent = `---
+    if (options.sveltekit) {
+      console.log(chalk.green("SvelteKit entegrasyonu ile Statue SSG ba\u015Flat\u0131l\u0131yor..."));
+      if (!fs3.existsSync(path3.join(targetDir, "package.json"))) {
+        console.log(chalk.yellow("Mevcut bir SvelteKit projesinde de\u011Filsiniz."));
+        console.log(chalk.blue("\xD6nce bir SvelteKit projesi olu\u015Fturun:"));
+        console.log(chalk.white("npm create svelte@latest my-app"));
+        console.log(chalk.white("cd my-app"));
+        console.log(chalk.white("npm install"));
+        console.log(chalk.white("npm install statue-ssg"));
+        process.exit(0);
+      }
+      try {
+        console.log(chalk.blue("Statue SSG dosyalar\u0131 kopyalan\u0131yor..."));
+        const postinstallPath = path3.join(__dirname, "..", "postinstall.js");
+        if (fs3.existsSync(postinstallPath)) {
+          execSync(`node ${postinstallPath}`, { stdio: "inherit" });
+        } else {
+          console.error(chalk.red("postinstall.js dosyas\u0131 bulunamad\u0131."));
+          console.log(chalk.yellow("Manuel olarak kurulum yap\u0131l\u0131yor..."));
+          fs3.ensureDirSync(path3.join(targetDir, "content"));
+          fs3.ensureDirSync(path3.join(targetDir, "content/blog"));
+          fs3.ensureDirSync(path3.join(targetDir, "content/docs"));
+          fs3.ensureDirSync(path3.join(targetDir, "content/static"));
+          console.log(chalk.green("\u2705 \u0130\xE7erik klas\xF6rleri olu\u015Fturuldu."));
+        }
+      } catch (err) {
+        console.error(chalk.red("Entegrasyon s\u0131ras\u0131nda hata olu\u015Ftu:"), err.message);
+      }
+      console.log(chalk.green("\u2705 SvelteKit entegrasyonu tamamland\u0131!"));
+      console.log();
+      console.log("Sonraki ad\u0131mlar:");
+      console.log("  1. Ba\u011F\u0131ml\u0131l\u0131klar\u0131 y\xFCkleyin:", chalk.bold("npm install"));
+      console.log("  2. Geli\u015Ftirme sunucusunu ba\u015Flat\u0131n:", chalk.bold("npm run dev"));
+      console.log("  3. content/ dizinindeki i\xE7eri\u011Fi d\xFCzenleyin");
+    } else {
+      fs3.ensureDirSync(targetDir);
+      fs3.ensureDirSync(path3.join(targetDir, "content"));
+      fs3.ensureDirSync(path3.join(targetDir, "content/blog"));
+      fs3.ensureDirSync(path3.join(targetDir, "content/docs"));
+      fs3.ensureDirSync(path3.join(targetDir, "content/static"));
+      const exampleContent = `---
 title: Hello World
 description: Welcome to Statue SSG
 date: ${(/* @__PURE__ */ new Date()).toISOString().split("T")[0]}
@@ -356,35 +438,36 @@ This is an example markdown file.
 - SEO friendly
 
 `;
-    fs3.writeFileSync(path3.join(targetDir, "content/blog/hello-world.md"), exampleContent);
-    const pkgPath = path3.join(targetDir, "package.json");
-    if (!fs3.existsSync(pkgPath)) {
-      const pkg = {
-        name: path3.basename(targetDir),
-        version: "0.0.1",
-        description: "A static site built with Statue SSG",
-        type: "module",
-        scripts: {
-          build: "statue-ssg build",
-          dev: "statue-ssg build && serve build"
-        },
-        dependencies: {
-          "statue-ssg": "^0.0.1"
-        },
-        devDependencies: {
-          serve: "^14.0.0"
-        }
-      };
-      fs3.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
+      fs3.writeFileSync(path3.join(targetDir, "content/blog/hello-world.md"), exampleContent);
+      const pkgPath = path3.join(targetDir, "package.json");
+      if (!fs3.existsSync(pkgPath)) {
+        const pkg = {
+          name: path3.basename(targetDir),
+          version: "0.0.1",
+          description: "A static site built with Statue SSG",
+          type: "module",
+          scripts: {
+            build: "statue-ssg build",
+            dev: "statue-ssg build && serve build"
+          },
+          dependencies: {
+            "statue-ssg": "^0.1.2"
+          },
+          devDependencies: {
+            serve: "^14.0.0"
+          }
+        };
+        fs3.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
+      }
+      console.log(chalk.green("\u2705 Statue SSG projesi ba\u015Flat\u0131ld\u0131!"));
+      console.log();
+      console.log("Sonraki ad\u0131mlar:");
+      console.log("  1. Ba\u011F\u0131ml\u0131l\u0131klar\u0131 y\xFCkleyin:", chalk.bold("npm install"));
+      console.log("  2. Statik siteyi olu\u015Fturun:", chalk.bold("npm run build"));
+      console.log("  3. content/ dizinindeki i\xE7eri\u011Fi d\xFCzenleyin");
     }
-    console.log(chalk.green("\u2705 Statue SSG project initialized!"));
-    console.log();
-    console.log("Next steps:");
-    console.log("  1. Install dependencies:", chalk.bold("npm install"));
-    console.log("  2. Build the site:", chalk.bold("npm run build"));
-    console.log("  3. Edit content in the", chalk.bold("content/"), "directory");
   } catch (err) {
-    console.error(chalk.red("Error:"), err.message);
+    console.error(chalk.red("Hata:"), err.message);
     process.exit(1);
   }
 });

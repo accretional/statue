@@ -18,12 +18,15 @@
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
+		"build:cli": "node scripts/build-cli.js",
 		"preview": "vite preview",
-		"prepublishOnly": "npm run package && npm run package:cli && npm run prepare:template",
-		"package": "rimraf dist && node scripts/build-package.js",
-		"package:cli": "node scripts/build-cli.js",
-		"prepare:template": "node scripts/prepare-template.js",
-		"postinstall": "node postinstall.js"
+		"prepublishOnly": "npm run build && npm run build:cli",
+		"postinstall": "node postinstall.js",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"lint": "prettier --plugin-search-dir . --check . && eslint .",
+		"format": "prettier --plugin-search-dir . --write .",
+		"release": "npm run build && npm run build:cli && npm publish"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-static": "^3.0.0",

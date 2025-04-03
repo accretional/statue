@@ -1,0 +1,125 @@
+<script>
+  import { page } from '$app/stores';
+  import NavigationBar from '$lib/components/NavigationBar.svelte';
+  
+  // Loaded content
+  export let data;
+  
+  // Show content if not having error (notFound: true) 
+  $: content = data.content;
+  $: directories = data.directories;
+  
+  // Active URL for highlighting (for navigation bar)
+  $: activePath = $page.url.pathname;
+  
+  // Page title
+  $: title = content ? content.metadata.title : 'Content Not Found';
+  $: description = content?.metadata?.description;
+  
+  // Create back link
+  $: backLink = content ? getBackLink(content.directory) : '/';
+  $: backLinkText = content ? getBackLinkText(content.directory) : 'Home';
+  
+  // Helper functions for back link
+  function getBackLink(directory) {
+    if (directory === 'root') return '/';
+    return `/${directory}`;
+  }
+  
+  function getBackLinkText(directory) {
+    if (directory === 'root') return 'Home';
+    return directory.charAt(0).toUpperCase() + directory.slice(1);
+  }
+</script>
+
+<svelte:head>
+  <title>{title}</title>
+  {#if description}
+    <meta name="description" content={description} />
+  {/if}
+</svelte:head>
+
+{#if data.notFound}
+  <!-- Content not found, let Svelte route handle it -->
+  <div class="bg-red-100 p-4 rounded-md my-8 max-w-prose mx-auto">
+    <h2 class="text-xl font-bold text-red-700">DEBUG: Content not found</h2>
+    <p class="my-2">URL: {$page.url.pathname}</p>
+    <p class="my-2">Params: {JSON.stringify($page.params)}</p>
+    <p class="my-2">Data: {JSON.stringify(data)}</p>
+  </div>
+{:else if content}
+  <NavigationBar navbarItems={directories} {activePath} />
+
+  <div class="bg-black text-white min-h-screen">
+    <div class="container mx-auto px-4 py-16">
+      <div class="max-w-4xl mx-auto">
+        <header class="mb-10">
+          <h1 class="text-4xl font-bold mb-4 bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">
+            {content.metadata.title}
+          </h1>
+          
+          {#if content.metadata.date}
+            <div class="text-gray-400 mt-4">
+              Published: {new Date(content.metadata.date).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })}
+              {#if content.metadata.author}
+                by {content.metadata.author}
+              {/if}
+            </div>
+          {/if}
+          
+          <div class="mt-6">
+            <a href={backLink} class="inline-flex items-center text-green-500 hover:text-green-400 transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+              </svg>
+              Back to {backLinkText}
+            </a>
+          </div>
+        </header>
+        
+        <main class="prose prose-invert prose-green max-w-none bg-gray-800 p-8 rounded-xl border border-gray-700">
+          {@html content.content}
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-black text-gray-400 py-10 border-t border-gray-800">
+    <div class="container mx-auto px-4 text-center">
+      <p>© {new Date().getFullYear()} Statue SSG. Static site generator developed with SvelteKit.</p>
+    </div>
+  </footer>
+{:else}
+  <div class="bg-yellow-100 p-4 rounded-md my-8 max-w-prose mx-auto">
+    <h2 class="text-xl font-bold text-yellow-700">DEBUG: Content is undefined or empty</h2>
+    <p class="my-2">URL: {$page.url.pathname}</p>
+    <p class="my-2">Params: {JSON.stringify($page.params)}</p>
+    <p class="my-2">Data: {JSON.stringify(data)}</p>
+  </div>
+{/if}
+
+<style>
+  :global(body) {
+    background-color: #000;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+      Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+  
+  :global(.prose) {
+    max-width: 65ch;
+  }
+  :global(.prose h1) { font-size: 1.5rem; font-weight: bold; margin-top: 2rem; margin-bottom: 1rem; }
+  :global(.prose h2) { font-size: 1.25rem; font-weight: bold; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+  :global(.prose h3) { font-size: 1.125rem; font-weight: bold; margin-top: 1rem; margin-bottom: 0.5rem; }
+  :global(.prose p) { margin-top: 1rem; margin-bottom: 1rem; }
+  :global(.prose ul) { list-style-type: disc; padding-left: 1.25rem; margin-top: 1rem; margin-bottom: 1rem; }
+  :global(.prose ol) { list-style-type: decimal; padding-left: 1.25rem; margin-top: 1rem; margin-bottom: 1rem; }
+  :global(.prose a) { color: #34d399; }
+  :global(.prose a:hover) { text-decoration: underline; }
+  :global(.prose code) { background-color: #1f2937; padding: 0.125rem 0.25rem; border-radius: 0.25rem; font-size: 0.875rem; }
+  :global(.prose pre) { background-color: #1f2937; padding: 1rem; border-radius: 0.25rem; margin-top: 1rem; margin-bottom: 1rem; overflow-x: auto; }
+</style> 
