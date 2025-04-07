@@ -5,18 +5,18 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import chalk from 'chalk';
 
-// ESM ile __dirname elde etmek
+// Get __dirname with ESM
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 
-// Template dizinini oluştur
+// Create template directory
 const templateDir = path.join(rootDir, 'template');
 fs.ensureDirSync(templateDir);
 
 console.log(chalk.green('✨ Preparing template folder...'));
 
-// Kaynak dosyaları ve hedef yollarını tanımla
+// Define source files and target paths
 const filesToCopy = [
   { src: 'src', dest: 'src' },
   { src: 'content', dest: 'content' },
@@ -25,19 +25,19 @@ const filesToCopy = [
   { src: 'tailwind.config.js', dest: 'tailwind.config.js' },
 ];
 
-// Dosyaları kopyala
+// Copy files
 for (const file of filesToCopy) {
   const srcPath = path.join(rootDir, file.src);
   const destPath = path.join(templateDir, file.dest);
   
   if (fs.existsSync(srcPath)) {
     try {
-      // Eğer hedef zaten varsa, önce temizle
+      // If target already exists, clean it first
       if (fs.existsSync(destPath)) {
         fs.removeSync(destPath);
       }
       
-      // Klasör veya dosyayı kopyala
+      // Copy folder or file
       fs.copySync(srcPath, destPath);
       console.log(chalk.green(`✓ ${file.src} copied`));
     } catch (err) {
@@ -48,7 +48,7 @@ for (const file of filesToCopy) {
   }
 }
 
-// package.json dosyasını oluşturmak için template
+// Template for creating package.json
 const templatePackageJson = {
   "name": "statue-example",
   "version": "0.0.1",
@@ -75,14 +75,14 @@ const templatePackageJson = {
   "type": "module"
 };
 
-// Template içine package.json dosyasını yaz
+// Write package.json file into template
 fs.writeFileSync(
   path.join(templateDir, 'package.json'), 
   JSON.stringify(templatePackageJson, null, 2)
 );
-console.log(chalk.green('✓ template/package.json oluşturuldu'));
+console.log(chalk.green('✓ template/package.json created'));
 
-// README oluştur
+// README create
 const readmeContent = `# Statue SSG Template
 
 This folder contains files that will be copied to the user's project when the statue-ssg npm package is installed or when the \`statue-ssg init -s\` command is run.
