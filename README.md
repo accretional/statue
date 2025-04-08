@@ -41,7 +41,21 @@ Add Statue SSG to your SvelteKit project:
 npm install statue-ssg
 ```
 
-### Step 3: Set Up Statue SSG
+### Step 3: Remove Default SvelteKit Files (Important!)
+
+Before setting up Statue SSG, remove the default SvelteKit src folder to avoid conflicts with existing files:
+
+```bash
+# Remove the default SvelteKit src folder
+rm -rf src
+
+# Alternatively on Windows
+# rmdir /s /q src
+```
+
+This step is necessary because Statue SSG won't overwrite existing files by default. Removing the src folder ensures that the Statue SSG templates are properly copied to your project.
+
+### Step 4: Set Up Statue SSG
 
 Run the setup command to copy all necessary files to your project:
 
@@ -55,7 +69,7 @@ This command will:
 - Configure routes for your Markdown content
 - Add necessary dependencies
 
-### Step 4: Start Developing
+### Step 5: Start Developing
 
 Start the development server:
 
