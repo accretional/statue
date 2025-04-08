@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
 try {
-  // Dist/cli.js dosyasını çağır
+  // call Dist/cli.js 
   import('../dist/cli.js').catch(err => {
-    console.error('Statue SSG CLI çalıştırılırken hata oluştu:', err);
+    console.error('Error:', err);
     process.exit(1);
   });
 } catch (err) {
-  console.error('Statue SSG CLI yüklenirken hata oluştu:', err);
+  console.error('Error:', err);
   process.exit(1);
 } 
