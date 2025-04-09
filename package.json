@@ -1,6 +1,6 @@
 {
 	"name": "statue-ssg",
-	"version": "0.1.4",
+	"version": "0.1.5",
 	"description": "Statue: SvelteKit-based CMS that converts markdown content into beautiful static websites",
 	"type": "module",
 	"main": "dist/index.js",

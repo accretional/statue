@@ -32,7 +32,7 @@ try {
     path.join(sourceTemplate, 'src'), 
     targetSrc, 
     { 
-      overwrite: false,
+      overwrite: true,
       errorOnExist: false
     }
   );
