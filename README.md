@@ -42,7 +42,7 @@ npm install statue-ssg
 After installation, the setup process will automatically run. If it doesn't, you can manually run:
 
 ```bash
-node node_modules/statue-ssg/postinstall.js
+npx statue init
 ```
 
 This will:
@@ -97,16 +97,6 @@ This is my first post using Statue SSG.
 - Beautiful UI
 ```
 
-## Alternative Setup Methods
-
-Use the standard SvelteKit build process:
-
-```bash
-npm run build
-```
-
-This will prerender all your content pages using SvelteKit's static adapter.
-
 ## 📥 Installation and Usage
 
 There are several methods for installing Statue SSG:
@@ -126,10 +116,7 @@ npx statue init
 If automatic installation doesn't work, you can try these alternative methods:
 
 ```bash
-# Using the setup script directly
-npm run setup
-
-# or using the alternative command
+# Using command directly
 npx statue-setup
 ```
 
@@ -146,7 +133,6 @@ If you encounter any issues during installation:
 
 1. Make sure the `--ignore-scripts` setting is not enabled in your NPM configuration
 2. Ensure the `fs-extra` package is added as a dependency in your project
-3. Examine error messages to identify problems
 
 ## License
 
