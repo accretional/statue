@@ -19,9 +19,6 @@ export default defineConfig({
     }
   },
   
-  // Static resource folder
-  publicDir: 'static',
-  
   // Development server
   server: {
     port: 3000,
