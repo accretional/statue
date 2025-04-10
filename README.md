@@ -1,6 +1,6 @@
 # Statue SSG
 
-A lightning-fast static site generator that combines the power of Markdown content with SvelteKit. Create beautiful static websites in minutes, with or without SvelteKit integration.
+A lightning-fast static site generator that combines the power of Markdown content with SvelteKit. Create beautiful static websites in minutes, with SvelteKit integration.
 
 [![npm version](https://img.shields.io/npm/v/statue-ssg.svg)](https://www.npmjs.com/package/statue-ssg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
@@ -114,7 +114,7 @@ During the setup and build processes, the following occurs:
   Executing `npx statue init` triggers a post-install script. This script copies the template folder from within the library to your project, and updates configuration files (e.g., `svelte.config.js` and others) accordingly.
 
 - **Content Management:**  
-  Once set up, you can rapidly create a site by editing the Markdown files in the `content` folder. Group your content by simply creating new folders and adding Markdown files to them.
+  Once set up, you can rapidly create a site by editing the Markdown files in the `content` folder. Group your content by simply creating new folders and adding Markdown files to them. If you want to modify the homepage, edit the `page.svelte` file under the `routes` folder. Additionally, you can extend your site by creating your own Svelte files within the `routes` folder.
 
 - **Static Site Generation:**  
   When you run `npm run build`, the build process executes `hooks/server.js`. This file uses an `entries` method to scan all your project’s root routes and converts them into static pages.
