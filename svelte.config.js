@@ -28,14 +28,7 @@ const config = {
     prerender: {
       crawl: true,
       entries: [
-        '/', 
-        '/statik',
-        '/statik/hakkimizda',
-        '/pages',
-        '/pages/pricing',
-        '/blog',
-        '/docs',
-        '/ornek'
+        '/'
       ],
       handleHttpError: 'warn'
     }
