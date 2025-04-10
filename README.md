@@ -7,7 +7,6 @@ A lightning-fast static site generator that combines the power of Markdown conte
 
 ## Features
 
-- ✨ **Dual Mode**: Use with SvelteKit for a full-featured app or standalone for simple static sites
 - 📝 **Markdown-Powered**: Write content in Markdown with frontmatter for metadata
 - 🚀 **Zero Configuration**: Get started with zero configuration
 - 📱 **Mobile-First**: Responsive templates out of the box
@@ -24,10 +23,7 @@ First, you need to create a SvelteKit project:
 
 ```bash
 # Create a new SvelteKit project
-npm create svelte@latest my-website
-
-# Navigate to your project
-cd my-website
+npx sv create .
 
 # Install dependencies
 npm install
@@ -43,13 +39,13 @@ npm install statue-ssg
 
 ### Step 3: Set Up Statue SSG
 
-Run the setup command to copy all necessary files to your project:
+After installation, the setup process will automatically run. If it doesn't, you can manually run:
 
 ```bash
-npx statue-ssg setup
+node node_modules/statue-ssg/postinstall.js
 ```
 
-This command will:
+This will:
 - Copy template files to your project
 - Set up the content directory structure
 - Configure routes for your Markdown content
@@ -103,39 +99,54 @@ This is my first post using Statue SSG.
 
 ## Alternative Setup Methods
 
-If the automatic setup didn't work, you can run the postinstall script manually:
+Use the standard SvelteKit build process:
 
 ```bash
+npm run build
+```
+
+This will prerender all your content pages using SvelteKit's static adapter.
+
+## 📥 Installation and Usage
+
+There are several methods for installing Statue SSG:
+
+### Automatic Installation (Recommended)
+
+```bash
+# Add the package to your project
+npm install statue-ssg
+
+# Complete installation (postinstall runs automatically with npm 7+)
+npx statue init
+```
+
+### Alternative Methods
+
+If automatic installation doesn't work, you can try these alternative methods:
+
+```bash
+# Using the setup script directly
+npm run setup
+
+# or using the alternative command
+npx statue-setup
+```
+
+### Manual Installation
+
+```bash
+# Traditional method
 node node_modules/statue-ssg/postinstall.js
 ```
 
-## CLI Commands
+## 🗣️ Troubleshooting
 
-Statue SSG provides several useful commands:
+If you encounter any issues during installation:
 
-```bash
-# Set up Statue SSG in an existing SvelteKit project
-npx statue-ssg setup
-
-# Initialize a new project with SvelteKit integration
-npx statue-ssg init -s
-
-# Build the static site
-npx statue-ssg build
-
-# Display help
-npx statue-ssg --help
-```
-
-## Build Options
-
-```bash
-# Specify input and output directories
-npx statue-ssg build -i content -o build
-
-# Enable verbose output
-npx statue-ssg build -v
-```
+1. Make sure the `--ignore-scripts` setting is not enabled in your NPM configuration
+2. Ensure the `fs-extra` package is added as a dependency in your project
+3. Examine error messages to identify problems
 
 ## License
 

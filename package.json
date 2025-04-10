@@ -1,30 +1,31 @@
 {
 	"name": "statue-ssg",
-	"version": "0.1.5",
-	"description": "Statue: SvelteKit-based CMS that converts markdown content into beautiful static websites",
+	"version": "0.1.6",
+	"description": "Statue: SvelteKit-based CMS for markdown content in SvelteKit projects",
 	"type": "module",
-	"main": "dist/index.js",
+	"main": "src/index.js",
 	"bin": {
-		"statue-ssg": "bin/cli.js"
+		"statue-setup": "./postinstall.js",
+		"statue": "./scripts/statue-cli.js"
 	},
 	"files": [
-		"dist",
-		"bin",
+		"src",
 		"template",
 		"postinstall.js",
+		"scripts",
 		"LICENSE",
 		"README.md"
 	],
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
-		"build:cli": "node scripts/build-cli.js",
 		"preview": "vite preview",
-		"prepublishOnly": "npm run build && npm run build:cli",
+		"prepublishOnly": "npm run build",
 		"postinstall": "node postinstall.js",
+		"setup": "node postinstall.js",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
 		"format": "prettier --plugin-search-dir . --write .",
-		"release": "npm run build && npm run build:cli && npm publish"
+		"release": "npm run build && npm publish"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-static": "^3.0.0",
@@ -50,8 +51,6 @@
 		"marked": "^15.0.7"
 	},
 	"peerDependencies": {
-		"commander": "^13.0.0",
-		"chalk": "^5.0.0",
 		"fs-extra": "^11.0.0"
 	},
 	"keywords": [

@@ -10,8 +10,6 @@ import {
   getSubDirectories
 } from './lib/cms/content-processor.js';
 
-import { generateStaticSite } from './generator.js';
-
 export {
   scanContentDirectory,
   getContentDirectories,
@@ -21,6 +19,5 @@ export {
   getContentByUrl,
   getContentByDirectory,
   clearContentCache,
-  getSubDirectories,
-  generateStaticSite
+  getSubDirectories
 };
