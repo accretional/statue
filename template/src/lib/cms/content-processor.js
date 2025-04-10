@@ -14,6 +14,13 @@ if (isBrowser) {
   throw new Error('Content processor cannot run on the client side!');
 }
 
+// Function to remove the first h1 heading from HTML content
+const removeFirstH1 = (html) => {
+  // Find the first heading and remove it
+  // This regex matches the first <h1> tag and its content up to the closing </h1>
+  return html.replace(/<h1[^>]*>(.*?)<\/h1>/, '');
+};
+
 // Scans all markdown files and folders in the content directory
 const scanContentDirectory = () => {
   const contentPath = path.resolve('content');
@@ -45,7 +52,8 @@ const scanContentDirectory = () => {
           
         const content = fs.readFileSync(fullPath, 'utf-8');
         const { data, content: markdownContent } = matter(content);
-        const html = marked.parse(markdownContent);
+        // Parse markdown to HTML and then remove the first h1 heading
+        const html = removeFirstH1(marked.parse(markdownContent));
         
         // Fix directory - use full path
         let directory = relativePath.replace(/\\/g, '/');

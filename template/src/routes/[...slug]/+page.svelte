@@ -81,7 +81,7 @@
           </div>
         </header>
         
-        <main class="prose prose-invert prose-green max-w-none bg-gray-800 p-8 rounded-xl border border-gray-700">
+        <main class="prose prose-invert prose-green max-w-none">
           {@html content.content}
         </main>
       </div>
@@ -112,14 +112,24 @@
   :global(.prose) {
     max-width: 65ch;
   }
-  :global(.prose h1) { font-size: 1.5rem; font-weight: bold; margin-top: 2rem; margin-bottom: 1rem; }
-  :global(.prose h2) { font-size: 1.25rem; font-weight: bold; margin-top: 1.5rem; margin-bottom: 0.75rem; }
-  :global(.prose h3) { font-size: 1.125rem; font-weight: bold; margin-top: 1rem; margin-bottom: 0.5rem; }
-  :global(.prose p) { margin-top: 1rem; margin-bottom: 1rem; }
-  :global(.prose ul) { list-style-type: disc; padding-left: 1.25rem; margin-top: 1rem; margin-bottom: 1rem; }
-  :global(.prose ol) { list-style-type: decimal; padding-left: 1.25rem; margin-top: 1rem; margin-bottom: 1rem; }
-  :global(.prose a) { color: #34d399; }
-  :global(.prose a:hover) { text-decoration: underline; }
-  :global(.prose code) { background-color: #1f2937; padding: 0.125rem 0.25rem; border-radius: 0.25rem; font-size: 0.875rem; }
-  :global(.prose pre) { background-color: #1f2937; padding: 1rem; border-radius: 0.25rem; margin-top: 1rem; margin-bottom: 1rem; overflow-x: auto; }
+  
+  /* Güçlendirilmiş seçiciler */
+  :global(.prose h1), :global(main.prose > div > h1) { font-size: 1.3rem; font-weight: bold; margin-top: 2rem; margin-bottom: 1rem; }
+  :global(.prose h2), :global(main.prose > div > h2) { font-size: 1.25rem; font-weight: bold; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+  :global(.prose h3), :global(main.prose > div > h3) { font-size: 1.125rem; font-weight: bold; margin-top: 1rem; margin-bottom: 0.5rem; }
+  :global(.prose p), :global(main.prose > div > p) { margin-top: 1rem; margin-bottom: 1rem; }
+  :global(.prose ul), :global(main.prose > div > ul) { list-style-type: disc; padding-left: 1.25rem; margin-top: 1rem; margin-bottom: 1rem; }
+  :global(.prose ol), :global(main.prose > div > ol) { list-style-type: decimal; padding-left: 1.25rem; margin-top: 1rem; margin-bottom: 1rem; }
+  :global(.prose a), :global(main.prose > div > a) { color: #34d399; }
+  :global(.prose a:hover), :global(main.prose > div > a:hover) { text-decoration: underline; }
+  :global(.prose code), :global(main.prose > div > code) { background-color: #1f2937; padding: 0.125rem 0.25rem; border-radius: 0.25rem; font-size: 0.875rem; }
+  :global(.prose pre), :global(main.prose > div > pre) { background-color: #1f2937; padding: 1rem; border-radius: 0.25rem; margin-top: 1rem; margin-bottom: 1rem; overflow-x: auto; }
+  
+  /* Liste öğeleri için ek stil */
+  :global(main.prose > div > ul > li), :global(.prose ul > li) { margin-top: 0.25rem; margin-bottom: 0.25rem; }
+  :global(main.prose > div > ol > li), :global(.prose ol > li) { margin-top: 0.25rem; margin-bottom: 0.25rem; }
+  
+  /* İç içe geçmiş stiller */
+  :global(main.prose > div > ul > li > *), :global(.prose ul > li > *) { margin-top: 0.25rem; margin-bottom: 0.25rem; }
+  :global(main.prose > div > ol > li > *), :global(.prose ol > li > *) { margin-top: 0.25rem; margin-bottom: 0.25rem; }
 </style> 
