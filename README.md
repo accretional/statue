@@ -9,7 +9,6 @@ A lightning-fast static site generator that combines the power of Markdown conte
 
 - 📝 **Markdown-Powered**: Write content in Markdown with frontmatter for metadata
 - 🚀 **Zero Configuration**: Get started with zero configuration
-- 📱 **Mobile-First**: Responsive templates out of the box
 - 🔍 **SEO Friendly**: Optimized for search engines
 - 🔄 **Fast Build Times**: Generate your site in seconds
 - 📂 **Organized Content**: Automatically organizes content by directories
@@ -22,10 +21,8 @@ A lightning-fast static site generator that combines the power of Markdown conte
 First, you need to create a SvelteKit project:
 
 ```bash
-# Create a new SvelteKit project
 npx sv create .
 
-# Install dependencies
 npm install
 ```
 
@@ -97,42 +94,51 @@ This is my first post using Statue SSG.
 - Beautiful UI
 ```
 
-## 📥 Installation and Usage
-
-There are several methods for installing Statue SSG:
-
-### Automatic Installation (Recommended)
-
-```bash
-# Add the package to your project
-npm install statue-ssg
-
-# Complete installation (postinstall runs automatically with npm 7+)
-npx statue init
-```
-
-### Alternative Methods
-
-If automatic installation doesn't work, you can try these alternative methods:
-
-```bash
-# Using command directly
-npx statue-setup
-```
-
-### Manual Installation
-
-```bash
-# Traditional method
-node node_modules/statue-ssg/postinstall.js
-```
-
 ## 🗣️ Troubleshooting
 
 If you encounter any issues during installation:
 
 1. Make sure the `--ignore-scripts` setting is not enabled in your NPM configuration
-2. Ensure the `fs-extra` package is added as a dependency in your project
+
+## Developer Notes
+
+During the setup and build processes, the following occurs:
+
+- **Project Setup:**  
+  The SvelteKit project is initialized using `npx sv create` followed by installing dependencies.
+
+- **Library Installation:**  
+  Running `npm install statue-ssg` integrates the Statue SSG library into your project.
+
+- **Initialization:**  
+  Executing `npx statue init` triggers a post-install script. This script copies the template folder from within the library to your project, and updates configuration files (e.g., `svelte.config.js` and others) accordingly.
+
+- **Content Management:**  
+  Once set up, you can rapidly create a site by editing the Markdown files in the `content` folder. Group your content by simply creating new folders and adding Markdown files to them.
+
+- **Static Site Generation:**  
+  When you run `npm run build`, the build process executes `hooks/server.js`. This file uses an `entries` method to scan all your project’s root routes and converts them into static pages.
+
+  The rest of the rendering process relies on SvelteKit’s default behavior, where `+page.svelte` and `+page.server.js` files are rendered.
+
+- **Preview:**  
+  Finally, use `npm run preview` to view the generated static site.
+
+These additional notes provide insight into the inner workings of Statue SSG, helping you understand and troubleshoot the setup and build processes when needed.
+
+### Updating the Project
+
+If you want to update the project:
+- Increase the version in your `package.json`.
+- Commit your changes.
+- Run `npm run release` to release the update.
+
+### Local Testing
+
+If you want to test your changes locally before publishing:
+- Run `npm pack` to compile your project into a local package.
+- Then, use `npm install <path-to-compiled-folder>` to install and test the compiled version locally.
+This allows you to verify all your changes in a local environment.
 
 ## License
 
