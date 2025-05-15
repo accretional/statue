@@ -1,6 +1,7 @@
 <script>
   import { page } from '$app/stores';
   import NavigationBar from '$lib/components/NavigationBar.svelte';
+  import Footer from '$lib/components/Footer.svelte';
   
   // Loaded content
   export let data;
@@ -88,11 +89,7 @@
     </div>
   </div>
 
-  <footer class="bg-black text-gray-400 py-10 border-t border-gray-800">
-    <div class="container mx-auto px-4 text-center">
-      <p>© {new Date().getFullYear()} Statue SSG. Static site generator developed with SvelteKit.</p>
-    </div>
-  </footer>
+  <Footer />
 {:else}
   <div class="bg-yellow-100 p-4 rounded-md my-8 max-w-prose mx-auto">
     <h2 class="text-xl font-bold text-yellow-700">DEBUG: Content is undefined or empty</h2>
