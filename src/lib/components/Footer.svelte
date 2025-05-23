@@ -1,9 +1,100 @@
-<script>
+<script lang="ts">
 	const currentYear = new Date().getFullYear();
+
+	interface Directory {
+		name: string;
+		path: string;
+		title: string;
+		url: string;
+		subpages?: {
+			title: string;
+			url: string;
+		}[];
+	}
+  
+  interface NavItem {
+    title: string;
+    url: string;
+  }
+
+	export let directories: Directory[] = [];
+	export let currentPath: string = '';
+  export let navbarItems: NavItem[] = [];
 </script>
 
 <footer class="bg-black text-gray-400 py-10 border-t border-gray-800">
   <div class="container mx-auto px-4 text-center">
+    <div class="sitemap mt-6 pt-4 mb-8">
+      <div class="sitemap-grid grid grid-cols-2 md:grid-cols-3 gap-4">
+        <div class="sitemap-category">
+          <h4 class="text-lg font-medium mb-2">Main Pages</h4>
+          <ul class="ml-2 space-y-1">
+            <li>
+              <a 
+                href="/" 
+                class="{currentPath === '/' ? 'text-amber-400' : 'text-gray-400'} hover:text-amber-400 text-sm"
+              >
+                Home Page
+              </a>
+            </li>
+            {#if navbarItems && navbarItems.length > 0}
+              {#each navbarItems as item}
+                <li>
+                  <a 
+                    href={item.url} 
+                    class="{currentPath === item.url ? 'text-amber-400' : 'text-gray-400'} hover:text-amber-400 text-sm"
+                  >
+                    {item.title}
+                  </a>
+                </li>
+              {/each}
+            {:else if directories && directories.length > 0}
+              {#each directories as directory}
+                <li>
+                  <a 
+                    href={directory.url}
+                    class="{currentPath === directory.url ? 'text-amber-400' : 'text-gray-400'} hover:text-amber-400 text-sm"
+                  >
+                    {directory.title}
+                  </a>
+                </li>
+              {/each}
+            {/if}
+          </ul>
+        </div>
+        
+        {#if directories && directories.length > 0}
+          {#each directories as directory}
+            <div class="sitemap-category">
+              <h4 class="text-lg font-medium mb-2">
+                <a 
+                  href={directory.url} 
+                  class="{currentPath.startsWith(directory.url) ? 'text-amber-400' : 'text-gray-300'} hover:text-amber-400"
+                >
+                  {directory.title}
+                </a>
+              </h4>
+              
+              {#if directory.subpages && directory.subpages.length > 0}
+                <ul class="ml-2 space-y-1">
+                  {#each directory.subpages as subpage}
+                    <li>
+                      <a 
+                        href={subpage.url} 
+                        class="{currentPath === subpage.url ? 'text-amber-400' : 'text-gray-400'} hover:text-amber-400 text-sm"
+                      >
+                        {subpage.title}
+                      </a>
+                    </li>
+                  {/each}
+                </ul>
+              {/if}
+            </div>
+          {/each}
+        {/if}
+      </div>
+    </div>
+
     <p>© {currentYear} Statue SSG. Static site generator developed with SvelteKit.</p>
     <div class="mt-4 flex justify-center space-x-6">
       <a href="/privacy-policy" class="text-gray-400 hover:text-white">Privacy Policy</a>
@@ -34,4 +125,14 @@
       </a>
     </div>
   </div>
-</footer> 
+</footer>
+
+<style>
+  .sitemap-grid {
+    margin-bottom: 1rem;
+  }
+  
+  .sitemap-category {
+    margin-bottom: 1rem;
+  }
+</style> 

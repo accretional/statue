@@ -106,7 +106,7 @@
   </div>
 </div>
 
-<Footer />
+<Footer directories={directories} currentPath="/" />
 
 <style>
   :global(body) {

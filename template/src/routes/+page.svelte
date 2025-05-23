@@ -106,7 +106,7 @@
   </div>
 </div>
 
-<Footer />
+<Footer directories={directories} />
 
 <style>
   :global(body) {

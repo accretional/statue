@@ -89,7 +89,7 @@
     </div>
   </div>
 
-  <Footer />
+  <Footer directories={directories} />
 {:else}
   <div class="bg-yellow-100 p-4 rounded-md my-8 max-w-prose mx-auto">
     <h2 class="text-xl font-bold text-yellow-700">DEBUG: Content is undefined or empty</h2>
