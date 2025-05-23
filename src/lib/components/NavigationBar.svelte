@@ -36,6 +36,14 @@
         >
           Home
         </a>
+
+        <a 
+        href="/about" 
+        class="py-2 px-3 font-medium text-sm transition-colors duration-200 {activePath === '/about' ? 'text-green-400' : 'text-gray-300 hover:text-white'}"
+      >
+        About
+      </a>
+      
         
         {#each navbarItems as item}
           <a 
