@@ -2,6 +2,7 @@
   import { page } from '$app/stores';
   import NavigationBar from '$lib/components/NavigationBar.svelte';
   import Footer from '$lib/components/Footer.svelte';
+  import Warning from '$lib/components/Warning.svelte';
   
   // Loaded content
   export let data;
@@ -81,6 +82,11 @@
             </a>
           </div>
         </header>
+        
+        <!-- Warning component - frontmatter'da warning varsa göster -->
+        {#if content.metadata.warning}
+          <Warning warning={content.metadata.warning} />
+        {/if}
         
         <main class="prose prose-invert prose-green max-w-none">
           {@html content.content}

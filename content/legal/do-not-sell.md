@@ -1,6 +1,10 @@
 ---
 title: Do Not Sell or Share My Personal Information
 description: California residents can opt-out of the sale or sharing of their personal information
+warning:
+  type: "info"
+  title: "Warning: This \"Do Not Sell\" functionality is currently a placeholder and has not been fully implemented."
+  message: "The form will not actually process opt-out requests until properly configured."
 ---
 
 # Do Not Sell or Share My Personal Information
