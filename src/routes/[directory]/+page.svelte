@@ -1,6 +1,5 @@
 <script>
   import NavigationBar from '$lib/components/NavigationBar.svelte';
-  import Footer from '$lib/components/Footer.svelte';
   
   // Loaded content
   export let data;
@@ -123,12 +122,6 @@
   </div>
 </div>
 
-<Footer directories={directories} />
-
 <style>
-  :global(body) {
-    background-color: #000;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-      Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  }
+  /* Page specific styles can go here */
 </style> 

@@ -11,15 +11,9 @@
 			url: string;
 		}[];
 	}
-  
-  interface NavItem {
-    title: string;
-    url: string;
-  }
 
 	export let directories: Directory[] = [];
 	export let currentPath: string = '';
-  export let navbarItems: NavItem[] = [];
 </script>
 
 <footer class="bg-black text-gray-400 py-10 border-t border-gray-800">
@@ -37,18 +31,7 @@
                 Home Page
               </a>
             </li>
-            {#if navbarItems && navbarItems.length > 0}
-              {#each navbarItems as item}
-                <li>
-                  <a 
-                    href={item.url} 
-                    class="{currentPath === item.url ? 'text-amber-400' : 'text-gray-400'} hover:text-amber-400 text-sm"
-                  >
-                    {item.title}
-                  </a>
-                </li>
-              {/each}
-            {:else if directories && directories.length > 0}
+            {#if directories && directories.length > 0}
               {#each directories as directory}
                 <li>
                   <a 
