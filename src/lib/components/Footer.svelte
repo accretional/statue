@@ -33,14 +33,16 @@
             </li>
             {#if directories && directories.length > 0}
               {#each directories as directory}
-                <li>
-                  <a 
-                    href={directory.url}
-                    class="{currentPath === directory.url ? 'text-amber-400' : 'text-gray-400'} hover:text-amber-400 text-sm"
-                  >
-                    {directory.title}
-                  </a>
-                </li>
+                {#if directory.name !== 'legal'}
+                  <li>
+                    <a 
+                      href={directory.url}
+                      class="{currentPath === directory.url ? 'text-amber-400' : 'text-gray-400'} hover:text-amber-400 text-sm"
+                    >
+                      {directory.title}
+                    </a>
+                  </li>
+                {/if}
               {/each}
             {/if}
           </ul>
@@ -48,31 +50,33 @@
         
         {#if directories && directories.length > 0}
           {#each directories as directory}
-            <div class="sitemap-category">
-              <h4 class="text-lg font-medium mb-2">
-                <a 
-                  href={directory.url} 
-                  class="{currentPath.startsWith(directory.url) ? 'text-amber-400' : 'text-gray-300'} hover:text-amber-400"
-                >
-                  {directory.title}
-                </a>
-              </h4>
-              
-              {#if directory.subpages && directory.subpages.length > 0}
-                <ul class="ml-2 space-y-1">
-                  {#each directory.subpages as subpage}
-                    <li>
-                      <a 
-                        href={subpage.url} 
-                        class="{currentPath === subpage.url ? 'text-amber-400' : 'text-gray-400'} hover:text-amber-400 text-sm"
-                      >
-                        {subpage.title}
-                      </a>
-                    </li>
-                  {/each}
-                </ul>
-              {/if}
-            </div>
+            {#if directory.name !== 'legal'}
+              <div class="sitemap-category">
+                <h4 class="text-lg font-medium mb-2">
+                  <a 
+                    href={directory.url} 
+                    class="{currentPath.startsWith(directory.url) ? 'text-amber-400' : 'text-gray-300'} hover:text-amber-400"
+                  >
+                    {directory.title}
+                  </a>
+                </h4>
+                
+                {#if directory.subpages && directory.subpages.length > 0}
+                  <ul class="ml-2 space-y-1">
+                    {#each directory.subpages as subpage}
+                      <li>
+                        <a 
+                          href={subpage.url} 
+                          class="{currentPath === subpage.url ? 'text-amber-400' : 'text-gray-400'} hover:text-amber-400 text-sm"
+                        >
+                          {subpage.title}
+                        </a>
+                      </li>
+                    {/each}
+                  </ul>
+                {/if}
+              </div>
+            {/if}
           {/each}
         {/if}
       </div>
