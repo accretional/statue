@@ -1,13 +1,13 @@
 ---
 title: Terms of Use
-description: Terms of Use for Statue SSG
+description: Terms of Use for {{site.name}}
 ---
 
 # Terms of Use
 
-Last updated: {new Date().toLocaleDateString('en-US')}
+Last updated: {{legal.termsLastUpdated}}
 
-These Terms of Use establish the terms and conditions for your use of the Statue SSG website and services.
+These Terms of Use establish the terms and conditions for your use of the {{site.name}} website and services.
 By using our site, you agree to these terms.
 
 ## Use of Services
@@ -50,7 +50,7 @@ Our services are provided "as is." We make no warranties and disclaim responsibi
 
 ## Limitation of Liability
 
-In no event shall Statue SSG or its directors, employees, or affiliates be liable for any indirect,
+In no event shall {{site.name}} or its directors, employees, or affiliates be liable for any indirect,
 punitive, incidental, special, or consequential damages arising out of or in any way connected with
 the use of or inability to use our services.
 
@@ -67,5 +67,5 @@ when posted on our website.
 
 If you have any questions or concerns about these Terms of Use, please contact us:
 
-- Email: [info@statuessg.com](mailto:info@statuessg.com)
-- Address: 123 Statue Street, San Francisco, CA 94103 
+- Email: [{{contact.email}}](mailto:{{contact.email}})
+- Address: {{contact.address.full}} 

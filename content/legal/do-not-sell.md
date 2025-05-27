@@ -29,7 +29,7 @@ We may collect information about you in various ways as we conduct our business:
 
 To opt-out of the sale or sharing of your personal information, please contact us directly using the information below:
 
-**Email:** [privacy@statuessg.com](mailto:privacy@statuessg.com?subject=Do%20Not%20Sell%20Request)
+**Email:** [{{contact.privacyEmail}}](mailto:{{contact.privacyEmail}}?subject=Do%20Not%20Sell%20Request)
 
 **Subject Line:** Do Not Sell Request
 
@@ -39,12 +39,12 @@ To opt-out of the sale or sharing of your personal information, please contact u
 - Confirmation that you are a California resident
 - Statement: "I opt-out of the sale or sharing of my personal information"
 
-We will process your request within 15 business days and send you a confirmation email once your opt-out request has been processed.
+We will process your request within {{legal.doNotSell.processingTime}} and send you a confirmation email once your opt-out request has been processed.
 
 ## More Information
 
 For more information about our privacy practices, please review our 
-[Privacy Policy](/privacy-policy).
+[Privacy Policy](/legal/privacy-policy).
 
 If you have any questions or concerns, please contact us at:
-[privacy@statuessg.com](mailto:privacy@statuessg.com) 
+[{{contact.privacyEmail}}](mailto:{{contact.privacyEmail}}) 

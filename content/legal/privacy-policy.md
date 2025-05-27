@@ -1,13 +1,13 @@
 ---
 title: Privacy Policy
-description: Privacy Policy for Statue SSG
+description: Privacy Policy for {{site.name}}
 ---
 
 # Privacy Policy
 
-Last updated: {new Date().toLocaleDateString('en-US')}
+Last updated: {{legal.privacyPolicyLastUpdated}}
 
-This Privacy Policy explains how Statue SSG ("we", "our", or "company") collects, uses, and shares 
+This Privacy Policy explains how {{site.name}} ("we", "our", or "company") collects, uses, and shares 
 your personal information when you use our website and services.
 
 ## Information We Collect
@@ -53,12 +53,12 @@ California residents have the following rights:
 - The right to opt-out of the sale or sharing of your personal information
 - The right to non-discrimination when exercising your privacy rights
 
-You can visit our [Do Not Sell My Information](/do-not-sell) 
+You can visit our [Do Not Sell My Information](/legal/do-not-sell) 
 page to opt-out of the sale or sharing of your personal information.
 
 ## Contact Us
 
 If you have any questions or concerns about this Privacy Policy, please contact us:
 
-- Email: [privacy@statuessg.com](mailto:privacy@statuessg.com)
-- Address: 123 Statue Street, San Francisco, CA 94103 
+- Email: [{{contact.privacyEmail}}](mailto:{{contact.privacyEmail}})
+- Address: {{contact.address.full}} 
