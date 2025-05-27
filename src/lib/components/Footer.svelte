@@ -98,9 +98,9 @@
     <div class="text-center">
       <p>© {currentYear} Statue SSG. Static site generator developed with SvelteKit.</p>
       <div class="mt-4 flex justify-center space-x-6">
-        <a href="/privacy-policy" class="text-gray-400 hover:text-white">Privacy Policy</a>
-        <a href="/do-not-sell" class="text-gray-400 hover:text-white">Do Not Sell My Information</a>
-        <a href="/terms" class="text-gray-400 hover:text-white">Terms of Use</a>
+        <a href="/legal/privacy-policy" class="text-gray-400 hover:text-white">Privacy Policy</a>
+        <a href="/legal/do-not-sell" class="text-gray-400 hover:text-white">Do Not Sell My Information</a>
+        <a href="/legal/terms" class="text-gray-400 hover:text-white">Terms of Use</a>
       </div>
       
       <div class="mt-6 flex justify-center space-x-8">
