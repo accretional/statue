@@ -5,10 +5,5 @@ export const excludeRoutes = [
 
 
 export const includeRoutes = [
-  '/',
-  '/ornek',
-  '/statik',
-  '/statik/hakkimizda',
-  '/blog',
-  '/docs'
+  '/'
 ]; 

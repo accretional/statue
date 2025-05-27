@@ -1,6 +1,7 @@
 <script>
   import { page } from '$app/stores';
   import NavigationBar from '$lib/components/NavigationBar.svelte';
+  import Warning from '$lib/components/Warning.svelte';
   
   // Loaded content
   export let data;
@@ -81,18 +82,17 @@
           </div>
         </header>
         
+        <!-- Warning component - frontmatter'da warning varsa göster -->
+        {#if content.metadata.warning}
+          <Warning warning={content.metadata.warning} />
+        {/if}
+        
         <main class="prose prose-invert prose-green max-w-none">
           {@html content.content}
         </main>
       </div>
     </div>
   </div>
-
-  <footer class="bg-black text-gray-400 py-10 border-t border-gray-800">
-    <div class="container mx-auto px-4 text-center">
-      <p>© {new Date().getFullYear()} Statue SSG. Static site generator developed with SvelteKit.</p>
-    </div>
-  </footer>
 {:else}
   <div class="bg-yellow-100 p-4 rounded-md my-8 max-w-prose mx-auto">
     <h2 class="text-xl font-bold text-yellow-700">DEBUG: Content is undefined or empty</h2>
@@ -103,12 +103,6 @@
 {/if}
 
 <style>
-  :global(body) {
-    background-color: #000;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-      Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  }
-  
   :global(.prose) {
     max-width: 65ch;
   }

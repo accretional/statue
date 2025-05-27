@@ -1,5 +1,6 @@
 <script>
   import NavigationBar from '$lib/components/NavigationBar.svelte';
+  import Footer from '$lib/components/Footer.svelte';
   
   export let data;
   
@@ -105,11 +106,7 @@
   </div>
 </div>
 
-<footer class="bg-black text-gray-400 py-10 border-t border-gray-800">
-  <div class="container mx-auto px-4 text-center">
-    <p>© {new Date().getFullYear()} Statue SSG. Static site generator developed with SvelteKit.</p>
-  </div>
-</footer>
+<Footer directories={directories} />
 
 <style>
   :global(body) {

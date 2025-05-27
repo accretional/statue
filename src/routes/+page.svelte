@@ -105,16 +105,6 @@
   </div>
 </div>
 
-<footer class="bg-black text-gray-400 py-10 border-t border-gray-800">
-  <div class="container mx-auto px-4 text-center">
-    <p>© {new Date().getFullYear()} Statue SSG. Static site generator developed with SvelteKit.</p>
-  </div>
-</footer>
-
 <style>
-  :global(body) {
-    background-color: #000;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-      Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  }
+  /* Page specific styles can go here */
 </style> 
