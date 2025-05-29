@@ -23,6 +23,7 @@ const filesToCopy = [
   { src: 'svelte.config.js', dest: 'svelte.config.js' },
   { src: 'vite.config.js', dest: 'vite.config.js' },
   { src: 'tailwind.config.js', dest: 'tailwind.config.js' },
+  { src: 'site.config.js', dest: 'site.config.js' },
 ];
 
 // Copy files

@@ -36,14 +36,24 @@
         >
           Home
         </a>
+
+        <a 
+        href="/about" 
+        class="py-2 px-3 font-medium text-sm transition-colors duration-200 {activePath === '/about' ? 'text-green-400' : 'text-gray-300 hover:text-white'}"
+      >
+        About
+      </a>
+      
         
         {#each navbarItems as item}
-          <a 
-            href={item.url} 
-            class="py-2 px-3 font-medium text-sm transition-colors duration-200 {activePath === item.url ? 'text-green-400' : 'text-gray-300 hover:text-white'}"
-          >
-            {item.title}
-          </a>
+          {#if item.name !== 'legal'}
+            <a 
+              href={item.url} 
+              class="py-2 px-3 font-medium text-sm transition-colors duration-200 {activePath === item.url ? 'text-green-400' : 'text-gray-300 hover:text-white'}"
+            >
+              {item.title}
+            </a>
+          {/if}
         {/each}
         
         <a href="/docs" class="ml-4 px-4 py-2 rounded-lg bg-green-500 hover:bg-green-600 text-white text-sm font-medium transition-colors duration-200">
@@ -80,12 +90,14 @@
         </a>
         
         {#each navbarItems as item}
-          <a 
-            href={item.url} 
-            class="block px-3 py-2 rounded-md text-base font-medium {activePath === item.url ? 'bg-gray-800 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'}"
-          >
-            {item.title}
-          </a>
+          {#if item.name !== 'legal'}
+            <a 
+              href={item.url} 
+              class="block px-3 py-2 rounded-md text-base font-medium {activePath === item.url ? 'bg-gray-800 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'}"
+            >
+              {item.title}
+            </a>
+          {/if}
         {/each}
         
         <a href="/docs" class="block px-3 py-2 rounded-md text-base font-medium bg-green-500 hover:bg-green-600 text-white mt-3">

@@ -65,7 +65,7 @@ async function setupStatueSSG() {
 
   // Copy root files (svelte.config.js, tailwind.config.js etc.)
   try {
-    const rootFiles = ['svelte.config.js', 'tailwind.config.js', 'vite.config.js'];
+    const rootFiles = ['svelte.config.js', 'tailwind.config.js', 'vite.config.js', 'site.config.js'];
     
     rootFiles.forEach(file => {
       const sourcePath = path.join(sourceTemplate, file);
