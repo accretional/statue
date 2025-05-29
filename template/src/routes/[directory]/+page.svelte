@@ -1,6 +1,5 @@
 <script>
   import NavigationBar from '$lib/components/NavigationBar.svelte';
-  import Footer from '$lib/components/Footer.svelte';
   
   // Loaded content
   export let data;
@@ -60,7 +59,6 @@
       <!-- Contents in this directory -->
       {#if currentDirContent && currentDirContent.length > 0}
         <div class="mb-16">
-          <h2 class="text-2xl font-bold mb-6 text-white">Contents in This Directory</h2>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             {#each currentDirContent as page}
               <a href={page.url} class="block bg-gray-800 border border-gray-700 p-6 rounded-xl hover:border-green-500 transition-all duration-300 hover:shadow-[0_0_15px_rgba(34,197,94,0.3)]">
@@ -124,12 +122,6 @@
   </div>
 </div>
 
-<Footer directories={directories} />
-
 <style>
-  :global(body) {
-    background-color: #000;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-      Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  }
+  /* Page specific styles can go here */
 </style> 

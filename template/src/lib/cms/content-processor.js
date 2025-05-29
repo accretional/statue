@@ -7,6 +7,9 @@ import path from 'path';
 import { marked } from 'marked';
 import matter from 'gray-matter';
 
+// Import site configuration
+import siteConfig from '../../../site.config.js';
+
 // This error check is to provide an early warning when this module is attempted to be used in the browser
 const isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined';
 if (isBrowser) {
@@ -52,8 +55,31 @@ const scanContentDirectory = () => {
           
         const content = fs.readFileSync(fullPath, 'utf-8');
         const { data, content: markdownContent } = matter(content);
+        
+        // Process template variables (both in markdown content and metadata)
+        const processedMarkdownContent = processTemplateVariables(markdownContent);
+        const processedMetadata = {};
+        
+        // Process string values in metadata through template processing
+        for (const [key, value] of Object.entries(data)) {
+          if (typeof value === 'string') {
+            processedMetadata[key] = processTemplateVariables(value);
+          } else {
+            processedMetadata[key] = value;
+          }
+        }
+        
+        // Add default values and process them through template processing
+        const finalMetadata = {
+          title: processedMetadata.title || formatTitle(slug),
+          description: processedMetadata.description || '',
+          date: processedMetadata.date || null,
+          author: processedMetadata.author || null,
+          ...processedMetadata
+        };
+        
         // Parse markdown to HTML and then remove the first h1 heading
-        const html = removeFirstH1(marked.parse(markdownContent));
+        const html = removeFirstH1(marked.parse(processedMarkdownContent));
         
         // Fix directory - use full path
         let directory = relativePath.replace(/\\/g, '/');
@@ -71,13 +97,7 @@ const scanContentDirectory = () => {
           // Depth of the path
           depth: directory === '' ? 0 : directory.split('/').length,
           content: html,
-          metadata: {
-            title: data.title || formatTitle(slug),
-            description: data.description || '',
-            date: data.date || null,
-            author: data.author || null,
-            ...data
-          }
+          metadata: finalMetadata
         });
       }
     }
@@ -215,6 +235,79 @@ const getSubDirectories = (directory) => {
   }));
 };
 
+// Function to process template variables
+const processTemplateVariables = (content) => {
+  // Get variables from configuration
+  const variables = {
+    // Site information
+    'site.name': siteConfig.site.name,
+    'site.description': siteConfig.site.description,
+    'site.url': siteConfig.site.url,
+    'site.author': siteConfig.site.author,
+    
+    // Contact information
+    'contact.email': siteConfig.contact.email,
+    'contact.privacyEmail': siteConfig.contact.privacyEmail,
+    'contact.supportEmail': siteConfig.contact.supportEmail,
+    'contact.phone': siteConfig.contact.phone,
+    'contact.address.street': siteConfig.contact.address.street,
+    'contact.address.city': siteConfig.contact.address.city,
+    'contact.address.state': siteConfig.contact.address.state,
+    'contact.address.zipCode': siteConfig.contact.address.zipCode,
+    'contact.address.country': siteConfig.contact.address.country,
+    'contact.address.full': `${siteConfig.contact.address.street}, ${siteConfig.contact.address.city}, ${siteConfig.contact.address.state} ${siteConfig.contact.address.zipCode}`,
+    
+    // Social media
+    'social.twitter': siteConfig.social.twitter,
+    'social.github': siteConfig.social.github,
+    'social.linkedin': siteConfig.social.linkedin,
+    'social.facebook': siteConfig.social.facebook,
+    'social.instagram': siteConfig.social.instagram,
+    'social.youtube': siteConfig.social.youtube,
+    
+    // Legal information
+    'legal.privacyPolicyLastUpdated': siteConfig.legal.privacyPolicyLastUpdated,
+    'legal.termsLastUpdated': siteConfig.legal.termsLastUpdated,
+    'legal.doNotSell.processingTime': siteConfig.legal.doNotSell.processingTime,
+    
+    // Dynamic date functions
+    'date.now': new Date().toLocaleDateString('en-US'),
+    'date.year': new Date().getFullYear().toString(),
+    'date.month': new Date().toLocaleDateString('en-US', { month: 'long' }),
+    'date.day': new Date().getDate().toString()
+  };
+  
+  // Replace template variables
+  // Support {{variable.name}} format variables
+  let processedContent = content;
+  
+  // First process JavaScript expressions (e.g.: {new Date().toLocaleDateString('en-US')})
+  processedContent = processedContent.replace(/\{([^}]+)\}/g, (match, expression) => {
+    try {
+      // Allow only specific functions for safe eval
+      if (expression.includes('new Date()')) {
+        return eval(expression);
+      }
+      return match; // Leave unchanged expressions as they are
+    } catch (error) {
+      console.warn(`Template expression error: ${expression}`, error);
+      return match;
+    }
+  });
+  
+  // Then process {{variable}} format variables
+  processedContent = processedContent.replace(/\{\{([^}]+)\}\}/g, (match, variableName) => {
+    const trimmedName = variableName.trim();
+    if (variables.hasOwnProperty(trimmedName)) {
+      return variables[trimmedName];
+    }
+    console.warn(`Template variable not found: ${trimmedName}`);
+    return match; // Leave unfound variables as they are
+  });
+  
+  return processedContent;
+};
+
 // Export functions
 export {
   scanContentDirectory,
@@ -225,5 +318,6 @@ export {
   getContentByUrl,
   getContentByDirectory,
   clearContentCache,
-  getSubDirectories
+  getSubDirectories,
+  processTemplateVariables
 }; 

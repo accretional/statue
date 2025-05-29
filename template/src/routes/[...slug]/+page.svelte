@@ -1,7 +1,7 @@
 <script>
   import { page } from '$app/stores';
   import NavigationBar from '$lib/components/NavigationBar.svelte';
-  import Footer from '$lib/components/Footer.svelte';
+  import Warning from '$lib/components/Warning.svelte';
   
   // Loaded content
   export let data;
@@ -82,14 +82,16 @@
           </div>
         </header>
         
+        {#if content.metadata.warning}
+          <Warning warning={content.metadata.warning} />
+        {/if}
+        
         <main class="prose prose-invert prose-green max-w-none">
           {@html content.content}
         </main>
       </div>
     </div>
   </div>
-
-  <Footer directories={directories} />
 {:else}
   <div class="bg-yellow-100 p-4 rounded-md my-8 max-w-prose mx-auto">
     <h2 class="text-xl font-bold text-yellow-700">DEBUG: Content is undefined or empty</h2>
@@ -100,12 +102,6 @@
 {/if}
 
 <style>
-  :global(body) {
-    background-color: #000;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-      Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  }
-  
   :global(.prose) {
     max-width: 65ch;
   }

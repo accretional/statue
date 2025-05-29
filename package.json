@@ -1,6 +1,6 @@
 {
 	"name": "statue-ssg",
-	"version": "0.2.0",
+	"version": "0.2.2",
 	"description": "A simple static site generator for markdown content with SvelteKit",
 	"type": "module",
 	"main": "src/index.js",
@@ -34,12 +34,7 @@
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
 		"@types/node": "^22.13.13",
 		"autoprefixer": "^10.4.21",
-		"chalk": "^5.4.1",
-		"commander": "^13.1.0",
 		"esbuild": "^0.20.2",
-		"fs-extra": "^11.3.0",
-		"gray-matter": "^4.0.3",
-		"marked": "^15.0.7",
 		"postcss": "^8.5.3",
 		"rimraf": "^5.0.10",
 		"svelte": "^4.2.7",
@@ -49,11 +44,13 @@
 		"vite": "^6.0.0"
 	},
 	"dependencies": {
+		"chalk": "^5.4.1",
+		"commander": "^13.1.0",
+		"fs-extra": "^11.3.0",
 		"gray-matter": "^4.0.3",
 		"marked": "^15.0.7"
 	},
 	"peerDependencies": {
-		"fs-extra": "^11.0.0"
 	},
 	"keywords": [
 		"static-site-generator",
