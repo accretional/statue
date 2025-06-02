@@ -10,7 +10,11 @@
 	},
 	"files": [
 		"src",
-		"template",
+		"content",
+		"svelte.config.js",
+		"vite.config.js",
+		"tailwind.config.js",
+		"site.config.js",
 		"postinstall.js",
 		"scripts",
 		"LICENSE",

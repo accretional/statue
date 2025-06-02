@@ -21,7 +21,7 @@ A lightning-fast static site generator that combines the power of Markdown conte
 First, you need to create a SvelteKit project:
 
 ```bash
-npx sv create .
+npx sv create . --template minimal --types ts --no-add-ons --install npm
 
 npm install
 ```
@@ -43,7 +43,7 @@ npx statue init
 ```
 
 This will:
-- Copy template files to your project
+- Copy statue files to your project
 - Set up the content directory structure
 - Configure routes for your Markdown content
 - Add necessary dependencies
