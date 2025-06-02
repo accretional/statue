@@ -82,6 +82,7 @@
           </div>
         </header>
         
+        <!-- Warning component - show if warning exists in frontmatter -->
         {#if content.metadata.warning}
           <Warning warning={content.metadata.warning} />
         {/if}
