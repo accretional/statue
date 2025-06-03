@@ -16,19 +16,19 @@ then
   LABEL="latest"
   VISIBILITY="public"
 else
-    VERSIONCHANGE=$2
-    if [ -z "$3" ]
+    VERSIONCHANGE=$1
+    if [ -z "$2" ]
     then
         echo "Error: Must provide statue release message for manual pushes"
         exit 1
     fi
-    MSG=$3
-    if [ -z "$4" ]
+    MSG=$2
+    if [ -z "$3" ]
     then
         echo "Error: Must provide git origin source branch for manual pushes"
         exit 1
     fi
-    LABEL=$4
+    LABEL=$3
     VISIBILITY="restricted"
 fi
 
