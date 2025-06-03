@@ -16,12 +16,24 @@ A lightning-fast static site generator that combines the power of Markdown conte
 
 ## Quick Start Guide
 
+### One-Liner Setup (Recommended)
+
+For a quick setup, run this single command:
+
+```bash
+yes | npx sv create . --template minimal --types ts --no-add-ons --install npm && npm install statue-ssg && npx statue init
+```
+
+This command will create a SvelteKit project, install Statue SSG, and set up everything automatically.
+
+### Step-by-Step Guide
+
 ### Step 1: Create a SvelteKit Project
 
 First, you need to create a SvelteKit project:
 
 ```bash
-npx sv create .
+npx sv create . --template minimal --types ts --no-add-ons --install npm
 
 npm install
 ```
@@ -43,7 +55,7 @@ npx statue init
 ```
 
 This will:
-- Copy template files to your project
+- Copy statue files to your project
 - Set up the content directory structure
 - Configure routes for your Markdown content
 - Add necessary dependencies
@@ -117,9 +129,9 @@ During the setup and build processes, the following occurs:
   Once set up, you can rapidly create a site by editing the Markdown files in the `content` folder. Group your content by simply creating new folders and adding Markdown files to them. If you want to modify the homepage, edit the `page.svelte` file under the `routes` folder. Additionally, you can extend your site by creating your own Svelte files within the `routes` folder.
 
 - **Static Site Generation:**  
-  When you run `npm run build`, the build process executes `hooks/server.js`. This file uses an `entries` method to scan all your project’s root routes and converts them into static pages.
+  When you run `npm run build`, the build process executes `hooks/server.js`. This file uses an `entries` method to scan all your project's root routes and converts them into static pages.
 
-  The rest of the rendering process relies on SvelteKit’s default behavior, where `+page.svelte` and `+page.server.js` files are rendered.
+  The rest of the rendering process relies on SvelteKit's default behavior, where `+page.svelte` and `+page.server.js` files are rendered.
 
 - **Preview:**  
   Finally, use `npm run preview` to view the generated static site.

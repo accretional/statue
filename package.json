@@ -1,6 +1,6 @@
 {
 	"name": "statue-ssg",
-	"version": "0.2.0",
+	"version": "0.2.7",
 	"description": "A simple static site generator for markdown content with SvelteKit",
 	"type": "module",
 	"main": "src/index.js",
@@ -10,7 +10,11 @@
 	},
 	"files": [
 		"src",
-		"template",
+		"content",
+		"svelte.config.js",
+		"vite.config.js",
+		"tailwind.config.js",
+		"site.config.js",
 		"postinstall.js",
 		"scripts",
 		"LICENSE",
@@ -22,7 +26,6 @@
 		"postbuild": "node scripts/generate-seo-files.js",
 		"preview": "vite preview",
 		"prepublishOnly": "npm run build",
-		"postinstall": "node postinstall.js",
 		"setup": "node postinstall.js",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
 		"format": "prettier --plugin-search-dir . --write .",
@@ -31,30 +34,26 @@
 	"devDependencies": {
 		"@sveltejs/adapter-static": "^3.0.0",
 		"@sveltejs/kit": "^2.0.0",
-		"@sveltejs/vite-plugin-svelte": "^3.0.0",
+		"@sveltejs/vite-plugin-svelte": "^3.1.2",
 		"@types/node": "^22.13.13",
 		"autoprefixer": "^10.4.21",
-		"chalk": "^5.4.1",
-		"commander": "^13.1.0",
 		"esbuild": "^0.20.2",
-		"fs-extra": "^11.3.0",
-		"gray-matter": "^4.0.3",
-		"marked": "^15.0.7",
 		"postcss": "^8.5.3",
 		"rimraf": "^5.0.10",
 		"svelte": "^4.2.7",
 		"svelte-sitemap": "^2.7.0",
 		"tailwindcss": "^4.0.15",
 		"typescript": "^5.0.0",
-		"vite": "^6.0.0"
+		"vite": "^5.4.11"
 	},
 	"dependencies": {
+		"chalk": "^5.4.1",
+		"commander": "^13.1.0",
+		"fs-extra": "^11.3.0",
 		"gray-matter": "^4.0.3",
 		"marked": "^15.0.7"
 	},
-	"peerDependencies": {
-		"fs-extra": "^11.0.0"
-	},
+	"peerDependencies": {},
 	"keywords": [
 		"static-site-generator",
 		"markdown",

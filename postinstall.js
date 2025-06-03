@@ -16,8 +16,15 @@ async function setupStatueSSG() {
   console.log(chalk.green('Copying Statue SSG files...'));
   console.log(chalk.blue(`Target directory: ${targetDir}`));
 
-  // Source folders (files in template)
-  const sourceTemplate = path.join(__dirname, 'template');
+  // Source folders (files in this project)
+  const sourceDir = __dirname;
+
+  // Check if we're running in the same directory as the source
+  if (path.resolve(sourceDir) === path.resolve(targetDir)) {
+    console.log(chalk.yellow('⚠️  Running in the same directory as source, skipping file copy operations'));
+    console.log(chalk.green.bold('✨ Statue SSG setup completed!'));
+    return true;
+  }
 
   // Target folders (directories in user's project)
   const targetSrc = path.join(targetDir, 'src');
@@ -31,7 +38,7 @@ async function setupStatueSSG() {
     
     // Copy everything in src folder
     fs.copySync(
-      path.join(sourceTemplate, 'src'), 
+      path.join(sourceDir, 'src'), 
       targetSrc, 
       { 
         overwrite: true,
@@ -48,7 +55,7 @@ async function setupStatueSSG() {
     if (!fs.existsSync(targetContent)) {
       fs.ensureDirSync(targetContent);
       fs.copySync(
-        path.join(sourceTemplate, 'content'), 
+        path.join(sourceDir, 'content'), 
         targetContent, 
         { 
           overwrite: true,
@@ -65,10 +72,10 @@ async function setupStatueSSG() {
 
   // Copy root files (svelte.config.js, tailwind.config.js etc.)
   try {
-    const rootFiles = ['svelte.config.js', 'tailwind.config.js', 'vite.config.js'];
+    const rootFiles = ['svelte.config.js', 'tailwind.config.js', 'vite.config.js', 'site.config.js'];
     
     rootFiles.forEach(file => {
-      const sourcePath = path.join(sourceTemplate, file);
+      const sourcePath = path.join(sourceDir, file);
       const targetPath = path.join(targetDir, file);
       
       if (fs.existsSync(sourcePath) && !fs.existsSync(targetPath)) {

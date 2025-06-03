@@ -1,7 +1,7 @@
 <script>
   export let warning;
   
-  // Warning tipine göre stil belirleme
+  // Determine style based on warning type
   $: warningClass = getWarningClass(warning?.type || 'info');
   
   function getWarningClass(type) {
