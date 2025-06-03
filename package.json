@@ -1,6 +1,6 @@
 {
 	"name": "statue-ssg",
-	"version": "0.2.3",
+	"version": "0.2.4",
 	"description": "A simple static site generator for markdown content with SvelteKit",
 	"type": "module",
 	"main": "src/index.js",
@@ -53,8 +53,7 @@
 		"gray-matter": "^4.0.3",
 		"marked": "^15.0.7"
 	},
-	"peerDependencies": {
-	},
+	"peerDependencies": {},
 	"keywords": [
 		"static-site-generator",
 		"markdown",
