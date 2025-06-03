@@ -34,7 +34,7 @@ fi
 
 git checkout $LABEL
 git pull
-npm version $VERSIONBUMP -m $MSG
+npm version $VERSIONCHANGE -m $MSG
 git push origin $LABEL --follow-tags --force
 if [ $2 -eq "auto" ]
 then
