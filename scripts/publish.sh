@@ -40,5 +40,6 @@ if [ $2 -eq "auto" ]
 then
     npm publish --tag=$LABEL --access=$VISIBILITY --otp=$OTP
 else
+    npm adduser
     npm publish --tag=$LABEL --access=$VISIBILITY
 fi
