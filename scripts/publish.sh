@@ -42,5 +42,6 @@ then
 else
     # TODO: make statue-ssg npm package scoped and re-enable
     # npm publish --tag=$LABEL --access=$VISIBILITY
+    npm adduser
     npm publish --tag=$LABEL
 fi
