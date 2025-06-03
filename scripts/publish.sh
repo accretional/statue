@@ -40,5 +40,7 @@ if [ $2 -eq "auto" ]
 then
     npm publish --tag=$LABEL --access=$VISIBILITY --otp=$OTP
 else
-    npm publish --tag=$LABEL --access=$VISIBILITY
+    # TODO: make statue-ssg npm package scoped and re-enable
+    # npm publish --tag=$LABEL --access=$VISIBILITY
+    npm publish --tag=$LABEL
 fi
