@@ -21,7 +21,7 @@ A lightning-fast static site generator that combines the power of Markdown conte
 For a quick setup, run this single command:
 
 ```bash
-npx sv create . --template minimal --types ts --no-add-ons --install npm && npm install statue-ssg && npx statue init
+yes | npx sv create . --template minimal --types ts --no-add-ons --install npm && npm install statue-ssg && npx statue init
 ```
 
 This command will create a SvelteKit project, install Statue SSG, and set up everything automatically.
