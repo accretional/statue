@@ -29,7 +29,10 @@
 		"setup": "node postinstall.js",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
 		"format": "prettier --plugin-search-dir . --write .",
-		"release": "npm run build && npm publish"
+		"release": "npm run build && npm publish",
+		"test:local": "./test/hermetic/test_local.sh",
+		"docker:build": "cd test/hermetic && docker build -t statue-ssg .",
+		"docker:test": "npm run docker:build && npm run test:local"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-static": "^3.0.0",
