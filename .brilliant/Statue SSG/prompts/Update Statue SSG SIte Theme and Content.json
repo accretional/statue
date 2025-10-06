@@ -1,0 +1,54 @@
+{
+  "title": "Update Statue SSG SIte Theme and Content",
+  "description": "Update the overall theme and content for your Statue SSG generated site.",
+  "category": "Statue SSG",
+  "message": "You are tasked with updating files for a SvelteKit site generated via a pre-configured static site generator.\n\nFor all specified files, your code should adhere to the following thematic and content specifications while maintaining the original code's general structure: {{input:What thematic and general content updates would you like to make?}}",
+  "insertionArgs": [
+    {
+      "method": "write to file",
+      "typedArgs": {
+        "path": "src/routes/+page.svelte",
+        "overwrite": true,
+        "show": true
+      },
+      "targetBlock": 1
+    },
+    {
+      "method": "write to file",
+      "typedArgs": {
+        "path": "src/lib/components/NavigationBar.svelte",
+        "overwrite": true,
+        "show": true
+      },
+      "targetBlock": 2
+    },
+    {
+      "method": "write to file",
+      "typedArgs": {
+        "path": "src/routes/[directory]/+page.svelte",
+        "overwrite": true,
+        "show": true
+      },
+      "targetBlock": 3
+    },
+    {
+      "method": "write to file",
+      "typedArgs": {
+        "path": "src/routes/[...slug]/+page.svelte",
+        "overwrite": true,
+        "show": true
+      },
+      "targetBlock": 4
+    },
+    {
+      "method": "write to file",
+      "typedArgs": {
+        "path": "src/routes/about/+page.svelte",
+        "overwrite": true,
+        "show": true
+      },
+      "targetBlock": 5
+    }
+  ],
+  "system": "Always return exactly five seperate code blocks. Include a brief description of the changes made and the relative directory of the file before each code block.\n\nThe first code block should always only include the code to the main page's .svelte file located at src/routes/+page.svelte. In generating the code, reference the following code: {{file:src/routes/+page.svelte}}. Include a brief description of the changes made and the relative directory before the code block.\n\nThe second code block should always only include the code for the site's header .svelte file located at src/lib/components/NavigationBar.svelte. In generating the code, reference the following code: {{file:src/lib/components/NavigationBar.svelte}}. Include a brief description of the changes made and the relative directory before the code block.\n\nThe third code block should always only include the code to the site's .svelte file located at src/routes/[directory]/+page.svelte. In generating the code, reference the following code: {{file:src/routes/[directory]/+page.svelte}}. Include a brief description of the changes made and the relative directory before the code block.\n\nThe fourth code block should always only include the code to the site's .svelte file located at src/routes/[...slug]/+page.svelte. In generating the code, reference the following code: {{file:src/routes/[...slug]/+page.svelte}}. Include a brief description of the changes made and the relative directory before the code block.\n\nThe fifth code block should always only include the code to the site's .svelte file located at src/routes/about/+page.svelte. In generating the code, reference the following code: {{file:src/routes/about/+page.svelte}}. Include a brief description of the changes made and the relative directory before the code block."
+}
