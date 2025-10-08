@@ -14,97 +14,163 @@
 
 <NavigationBar navbarItems={directories} activePath="/" />
 
-<div class="bg-black text-white min-h-screen">
+<div class="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
   <!-- Hero Section -->
-  <div class="container mx-auto px-4 pt-12 pb-20 md:pt-20 md:pb-24">
-    <div class="max-w-4xl mx-auto text-center">
-      <h1 class="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">
-        Anyone can create<br />
-        Websites with Markdown!
-      </h1>
-      <p class="text-xl text-gray-300 mb-10">
-        Create amazing static sites easily with Statue SSG using Markdown.
-        Fast, secure, and SEO-friendly sites ready in minutes.
-      </p>
-      <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-        <a href="#directories" class="bg-green-500 hover:bg-green-600 text-white font-bold px-6 py-3 rounded-lg transition-all">
-          Explore Content
-        </a>
-        <a href="/docs" class="bg-transparent border border-green-500 hover:bg-green-500/20 text-white font-bold px-6 py-3 rounded-lg transition-all">
-          Documentation
-        </a>
+  <div class="container mx-auto px-4 pt-20 pb-32 md:pt-32 md:pb-40">
+    <div class="max-w-5xl mx-auto text-center relative">
+      <!-- Decorative elements -->
+      <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl opacity-20"></div>
+      
+      <div class="relative z-10">
+        <!-- Badge -->
+        <div class="inline-flex items-center px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 mb-8">
+          <span class="text-sm font-medium text-emerald-400">✨ Powered by Markdown Files</span>
+        </div>
+        
+        <h1 class="text-5xl md:text-7xl font-bold mb-8 leading-tight">
+          <span class="bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
+            Anyone can create<br />
+          </span>
+          <span class="bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-500 bg-clip-text text-transparent">
+            Websites with Markdown!
+          </span>
+        </h1>
+        
+        <p class="text-xl md:text-2xl text-slate-400 mb-12 max-w-3xl mx-auto leading-relaxed">
+          Create amazing static sites easily with Statue SSG using Markdown.
+          Fast, secure, and SEO-friendly sites ready in minutes.
+        </p>
+        
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+          <a href="#directories" class="group relative px-8 py-4 bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-semibold rounded-xl overflow-hidden transition-all duration-300 hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] hover:scale-105">
+            <span class="relative z-10">Explore Content</span>
+            <div class="absolute inset-0 bg-gradient-to-r from-emerald-600 to-cyan-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          </a>
+          <a href="/docs" class="group px-8 py-4 bg-slate-800/50 backdrop-blur-sm text-white font-semibold rounded-xl border border-slate-700/50 hover:border-emerald-500/50 hover:bg-slate-800 transition-all duration-300">
+            Documentation
+            <span class="inline-block ml-2 transition-transform group-hover:translate-x-1">→</span>
+          </a>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Content Sections with Gradient BG -->
-  <div class="bg-gradient-to-b from-black to-gray-900">
-    <div class="container mx-auto px-4 py-16">
-      <!-- Folder Cards -->
-      {#if directories && directories.length > 0}
-        <div id="directories" class="max-w-5xl mx-auto">
-          <h2 class="text-3xl font-bold mb-10 text-center">
-            <span class="bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">Categories</span>
-          </h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {#each directories as directory}
-              <div class="bg-gray-800 border border-gray-700 p-6 rounded-xl hover:border-green-500 transition-all duration-300 hover:shadow-[0_0_15px_rgba(34,197,94,0.3)]">
-                <h3 class="text-xl font-bold mb-3 text-white">{directory.title}</h3>
-                <a href={directory.url} class="inline-block bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-all mt-2">
-                  View Content
-                </a>
-              </div>
-            {/each}
+  <!-- Stats Section - Moved up for better flow -->
+  <div class="container mx-auto px-4 pb-24">
+    <div class="max-w-6xl mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="group relative bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-2xl p-8 hover:border-emerald-500/50 transition-all duration-300">
+          <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div class="relative">
+            <div class="text-6xl font-bold mb-4 bg-gradient-to-br from-emerald-400 to-emerald-600 bg-clip-text text-transparent">
+              Fast
+            </div>
+            <p class="text-slate-400 leading-relaxed">Convert your content to a static site in seconds</p>
           </div>
         </div>
-      {/if}
-      
-      <!-- Root Directory Contents with Card Style -->
-      {#if rootContent && rootContent.length > 0}
-        <div class="max-w-5xl mx-auto mt-20">
-          <h2 class="text-3xl font-bold mb-10 text-center">
-            <span class="bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">Latest Content</span>
-          </h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {#each rootContent as page}
-              <a href={page.url} class="block bg-gray-800 border border-gray-700 p-6 rounded-xl hover:border-green-500 transition-all duration-300 hover:shadow-[0_0_15px_rgba(34,197,94,0.3)]">
-                <h3 class="font-bold text-xl text-white mb-2">{page.metadata.title}</h3>
-                {#if page.metadata.description}
-                  <p class="text-gray-400 mt-2">{page.metadata.description}</p>
-                {/if}
-                <div class="mt-4 text-green-500 text-sm font-medium flex items-center">
-                  <span>Read more</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                  </svg>
-                </div>
-              </a>
-            {/each}
+        
+        <div class="group relative bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-2xl p-8 hover:border-cyan-500/50 transition-all duration-300">
+          <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div class="relative">
+            <div class="text-6xl font-bold mb-4 bg-gradient-to-br from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+              Simple
+            </div>
+            <p class="text-slate-400 leading-relaxed">Just write Markdown, we'll handle the rest</p>
           </div>
         </div>
-      {/if}
-      
-      <!-- Stats Section (similar to the numbers shown in BotGauge) -->
-      <div class="max-w-5xl mx-auto mt-24 mb-8">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div class="bg-gray-800 border border-gray-700 p-8 rounded-xl text-center">
-            <div class="text-green-500 text-5xl font-bold mb-2">Fast</div>
-            <p class="text-gray-400">Convert your content to a static site in seconds</p>
-          </div>
-          <div class="bg-gray-800 border border-gray-700 p-8 rounded-xl text-center">
-            <div class="bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent text-5xl font-bold mb-2">Simple</div>
-            <p class="text-gray-400">Just write Markdown, we'll handle the rest</p>
-          </div>
-          <div class="bg-gray-800 border border-gray-700 p-8 rounded-xl text-center">
-            <div class="text-green-500 text-5xl font-bold mb-2">Secure</div>
-            <p class="text-gray-400">Static sites contain no security vulnerabilities</p>
+        
+        <div class="group relative bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-2xl p-8 hover:border-emerald-500/50 transition-all duration-300">
+          <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div class="relative">
+            <div class="text-6xl font-bold mb-4 bg-gradient-to-br from-emerald-400 to-emerald-600 bg-clip-text text-transparent">
+              Secure
+            </div>
+            <p class="text-slate-400 leading-relaxed">Static sites contain no security vulnerabilities</p>
           </div>
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- Content Sections -->
+  <div class="container mx-auto px-4 py-20">
+    <!-- Categories Section -->
+    {#if directories && directories.length > 0}
+      <div id="directories" class="max-w-6xl mx-auto mb-32">
+        <div class="text-center mb-16">
+          <h2 class="text-4xl md:text-5xl font-bold mb-4">
+            <span class="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+              Categories
+            </span>
+          </h2>
+          <div class="w-20 h-1 bg-gradient-to-r from-emerald-500 to-cyan-500 mx-auto rounded-full"></div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {#each directories as directory}
+            <div class="group relative bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-2xl p-8 hover:border-emerald-500/50 transition-all duration-300 hover:scale-[1.02]">
+              <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div class="relative">
+                <div class="w-12 h-12 bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 rounded-xl flex items-center justify-center mb-4">
+                  <svg class="w-6 h-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+                  </svg>
+                </div>
+                <h3 class="text-2xl font-bold mb-4 text-white">{directory.title}</h3>
+                <a href={directory.url} class="inline-flex items-center gap-2 text-emerald-400 font-medium hover:gap-3 transition-all">
+                  <span>View Content</span>
+                  <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+          {/each}
+        </div>
+      </div>
+    {/if}
+    
+    <!-- Latest Content Section -->
+    {#if rootContent && rootContent.length > 0}
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-16">
+          <h2 class="text-4xl md:text-5xl font-bold mb-4">
+            <span class="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+              Latest Content
+            </span>
+          </h2>
+          <div class="w-20 h-1 bg-gradient-to-r from-emerald-500 to-cyan-500 mx-auto rounded-full"></div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {#each rootContent as page}
+            <a href={page.url} class="group relative bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-2xl p-8 hover:border-emerald-500/50 transition-all duration-300 hover:scale-[1.02]">
+              <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div class="relative">
+                <h3 class="font-bold text-2xl text-white mb-3 group-hover:text-emerald-400 transition-colors">
+                  {page.metadata.title}
+                </h3>
+                {#if page.metadata.description}
+                  <p class="text-slate-400 leading-relaxed mb-4">{page.metadata.description}</p>
+                {/if}
+                <div class="flex items-center gap-2 text-emerald-400 font-medium group-hover:gap-3 transition-all">
+                  <span>Read more</span>
+                  <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </div>
+              </div>
+            </a>
+          {/each}
+        </div>
+      </div>
+    {/if}
   </div>
 </div>
 
 <style>
-  /* Page specific styles can go here */
+  /* Add smooth scroll behavior */
+  :global(html) {
+    scroll-behavior: smooth;
+  }
 </style> 
