@@ -20,7 +20,7 @@
     <div class="max-w-4xl mx-auto text-center">
       <h1 class="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">
         Anyone can create<br />
-        content with Markdown!
+        Websites with Markdown!
       </h1>
       <p class="text-xl text-gray-300 mb-10">
         Create amazing static sites easily with Statue SSG using Markdown.
