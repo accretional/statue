@@ -51,16 +51,16 @@
 {:else if content}
   <NavigationBar navbarItems={directories} {activePath} />
 
-  <div class="bg-black text-white min-h-screen">
+  <div class="min-h-screen text-white bg-gradient-to-b from-[var(--color-hero-from)] via-[var(--color-hero-via)] to-[var(--color-hero-to)]">
     <div class="container mx-auto px-4 py-16">
       <div class="max-w-4xl mx-auto">
         <header class="mb-10">
-          <h1 class="text-4xl font-bold mb-4 bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">
+          <h1 class="text-4xl font-bold mb-4 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] bg-clip-text text-transparent">
             {content.metadata.title}
           </h1>
           
           {#if content.metadata.date}
-            <div class="text-gray-400 mt-4">
+            <div class="text-slate-400 mt-4">
               Published: {new Date(content.metadata.date).toLocaleDateString('en-US', {
                 year: 'numeric',
                 month: 'long',
@@ -73,7 +73,7 @@
           {/if}
           
           <div class="mt-6">
-            <a href={backLink} class="inline-flex items-center text-green-500 hover:text-green-400 transition-colors">
+            <a href={backLink} class="inline-flex items-center text-[var(--color-primary)] hover:brightness-110 transition-colors">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
               </svg>
@@ -87,7 +87,7 @@
           <Warning warning={content.metadata.warning} />
         {/if}
         
-        <main class="prose prose-invert prose-green max-w-none">
+        <main class="prose prose-invert max-w-none">
           {@html content.content}
         </main>
       </div>

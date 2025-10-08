@@ -16,17 +16,17 @@
 	export let currentPath: string = '';
 </script>
 
-<footer class="bg-black text-gray-400 py-10 border-t border-gray-800">
+<footer class="bg-[var(--color-card)] text-slate-400 py-10 border-t border-[var(--color-border)]">
   <div class="container mx-auto px-4">
     <div class="sitemap mt-6 pt-4 mb-8">
       <div class="sitemap-grid grid grid-cols-2 md:grid-cols-3 gap-4">
         <div class="sitemap-category">
-          <h4 class="text-lg font-medium mb-2">Main Pages</h4>
+          <h4 class="text-lg font-medium mb-2 text-[var(--color-foreground)]">Main Pages</h4>
           <ul class="ml-2 space-y-1">
             <li>
               <a 
                 href="/" 
-                class="{currentPath === '/' ? 'text-amber-400' : 'text-gray-400'} hover:text-amber-400 text-sm"
+                class="{currentPath === '/' ? 'text-[var(--color-primary)]' : 'text-slate-400'} hover:text-[var(--color-primary)] text-sm"
               >
                 Home Page
               </a>
@@ -37,7 +37,7 @@
                   <li>
                     <a 
                       href={directory.url}
-                      class="{currentPath === directory.url ? 'text-amber-400' : 'text-gray-400'} hover:text-amber-400 text-sm"
+                      class="{currentPath === directory.url ? 'text-[var(--color-primary)]' : 'text-slate-400'} hover:text-[var(--color-primary)] text-sm"
                     >
                       {directory.title}
                     </a>
@@ -52,10 +52,10 @@
           {#each directories as directory}
             {#if directory.name !== 'legal'}
               <div class="sitemap-category">
-                <h4 class="text-lg font-medium mb-2">
+                <h4 class="text-lg font-medium mb-2 text-[var(--color-foreground)]">
                   <a 
                     href={directory.url} 
-                    class="{currentPath.startsWith(directory.url) ? 'text-amber-400' : 'text-gray-300'} hover:text-amber-400"
+                    class="{currentPath.startsWith(directory.url) ? 'text-[var(--color-primary)]' : 'text-slate-300'} hover:text-[var(--color-primary)]"
                   >
                     {directory.title}
                   </a>
@@ -67,7 +67,7 @@
                       <li>
                         <a 
                           href={subpage.url} 
-                          class="{currentPath === subpage.url ? 'text-amber-400' : 'text-gray-400'} hover:text-amber-400 text-sm"
+                          class="{currentPath === subpage.url ? 'text-[var(--color-primary)]' : 'text-slate-400'} hover:text-[var(--color-primary)] text-sm"
                         >
                           {subpage.title}
                         </a>
@@ -85,9 +85,9 @@
     <div class="text-center">
       <p>© {currentYear} Statue SSG. Static site generator developed with SvelteKit.</p>
       <div class="mt-4 flex justify-center space-x-6">
-        <a href="/legal/privacy-policy" class="text-gray-400 hover:text-white">Privacy Policy</a>
-        <a href="/legal/do-not-sell" class="text-gray-400 hover:text-white">Do Not Sell My Information</a>
-        <a href="/legal/terms" class="text-gray-400 hover:text-white">Terms of Use</a>
+        <a href="/legal/privacy-policy" class="text-slate-400 hover:text-white">Privacy Policy</a>
+        <a href="/legal/do-not-sell" class="text-slate-400 hover:text-white">Do Not Sell My Information</a>
+        <a href="/legal/terms" class="text-slate-400 hover:text-white">Terms of Use</a>
       </div>
       
       <div class="mt-6 flex justify-center space-x-8">

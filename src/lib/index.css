@@ -1,1 +1,31 @@
-@import "tailwindcss"; 
+@import "tailwindcss";
+
+/* Centralized theme tokens for Tailwind v4 */
+@theme {
+  /* Core palette */
+  --color-background: #0b1220; /* slate-950-ish */
+  --color-card: #0f172a;       /* slate-900 */
+  --color-border: #1f2937;     /* gray-800 */
+  --color-foreground: #e5e7eb; /* gray-200 */
+  --color-muted: #94a3b8;      /* slate-400 */
+
+  /* Brand colors */
+  --color-primary: #10b981;    /* emerald-500 */
+  --color-secondary: #06b6d4;  /* cyan-500 */
+  --color-accent: #3b82f6;     /* blue-500 */
+
+  /* Hero gradients */
+  --color-hero-from: #0b1220;
+  --color-hero-via: #0f172a;
+  --color-hero-to: #0b1220;
+}
+
+/* Base element defaults using tokens */
+:root {
+  color-scheme: dark;
+}
+
+/* Optional utilities for smooth rendering */
+@layer utilities {
+  .bg-surface { background-color: var(--color-card); }
+}
