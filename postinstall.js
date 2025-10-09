@@ -72,7 +72,7 @@ async function setupStatueSSG() {
 
   // Copy root files (svelte.config.js, tailwind.config.js etc.)
   try {
-    const rootFiles = ['svelte.config.js', 'tailwind.config.js', 'vite.config.js', 'site.config.js'];
+    const rootFiles = ['svelte.config.js', 'tailwind.config.js', 'vite.config.js', 'site.config.js', 'postcss.config.js'];
     
     rootFiles.forEach(file => {
       const sourcePath = path.join(sourceDir, file);
@@ -98,8 +98,17 @@ async function setupStatueSSG() {
       
       // Required dependencies
       const dependencies = {
-        'marked': '^4.2.4',
+        'marked': '^15.0.7',
         'gray-matter': '^4.0.3'
+      };
+      
+      // Required devDependencies
+      const devDependencies = {
+        '@sveltejs/adapter-static': '^3.0.0',
+        '@tailwindcss/postcss': '^4.1.14',
+        '@types/node': '^22.13.13',
+        'autoprefixer': '^10.4.21',
+        'postcss': '^8.5.3'
       };
       
       // Add missing dependencies
@@ -108,6 +117,15 @@ async function setupStatueSSG() {
         if (!packageJson.dependencies || !packageJson.dependencies[dep]) {
           packageJson.dependencies = packageJson.dependencies || {};
           packageJson.dependencies[dep] = version;
+          dependenciesAdded = true;
+        }
+      }
+      
+      // Add missing devDependencies
+      for (const [dep, version] of Object.entries(devDependencies)) {
+        if (!packageJson.devDependencies || !packageJson.devDependencies[dep]) {
+          packageJson.devDependencies = packageJson.devDependencies || {};
+          packageJson.devDependencies[dep] = version;
           dependenciesAdded = true;
         }
       }

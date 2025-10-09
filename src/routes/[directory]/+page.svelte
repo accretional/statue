@@ -36,7 +36,7 @@
 <div class="min-h-screen text-white bg-gradient-to-b from-[var(--color-hero-from)] via-[var(--color-hero-via)] to-[var(--color-hero-to)]">
   <div class="container mx-auto px-4 py-16">
     <div class="max-w-5xl mx-auto">
-      <h1 class="text-4xl font-bold mb-10 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] bg-clip-text text-transparent">
+      <h1 class="text-4xl font-bold mb-10 text-[var(--color-primary)]">
         {currentDirectory.title}
       </h1>
       
@@ -46,7 +46,7 @@
           <h2 class="text-2xl font-bold mb-6 text-white">Subcategories</h2>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {#each subDirectories as subdir}
-              <div class="bg-slate-900/50 backdrop-blur-sm border border-slate-800 p-6 rounded-xl hover:border-[var(--color-primary)] transition-all duration-300 hover:shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+              <div class="bg-[var(--color-card)]/50 backdrop-blur-sm border border-[var(--color-border)] p-6 rounded-xl hover:border-[var(--color-primary)] transition-all duration-300 hover:shadow-[0_0_15px_rgba(59,130,246,0.3)]">
                 <a href={subdir.url} class="block">
                   <h3 class="font-bold text-xl text-white">{subdir.title}</h3>
                 </a>
@@ -61,13 +61,13 @@
         <div class="mb-16">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             {#each currentDirContent as page}
-              <a href={page.url} class="block bg-slate-900/50 backdrop-blur-sm border border-slate-800 p-6 rounded-xl hover:border-[var(--color-primary)] transition-all duration-300 hover:shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+              <a href={page.url} class="block bg-[var(--color-card)]/50 backdrop-blur-sm border border-[var(--color-border)] p-6 rounded-xl hover:border-[var(--color-primary)] transition-all duration-300 hover:shadow-[0_0_15px_rgba(59,130,246,0.3)]">
                 <h3 class="font-bold text-xl text-white mb-2">{page.metadata.title}</h3>
                 {#if page.metadata.description}
-                  <p class="text-slate-400 mt-2">{page.metadata.description}</p>
+                  <p class="text-[var(--color-muted)] mt-2">{page.metadata.description}</p>
                 {/if}
                 {#if page.metadata.date}
-                  <p class="text-slate-500 text-sm mt-2">
+                  <p class="text-[var(--color-muted)] text-sm mt-2">
                     {new Date(page.metadata.date).toLocaleDateString('en-US', {
                       year: 'numeric',
                       month: 'long',
@@ -93,13 +93,13 @@
           <h2 class="text-2xl font-bold mb-6 text-white">Contents in Subdirectories</h2>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             {#each subDirContent as page}
-              <a href={page.url} class="block bg-slate-900/50 backdrop-blur-sm border border-slate-800 p-6 rounded-xl hover:border-[var(--color-primary)] transition-all duration-300 hover:shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+              <a href={page.url} class="block bg-[var(--color-card)]/50 backdrop-blur-sm border border-[var(--color-border)] p-6 rounded-xl hover:border-[var(--color-primary)] transition-all duration-300 hover:shadow-[0_0_15px_rgba(59,130,246,0.3)]">
                 <h3 class="font-bold text-xl text-white mb-2">{page.metadata.title}</h3>
                 <p class="text-[var(--color-primary)] text-sm mb-2">
                   Directory: {page.directory}
                 </p>
                 {#if page.metadata.description}
-                  <p class="text-slate-400 mt-2">{page.metadata.description}</p>
+                  <p class="text-[var(--color-muted)] mt-2">{page.metadata.description}</p>
                 {/if}
                 <div class="mt-4 text-[var(--color-primary)] text-sm font-medium flex items-center">
                   <span>Read more</span>
@@ -114,8 +114,8 @@
       {/if}
       
       {#if !currentDirContent.length && !subDirContent.length}
-        <div class="bg-slate-900/50 backdrop-blur-sm border border-slate-800 p-8 rounded-xl text-center">
-          <p class="text-slate-400">No content found in this directory.</p>
+        <div class="bg-[var(--color-card)]/50 backdrop-blur-sm border border-[var(--color-border)] p-8 rounded-xl text-center">
+          <p class="text-[var(--color-muted)]">No content found in this directory.</p>
         </div>
       {/if}
     </div>

@@ -19,7 +19,7 @@
   <div class="container mx-auto px-4 pt-20 pb-32 md:pt-32 md:pb-40">
     <div class="max-w-5xl mx-auto text-center relative">
       <!-- Decorative elements -->
-      <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl opacity-20"></div>
+      <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[var(--color-primary)]/20 rounded-full blur-3xl opacity-20"></div>
       
       <div class="relative z-10">
         <!-- Badge -->
@@ -28,25 +28,25 @@
         </div>
         
         <h1 class="text-5xl md:text-7xl font-bold mb-8 leading-tight">
-          <span class="bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
+          <span class="text-white">
             Anyone can create<br />
           </span>
-          <span class="bg-gradient-to-r from-[var(--color-primary)] via-[var(--color-secondary)] to-[var(--color-accent)] bg-clip-text text-transparent">
+          <span class="text-[var(--color-primary)]">
             Websites with Markdown!
           </span>
         </h1>
         
-        <p class="text-xl md:text-2xl text-slate-400 mb-12 max-w-3xl mx-auto leading-relaxed">
+        <p class="text-xl md:text-2xl text-[var(--color-foreground)] mb-12 max-w-3xl mx-auto leading-relaxed">
           Create amazing static sites easily with Statue SSG using Markdown.
           Fast, secure, and SEO-friendly sites ready in minutes.
         </p>
         
         <div class="flex flex-col sm:flex-row justify-center gap-4">
-          <a href="#directories" class="group relative px-8 py-4 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] text-white font-semibold rounded-xl overflow-hidden transition-all duration-300 hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] hover:scale-105">
+          <a href="#directories" class="group relative px-8 py-4 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] text-[var(--color-on-primary)] font-semibold rounded-xl overflow-hidden transition-all duration-300  hover:scale-105">
             <span class="relative z-10">Explore Content</span>
             <div class="absolute inset-0 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] opacity-0 group-hover:opacity-100 transition-opacity brightness-110"></div>
           </a>
-          <a href="/docs" class="group px-8 py-4 bg-slate-800/50 backdrop-blur-sm text-white font-semibold rounded-xl border border-slate-700/50 hover:border-[var(--color-primary)]/50 hover:bg-slate-800 transition-all duration-300">
+          <a href="/docs" class="group px-8 py-4 bg-[var(--color-card)]/50 backdrop-blur-sm text-[var(--color-foreground)] font-semibold rounded-xl border border-[var(--color-border)]/50 hover:border-[var(--color-primary)]/50 hover:bg-[var(--color-card)] transition-all duration-300">
             Documentation
             <span class="inline-block ml-2 transition-transform group-hover:translate-x-1">→</span>
           </a>
@@ -59,33 +59,33 @@
   <div class="container mx-auto px-4 pb-24">
     <div class="max-w-6xl mx-auto">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="group relative bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-2xl p-8 hover:border-[var(--color-primary)]/50 transition-all duration-300">
-          <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        <div class="group relative bg-[var(--color-card)]/50 backdrop-blur-sm border border-[var(--color-border)] rounded-2xl p-8 hover:border-[var(--color-primary)]/50 transition-all duration-300">
+          <div class="absolute inset-0 bg-gradient-to-br from-[var(--color-primary)]/5 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
           <div class="relative">
-            <div class="text-6xl font-bold mb-4 bg-gradient-to-br from-[var(--color-primary)] to-emerald-600 bg-clip-text text-transparent">
+            <div class="text-6xl font-bold mb-4 text-[var(--color-primary)]">
               Fast
             </div>
-            <p class="text-slate-400 leading-relaxed">Convert your content to a static site in seconds</p>
+            <p class="text-[var(--color-muted)] leading-relaxed">Convert your content to a static site in seconds</p>
           </div>
         </div>
         
-        <div class="group relative bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-2xl p-8 hover:border-[var(--color-secondary)]/50 transition-all duration-300">
-          <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        <div class="group relative bg-[var(--color-card)]/50 backdrop-blur-sm border border-[var(--color-border)] rounded-2xl p-8 hover:border-[var(--color-secondary)]/50 transition-all duration-300">
+          <div class="absolute inset-0 bg-gradient-to-br from-[var(--color-secondary)]/5 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
           <div class="relative">
-            <div class="text-6xl font-bold mb-4 bg-gradient-to-br from-[var(--color-secondary)] to-[var(--color-accent)] bg-clip-text text-transparent">
+            <div class="text-6xl font-bold mb-4 text-[var(--color-secondary)]">
               Simple
             </div>
-            <p class="text-slate-400 leading-relaxed">Just write Markdown, we'll handle the rest</p>
+            <p class="text-[var(--color-muted)] leading-relaxed">Just write Markdown, we'll handle the rest</p>
           </div>
         </div>
         
-        <div class="group relative bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-2xl p-8 hover:border-[var(--color-primary)]/50 transition-all duration-300">
-          <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        <div class="group relative bg-[var(--color-card)]/50 backdrop-blur-sm border border-[var(--color-border)] rounded-2xl p-8 hover:border-[var(--color-primary)]/50 transition-all duration-300">
+          <div class="absolute inset-0 bg-gradient-to-br from-[var(--color-primary)]/5 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
           <div class="relative">
-            <div class="text-6xl font-bold mb-4 bg-gradient-to-br from-[var(--color-primary)] to-emerald-600 bg-clip-text text-transparent">
+            <div class="text-6xl font-bold mb-4 text-[var(--color-primary)]">
               Secure
             </div>
-            <p class="text-slate-400 leading-relaxed">Static sites contain no security vulnerabilities</p>
+            <p class="text-[var(--color-muted)] leading-relaxed">Static sites contain no security vulnerabilities</p>
           </div>
         </div>
       </div>
@@ -98,17 +98,15 @@
     {#if directories && directories.length > 0}
       <div id="directories" class="max-w-6xl mx-auto mb-32">
         <div class="text-center mb-16">
-          <h2 class="text-4xl md:text-5xl font-bold mb-4">
-            <span class="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] bg-clip-text text-transparent">
-              Categories
-            </span>
+          <h2 class="text-4xl md:text-5xl font-bold mb-4 text-[var(--color-primary)]">
+            Categories
           </h2>
           <div class="w-20 h-1 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] mx-auto rounded-full"></div>
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {#each directories as directory}
-            <div class="group relative bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-2xl p-8 hover:border-[var(--color-primary)]/50 transition-all duration-300 hover:scale-[1.02]">
+            <div class="group relative bg-[var(--color-card)]/50 backdrop-blur-sm border border-[var(--color-border)] rounded-2xl p-8 hover:border-[var(--color-primary)]/50 transition-all duration-300 hover:scale-[1.02]">
               <div class="absolute inset-0 bg-gradient-to-br from-[var(--color-primary)]/10 to-[var(--color-secondary)]/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
               <div class="relative">
                 <div class="w-12 h-12 bg-gradient-to-br from-[var(--color-primary)]/20 to-[var(--color-secondary)]/20 rounded-xl flex items-center justify-center mb-4">
@@ -134,24 +132,22 @@
     {#if rootContent && rootContent.length > 0}
       <div class="max-w-6xl mx-auto">
         <div class="text-center mb-16">
-          <h2 class="text-4xl md:text-5xl font-bold mb-4">
-            <span class="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] bg-clip-text text-transparent">
-              Latest Content
-            </span>
+          <h2 class="text-4xl md:text-5xl font-bold mb-4 text-[var(--color-primary)]">
+            Latest Content
           </h2>
           <div class="w-20 h-1 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] mx-auto rounded-full"></div>
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           {#each rootContent as page}
-            <a href={page.url} class="group relative bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-2xl p-8 hover:border-[var(--color-primary)]/50 transition-all duration-300 hover:scale-[1.02]">
+            <a href={page.url} class="group relative bg-[var(--color-card)]/50 backdrop-blur-sm border border-[var(--color-border)] rounded-2xl p-8 hover:border-[var(--color-primary)]/50 transition-all duration-300 hover:scale-[1.02]">
               <div class="absolute inset-0 bg-gradient-to-br from-[var(--color-primary)]/10 to-[var(--color-secondary)]/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
               <div class="relative">
                 <h3 class="font-bold text-2xl text-white mb-3 group-hover:text-[var(--color-primary)] transition-colors">
                   {page.metadata.title}
                 </h3>
                 {#if page.metadata.description}
-                  <p class="text-slate-400 leading-relaxed mb-4">{page.metadata.description}</p>
+                  <p class="text-[var(--color-muted)] leading-relaxed mb-4">{page.metadata.description}</p>
                 {/if}
                 <div class="flex items-center gap-2 text-[var(--color-primary)] font-medium group-hover:gap-3 transition-all">
                   <span>Read more</span>

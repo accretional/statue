@@ -55,12 +55,12 @@
     <div class="container mx-auto px-4 py-16">
       <div class="max-w-4xl mx-auto">
         <header class="mb-10">
-          <h1 class="text-4xl font-bold mb-4 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] bg-clip-text text-transparent">
+          <h1 class="text-4xl font-bold mb-4 text-[var(--color-primary)]">
             {content.metadata.title}
           </h1>
           
           {#if content.metadata.date}
-            <div class="text-slate-400 mt-4">
+            <div class="text-[var(--color-muted)] mt-4">
               Published: {new Date(content.metadata.date).toLocaleDateString('en-US', {
                 year: 'numeric',
                 month: 'long',
@@ -114,10 +114,10 @@
   :global(.prose p), :global(main.prose > div > p) { margin-top: 1rem; margin-bottom: 1rem; }
   :global(.prose ul), :global(main.prose > div > ul) { list-style-type: disc; padding-left: 1.25rem; margin-top: 1rem; margin-bottom: 1rem; }
   :global(.prose ol), :global(main.prose > div > ol) { list-style-type: decimal; padding-left: 1.25rem; margin-top: 1rem; margin-bottom: 1rem; }
-  :global(.prose a), :global(main.prose > div > a) { color: #34d399; }
+  :global(.prose a), :global(main.prose > div > a) { color: var(--color-primary); }
   :global(.prose a:hover), :global(main.prose > div > a:hover) { text-decoration: underline; }
-  :global(.prose code), :global(main.prose > div > code) { background-color: #1f2937; padding: 0.125rem 0.25rem; border-radius: 0.25rem; font-size: 0.875rem; }
-  :global(.prose pre), :global(main.prose > div > pre) { background-color: #1f2937; padding: 1rem; border-radius: 0.25rem; margin-top: 1rem; margin-bottom: 1rem; overflow-x: auto; }
+  :global(.prose code), :global(main.prose > div > code) { background-color: var(--color-card); padding: 0.125rem 0.25rem; border-radius: 0.25rem; font-size: 0.875rem; }
+  :global(.prose pre), :global(main.prose > div > pre) { background-color: var(--color-card); padding: 1rem; border-radius: 0.25rem; margin-top: 1rem; margin-bottom: 1rem; overflow-x: auto; }
   
   /* Additional styles for list items */
   :global(main.prose > div > ul > li), :global(.prose ul > li) { margin-top: 0.25rem; margin-bottom: 0.25rem; }
