@@ -4,6 +4,23 @@
 	"description": "A simple static site generator for markdown content with SvelteKit",
 	"type": "module",
 	"main": "src/index.js",
+	"svelte": "src/lib/index.ts",
+	"exports": {
+		".": {
+			"types": "./src/lib/index.ts",
+			"svelte": "./src/lib/index.ts",
+			"default": "./src/index.js"
+		},
+    "./cms/*": "./src/lib/cms/*",
+		"./components": {
+			"types": "./src/lib/index.ts",
+			"svelte": "./src/lib/index.ts"
+		},
+		"./components/*": "./src/lib/components/*",
+		"./themes/*": "./src/lib/themes/*",
+		"./styles.css": "./src/lib/index.css",
+		"./package.json": "./package.json"
+	},
 	"bin": {
 		"statue-setup": "./postinstall.js",
 		"statue": "./scripts/statue-cli.js"
