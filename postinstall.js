@@ -115,12 +115,12 @@ async function setupStatueSSG() {
     if (!fs.existsSync(indexCssPath)) {
       const appCssContent = `@import "tailwindcss";
 
+/* Theme selection - Import your desired theme */
+@import "statue-ssg/themes/black-white.css";
+
 /* Tailwind v4 content config - scans src directory for classes */
 @source "../";
 @source "../../node_modules/statue-ssg/src/**/*.{svelte,js,ts}";
-
-/* Theme selection - Import your desired theme */
-@import "statue-ssg/themes/black-white.css";
 
 /* Other theme options:
 @import "statue-ssg/themes/red.css";
