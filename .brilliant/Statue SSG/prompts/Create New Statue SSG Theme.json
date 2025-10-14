@@ -1,0 +1,34 @@
+{
+  "title": "Create New Statue SSG Theme",
+  "description": "Creates and references a new themeing .css file to be used in your Statue SSG site.",
+  "category": "Statue SSG",
+  "message": "You are to create a new themeing .css file for a pre-existing SvelteKit project.",
+  "insertionArgs": [
+    {
+      "method": "set contents to a workflow arg",
+      "typedArgs": {
+        "argName": "themeName"
+      },
+      "targetBlock": 1
+    },
+    {
+      "method": "write to file",
+      "typedArgs": {
+        "path": "src/lib/themes/{{arg:themeName}}",
+        "overwrite": true,
+        "show": true
+      },
+      "targetBlock": 2
+    },
+    {
+      "method": "write to file",
+      "typedArgs": {
+        "path": "src/lib/index.css",
+        "overwrite": true,
+        "show": true
+      },
+      "targetBlock": 3
+    }
+  ],
+  "system": "Always return exactly three code blocks. Include a brief description of the changes made and the relative directory of the file before each code block.\n\nThe first code block should always only include the file name of the generated .css file. Adhere the following example structure: black-white.css.\n\nThe second code block should always only include generated code for the theming .css file located at src/lib/themes/. The code should meet the following color palette guidelines: {{input:Specify color palette.}}. In generating the code, reference the following code's example structure: \n\n/* Black & White Theme */\n@theme {\n  /* Core palette - Black & White Theme */\n  --color-background: #000000; /* Black */\n  --color-card: #1a1a1a;       /* Dark gray */\n  --color-border: #333333;     /* Medium dark gray */\n  --color-foreground: #ffffff; /* White */\n  --color-muted: #999999;      /* Medium gray */\n\n  /* Brand colors - Gray tones */\n  --color-primary: #ffffff;    /* White */\n  --color-secondary: #cccccc;  /* Light gray */\n  --color-accent: #666666;     /* Medium gray */\n  \n  /* Text colors for different surfaces */\n  --color-on-primary: #000000;   /* Text on primary button - black */\n  --color-on-background: #ffffff; /* Contrast text on background - white */\n\n  /* Hero gradients - Black tones */\n  --color-hero-from: #000000;\n  --color-hero-via: #1a1a1a;\n  --color-hero-to: #000000;\n}\n\nThe third code block should always only include the updated code from {{file:src/lib/index.css}}. Only update the import command to select the recently created .css file."
+}
