@@ -118,11 +118,7 @@ async function setupStatueSSG() {
 /* Theme selection - Import your desired theme */
 @import "statue-ssg/themes/black-white.css";
 
-/* Tailwind v4 content config - scans src directory for classes */
-@source "../";
-@source "../../node_modules/statue-ssg/src/**/*.{svelte,js,ts}";
-
-/* Other theme options:
+/* Other built-in theme options:
 @import "statue-ssg/themes/red.css";
 @import "statue-ssg/themes/orange.css";
 @import "statue-ssg/themes/green.css";
@@ -130,6 +126,22 @@ async function setupStatueSSG() {
 @import "statue-ssg/themes/cyan.css";
 @import "statue-ssg/themes/pink.css";
 */
+
+/* Custom theme option:
+Create your own theme file (e.g., src/lib/themes/my-theme.css) and import it:
+@import "./themes/my-theme.css";
+
+Your custom theme should use Tailwind v4's @theme directive with CSS variables:
+@theme {
+  --color-background: #your-color;
+  --color-primary: #your-color;
+  ...
+}
+*/
+
+/* Tailwind v4 content config - scans src directory for classes */
+@source "../";
+@source "../../node_modules/statue-ssg/src/**/*.{svelte,js,ts}";
 
 /* Base element defaults using tokens */
 :root {
