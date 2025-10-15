@@ -1,5 +1,5 @@
 <script>
-  // PageHero component - Sayfa başlık bölümü (about, docs vb. için)
+  // PageHero component - Page header section (for about, docs, etc.)
   export let title = '';
   export let description = '';
 </script>

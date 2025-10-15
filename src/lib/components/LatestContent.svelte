@@ -1,5 +1,5 @@
 <script>
-  // LatestContent component - En son içerikler bölümü
+  // LatestContent component - Latest content section
   export let rootContent = [];
 </script>
 

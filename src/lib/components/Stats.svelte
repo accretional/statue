@@ -1,5 +1,5 @@
 <script>
-  // Stats component - İstatistik kartları bölümü
+  // Stats component - Statistics cards section
 </script>
 
 <div class="container mx-auto px-4 pb-24">

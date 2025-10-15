@@ -1,5 +1,5 @@
 <script>
-  // WhyChooseUs component - Neden bizi seçmelisiniz bölümü
+  // WhyChooseUs component - Why choose us section
   export let features = [
     { title: 'Developer-Friendly', description: 'Built on Svelte and modern web standards with developers in mind. Extend and customize with ease.' },
     { title: 'Blazing Fast', description: 'Generate optimized static sites that load instantly and score high on performance metrics.' },

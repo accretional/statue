@@ -1,5 +1,5 @@
 <script>
-  // SubDirectories component - Alt dizinler bölümü
+  // SubDirectories component - Subdirectories section
   export let subDirectories = [];
 </script>
 

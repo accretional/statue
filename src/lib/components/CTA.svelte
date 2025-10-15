@@ -1,5 +1,5 @@
 <script>
-  // CTA component - Call to Action bölümü
+  // CTA component - Call to Action section
   export let title = 'Ready to get started?';
   export let description = 'Join the growing community of creators using Statue SSG';
   export let primaryButtonText = 'Explore Features';

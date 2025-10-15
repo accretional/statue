@@ -1,5 +1,5 @@
 <script>
-  // Hero component - Ana sayfa hero bölümü
+  // Hero component - Homepage hero section
 </script>
 
 <div class="container mx-auto px-4 pt-20 pb-32 md:pt-32 md:pb-40">

@@ -1,5 +1,5 @@
 <script>
-  // Team component - Takım üyeleri bölümü
+  // Team component - Team members section
   export let teamMembers = [
     { name: 'John Doe', role: 'Founder & Lead Developer', initials: 'JD' },
     { name: 'Jane Smith', role: 'UX Designer', initials: 'JS' },

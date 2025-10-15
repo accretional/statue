@@ -1,5 +1,5 @@
 <script>
-  // ContentBody component - İçerik gövde bölümü
+  // ContentBody component - Content body section
   export let content = '';
 </script>
 

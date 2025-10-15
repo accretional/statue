@@ -1,5 +1,5 @@
 <script>
-  // Categories component - Kategoriler bölümü
+  // Categories component - Categories section
   export let directories = [];
 </script>
 

@@ -1,5 +1,5 @@
 <script>
-  // DirectoryContent component - Dizin içeriği bölümü
+  // DirectoryContent component - Directory content section
   export let content = [];
   export let showDirectory = false;
   export let emptyMessage = 'No content found in this directory.';

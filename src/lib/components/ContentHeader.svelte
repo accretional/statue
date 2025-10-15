@@ -1,5 +1,5 @@
 <script>
-  // ContentHeader component - İçerik başlık bölümü
+  // ContentHeader component - Content header section
   export let title = '';
   export let date = null;
   export let author = null;

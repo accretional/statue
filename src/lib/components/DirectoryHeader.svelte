@@ -1,5 +1,5 @@
 <script>
-  // DirectoryHeader component - Dizin başlık bölümü
+  // DirectoryHeader component - Directory header section
   export let title = '';
 </script>
 

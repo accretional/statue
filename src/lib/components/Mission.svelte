@@ -1,5 +1,5 @@
 <script>
-  // Mission component - Misyon bölümü
+  // Mission component - Mission section
 </script>
 
 <div class="max-w-5xl mx-auto mb-20">
