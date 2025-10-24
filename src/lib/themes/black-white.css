@@ -1,0 +1,24 @@
+/* Black & White Theme */
+@theme {
+  /* Core palette - Black & White Theme */
+  --color-background: #000000; /* Black */
+  --color-card: #1a1a1a;       /* Dark gray */
+  --color-border: #333333;     /* Medium dark gray */
+  --color-foreground: #ffffff; /* White */
+  --color-muted: #999999;      /* Medium gray */
+
+  /* Brand colors - Gray tones */
+  --color-primary: #ffffff;    /* White */
+  --color-secondary: #cccccc;  /* Light gray */
+  --color-accent: #666666;     /* Medium gray */
+  
+  /* Text colors for different surfaces */
+  --color-on-primary: #000000;   /* Text on primary button - black */
+  --color-on-background: #ffffff; /* Contrast text on background - white */
+
+  /* Hero gradients - Black tones */
+  --color-hero-from: #000000;
+  --color-hero-via: #1a1a1a;
+  --color-hero-to: #000000;
+}
+

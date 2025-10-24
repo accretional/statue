@@ -28,26 +28,62 @@ async function setupStatueSSG() {
 
   // Target folders (directories in user's project)
   const targetSrc = path.join(targetDir, 'src');
+  const targetRoutes = path.join(targetSrc, 'routes');
   const targetContent = path.join(targetDir, 'content');
 
-  // Copy src folder
+  // Copy only src/routes folder and transform imports to use the package API
   try {
-    if (!fs.existsSync(targetSrc)) {
-      fs.ensureDirSync(targetSrc);
-    }
-    
-    // Copy everything in src folder
-    fs.copySync(
-      path.join(sourceDir, 'src'), 
-      targetSrc, 
-      { 
-        overwrite: true,
-        errorOnExist: false
+    const sourceRoutes = path.join(sourceDir, 'src', 'routes');
+    if (!fs.existsSync(targetSrc)) fs.ensureDirSync(targetSrc);
+    if (!fs.existsSync(targetRoutes)) fs.ensureDirSync(targetRoutes);
+
+    // Copy routes first
+    fs.copySync(sourceRoutes, targetRoutes, { overwrite: true, errorOnExist: false });
+    console.log(chalk.green('✓ routes folder copied successfully'));
+
+    // Helper: transform file imports in a string
+    const transformImports = (code) => {
+      // 1) Component default imports from $lib/components/X.svelte -> import { X } from 'statue-ssg'
+      code = code.replace(/import\s+([A-Za-z0-9_]+)\s+from\s+['"]\$lib\/components\/\1\.svelte['"];?/g, (m, name) => `import { ${name} } from 'statue-ssg';`);
+
+      // 2) Bulk replace any remaining $lib/components/<Any>.svelte -> named import
+      code = code.replace(/import\s+([A-Za-z0-9_]+)\s+from\s+['"]\$lib\/components\/([A-Za-z0-9_]+)\.svelte['"];?/g, (m, local, comp) => `import { ${comp} } from 'statue-ssg';`);
+
+      // 3) Replace stylesheet import - keep as $lib/index.css
+      // No replacement needed - it stays as $lib/index.css
+
+      // 4) Replace server cms imports
+      code = code.replace(/from\s+['"]\$lib\/cms\/content-processor['"]/g, "from 'statue-ssg/cms/content-processor'");
+
+      return code;
+    };
+
+    // Walk through all files in routes and transform svelte/js/ts files
+    const exts = new Set(['.svelte', '.js', '.ts']);
+    const walk = (dir) => {
+      const entries = fs.readdirSync(dir);
+      for (const entry of entries) {
+        const full = path.join(dir, entry);
+        const stat = fs.statSync(full);
+        if (stat.isDirectory()) {
+          walk(full);
+        } else {
+          const ext = path.extname(full);
+          if (exts.has(ext)) {
+            const orig = fs.readFileSync(full, 'utf8');
+            const next = transformImports(orig);
+            if (orig !== next) {
+              fs.writeFileSync(full, next);
+            }
+          }
+        }
       }
-    );
-    console.log(chalk.green('✓ src folder copied successfully'));
+    };
+
+    walk(targetRoutes);
+    console.log(chalk.green('✓ route imports transformed to use "statue-ssg"'));
   } catch (err) {
-    console.error(chalk.red('An error occurred while copying src folder:'), err);
+    console.error(chalk.red('An error occurred while copying routes or transforming imports:'), err);
   }
 
   // Copy content folder
@@ -70,9 +106,67 @@ async function setupStatueSSG() {
     console.error(chalk.red('An error occurred while copying content folder:'), err);
   }
 
-  // Copy root files (svelte.config.js, tailwind.config.js etc.)
+  // Create src/lib/index.css with Tailwind imports (same as original project)
   try {
-    const rootFiles = ['svelte.config.js', 'tailwind.config.js', 'vite.config.js', 'site.config.js'];
+    const targetLib = path.join(targetSrc, 'lib');
+    if (!fs.existsSync(targetLib)) fs.ensureDirSync(targetLib);
+    
+    const indexCssPath = path.join(targetLib, 'index.css');
+    if (!fs.existsSync(indexCssPath)) {
+      const appCssContent = `@import "tailwindcss";
+
+/* Theme selection - Import your desired theme */
+@import "statue-ssg/themes/black-white.css";
+
+/* Other built-in theme options:
+@import "statue-ssg/themes/red.css";
+@import "statue-ssg/themes/orange.css";
+@import "statue-ssg/themes/green.css";
+@import "statue-ssg/themes/purple.css";
+@import "statue-ssg/themes/cyan.css";
+@import "statue-ssg/themes/pink.css";
+*/
+
+/* Custom theme option:
+Create your own theme file (e.g., src/lib/themes/my-theme.css) and import it:
+@import "./themes/my-theme.css";
+
+Your custom theme should use Tailwind v4's @theme directive with CSS variables:
+@theme {
+  --color-background: #your-color;
+  --color-primary: #your-color;
+  ...
+}
+*/
+
+/* Tailwind v4 content config - scans src directory for classes */
+@source "../";
+@source "../../node_modules/statue-ssg/src/**/*.{svelte,js,ts}";
+
+/* Base element defaults using tokens */
+:root {
+  color-scheme: dark;
+}
+
+/* Optional utilities for smooth rendering */
+@layer utilities {
+  .bg-surface { background-color: var(--color-card); }
+  .glass-bg { background-color: color-mix(in srgb, var(--color-card) 78%, transparent); }
+  .glass-border { border-color: color-mix(in srgb, var(--color-border) 70%, transparent); }
+}`;
+      fs.writeFileSync(indexCssPath, appCssContent);
+      console.log(chalk.green('✓ src/lib/index.css created with Tailwind imports'));
+    } else {
+      console.log(chalk.yellow('! src/lib/index.css already exists, not overwritten'));
+    }
+  } catch (err) {
+    console.error(chalk.red('An error occurred while creating app.css:'), err);
+  }
+
+  // Copy root files (svelte.config.js, postcss.config.js etc.)
+  // Note: tailwind.config.js is NOT copied because Tailwind v4 uses CSS-based config
+  try {
+    const rootFiles = ['svelte.config.js', 'vite.config.js', 'site.config.js', 'postcss.config.js'];
     
     rootFiles.forEach(file => {
       const sourcePath = path.join(sourceDir, file);
@@ -98,8 +192,18 @@ async function setupStatueSSG() {
       
       // Required dependencies
       const dependencies = {
-        'marked': '^4.2.4',
+        'marked': '^15.0.7',
         'gray-matter': '^4.0.3'
+      };
+      
+      // Required devDependencies
+      const devDependencies = {
+        '@sveltejs/adapter-static': '^3.0.0',
+        '@tailwindcss/postcss': '^4.1.14',
+        'tailwindcss': '^4.0.0',
+        '@types/node': '^22.13.13',
+        'autoprefixer': '^10.4.21',
+        'postcss': '^8.5.3'
       };
       
       // Add missing dependencies
@@ -108,6 +212,15 @@ async function setupStatueSSG() {
         if (!packageJson.dependencies || !packageJson.dependencies[dep]) {
           packageJson.dependencies = packageJson.dependencies || {};
           packageJson.dependencies[dep] = version;
+          dependenciesAdded = true;
+        }
+      }
+      
+      // Add missing devDependencies
+      for (const [dep, version] of Object.entries(devDependencies)) {
+        if (!packageJson.devDependencies || !packageJson.devDependencies[dep]) {
+          packageJson.devDependencies = packageJson.devDependencies || {};
+          packageJson.devDependencies[dep] = version;
           dependenciesAdded = true;
         }
       }
