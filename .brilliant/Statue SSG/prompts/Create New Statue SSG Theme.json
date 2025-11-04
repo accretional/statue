@@ -1,8 +1,8 @@
 {
   "title": "Create New Statue SSG Theme",
-  "description": "Creates and references a new themeing .css file to be used in your Statue SSG site.",
+  "description": "Create and reference a new themeing .css file to be used in your Statue SSG site.",
   "category": "Statue SSG",
-  "message": "You are to create a new themeing .css file for a pre-existing SvelteKit project.",
+  "message": "Create a new themeing .css file for a pre-existing SvelteKit project.",
   "insertionArgs": [
     {
       "method": "set contents to a workflow arg",
