@@ -1,0 +1,23 @@
+{
+  "title": "Add a Component",
+  "description": "Add an existing component to your codebase.",
+  "category": "Coding",
+  "message": "Add a new component to the codebase.",
+  "insertionArgs": [
+    {
+      "method": "set contents to a workflow arg",
+      "typedArgs": {
+        "argName": "filePath"
+      },
+      "targetBlock": 1
+    },
+    {
+      "method": "replace selection",
+      "typedArgs": {
+        "selectionBehavior": "Use Original Selection"
+      },
+      "targetBlock": 2
+    }
+  ],
+  "system": "I have the following component file: {{file:src/lib/components/ui/{{arg:filename}}}}\n\nAdd the specified component as a new component to the following codebase: {{selection}}\n\nYour output should contain updated code that includes the new component addition, and always maintain the existing codebase in your response. Always adhere to all prop names from the original component file when generating the updated code. The new component should match the general themeing of the original codebase unless otherwise specified. You should adhere to the following additional guidelines: {{input:Component guidelines}}.\n\nAlways return exactly two code block and summarize the contents of the succeeding code block.\n\nThe first codeblock should always only contain the relative directory of the new component you are to import's file.\n\nThe second codeblock should always only contain the updated code with the new component addition. When importing the new component, always use the relative directory specified in code block one: {{arg:filePath}}."
+}
