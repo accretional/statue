@@ -1,5 +1,5 @@
 {
-  "title": "Update Statue SSG Site Theme and Design-1",
+  "title": "Update Statue SSG Site Theme and Design",
   "description": "Update the overall theme and design for your Statue SSG generated site.",
   "category": "Statue SSG",
   "message": "Update a themeing index.css file for a SvelteKit site generated via a pre-configured static site generator.",
