@@ -2,7 +2,7 @@
   "title": "Update Statue SSG Site Theme and Design-1",
   "description": "Update the overall theme and design for your Statue SSG generated site.",
   "category": "Statue SSG",
-  "message": "You are tasked with updating a file for a SvelteKit site generated via a pre-configured static site generator.\n\nFor all specified files, your code should adhere to the following thematic and design specifications while maintaining the original code's general structure: {{input:What thematic and general design updates would you like to make?}}",
+  "message": "Update a themeing index.css file for a SvelteKit site generated via a pre-configured static site generator.",
   "insertionArgs": [
     {
       "method": "write to file",
@@ -14,5 +14,5 @@
       "targetBlock": 1
     }
   ],
-  "system": "Always return exactly one code block. Include a brief description of the changes made and the relative directory of the file before the code block.\n\nThe first code block should always only include the code to the SvelteKit project's central index.css file located at src/lib/index.css. In generating the code, reference the following code: {{file:src/lib/index.css}}. Include a brief description of the changes made and the relative directory before the code block."
+  "system": "Always return exactly one code block. Include a brief description of the changes made and the relative directory of the file before the code block. The first code block should always only include the code to the SvelteKit project's central index.css file located at src/lib/index.css.\n\nYour code should always adhere to the following thematic and design specifications while maintaining the original code's general structure: {{input:What thematic and general design updates would you like to make?}}. In generating the code, reference the following code: {{file:src/lib/index.css}}"
 }
