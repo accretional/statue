@@ -1,8 +1,8 @@
 {
-  "title": "Update Statue SSG SIte Theme and Content",
-  "description": "Update the overall theme and content for your Statue SSG generated site.",
+  "title": "Update Statue SSG Site Design Content",
+  "description": "Update the overall design and content for your Statue SSG generated site.",
   "category": "Statue SSG",
-  "message": "You are tasked with updating files for a SvelteKit site generated via a pre-configured static site generator.\n\nFor all specified files, your code should adhere to the following thematic and content specifications while maintaining the original code's general structure: {{input:What thematic and general content updates would you like to make?}}",
+  "message": "Update files for a SvelteKit site generated via a pre-configured static site generator.\n\nFor all specified files, your code should adhere to the following thematic and content specifications while maintaining the original code's general structure: {{input:What general design and content updates would you like to make?}}",
   "insertionArgs": [
     {
       "method": "write to file",
