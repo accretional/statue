@@ -2,7 +2,7 @@
   "title": "Add a Component",
   "description": "Add an existing component to your codebase.",
   "category": "Coding",
-  "message": "Add a new component to an existing codebase.",
+  "message": "Add a component to an existing codebase.",
   "insertionArgs": [
     {
       "method": "set contents to a workflow arg",
