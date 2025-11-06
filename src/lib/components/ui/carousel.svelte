@@ -8,7 +8,7 @@
   }
   
   export let slides: Slide[] = [];
-  export let height: string = '600px'; // Add height prop with default value
+  export let height: string = '600px';
   
   let currentIndex = 0;
   let isTransitioning = false;
