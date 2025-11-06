@@ -3,6 +3,10 @@
   export let description: string = '';
   export let onClose: (() => void) | undefined = undefined;
   export let onClick: (() => void) | undefined = undefined;
+  export let containerClass: string = '';
+  export let descriptionClass: string = '';
+  export let buttonClass: string = '';
+  export let closeButtonClass: string = '';
   
   function handleClose() {
     if (onClose) {
@@ -17,10 +21,10 @@
   }
 </script>
 
-<div class="relative w-full rounded-lg border border-blue-200 bg-blue-50 p-4">
+<div class={containerClass}>
   <div class="flex items-center justify-between gap-4">
     <div class="flex-1">
-      <p class="text-sm text-blue-900">
+      <p class={descriptionClass}>
         {description}
       </p>
     </div>
@@ -28,7 +32,7 @@
     <div class="flex items-center gap-2">
       <button
         on:click={handleClick}
-        class="bg-blue-600 text-white hover:bg-blue-700 text-sm px-3 py-1.5 rounded-md"
+        class={buttonClass}
       >
         {buttonText}
       </button>
@@ -36,7 +40,7 @@
       {#if onClose}
         <button
           on:click={handleClose}
-          class="rounded-md p-1 text-blue-900 hover:bg-blue-100 transition-colors"
+          class={closeButtonClass}
           aria-label="Close banner"
         >
           <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
