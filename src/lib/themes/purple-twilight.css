@@ -1,0 +1,23 @@
+/* Purple Theme */
+@theme {
+  /* Core palette - Purple Theme */
+  --color-background: #130a1a; /* Dark purple-black */
+  --color-card: #1e0f2a;       /* Very dark purple */
+  --color-border: #3a1f5c;     /* Dark purple */
+  --color-foreground: #faf5ff; /* Light purple-white */
+  --color-muted: #c4b5fd;      /* purple-300 */
+
+  /* Brand colors - Purple tones */
+  --color-primary: #a855f7;    /* purple-500 - bright purple */
+  --color-secondary: #c084fc;  /* purple-400 - light purple */
+  --color-accent: #9333ea;     /* purple-600 - dark purple */
+  
+  /* Text colors for different surfaces */
+  --color-on-primary: #ffffff;   /* Text on primary button - white */
+  --color-on-background: #1e0f2a; /* Contrast text on background - dark */
+
+  /* Hero gradients - Dark purple tones */
+  --color-hero-from: #130a1a;
+  --color-hero-via: #1e0f2a;
+  --color-hero-to: #130a1a;
+}
