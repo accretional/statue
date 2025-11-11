@@ -281,21 +281,7 @@ const processTemplateVariables = (content) => {
   // Support {{variable.name}} format variables
   let processedContent = content;
   
-  // First process JavaScript expressions (e.g.: {new Date().toLocaleDateString('en-US')})
-  processedContent = processedContent.replace(/\{([^}]+)\}/g, (match, expression) => {
-    try {
-      // Allow only specific functions for safe eval
-      if (expression.includes('new Date()')) {
-        return eval(expression);
-      }
-      return match; // Leave unchanged expressions as they are
-    } catch (error) {
-      console.warn(`Template expression error: ${expression}`, error);
-      return match;
-    }
-  });
-  
-  // Then process {{variable}} format variables
+  // Process {{variable}} format variables
   processedContent = processedContent.replace(/\{\{([^}]+)\}\}/g, (match, variableName) => {
     const trimmedName = variableName.trim();
     if (variables.hasOwnProperty(trimmedName)) {
