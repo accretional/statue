@@ -19,7 +19,7 @@ Statue SSG is a fast static site generator that combines Markdown content with S
 This single command creates a SvelteKit project, installs Statue SSG, and initializes it:
 
 ```bash
-yes | npx sv create . --template minimal --types ts --no-add-ons --install npm && npm install statue-ssg && npx statue init && npm install
+yes | npx sv create . --template minimal --types ts --no-add-ons --install npm && npm install statue-ssg && npx statue init && npm install && npm run dev
 ```
 ![area4-github](https://github.com/user-attachments/assets/0026d024-9aa3-4ced-a71d-d99c2ee7e8f2)
 
