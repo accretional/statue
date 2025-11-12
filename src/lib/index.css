@@ -1,24 +1,25 @@
 @import "tailwindcss";
 
+/* Theme selection - Import your desired theme (development mode uses direct src path) */
+@import "./themes/white.css";
+
 /* Tailwind v4 content config - scans src directory for classes */
 @source "../";
-
-/* Theme selection - Import your desired theme (development mode uses direct src path) */
-@import "statue-ssg/src/lib/themes/black-white.css";
-
 /* Other theme options:
 @import "statue-ssg/src/lib/themes/black-white.css";
+@import "statue-ssg/src/lib/themes/white.css";
 @import "statue-ssg/src/lib/themes/red.css";
 @import "statue-ssg/src/lib/themes/orange.css";
 @import "statue-ssg/src/lib/themes/green.css";
 @import "statue-ssg/src/lib/themes/purple.css";
 @import "statue-ssg/src/lib/themes/cyan.css";
 @import "statue-ssg/src/lib/themes/pink.css";
+@import "statue-ssg/src/lib/themes/blue.css";
 */
 
 /* Base element defaults using tokens */
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 /* Optional utilities for smooth rendering */

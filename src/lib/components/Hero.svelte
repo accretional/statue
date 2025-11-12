@@ -14,7 +14,7 @@
       </div>
       
       <h1 class="text-5xl md:text-7xl font-bold mb-8 leading-tight">
-        <span class="text-white">
+        <span class="text-[var(--color-primary)]">
           Anyone can create<br />
         </span>
         <span class="text-[var(--color-primary)]">
@@ -22,7 +22,7 @@
         </span>
       </h1>
       
-      <p class="text-xl md:text-2xl text-[var(--color-foreground)] mb-12 max-w-3xl mx-auto leading-relaxed">
+      <p class="text-xl md:text-2xl text-[var(--color-hero-description,var(--color-foreground))] mb-12 max-w-3xl mx-auto leading-relaxed">
         Create amazing static sites easily with Statue SSG using Markdown.
         Fast, secure, and SEO-friendly sites ready in minutes.
       </p>

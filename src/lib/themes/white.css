@@ -1,0 +1,35 @@
+/* White Theme - Light Theme */
+@theme {
+  /* Core palette - White Theme */
+  /* ⚠️ CRITICAL CONTRAST RULES:
+   * 1. --color-background and --color-foreground MUST have HIGH CONTRAST
+   * 2. NEVER use similar brightness for background and foreground
+   * 3. Hero gradients must match background brightness (dark bg → dark hero, light bg → light hero)
+   */
+  --color-background: #ffffff; /* Pure white - Light background */
+  --color-card: #f5f5f5;       /* Very light gray - Differs slightly from background */
+  --color-border: #e0e0e0;     /* Light gray border - Visible on white background */
+  --color-foreground: #0a0a0a; /* Almost black - HIGH contrast with background */
+  --color-muted: #666666;      /* Medium dark gray - Between background and foreground */
+
+  /* Brand colors - Can be any vibrant colors */
+  --color-primary: #2563eb;    /* blue-600 - Vibrant blue */
+  --color-secondary: #3b82f6;  /* blue-500 - Lighter blue */
+  --color-accent: #1d4ed8;     /* blue-700 - Darker blue */
+  
+  /* Text colors for different surfaces */
+  /* ⚠️ Ensure these contrast with their backgrounds */
+  --color-on-primary: #ffffff;   /* Text on primary button - white (contrasts with blue) */
+  --color-on-background: #0a0a0a; /* Contrast text on background - dark */
+
+  /* Hero section specific colors (OPTIONAL - customize hero text if desired) */
+  --color-hero-heading: #121212;     /* Hero heading - Slightly lighter than body text for elegance */
+  --color-hero-description: #121212; /* Hero description - Medium gray for softer look */
+
+  /* Hero gradients - Light tones */
+  /* ⚠️ These are LIGHT to match LIGHT background (text uses dark --color-foreground) */
+  --color-hero-from: #ffffff; /* Matches background brightness - white */
+  --color-hero-via: #f8f8f8;  /* Matches background brightness - very light gray */
+  --color-hero-to: #ffffff;   /* Matches background brightness - white */
+}
+

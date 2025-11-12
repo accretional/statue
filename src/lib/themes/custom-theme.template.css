@@ -8,23 +8,47 @@
 
 @theme {
   /* Core palette - Base colors for your theme */
-  --color-background: #000000;  /* Main background color */
-  --color-card: #1a1a1a;        /* Card/section background */
-  --color-border: #333333;      /* Border color */
-  --color-foreground: #ffffff;  /* Main text color */
-  --color-muted: #999999;       /* Secondary/muted text */
+  /* ⚠️ CRITICAL CONTRAST RULES - DO NOT VIOLATE THESE RULES:
+   * 1. --color-background and --color-foreground MUST have HIGH CONTRAST
+   *    Examples: 
+   *    - Dark background (#000000-#3a3a3a) → Light foreground (#e0e0e0-#ffffff)
+   *    - Light background (#e0e0e0-#ffffff) → Dark foreground (#000000-#3a3a3a)
+   * 2. NEVER use similar colors for background and foreground (e.g., both light or both dark)
+   * 3. --color-muted should be between background and foreground (visible but less prominent)
+   * 4. Hero gradients (hero-from, hero-via, hero-to) must match background tone
+   *    - If background is dark → hero gradients must be dark
+   *    - If background is light → hero gradients must be light
+   * 5. Text in hero sections uses --color-foreground, so ensure contrast!
+   */
+  --color-background: #000000;  /* Main background color - Can be dark OR light */
+  --color-card: #1a1a1a;        /* Card/section background - Should differ slightly from background */
+  --color-border: #333333;      /* Border color - Should be visible on background */
+  --color-foreground: #ffffff;  /* Main text color - MUST contrast strongly with background */
+  --color-muted: #999999;       /* Secondary text - Between background and foreground in brightness */
 
   /* Brand colors - Your primary branding colors */
-  --color-primary: #3b82f6;     /* Primary accent (buttons, links) */
-  --color-secondary: #60a5fa;   /* Secondary accent */
-  --color-accent: #2563eb;      /* Tertiary accent */
+  /* These can be any color, but ensure good contrast with their usage contexts */
+  --color-primary: #3b82f6;     /* Primary accent (buttons, links) - Should be vibrant and visible */
+  --color-secondary: #60a5fa;   /* Secondary accent - Should complement primary */
+  --color-accent: #2563eb;      /* Tertiary accent - Should harmonize with primary/secondary */
 
   /* Text colors for different surfaces */
-  --color-on-primary: #ffffff;    /* Text on primary buttons */
-  --color-on-background: #ffffff; /* Contrast text on background */
+  /* ⚠️ CONTRAST CRITICAL: These colors must provide readable text on their respective backgrounds */
+  --color-on-primary: #ffffff;    /* Text on primary buttons - MUST contrast with --color-primary */
+  --color-on-background: #ffffff; /* Contrast text on background - MUST contrast with --color-background */
 
-  /* Hero gradients - Used in hero sections */
-  --color-hero-from: #000000;   /* Gradient start */
-  --color-hero-via: #1a1a1a;    /* Gradient middle */
-  --color-hero-to: #000000;     /* Gradient end */
+  /* Hero section specific colors (OPTIONAL - if not defined, defaults to foreground) */
+  /* These are optional and can be used to customize hero section text colors */
+  --color-hero-heading: #ffffff;     /* Hero main heading color - Falls back to --color-foreground if not defined */
+  --color-hero-description: #ffffff; /* Hero description text color - Falls back to --color-foreground if not defined */
+
+  /* Hero gradients - Used in hero sections and page backgrounds */
+  /* ⚠️ IMPORTANT: These gradients appear with --color-foreground text on top
+   * Therefore, hero colors MUST match the brightness of --color-background
+   * Rule: If background is dark → hero gradients dark | If background is light → hero gradients light
+   * NEVER mix: light hero with dark background OR dark hero with light background
+   */
+  --color-hero-from: #000000;   /* Gradient start - Must match background brightness */
+  --color-hero-via: #1a1a1a;    /* Gradient middle - Must match background brightness */
+  --color-hero-to: #000000;     /* Gradient end - Must match background brightness */
 }
