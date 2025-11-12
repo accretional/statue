@@ -21,6 +21,7 @@ This single command creates a SvelteKit project, installs Statue SSG, and initia
 ```bash
 yes | npx sv create . --template minimal --types ts --no-add-ons --install npm && npm install statue-ssg && npx statue init && npm install
 ```
+![area4-github](https://github.com/user-attachments/assets/0026d024-9aa3-4ced-a71d-d99c2ee7e8f2)
 
 ## Step-by-Step Setup
 
