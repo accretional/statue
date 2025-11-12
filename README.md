@@ -1,10 +1,11 @@
 # Statue SSG
 
-Statue SSG is a fast static site generator that combines Markdown content with SvelteKit. You can get a working site with a single command, manage pages as `.md` files, and extend with Svelte components whenever you need. The output is fully static, so hosting is extremely cheap—often free.
+Statue SSG is a fast static site generator that combines Markdown content with SvelteKit. You can get a working site with a single command, manage pages as `.md` files, and extend with Svelte components whenever you need. The output is fully static, so hosting is extremely cheap and often free.
 
 [![npm version](https://img.shields.io/npm/v/statue-ssg.svg)](https://www.npmjs.com/package/statue-ssg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
+![area3-github](https://github.com/user-attachments/assets/9a53e186-60fd-443e-b87b-9907d217df20)
 
 ## Why Statue?
 - **One-command start**: Spin up a working site with a single command.
@@ -15,11 +16,12 @@ Statue SSG is a fast static site generator that combines Markdown content with S
 - **Ultra-cheap hosting**: Deploy static output to Netlify, Vercel, Cloudflare Pages, GitHub Pages, etc.
 
 ## Quick Start — One Command
-This single command creates a SvelteKit project, installs Statue SSG, and initializes it:
+This single command creates a SvelteKit project, installs Statue SSG, and initializes it. Just copy and paste it in your terminal.
 
 ```bash
-yes | npx sv create . --template minimal --types ts --no-add-ons --install npm && npm install statue-ssg && npx statue init
+yes | npx sv create . --template minimal --types ts --no-add-ons --install npm && npm install statue-ssg && npx statue init && npm install && npm run dev
 ```
+![area4-github](https://github.com/user-attachments/assets/0026d024-9aa3-4ced-a71d-d99c2ee7e8f2)
 
 ## Step-by-Step Setup
 
