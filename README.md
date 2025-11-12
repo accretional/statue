@@ -6,6 +6,8 @@ Statue SSG is a fast static site generator that combines Markdown content with S
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 ![statuegif](https://github.com/user-attachments/assets/637ce372-29d1-4145-947c-59b64daaf362)
+![area3-github](https://github.com/user-attachments/assets/9a53e186-60fd-443e-b87b-9907d217df20)
+
 ## Why Statue?
 - **One-command start**: Spin up a working site with a single command.
 - **Markdown-first**: Build your site by writing `.md` files—no coding required.
