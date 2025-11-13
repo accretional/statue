@@ -1,6 +1,6 @@
 {
 	"name": "statue-ssg",
-	"version": "0.2.8",
+	"version": "0.2.9",
 	"description": "A simple static site generator for markdown content with SvelteKit",
 	"type": "module",
 	"main": "src/index.js",
@@ -11,7 +11,7 @@
 			"svelte": "./src/lib/index.ts",
 			"default": "./src/index.js"
 		},
-    "./cms/*": "./src/lib/cms/*",
+		"./cms/*": "./src/lib/cms/*",
 		"./components": {
 			"types": "./src/lib/index.ts",
 			"svelte": "./src/lib/index.ts"
