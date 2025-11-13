@@ -101,8 +101,7 @@ If you want to create a **new page**, follow these steps:
 
 Or, write the page yourself: we recommend starting with an existing or minimal page if you do.
 
-![howai2-github](https://github.com/user-attachments/assets/2703e415-9d3b-4d8b-981c-25f81cbc4aa2)
-
+![editingpage2](https://github.com/user-attachments/assets/671ca181-91ca-4cce-8e5a-9ffd82184837)
 
 ## Theme System (Brief)
 Statue SSG ships with built-in themes. Import one in `src/lib/index.css`:
@@ -117,6 +116,9 @@ Statue SSG ships with built-in themes. Import one in `src/lib/index.css`:
 
 To create a custom theme or see all available themes, see `src/lib/themes/README.md` in this repository.
 
+## Svelte and Routes
+Markdown files are turned into pages automatically. You can keep adding SvelteKit routes under `src/routes/` (pages, layouts, endpoints). UI components can be customized with Tailwind.
+
 ## Build and Preview
 Generate the static site and preview it locally:
 
@@ -127,8 +129,34 @@ npm run preview
 
 The static output is written to the `build/` directory. Deploy that directory directly to your static hosting provider.
 
-## Svelte and Routes
-Markdown files are turned into pages automatically. You can keep adding SvelteKit routes under `src/routes/` (pages, layouts, endpoints). UI components can be customized with Tailwind.
+## How to Deploy Your Website
+
+If you're done editing your site, it's time to publish it.  
+One of the biggest advantages of being fully static is **free hosting up to very high traffic levels (200,000+ users)**.  
+You can deploy anywhere — **Cloudflare Pages, Netlify, GitHub Pages**, etc.
+
+In this guide, we'll use **Cloudflare Pages**.
+
+---
+
+### Pre-Setup
+
+Run the following command in your terminal to install Wrangler and log in to Cloudflare:
+
+```bash
+npm install wrangler && wrangler login
+```
+This connects your local environment to your Cloudflare account.
+### Deploy
+Paste this single command into your terminal.
+When it finishes, click the link it prints — your site is now live!
+
+```bash
+npm run build && npx wrangler pages deploy build --project-name=myfirstwebsite
+```
+You can optionally connect a custom domain later from the Cloudflare dashboard.
+
+![deploy1](https://github.com/user-attachments/assets/5a2b6d07-5667-4bdc-9904-5c0293cbed28)
 
 ## Troubleshooting
 - Ensure `--ignore-scripts` is not enabled in your npm configuration; otherwise initialization may not run.
