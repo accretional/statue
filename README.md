@@ -1,29 +1,45 @@
-# Statue
+# Statue [![npm version](https://img.shields.io/npm/v/statue-ssg.svg)](https://www.npmjs.com/package/statue-ssg) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-Statue is a fast static site generator that combines Markdown content with SvelteKit. You can get a working site with a single command, manage pages as `.md` files, and extend with Svelte components whenever you need. The output is fully static, so hosting is extremely cheap and often free.
+Statue is a blazingly-fast static site generator based on Markdown, Sveltekit, and an included component library. Get started in seconds:
 
-[![npm version](https://img.shields.io/npm/v/statue-ssg.svg)](https://www.npmjs.com/package/statue-ssg)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+```bash
+yes | npx sv create . --template minimal --types ts --no-add-ons --install npm && npm install statue-ssg && npx statue init && npm install && npm run dev
+```
+
+Content like blogs and documentation can be added and modified directly through `.md` files, with pages and the site structure itself based on Svelte components. Statue sites are fully static, so **management is simple, development can be non-technical, and hosting is cheap or free.**
 
 ![area3-github](https://github.com/user-attachments/assets/9a53e186-60fd-443e-b87b-9907d217df20)
 
 ## Why Statue?
-- **One-command start**: Spin up a working site with a single command.
-- **Markdown-first**: Build your site by writing `.md` files—no coding required.
-- **Powered by SvelteKit**: Keep using Svelte features and the ecosystem.
-- **Tailwind included**: Customize the UI easily with Tailwind CSS.
-- **Easy to extend**: Use AI tools or write custom code when you need specifics.
-- **Ultra-cheap hosting**: Deploy static output to Netlify, Vercel, Cloudflare Pages, GitHub Pages, etc.
+Above all else, Statue is **Fast, Simple, and Flexible from start to finish**. It takes only one command to get started, builds and deployments are fast, hosting is simple, sites are extensible, and developing a Statue site is about building what you want rather than battling, learning, and conforming to the tool itself.
 
-## Quick Start — One Command
+- **Markdown-first**: Build out your site content by writing `.md` files: no coding required.
+- **Powered by SvelteKit**: Familiar Svelte features and ecosystem, based on an elegant declarative model ideal for static sites.
+- **Tailwind + Components**: Customize the UI easily with Tailwind CSS, and a library of included components.
+- **Easy to Use and Extend**: The Declarative Component Model is easy to use, and with LLMs, easy for even non-technical users to work with.
+- **Ultra-cheap hosting**: Deploy static output to Netlify, Vercel, Cloudflare Pages, GitHub Pages, etc.
+- **Low Maintenance**: Static sites are almost maintenance-free, and Statue itself is much less complex than other web tools
+
+Statue meets the needs of multiple kinds of use cases and users. Even non-developers can write markdown files use AI to build Statue sites - Statue's design is intentionally highly structured, self-contained, and based on simple-yet-familiar web technologies, so that LLMs could productively contribute to it even when guided by non-technical users. That same commitment to order and contrained complexity makes it great for developers, too: they can spend less time on the tool itself, and more time building.
+
+Statue exists to help you create static sites, according to your needs and vision. It's a tool that does what you ask of it, and no more. Setting up a website shouldn't be any harder than this:
+
+```bash
+yes | npx sv create . --template minimal --types ts --no-add-ons --install npm && npm install statue-ssg && npx statue init && npm install && npm run dev
+```
+
+![area4-github](https://github.com/user-attachments/assets/0026d024-9aa3-4ced-a71d-d99c2ee7e8f2)
+
+## Setup
+
+### Recommended: Quickstart
 This single command creates a SvelteKit project, installs Statue SSG, and initializes it. Just copy and paste it in your terminal.
 
 ```bash
 yes | npx sv create . --template minimal --types ts --no-add-ons --install npm && npm install statue-ssg && npx statue init && npm install && npm run dev
 ```
-![area4-github](https://github.com/user-attachments/assets/0026d024-9aa3-4ced-a71d-d99c2ee7e8f2)
 
-## Step-by-Step Setup
+If you'd like to start with a project with different defaults, or some of the required dependencies (mostly just npm) are missing and causing that command to fail, here are some steps laid out more iteratively,
 
 ### 1) Create a SvelteKit project
 ```bash
@@ -82,6 +98,8 @@ If you want to create a **new page**, follow these steps:
 1. Create a new folder inside `src/routes/`.
 2. Inside that folder, create a file named `+page.svelte`.
 3. Ask your AI tool to generate or modify the content of this new `+page.svelte` file.
+
+Or, write the page yourself: we recommend starting with an existing or minimal page if you do.
 
 ![howai2-github](https://github.com/user-attachments/assets/2703e415-9d3b-4d8b-981c-25f81cbc4aa2)
 
