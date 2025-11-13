@@ -1,6 +1,6 @@
-# Statue SSG
+# Statue
 
-Statue SSG is a fast static site generator that combines Markdown content with SvelteKit. You can get a working site with a single command, manage pages as `.md` files, and extend with Svelte components whenever you need. The output is fully static, so hosting is extremely cheap and often free.
+Statue is a fast static site generator that combines Markdown content with SvelteKit. You can get a working site with a single command, manage pages as `.md` files, and extend with Svelte components whenever you need. The output is fully static, so hosting is extremely cheap and often free.
 
 [![npm version](https://img.shields.io/npm/v/statue-ssg.svg)](https://www.npmjs.com/package/statue-ssg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
