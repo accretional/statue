@@ -1,7 +1,6 @@
 <script>
   import NavigationBar from '$lib/components/NavigationBar.svelte';
   import Hero from '$lib/components/Hero.svelte';
-  import Stats from '$lib/components/Stats.svelte';
   import Categories from '$lib/components/Categories.svelte';
   import LatestContent from '$lib/components/LatestContent.svelte';
   
@@ -21,9 +20,6 @@
 <div class="min-h-screen bg-gradient-to-b from-[var(--color-hero-from)] via-[var(--color-hero-via)] to-[var(--color-hero-to)]">
   <!-- Hero Section -->
   <Hero />
-
-  <!-- Stats Section -->
-  <Stats />
 
   <!-- Content Sections -->
   <div class="container mx-auto px-4 py-20">

@@ -4,7 +4,7 @@
 @source "../";
 
 /* Theme selection - Import your desired theme (development mode uses direct src path) */
-@import "statue-ssg/src/lib/themes/black-white.css";
+@import "./themes/white.css";
 
 /* Other theme options:
 @import "statue-ssg/src/lib/themes/black-white.css";

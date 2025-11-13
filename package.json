@@ -11,7 +11,7 @@
 			"svelte": "./src/lib/index.ts",
 			"default": "./src/index.js"
 		},
-    "./cms/*": "./src/lib/cms/*",
+		"./cms/*": "./src/lib/cms/*",
 		"./components": {
 			"types": "./src/lib/index.ts",
 			"svelte": "./src/lib/index.ts"
@@ -68,6 +68,8 @@
 		"vite": "^5.4.11"
 	},
 	"dependencies": {
+		"@babylonjs/core": "^8.36.1",
+		"@babylonjs/loaders": "^8.36.1",
 		"chalk": "^5.4.1",
 		"commander": "^13.1.0",
 		"fs-extra": "^11.3.0",
