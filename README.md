@@ -156,7 +156,7 @@ npm run build && npx wrangler pages deploy build --project-name=myfirstwebsite
 ```
 You can optionally connect a custom domain later from the Cloudflare dashboard.
 
-![deploy1](https://github.com/user-attachments/assets/5a2b6d07-5667-4bdc-9904-5c0293cbed28)
+![deploy3](https://github.com/user-attachments/assets/c04a8298-0ce9-4a80-909c-02c3b5c63f26)
 
 ## Troubleshooting
 - Ensure `--ignore-scripts` is not enabled in your npm configuration; otherwise initialization may not run.
