@@ -72,7 +72,8 @@
 		"commander": "^13.1.0",
 		"fs-extra": "^11.3.0",
 		"gray-matter": "^4.0.3",
-		"marked": "^15.0.7"
+		"marked": "^15.0.7",
+		"lottie-web": "^5.12.2"
 	},
 	"keywords": [
 		"static-site-generator",
