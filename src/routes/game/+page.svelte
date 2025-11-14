@@ -5,19 +5,30 @@
   const raceDuration = 18000;
   const finishWindow = 6000;
   const tickRate = 90;
-  const playerStep = 2.4;
-  const playerDrag = 0.22;
-  const boltBaseSpeed = 1.05;
 
-  const statusCopy = {
-    hazir: '← → ritmini hazırla, kamera Bolt’ta sabit.',
-    yarista: 'Bolt ortada sabit, sağ taraf sende kalmalı!',
-    bitti: 'Yarış tamamlandı. Resetle tekrar dene.'
-  };
+  const playerStep = 2.4;
+  const playerDrag = 0.26;
+  const playerMeterFloor = -28;
+
+  const boltBaseSpeed = 1.18;
+  const boltCatchupFactor = 0.095;
+  const boltLateRaceBoost = 0.6;
+
+  const boltScreen = 50;
+  const cameraDrift = 1.45;
+  const playerScreenBounds = { min: -24, max: 88 };
+
+const statusCopy = {
+  ready: 'Prime a Left/Right rhythm while the camera stays locked on Bolt.',
+  racing: 'Bolt anchors the center—keep the right side yours.',
+  finished: 'Race complete. Reset to run it again.'
+};
 
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+  const getPlayerScreen = (lead) =>
+    clamp(boltScreen + lead * cameraDrift, playerScreenBounds.min, playerScreenBounds.max);
 
-  let raceState = 'hazir';
+let raceState = 'ready';
   let raceTimer = raceDuration;
   let playerMeter = -2;
   let boltMeter = 0;
@@ -31,11 +42,10 @@
   let poseTimeout;
   const idleDelay = 520;
   let raceLoop;
+let hasRedirected = false;
 
   $: lead = playerMeter - boltMeter;
-  $: sceneShift = clamp(lead * 1.35, -22, 22);
-  $: playerScreen = clamp(18, 50 + sceneShift, 86);
-  $: boltScreen = 50;
+  $: playerScreen = getPlayerScreen(lead);
   $: secondsLeft = (raceTimer / 1000).toFixed(1);
 
   onMount(() => {
@@ -54,16 +64,16 @@
     if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
     event.preventDefault();
 
-    if (raceState === 'bitti') return;
+    if (raceState === 'finished') return;
 
-    if (raceState === 'hazir') {
+    if (raceState === 'ready') {
       startRace();
     }
 
-    if (raceState !== 'yarista') return;
+    if (raceState !== 'racing') return;
 
     if (lastStep === event.key) {
-      playerMeter = Math.max(-10, playerMeter - 0.6);
+      playerMeter = Math.max(playerMeterFloor, playerMeter - 0.6);
       animatePlayer(event.key);
       return;
     }
@@ -82,7 +92,7 @@
   }
 
   function startRace() {
-    raceState = 'yarista';
+    raceState = 'racing';
     raceTimer = raceDuration;
     playerMeter = -2;
     boltMeter = 0;
@@ -91,14 +101,18 @@
     finishPosition = 130;
     winnerMessage = '';
     lastStep = null;
+    hasRedirected = false;
   }
 
   function tickRace() {
-    if (raceState !== 'yarista') return;
+    if (raceState !== 'racing') return;
 
     raceTimer = Math.max(0, raceTimer - tickRate);
-    boltMeter += boltBaseSpeed;
-    playerMeter = Math.max(-12, playerMeter - playerDrag);
+    const raceProgress = 1 - raceTimer / raceDuration;
+    const boltChase = Math.max(0, playerMeter - boltMeter) * boltCatchupFactor;
+    const boltLatePush = raceProgress * boltLateRaceBoost;
+    boltMeter += boltBaseSpeed + boltChase + boltLatePush;
+    playerMeter = Math.max(playerMeterFloor, playerMeter - playerDrag);
     const relative = playerMeter - boltMeter;
     scrollAmount = (scrollAmount + 4 + Math.max(0, relative)) % 500;
     boltPose = boltPose === 'right' ? 'left' : 'right';
@@ -118,31 +132,55 @@
   function checkFinishCollision(force = false) {
     if (winnerMessage) return;
 
-    const playerPos = clamp(18, 50 + (playerMeter - boltMeter) * 1.35, 86);
-    const boltPos = 50;
+    const playerPos = getPlayerScreen(playerMeter - boltMeter);
+    const boltPos = boltScreen;
+    const rawDelta = playerPos - boltPos;
+    const elapsedSeconds = ((raceDuration - raceTimer) / 1000).toFixed(1);
+    const formattedDelta = Math.abs(rawDelta).toFixed(1);
+    const detailWin = `Finish contact at ${elapsedSeconds}s with a +${formattedDelta}% screen lead.`;
+    const detailLose = `Finish contact at ${elapsedSeconds}s while Bolt led by ${formattedDelta}% of the screen.`;
 
     const ordering =
       playerPos > boltPos
         ? [
-            { id: 'player', pos: playerPos, copy: 'Kazanan sensin! Bolt merkezde kaldı 🚀' },
-            { id: 'bolt', pos: boltPos, copy: 'Usain Bolt kazandı. Ritim hızını artır ⚡' }
+            {
+              id: 'player',
+              pos: playerPos,
+              copy: 'You won! Bolt stayed locked to the center 🚀',
+              detail: detailWin
+            },
+            {
+              id: 'bolt',
+              pos: boltPos,
+              copy: 'Usain Bolt wins. Crank up your rhythm ⚡',
+              detail: detailLose
+            }
           ]
         : [
-            { id: 'bolt', pos: boltPos, copy: 'Usain Bolt kazandı. Ritim hızını artır ⚡' },
-            { id: 'player', pos: playerPos, copy: 'Kazanan sensin! Bolt merkezde kaldı 🚀' }
+            {
+              id: 'bolt',
+              pos: boltPos,
+              copy: 'Usain Bolt wins. Crank up your rhythm ⚡',
+              detail: detailLose
+            },
+            {
+              id: 'player',
+              pos: playerPos,
+              copy: 'You won! Bolt stayed locked to the center 🚀',
+              detail: detailWin
+            }
           ];
 
     for (const entry of ordering) {
       if (force || finishPosition <= entry.pos) {
-        winnerMessage = entry.copy;
-        raceState = 'bitti';
+        completeRace(entry);
         return;
       }
     }
   }
 
   function resetRace() {
-    raceState = 'hazir';
+    raceState = 'ready';
     raceTimer = raceDuration;
     playerMeter = -2;
     boltMeter = 0;
@@ -153,48 +191,66 @@
     lastStep = null;
     playerPose = 'idle';
     boltPose = 'right';
+    hasRedirected = false;
+  }
+
+  function completeRace(entry) {
+    winnerMessage = entry.copy;
+    raceState = 'finished';
+
+    if (hasRedirected) return;
+    hasRedirected = true;
+
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams({
+      result: entry.id === 'player' ? 'win' : 'lose',
+      message: entry.copy,
+      detail: entry.detail
+    });
+    window.location.href = `/?${params.toString()}`;
   }
 </script>
 
 <svelte:head>
   <title>Run Beyond Bolt | Statue Arcade</title>
-  <meta name="description" content="Bolt ortada sabit, kamera senden yana. ← ve → ritmiyle onu geç." />
+  <meta name="description" content="Bolt holds the center while the camera favors you. Beat him with a Left/Right rhythm." />
 </svelte:head>
 
-<main class="min-h-screen bg-gradient-to-b from-slate-900 via-slate-950 to-black text-white px-6 py-16 flex flex-col gap-12 items-center">
-  <section class="w-full max-w-4xl bg-slate-900/60 border border-white/10 rounded-3xl shadow-[0_20px_80px_rgba(15,23,42,0.9)] backdrop-blur p-8 md:p-12 space-y-8">
+<main
+  class="game-main min-h-screen bg-gradient-to-b from-slate-900 via-slate-950 to-black text-white px-4 sm:px-8 py-6 sm:py-10"
+>
+  <section
+    class="hud-panel w-full max-w-xl sm:max-w-2xl bg-slate-900/60 border border-white/10 rounded-3xl shadow-[0_20px_80px_rgba(15,23,42,0.9)] backdrop-blur p-6 md:p-8 space-y-6 md:space-y-8"
+  >
     <div class="flex flex-col gap-4">
       <p class="text-sm uppercase tracking-[0.35em] text-emerald-300">Statue Mini Game</p>
       <h1 class="text-4xl font-semibold">Run Beyond Bolt</h1>
       <p class="text-slate-300 max-w-2xl">
-        Kamera Bolt’un üzerinde kilitli. Biz stick karakteri kontrol ediyoruz; ritmin güçlüyse sahne sağa
-        kayıyor, düşersen sahnenin soluna itilirsin. Arkaplanda yol ve ağaçlar kayarak hız hissi veriyor.
-        Süre dolunca finiş çizgisi sağdan süzülür, kimi önce yakalarsa yarış onunla sonuçlanır.
+        The camera is locked on Bolt. You steer the stick figure; keep a steady rhythm and the scene drifts
+        right, but stumble and it shoves you left. Roads and trees streak by for extra speed.
+        When the clock winds down a finish line glides in from the right, and whoever it meets first wins.
       </p>
     </div>
 
     <div class="grid gap-4 md:grid-cols-3 text-sm text-slate-200">
       <div class="hud-card">
-        <p class="text-slate-400 mb-1 uppercase text-[10px] tracking-[0.3em]">Durum</p>
-        <p class="text-lg text-white">{raceState === 'bitti' ? winnerMessage : statusCopy[raceState]}</p>
+        <p class="text-slate-400 mb-1 uppercase text-[10px] tracking-[0.3em]">Status</p>
+        <p class="text-lg text-white">{raceState === 'finished' ? winnerMessage : statusCopy[raceState]}</p>
       </div>
       <div class="hud-card">
-        <p class="text-slate-400 mb-1 uppercase text-[10px] tracking-[0.3em]">Süre</p>
+        <p class="text-slate-400 mb-1 uppercase text-[10px] tracking-[0.3em]">Time Left</p>
         <p class="text-3xl font-semibold text-emerald-300">{secondsLeft}s</p>
       </div>
       <div class="hud-card">
-        <p class="text-slate-400 mb-1 uppercase text-[10px] tracking-[0.3em]">Avantaj</p>
+        <p class="text-slate-400 mb-1 uppercase text-[10px] tracking-[0.3em]">Advantage</p>
         <p class="text-lg">
-          {playerScreen > boltScreen ? 'Önündesin, ritmi koru.' : 'Bolt seni yakaladı, hızlan!' }
+          {playerScreen > boltScreen ? 'You are ahead, keep the cadence.' : 'Bolt caught up, punch the pace!' }
         </p>
       </div>
     </div>
   </section>
 
-  <section
-    class="arena w-full max-w-5xl"
-    style={`--scroll:${scrollAmount}px;`}
-  >
+  <section class="arena" style={`--scroll:${scrollAmount}px;`}>
     <div class="parallax sky" style={`--scroll-layer:${scrollAmount * 0.25}px;`}></div>
     <div class="parallax trees" style={`--scroll-layer:${scrollAmount * 0.6}px;`}></div>
     <div class="ground" style={`--scroll-layer:${scrollAmount}px;`}>
@@ -211,18 +267,28 @@
     <div class="ground-shadow"></div>
   </section>
 
-  <section class="w-full max-w-5xl flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-300">
-    <p>İpucu: ← → tuşlarını ritmik aralıklarla değiştir. Aynı tuşa üst üste basarsan karakter sendeleyip geri düşer.</p>
+  <section
+    class="bottom-panel w-full max-w-5xl flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-300"
+  >
+    <p>Tip: alternate the Left and Right arrow keys with a steady beat. Hitting the same key twice makes the runner stumble back.</p>
     <div class="flex gap-3">
-      <a href="/" class="px-4 py-2 rounded-full border border-white/20 hover:border-white/60 transition text-sm">Ana Sayfa</a>
+      <a href="/" class="px-4 py-2 rounded-full border border-white/20 hover:border-white/60 transition text-sm">Home</a>
       <button class="px-5 py-2 rounded-full bg-emerald-400 text-slate-900 font-semibold hover:bg-emerald-300 transition text-sm" on:click={resetRace}>
-        Resetle
+        Reset
       </button>
     </div>
   </section>
 </main>
 
 <style>
+  .game-main {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    overflow: hidden;
+  }
+
   .hud-card {
     padding: 1rem;
     border-radius: 1.25rem;
@@ -230,10 +296,17 @@
     border: 1px solid rgba(148, 163, 184, 0.2);
   }
 
+  .hud-panel {
+    position: absolute;
+    inset: 1.25rem 1.25rem auto 1.25rem;
+    max-width: 32rem;
+    z-index: 20;
+  }
+
   .arena {
-    position: relative;
-    aspect-ratio: 16 / 9;
-    border-radius: 40px;
+    position: absolute;
+    inset: 0;
+    border-radius: 0;
     overflow: hidden;
     border: 1px solid rgba(148, 163, 184, 0.15);
     background: radial-gradient(circle at top, rgba(56, 189, 248, 0.08), rgba(2, 6, 23, 0.95));
@@ -317,8 +390,8 @@
   .runner {
     position: absolute;
     bottom: 26%;
-    width: 140px;
-    height: 140px;
+    width: 420px;
+    height: 420px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -329,13 +402,13 @@
   }
 
   :global(.runner .runner-lottie) {
-    width: 130px;
-    height: 130px;
+    width: 390px;
+    height: 390px;
     filter: drop-shadow(0 18px 35px rgba(0, 0, 0, 0.55));
   }
 
   .runner .tag {
-    font-size: 0.7rem;
+    font-size: 1.4rem;
     letter-spacing: 0.25em;
     text-transform: uppercase;
     color: rgba(248, 250, 252, 0.65);
@@ -357,9 +430,30 @@
     --lean: 5deg;
   }
 
+  .bottom-panel {
+    position: absolute;
+    inset: auto 1.5rem 1.5rem 1.5rem;
+    max-width: 60rem;
+    margin: 0 auto;
+    z-index: 20;
+    background: rgba(15, 23, 42, 0.72);
+    border-radius: 9999px;
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    padding: 0.9rem 1.5rem;
+    backdrop-filter: blur(18px);
+  }
+
   @media (max-width: 768px) {
-    .arena {
-      border-radius: 28px;
+    .hud-panel {
+      inset: 1rem;
+      max-width: none;
+    }
+
+    .bottom-panel {
+      inset: auto 1rem 1rem 1rem;
+      border-radius: 1.5rem;
+      flex-direction: column;
+      align-items: flex-start;
     }
 
     .runner {

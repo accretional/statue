@@ -2,16 +2,16 @@
   import { onMount, onDestroy } from 'svelte';
   import lottie from 'lottie-web';
 
-  export let pose = 'idle'; // idle | left | right
+export let pose = 'idle'; // idle | left | right
   export let speed = 1.2;
   export let path = '/runner2.json';
 
-  // runner2.json: 0. frame duruş, 0–10 arası tam bir adım; her 10 frame'de cycle tekrar ediyor
+// runner2.json: frame 0 is the neutral stance, frames 0-10 are a full stride, and the cycle repeats every 10 frames
   const segmentMap = {
     idle: [[0, 0]],
-    // ilk adım
+  // first stride
     left: [[0, 10]],
-    // ikinci adım (cycle'ın bir sonraki fazı)
+  // second stride (next phase of the cycle)
     right: [[10, 20]]
   };
 

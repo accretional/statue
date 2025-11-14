@@ -13,7 +13,6 @@
   <slot />
 </main>
 
-<Footer directories={globalDirectories} {currentPath} />
 
 <style>
   :global(body) {
