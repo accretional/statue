@@ -12,7 +12,7 @@
 </script>
 
 <svelte:head>
-  <title>Statue SSG</title>
+  <title>Statue</title>
   <meta name="description" content="Statue SSG powered by Svelte, generates static sites from markdown content." />
 </svelte:head>
 
