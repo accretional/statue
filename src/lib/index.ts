@@ -19,3 +19,6 @@ export { default as NavigationBar } from './components/NavigationBar.svelte';
 export { default as Footer } from './components/Footer.svelte';
 export { default as Sitemap } from './components/Sitemap.svelte';
 export { default as Warning } from './components/Warning.svelte';
+export { default as WorkflowTasks } from './components/WorkflowTasks.svelte';
+export { default as CollapsibleTree } from './components/CollapsibleTree.svelte';
+export type { WorkflowTask, TaskStatus, TaskType } from './types/workflow';
