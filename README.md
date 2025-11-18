@@ -58,6 +58,11 @@ npm install statue-ssg
 npx statue init
 ```
 
+Or choose a specific template (e.g., `blog`):
+```bash
+npx statue init --template blog
+```
+
 ### 4) Start the dev server
 ```bash
 npm run dev -- --open
