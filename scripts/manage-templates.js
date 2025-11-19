@@ -43,7 +43,8 @@ program
     if (!options.force) {
         console.log(chalk.yellow('⚠️  Warning: This will overwrite your src/routes and content directories.'));
         console.log(chalk.yellow('   Ensure you have committed your changes to "default" (or other templates).'));
-        // In an interactive CLI we would ask for confirmation, but for now we assume awareness or force flag
+        console.error(chalk.red('Operation aborted. Use -f or --force to proceed.'));
+        return;
     }
 
     // Targets in workspace

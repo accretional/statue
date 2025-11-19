@@ -70,8 +70,7 @@ Artifacts are generated in `statue_test_env/` (which is git-ignored).
 ├── src/routes/           # Default Template Routes (Source of Truth)
 ├── content/              # Default Template Content
 ├── templates/            # Additional Templates
-│   ├── blog/             # Blog Template Source
-│   └── game/             # Game Template Source
+│   └── blog/             # Blog Template Source
 ├── scripts/
 │   ├── statue-cli.js     # CLI Entry point
 │   ├── manage-templates.js # Internal tool for swapping templates
