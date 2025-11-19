@@ -28,6 +28,7 @@
 	"files": [
 		"src",
 		"content",
+		"templates",
 		"svelte.config.js",
 		"vite.config.js",
 		"tailwind.config.js",
@@ -50,7 +51,10 @@
 		"release": "npm run build && npm publish",
 		"test:local": "./test/hermetic/test_local.sh",
 		"docker:build": "cd test/hermetic && docker build -t statue-ssg .",
-		"docker:test": "npm run docker:build && npm run test:local"
+		"docker:test": "npm run docker:build && npm run test:local",
+		"template:load": "node scripts/manage-templates.js load",
+		"template:save": "node scripts/manage-templates.js save",
+		"template:list": "node scripts/manage-templates.js list"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-static": "^3.0.0",
