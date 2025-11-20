@@ -188,11 +188,10 @@ async function setupStatueSSG(options = {}) {
           sourcePath = rootConfigPath;
       }
 
-      if (sourcePath && !fs.existsSync(targetPath)) {
-        fs.copySync(sourcePath, targetPath);
-        console.log(chalk.green(`✓ ${file} copied successfully`));
-      } else if (fs.existsSync(targetPath)) {
-        console.log(chalk.yellow(`! ${file} already exists, not overwritten`));
+      if (sourcePath) {
+        // Force overwrite for config files to ensure correct setup
+        fs.copySync(sourcePath, targetPath, { overwrite: true });
+        console.log(chalk.green(`✓ ${file} copied/updated successfully`));
       }
     });
   } catch (err) {
