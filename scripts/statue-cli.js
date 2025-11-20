@@ -16,30 +16,47 @@ const program = new Command();
 program
   .name('statue')
   .description('Statue SSG - SvelteKit Static Site Generator for Markdown Content')
-  .version('0.1.6');
+  .version('0.2.0');
 
 program
   .command('init')
   .description('Initialize Statue SSG in your project')
-  .action(async () => {
-    console.log(chalk.blue('🗿 Statue SSG - Initializing your project'));
+  .option('-t, --template <name>', 'Specify a template to use (default: "default")', 'default')
+  .action(async (options) => {
+    const templateName = options.template;
+    console.log(chalk.blue(`🗿 Statue SSG - Initializing with template: ${chalk.bold(templateName)}`));
     
     try {
-      // Run the postinstall script
+      // Check if template exists before proceeding
+      // 'default' always exists (it's the package root)
+      if (templateName !== 'default') {
+        const templatePath = path.join(packageDir, 'templates', templateName);
+        if (!fs.existsSync(templatePath)) {
+          console.error(chalk.red(`❌ Template '${templateName}' does not exist.`));
+          console.log(chalk.yellow('Available templates:'));
+          console.log('  - default');
+          try {
+            const templates = fs.readdirSync(path.join(packageDir, 'templates'))
+              .filter(t => fs.statSync(path.join(packageDir, 'templates', t)).isDirectory());
+            templates.forEach(t => console.log(`  - ${t}`));
+          } catch (e) {
+             // Ignore
+          }
+          process.exit(1);
+        }
+      }
+
+      // Run the postinstall script with options
       const postinstallPath = path.join(packageDir, 'postinstall.js');
-      
-      // Import the file dynamically
       const { default: postinstall } = await import(postinstallPath);
       
-      // If postinstall is a function, execute it
+      // Execute setup with the selected template
       if (typeof postinstall === 'function') {
-        await postinstall();
+        await postinstall({ template: templateName });
       } else {
-        // Otherwise, just execute the script directly
-        await import(postinstallPath);
+        console.error(chalk.red('❌ Internal Error: postinstall script is not exporting a function.'));
       }
       
-      console.log(chalk.green.bold('✅ Statue SSG successfully initialized!'));
     } catch (error) {
       console.error(chalk.red('❌ Error initializing Statue SSG:'), error);
       process.exit(1);

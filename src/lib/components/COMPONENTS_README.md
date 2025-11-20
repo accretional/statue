@@ -223,6 +223,29 @@ Components use CSS variables like `--color-primary`, `--color-secondary`, `--col
 <Warning {warning} />
 ```
 
+- **CollapsibleTree**: Recursive collapsible tree for nested data structures.
+  - Props: `items: Array<{ id: string; label: string; badge?: string; children?: Array }>`, `title?: string`.
+  - All items expanded by default, click chevron to collapse/expand.
+  - Example:
+```svelte
+<script>
+  import { CollapsibleTree } from 'statue-ssg';
+  const items = [
+    {
+      id: 'item-1',
+      label: 'Parent Item',
+      badge: 'completed',
+      children: [
+        { id: 'item-1-1', label: 'Child Item', badge: 'running' }
+      ]
+    },
+    { id: 'item-2', label: 'Another Item', badge: 'error' }
+  ];
+</script>
+
+<CollapsibleTree {items} title="My Structure" />
+```
+
 ### Notes
 
 - All components are SSR-friendly and work in SvelteKit routes and layouts.
