@@ -1,5 +1,6 @@
 <script>
   // WhyChooseUs component - Why choose us section
+  export let title = 'Why Choose Statue SSG';
   export let features = [
     { title: 'Developer-Friendly', description: 'Built on Svelte and modern web standards with developers in mind. Extend and customize with ease.' },
     { title: 'Blazing Fast', description: 'Generate optimized static sites that load instantly and score high on performance metrics.' },
@@ -10,7 +11,7 @@
 
 <div class="max-w-5xl mx-auto mt-24 mb-8">
   <h2 class="text-3xl font-bold mb-10 text-center text-[var(--color-primary)]">
-    Why Choose Statue SSG
+    {title}
   </h2>
   <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
     {#each features as feature}

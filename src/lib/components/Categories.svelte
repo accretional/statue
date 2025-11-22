@@ -1,13 +1,15 @@
 <script>
   // Categories component - Categories section
   export let directories = [];
+  export let title = 'Categories';
+  export let viewContentText = 'View Content';
 </script>
 
 {#if directories && directories.length > 0}
   <div id="directories" class="max-w-6xl mx-auto mb-32">
     <div class="text-center mb-16">
       <h2 class="text-4xl md:text-5xl font-bold mb-4 text-[var(--color-primary)]">
-        Categories
+        {title}
       </h2>
       <div class="w-20 h-1 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] mx-auto rounded-full"></div>
     </div>
@@ -24,7 +26,7 @@
             </div>
             <h3 class="text-2xl font-bold mb-4 text-white">{directory.title}</h3>
             <a href={directory.url} class="inline-flex items-center gap-2 text-[var(--color-primary)] font-medium hover:gap-3 transition-all">
-              <span>View Content</span>
+              <span>{viewContentText}</span>
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
