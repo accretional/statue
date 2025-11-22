@@ -1,9 +1,9 @@
 <script>
   // Stats component - Statistics cards section
   export let stats = [
-    { title: 'Fast', description: 'Convert your content to a static site in seconds', color: 'primary' },
+    { title: 'Fast', description: 'Put your content on a static site in seconds', color: 'primary' },
     { title: 'Simple', description: 'Just write Markdown, we\'ll handle the rest', color: 'secondary' },
-    { title: 'Secure', description: 'Static sites contain no security vulnerabilities', color: 'primary' }
+    { title: 'Secure', description: 'Static sites require no server maintenance or configuration', color: 'primary' }
   ];
 </script>
 
