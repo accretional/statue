@@ -1,6 +1,6 @@
 <script>
   // Hero component - Homepage hero section
-  export let badgeText = '<a href="https://https://github.com/accretional/statue" target="_blank">✨ Powered by Statue SSG</a>';
+  export let badgeText = '<a href="https://github.com/accretional/statue" target="_blank">✨ Powered by Statue SSG</a>';
   export let titleLine1 = 'Welcome to Your Site!';
   export let titleLine2 = '(Statue 🗿 Default)';
   export let description = 'Create amazing static sites easily with Statue SSG using Markdown and Svelte. Fast, secure, and SEO-friendly sites ready in minutes.';
@@ -18,7 +18,9 @@
     <div class="relative z-10">
       <!-- Badge -->
       <div class="inline-flex items-center px-4 py-1.5 rounded-full bg-[color:oklch(0.78_0.14_152.17)/0.10] border border-[color:oklch(0.78_0.14_152.17)/0.20] mb-8">
-        <span class="text-sm font-medium text-[var(--color-primary)]">{badgeText}</span>
+
+        <span class="text-sm font-medium text-[var(--color-primary)]">{@html badgeText}</span>
+      
       </div>
       
       <h1 class="text-5xl md:text-7xl font-bold mb-8 leading-tight">
@@ -47,4 +49,5 @@
     </div>
   </div>
 </div>
+
 
