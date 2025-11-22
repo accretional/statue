@@ -1,5 +1,6 @@
 <script>
   // Team component - Team members section
+  export let title = 'Our Team';
   export let teamMembers = [
     { name: 'John Doe', role: 'Founder & Lead Developer', initials: 'JD' },
     { name: 'Jane Smith', role: 'UX Designer', initials: 'JS' },
@@ -9,7 +10,7 @@
 
 <div class="max-w-5xl mx-auto mt-24 mb-20">
   <h2 class="text-3xl font-bold mb-10 text-center text-[var(--color-primary)]">
-    Our Team
+    {title}
   </h2>
   <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
     {#each teamMembers as member}

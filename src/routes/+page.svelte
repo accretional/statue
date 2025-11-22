@@ -4,6 +4,7 @@
   import Stats from '$lib/components/Stats.svelte';
   import Categories from '$lib/components/Categories.svelte';
   import LatestContent from '$lib/components/LatestContent.svelte';
+  import BuiltBy from '$lib/components/BuiltBy.svelte';
   
   export let data;
   
@@ -22,6 +23,10 @@
   <!-- Hero Section -->
   <Hero />
 
+  <!-- Built By Section -->
+    <section class="typewriter-showcase">
+      <BuiltBy />
+    </section>
   <!-- Stats Section -->
   <Stats />
 
@@ -40,4 +45,14 @@
   :global(html) {
     scroll-behavior: smooth;
   }
+    /* Typewriter Showcase Section */
+  .typewriter-showcase {
+    max-width: 1200px;
+    margin: 0 auto -2rem;
+    padding: 1rem 2rem;
+    text-align: center;
+    position: relative;
+    z-index: 10;
+  }
+  
 </style> 

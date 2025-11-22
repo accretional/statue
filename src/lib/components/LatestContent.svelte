@@ -1,13 +1,15 @@
 <script>
   // LatestContent component - Latest content section
   export let rootContent = [];
+  export let title = 'Latest Content';
+  export let readMoreText = 'Read more';
 </script>
 
 {#if rootContent && rootContent.length > 0}
   <div class="max-w-6xl mx-auto">
     <div class="text-center mb-16">
       <h2 class="text-4xl md:text-5xl font-bold mb-4 text-[var(--color-primary)]">
-        Latest Content
+        {title}
       </h2>
       <div class="w-20 h-1 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] mx-auto rounded-full"></div>
     </div>
@@ -24,7 +26,7 @@
               <p class="text-[var(--color-muted)] leading-relaxed mb-4">{page.metadata.description}</p>
             {/if}
             <div class="flex items-center gap-2 text-[var(--color-primary)] font-medium group-hover:gap-3 transition-all">
-              <span>Read more</span>
+              <span>{readMoreText}</span>
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
