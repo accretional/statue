@@ -246,6 +246,41 @@ async function setupStatueSSG(options = {}) {
     console.error(chalk.red('An error occurred while updating package.json:'), err);
   }
 
+  // 6. Copy Static Assets (Favicon)
+  try {
+    const targetStatic = path.join(targetDir, 'static');
+    if (!fs.existsSync(targetStatic)) fs.ensureDirSync(targetStatic);
+
+    const faviconFile = 'favicon.png';
+    // templateDir could be the same as sourceDir (default template)
+    const templateStaticPath = path.join(templateDir, 'static', faviconFile);
+    const rootStaticPath = path.join(sourceDir, 'static', faviconFile);
+    const targetFaviconPath = path.join(targetStatic, faviconFile);
+
+    let sourcePath = null;
+
+    // 1. Try template specific static/favicon.png
+    if (fs.existsSync(templateStaticPath)) {
+      sourcePath = templateStaticPath;
+    } 
+    // 2. Fallback to root static/favicon.png if not found in template
+    // (This covers the case where templateDir != sourceDir but template has no favicon)
+    else if (fs.existsSync(rootStaticPath)) {
+      sourcePath = rootStaticPath;
+    }
+
+    if (sourcePath) {
+      
+      fs.copySync(sourcePath, targetFaviconPath, { overwrite: true });
+      console.log(chalk.green(`✓ ${faviconFile} copied successfully`));
+    } else {
+        // Optional: warn if no favicon found at all, though unlikely if root has it
+        // console.warn(chalk.yellow(`! No ${faviconFile} found to copy.`));
+    }
+  } catch (err) {
+    console.error(chalk.red('An error occurred while copying static assets:'), err);
+  }
+
   console.log(chalk.green.bold('✨ Statue SSG setup completed!'));
   
   return true;
