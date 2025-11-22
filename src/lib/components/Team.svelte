@@ -2,9 +2,9 @@
   // Team component - Team members section
   export let title = 'Our Team';
   export let teamMembers = [
-    { name: 'John Doe', role: 'Founder & Lead Developer', initials: 'JD' },
-    { name: 'Jane Smith', role: 'UX Designer', initials: 'JS' },
-    { name: 'Michael Brown', role: 'Documentation Specialist', initials: 'MB' }
+    { name: 'Statue SSG', role: 'Static Site Generator, Web Framework', initials: '🗿' },
+    { name: 'Markdown', role: 'Content Format, Simple Formatting', initials: '.md' },
+    { name: 'Svelte', role: 'General Web Framework, Custom Functionality', initials: '.svelte' }
   ];
 </script>
 
