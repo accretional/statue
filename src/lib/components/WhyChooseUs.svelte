@@ -4,7 +4,7 @@
   export let features = [
     { title: 'Developer-Friendly', description: 'Built on Svelte and modern web standards with developers in mind. Extend and customize with ease.' },
     { title: 'Blazing Fast', description: 'Generate optimized static sites that load instantly and score high on performance metrics.' },
-    { title: 'Content-Focused', description: 'Focus on writing with Markdown while we handle the technical details of publishing.' },
+    { title: 'Content-Focused', description: 'Focus on writing in Markdown while we handle the technical details, or customize away.' },
     { title: 'SEO Optimized', description: 'Built-in SEO features to help your content rank higher in search engines.' }
   ];
 </script>
