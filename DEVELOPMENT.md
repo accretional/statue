@@ -39,6 +39,22 @@ git checkout src/routes content site.config.js
 ```
 (Or simply use `git` to manage the default template changes).
 
+## Theming
+
+Statue supports multiple themes. You can switch the active theme by editing `src/lib/index.css`.
+
+> **Note:** In development mode, we use the direct `src` path to import themes.
+
+```css
+/* src/lib/index.css */
+/* Theme selection - Import your desired theme (development mode uses direct src path) */
+@import "statue-ssg/src/lib/themes/black-white.css";
+```
+
+To change the theme, simply comment out the current import and uncomment one of the other available options (e.g., `red.css`, `purple.css`, etc.).
+
+
+
 ## Testing
 
 Before releasing, we must ensure that the package works from a user's perspective (installing via npm).
