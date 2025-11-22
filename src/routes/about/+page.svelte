@@ -12,8 +12,8 @@
 </script>
 
 <svelte:head>
-  <title>About Us | Statue SSG</title>
-  <meta name="description" content="Learn about the team behind Statue SSG, our mission and values." />
+  <title>About Your Site</title>
+  <meta name="description" content="Learn about your Site, and how it was created." />
 </svelte:head>
 
 <NavigationBar navbarItems={directories} activePath="/about" />
@@ -21,13 +21,14 @@
 <div class="min-h-screen text-white bg-gradient-to-b from-[var(--color-hero-from)] via-[var(--color-hero-via)] to-[var(--color-hero-to)]">
   <!-- Hero Section -->
   <PageHero 
-    title="About Statue SSG" 
-    description="We're building the next generation of static site tools for creators and developers." 
+    title="About Your Statue Static Site" 
+    description="Customize your Statue about page at src/routes/about/+page.svelte"
   />
-
   <!-- Content Sections -->
   <div>
     <div class="container mx-auto px-4 py-16">
+      <p style="text-align: center;">Statue is an <a href="https://https://github.com/accretional/statue" target="_blank">open source</a> static site generator brought you to by <a href="https://accretional.com" target="_blank">Accretional</a>, a developer tools company.</p>
+      <p style="text-align: center;">Make this site yours with the components below!</p><br>
       <!-- Our Mission Section -->
       <Mission />
       
