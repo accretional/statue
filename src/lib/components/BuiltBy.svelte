@@ -1,15 +1,16 @@
 <script lang="ts">
-  // No props needed for now, but can be added later if needed
+  import accretionIcon from '../assets/accretion.png';
+  import statueIcon from '../assets/favicon.png';
 </script>
 
 <div class="built-by-container">
   <span class="built-text">Built by</span>
   <a href="https://accretional.com" target="_blank" rel="noopener noreferrer" class="built-link accretional-link">
-    <img src="/accretion.png" alt="Accretional" class="accretion-icon" />Accretional.com
+    <img src={accretionIcon} alt="Accretional" class="accretion-icon" />Accretional.com
   </a>
   <span class="built-text">Built in</span>
   <span class="statue-group">
-    <img src="/favicon.png" alt="Statue" class="statue-icon" />
+    <img src={statueIcon} alt="Statue" class="statue-icon" />
     <a href="https://statue.dev" target="_blank" rel="noopener noreferrer" class="built-link statue-link">
       Statue.dev
     </a>
