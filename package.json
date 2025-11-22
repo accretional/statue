@@ -28,6 +28,7 @@
 	"files": [
 		"src",
 		"content",
+		"static",
 		"templates",
 		"svelte.config.js",
 		"vite.config.js",

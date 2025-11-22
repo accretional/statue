@@ -8,7 +8,7 @@ import { marked } from 'marked';
 import matter from 'gray-matter';
 
 // Import site configuration
-import siteConfig from '../../../site.config.js';
+import siteConfig from '/site.config.js';
 
 // This error check is to provide an early warning when this module is attempted to be used in the browser
 const isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined';
@@ -156,10 +156,25 @@ let cachedContent = null;
 
 // Get all content (using cache)
 const getAllContent = () => {
-  if (cachedContent) return cachedContent;
+  // Check for development mode to skip caching
+  const isDev = process.env.NODE_ENV === 'development' || (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.DEV);
+
+  if (!isDev && cachedContent) return cachedContent;
   
-  cachedContent = scanContentDirectory();
-  return cachedContent;
+  // In development, we want to scan every time to pick up changes
+  if (isDev) {
+    // Clear cache to be safe
+    cachedContent = null;
+  }
+
+  const content = scanContentDirectory();
+  
+  // Only cache in production
+  if (!isDev) {
+    cachedContent = content;
+  }
+  
+  return content;
 };
 
 // Get content for a specific URL

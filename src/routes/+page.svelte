@@ -28,10 +28,12 @@
       <BuiltBy />
     </section>
   <!-- Stats Section -->
-  <Stats />
+  <div class="stats-wrapper">
+    <Stats />
+  </div>
 
   <!-- Content Sections -->
-  <div class="container mx-auto px-4 py-20">
+  <div class="container mx-auto px-4 py-10">
     <!-- Categories Section -->
     <Categories {directories} />
     
@@ -45,11 +47,17 @@
   :global(html) {
     scroll-behavior: smooth;
   }
+  
+  /* Reduce padding of Stats component on this page to sit closer to BuiltBy */
+  .stats-wrapper :global(.container) {
+    padding-top: 1rem !important;
+  }
+
     /* Typewriter Showcase Section */
   .typewriter-showcase {
     max-width: 1200px;
-    margin: 0 auto -2rem;
-    padding: 1rem 2rem;
+    margin: 0 auto;
+    padding: 1rem 2rem 0;
     text-align: center;
     position: relative;
     z-index: 10;

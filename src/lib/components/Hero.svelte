@@ -24,10 +24,10 @@
       </div>
       
       <h1 class="text-5xl md:text-7xl font-bold mb-8 leading-tight">
-        <span class="text-white">
+        <span class="text-[var(--color-primary)]">
           {titleLine1}<br />
         </span>
-        <span class="text-[var(--color-primary)]">
+        <span class="text-[var(--color-secondary)]">
           {titleLine2}
         </span>
       </h1>

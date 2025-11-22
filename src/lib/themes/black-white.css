@@ -20,5 +20,10 @@
   --color-hero-from: #000000;
   --color-hero-via: #1a1a1a;
   --color-hero-to: #000000;
+
+  /* Prose overrides for better visibility */
+  --color-prose-link: #8DA2C8;    /* Distinct light gray for links */
+  --color-prose-code-bg: #333333; /* Lighter background for code blocks */
+  --color-prose-pre-bg: #333333;  /* Lighter background for pre blocks */
 }
 

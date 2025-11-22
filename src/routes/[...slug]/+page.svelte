@@ -55,7 +55,7 @@
 
   <div class="min-h-screen text-white bg-gradient-to-b from-[var(--color-hero-from)] via-[var(--color-hero-via)] to-[var(--color-hero-to)]">
     <div class="container mx-auto px-4 py-16">
-      <div class="max-w-4xl mx-auto">
+      <div class="max-w-6xl mx-auto">
         <ContentHeader 
           title={content.metadata.title}
           date={content.metadata.date}
