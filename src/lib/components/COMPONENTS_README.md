@@ -9,7 +9,7 @@ This folder contains ready-to-use UI components for Statue SSG (built with Svelt
 
 ```svelte
 <script>
-  import { Hero, Categories, LatestContent, PageHero, Mission, Team, WhyChooseUs, CTA, DirectoryHeader, SubDirectories, DirectoryContent, ContentHeader, ContentBody, NavigationBar, Footer, Sitemap, Warning } from 'statue-ssg';
+  import { Hero, Categories, LatestContent, PageHero, Mission, Team, WhyChooseUs, CTA, DirectoryHeader, SubDirectories, DirectoryContent, ContentHeader, ContentBody, NavigationBar, Footer, Sitemap, Warning, BuiltBy } from 'statue-ssg';
 </script>
 ```
 
@@ -160,8 +160,8 @@ Components use CSS variables like `--color-primary`, `--color-secondary`, `--col
   - Example: `<DirectoryHeader title="Docs" />`
 
 - **SubDirectories**: Grid of subdirectories.
-  - Props: `subDirectories: { title: string; url: string }[]`.
-  - Example: `<SubDirectories subDirectories={[{ title: 'Guides', url: '/docs/guides' }]} />`
+  - Props: `subDirectories: { title: string; url: string }[]`, `title: string`.
+  - Example: `<SubDirectories subDirectories={[{ title: 'Guides', url: '/docs/guides' }]} title="Subcategories" />`
 
 - **DirectoryContent**: Cards for directory content.
   - Props: `content: { url: string; directory?: string; metadata: { title: string; description?: string; date?: string } }[]`, `showDirectory?: boolean`, `emptyMessage?: string`.
@@ -193,7 +193,14 @@ Components use CSS variables like `--color-primary`, `--color-secondary`, `--col
   - Example: `<ContentBody content={html} />`
 
 - **Footer**: Footer with sitemap and links.
-  - Props: `directories: Directory[]`, `currentPath: string`.
+  - Props: 
+    - `directories: Directory[]`
+    - `currentPath: string`
+    - `mainPagesTitle: string`
+    - `homePageText: string`
+    - `copyrightText: string`
+    - `legalLinks: { title: string; url: string }[]`
+    - `socialLinks: { name: string; url: string; iconPath: string }[]`
   - Example:
 ```svelte
 <script lang="ts">
@@ -246,10 +253,15 @@ Components use CSS variables like `--color-primary`, `--color-secondary`, `--col
 <CollapsibleTree {items} title="My Structure" />
 ```
 
+- **BuiltBy**: "Built by" credit component.
+  - Props:
+    - `builtByText`, `builtByLinkText`, `builtByLinkUrl`, `builtByIcon`
+    - `builtInText`, `builtInLinkText`, `builtInLinkUrl`, `builtInIcon`
+    - `builtForText`, `communityLinkText`, `communityLinkUrl`
+  - Example: `<BuiltBy />`
+
 ### Notes
 
 - All components are SSR-friendly and work in SvelteKit routes and layouts.
 - Prefer package-level imports (`import { ... } from 'statue-ssg'`) for app code.
 - If you tree-shake, modern bundlers will drop unused components automatically.
-
-
