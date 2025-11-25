@@ -174,7 +174,7 @@
     white-space: nowrap;
     flex: 1;
     min-width: 0;
-    user-select: all;
+    user-select: none;
   }
 
   /* Copied Indicator */
