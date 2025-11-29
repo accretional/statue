@@ -73,14 +73,10 @@
 		"vite": "^5.4.11"
 	},
 	"dependencies": {
-		"@google/genai": "^1.30.0",
-		"@types/d3": "^7.4.3",
 		"chalk": "^5.4.1",
 		"commander": "^13.1.0",
-		"d3": "^7.9.0",
 		"fs-extra": "^11.3.0",
 		"gray-matter": "^4.0.3",
-		"lucide-svelte": "^0.555.0",
 		"marked": "^15.0.7"
 	},
 	"keywords": [
