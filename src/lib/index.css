@@ -3,26 +3,11 @@
 /* Tailwind v4 content config - scans src directory for classes */
 @source "../";
 
-/* Theme selection - Import your desired theme (development mode uses direct src path)
-example: @import "./themes/black-white.css"; to the 2nd line */
-@import "statue-ssg/src/lib/themes/black-white.css";
-
-/* Other theme options:
-@import "statue-ssg/src/lib/themes/black-white.css";
-@import "statue-ssg/src/lib/themes/red.css";
-@import "statue-ssg/src/lib/themes/orange.css";
-@import "statue-ssg/src/lib/themes/green.css";
-@import "statue-ssg/src/lib/themes/purple.css";
-@import "statue-ssg/src/lib/themes/cyan.css";
-@import "statue-ssg/src/lib/themes/pink.css";
-*/
-
-/* Base element defaults using tokens */
+/* Base styles for the game */
 :root {
   color-scheme: dark;
 }
 
-/* Optional utilities for smooth rendering */
 @layer utilities {
   .bg-surface { background-color: var(--color-card); }
   .glass-bg { background-color: color-mix(in srgb, var(--color-card) 78%, transparent); }
