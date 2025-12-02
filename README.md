@@ -1,6 +1,8 @@
 # Statue [![npm version](https://img.shields.io/npm/v/statue-ssg.svg)](https://www.npmjs.com/package/statue-ssg) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-Statue is a blazingly-fast static site generator based on Markdown, Sveltekit, and a component library. Setup:
+Statue is a blazingly-fast static site generator based on Markdown, Sveltekit, and a component library.
+
+One-line setup!
 
 ```bash
 yes | npx sv create . --template minimal --types ts --no-add-ons --install npm && npm install statue-ssg && npx statue init && npm install && npm run dev
