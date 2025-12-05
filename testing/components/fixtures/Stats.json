@@ -1,0 +1,20 @@
+{
+  "component": "Stats",
+  "themes": ["black-white", "orange"],
+  "props": {
+    "stats": [
+      { "title": "45ms", "description": "TTFB on cached static pages", "color": "primary" },
+      { "title": "99.9%", "description": "Uptime with static hosting", "color": "secondary" },
+      { "title": "0 deps", "description": "Runtime servers required", "color": "primary" }
+    ]
+  },
+  "variants": {
+    "stats": [
+      [
+        { "title": "3x", "description": "Faster than baseline SSR", "color": "primary" },
+        { "title": "2min", "description": "From init to first deploy", "color": "secondary" },
+        { "title": "5kb", "description": "Typical page JS", "color": "primary" }
+      ]
+    ]
+  }
+}

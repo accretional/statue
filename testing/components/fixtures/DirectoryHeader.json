@@ -1,0 +1,10 @@
+{
+  "component": "DirectoryHeader",
+  "themes": ["black-white"],
+  "props": {
+    "title": "Docs"
+  },
+  "variants": {
+    "title": ["Docs", "Blog"]
+  }
+}

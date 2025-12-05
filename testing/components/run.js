@@ -137,6 +137,12 @@ async function buildVariantHTML({ componentPath, componentName, props, theme, ou
     write: false,
     logLevel: 'silent',
     mainFields: ['svelte', 'module', 'main'],
+    loader: {
+      '.png': 'dataurl',
+      '.jpg': 'dataurl',
+      '.jpeg': 'dataurl',
+      '.svg': 'dataurl'
+    },
     plugins: [sveltePlugin()]
   });
 

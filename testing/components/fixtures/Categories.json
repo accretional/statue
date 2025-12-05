@@ -1,0 +1,17 @@
+{
+  "component": "Categories",
+  "themes": ["black-white", "green"],
+  "props": {
+    "title": "Categories",
+    "viewContentText": "View Content",
+    "directories": [
+      { "name": "docs", "url": "/docs", "title": "Docs" },
+      { "name": "blog", "url": "/blog", "title": "Blog" },
+      { "name": "legal", "url": "/legal", "title": "Legal" }
+    ]
+  },
+  "variants": {
+    "title": ["Categories", "Browse"],
+    "viewContentText": ["View Content", "Open"]
+  }
+}

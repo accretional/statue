@@ -1,0 +1,19 @@
+{
+  "component": "BuiltBy",
+  "themes": ["black-white"],
+  "props": {
+    "builtByText": "Built by",
+    "builtByLinkText": "Accretional",
+    "builtByLinkUrl": "https://accretional.com",
+    "builtInText": "Built in",
+    "builtInLinkText": "Statue",
+    "builtInLinkUrl": "https://statue.dev",
+    "builtForText": "Built for",
+    "communityLinkText": "Statue Community",
+    "communityLinkUrl": "https://discord.gg/accretional"
+  },
+  "variants": {
+    "builtByLinkText": ["Accretional", "Your Team"],
+    "communityLinkText": ["Statue Community", "Developers"]
+  }
+}

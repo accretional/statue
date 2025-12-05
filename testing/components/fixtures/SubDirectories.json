@@ -1,0 +1,15 @@
+{
+  "component": "SubDirectories",
+  "themes": ["black-white"],
+  "props": {
+    "title": "Subcategories",
+    "subDirectories": [
+      { "title": "Guides", "url": "/docs/guides" },
+      { "title": "API", "url": "/docs/api" },
+      { "title": "Tutorials", "url": "/docs/tutorials" }
+    ]
+  },
+  "variants": {
+    "title": ["Subcategories", "Sections"]
+  }
+}
