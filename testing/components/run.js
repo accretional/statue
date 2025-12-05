@@ -3,8 +3,9 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { build } from 'esbuild';
-import { compile } from 'svelte/compiler';
+import { compile, preprocess } from 'svelte/compiler';
 import { Command } from 'commander';
+import ts from 'typescript';
 
 const __filename = fileURLToPath(import.meta.url);
 const LAB_DIR = path.dirname(__filename);
@@ -85,9 +86,26 @@ function sveltePlugin() {
 
       buildApi.onLoad({ filter: /\.svelte$/ }, async (args) => {
         const source = await fs.promises.readFile(args.path, 'utf8');
-        const compiled = compile(source, {
+        // Minimal TS support without extra deps
+        const processed = await preprocess(source, {
+          script: ({ content, attributes }) => {
+            if (attributes.lang === 'ts') {
+              const transpiled = ts.transpileModule(content, {
+                compilerOptions: {
+                  target: ts.ScriptTarget.ES2018,
+                  module: ts.ModuleKind.ESNext,
+                  importsNotUsedAsValues: ts.ImportsNotUsedAsValues.Preserve
+                },
+                fileName: args.path
+              });
+              return { code: transpiled.outputText, map: transpiled.sourceMapText || undefined };
+            }
+            return { code: content };
+          }
+        });
+        const compiled = compile(processed.code, {
           filename: args.path,
-          css: true,
+          css: 'injected',
           dev: false
         });
         return {
