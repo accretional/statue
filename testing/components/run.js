@@ -254,7 +254,7 @@ function loadFixture(componentName, customFixturePath) {
 async function main() {
   const program = new Command();
   program
-    .requiredOption('-c, --component <name>', 'Component name (or "all" to use all fixtures)')
+    .requiredOption('-c, --component <name...>', 'Component name(s) (or "all" to use all fixtures)')
     .option('--output_dir <path>', 'Output directory', DEFAULT_OUTPUT)
     .option('--variant <key=vals...>', 'Add prop variants (repeatable)', (value, prev) => {
       prev.push(value);
@@ -270,11 +270,12 @@ async function main() {
   ensureDir(outputRoot);
 
   const components = [];
-  if (opts.component === 'all') {
+  const compArgs = Array.isArray(opts.component) ? opts.component : [opts.component];
+  if (compArgs.includes('all')) {
     const fixtureFiles = fs.readdirSync(path.join(LAB_DIR, 'fixtures')).filter((f) => f.endsWith('.json'));
     fixtureFiles.forEach((file) => components.push(path.basename(file, '.json')));
   } else {
-    components.push(opts.component);
+    compArgs.forEach((c) => components.push(c));
   }
 
   for (const componentName of components) {

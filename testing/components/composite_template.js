@@ -7,7 +7,7 @@ const VARIANT_MAP = VARIANTS.reduce((acc, v) => {
 
 let currentPage = 1;
 let autoplayTimer = null;
-let isAutoplay = false;
+let isAutoplay = true;
 const AUTOPLAY_INTERVAL = 4000;
 
 const state = {
@@ -175,9 +175,11 @@ function render() {
   const end = start + effectivePageSize;
   const pageItems = [...pinnedList, ...unpinnedList.slice(start, end)];
 
-  pageItems.forEach((variant) => {
+  pageItems.forEach((variant, idx) => {
     const card = document.createElement('div');
     card.className = 'card' + (state.pinned.has(variant.file) ? ' pinned' : '');
+    card.style.animation = `fadeSlide 0.6s ease forwards`;
+    card.style.animationDelay = `${idx * 60}ms`;
 
     const header = document.createElement('div');
     header.className = 'card-header';
@@ -248,4 +250,7 @@ document.addEventListener('DOMContentLoaded', () => {
   render();
   const btn = document.getElementById('autoplay-btn');
   if (btn) btn.addEventListener('click', toggleAutoplay);
+  const btnLabel = document.getElementById('autoplay-btn');
+  if (btnLabel) btnLabel.textContent = isAutoplay ? 'Pause' : 'Play';
+  if (isAutoplay) scheduleAutoplay();
 });

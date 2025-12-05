@@ -14,7 +14,7 @@ Outputs land in `testing/components/output/Hero/`:
 - `Hero_COMPOSITE.html` (viewer; open in a browser)
 
 Common flags:
-- `--component <Name|all>`: Component in `src/lib/components`. `all` uses every fixture in `testing/components/fixtures/`.
+- `--component <Name|all|Name1 Name2 ...>`: Component(s) in `src/lib/components`. `all` uses every fixture in `testing/components/fixtures/`. Multiple names are allowed.
 - `--output_dir <path>`: Where to place generated files (default: `testing/components/output`).
 - `--variant KEY=val1,val2`: Add prop permutations on top of fixture defaults (repeatable).
 - `--theme name1,name2`: Theme permutations; defaults to `black-white` or fixture themes.
