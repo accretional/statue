@@ -1,0 +1,16 @@
+{
+  "component": "NavigationBar",
+  "themes": ["black-white", "green"],
+  "props": {
+    "navbarItems": [
+      { "name": "home", "title": "Home", "url": "/" },
+      { "name": "docs", "title": "Docs", "url": "/docs" },
+      { "name": "blog", "title": "Blog", "url": "/blog" },
+      { "name": "about", "title": "About", "url": "/about" }
+    ],
+    "activePath": "/"
+  },
+  "variants": {
+    "activePath": ["/", "/about"]
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "component": "Warning",
+  "themes": ["black-white"],
+  "props": {
+    "warning": {
+      "type": "info",
+      "title": "Heads up",
+      "message": "Statue component lab preview."
+    }
+  },
+  "variants": {
+    "warning": [
+      { "type": "info", "title": "Info", "message": "Informational notice." },
+      { "type": "warning", "title": "Warning", "message": "Pay attention to this state." },
+      { "type": "success", "title": "Success", "message": "Looks good!" }
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "component": "CTA",
+  "themes": ["black-white", "cyan"],
+  "props": {
+    "title": "Ready to get started?",
+    "description": "Join the growing community of creators using Statue SSG.",
+    "primaryButtonText": "Explore Features",
+    "primaryButtonLink": "/",
+    "secondaryButtonText": "Read Documentation",
+    "secondaryButtonLink": "/docs"
+  },
+  "variants": {
+    "primaryButtonText": ["Explore Features", "Start Free"],
+    "secondaryButtonText": ["Read Documentation", "View Blog"]
+  }
+}

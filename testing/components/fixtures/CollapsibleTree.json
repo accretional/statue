@@ -1,0 +1,26 @@
+{
+  "component": "CollapsibleTree",
+  "themes": ["black-white"],
+  "props": {
+    "title": "Content Structure",
+    "items": [
+      {
+        "id": "docs",
+        "label": "Docs",
+        "badge": "4",
+        "children": [
+          { "id": "docs-getting-started", "label": "Getting Started" },
+          { "id": "docs-guides", "label": "Guides", "badge": "new" }
+        ]
+      },
+      {
+        "id": "blog",
+        "label": "Blog",
+        "badge": "7"
+      }
+    ]
+  },
+  "variants": {
+    "title": ["Content Structure", "Sample Tree"]
+  }
+}
