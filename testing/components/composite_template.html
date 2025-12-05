@@ -6,7 +6,7 @@
   <title>Statue Component Lab</title>
   <style>
     :root { color-scheme: dark; }
-    body { margin: 0; font-family: 'Inter', system-ui, -apple-system, sans-serif; background: #0b0b0f; color: #e5e7eb; }
+    body { margin: 0; font-family: 'Inter', system-ui, -apple-system, sans-serif; background: radial-gradient(circle at 20% 20%, rgba(79, 70, 229, 0.08), transparent 26%), radial-gradient(circle at 80% 10%, rgba(14, 165, 233, 0.07), transparent 24%), #0b0b0f; color: #e5e7eb; overflow-x: hidden; }
     .header { padding: 16px 24px; border-bottom: 1px solid #1f2937; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: #0b0b0f; z-index: 10; }
     .title { font-size: 1.1rem; font-weight: 600; }
     .controls { display: flex; gap: 12px; align-items: center; }
@@ -26,7 +26,7 @@
     .edit-row label { width: 160px; font-family: "SFMono-Regular", monospace; font-size: 0.82rem; color: #cbd5e1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .edit-row input { flex: 1; background: #0f172a; border: 1px solid #1f2937; color: #e5e7eb; padding: 6px 8px; border-radius: 6px; font-family: "SFMono-Regular", monospace; font-size: 0.85rem; }
     .edit-actions { display: flex; justify-content: flex-end; gap: 8px; padding-top: 4px; }
-    .iframe-wrap { flex: 1; position: relative; }
+    .iframe-wrap { flex: 1; position: relative; overflow: hidden; }
     iframe { width: 100%; height: 100%; border: none; background: #000; }
     .pagination { padding: 0 16px 12px; display: flex; align-items: center; gap: 10px; color: #cbd5e1; }
     .pagination a { cursor: pointer; color: #38bdf8; }
@@ -35,14 +35,26 @@
     #toast.show { visibility: visible; animation: fadein 0.25s, fadeout 0.5s 2.5s; }
     @keyframes fadein { from { bottom: 0; opacity: 0; } to { bottom: 24px; opacity: 1; } }
     @keyframes fadeout { from { bottom: 24px; opacity: 1; } to { bottom: 0; opacity: 0; } }
+    /* Floating dots background */
+    .bg-dots { position: fixed; inset: 0; pointer-events: none; opacity: 0.6; filter: blur(0.4px); }
+    .bg-dots span { position: absolute; width: 6px; height: 6px; border-radius: 999px; background: rgba(59,130,246,0.35); animation: float 12s linear infinite; }
+    .bg-dots span:nth-child(2) { width: 8px; height: 8px; background: rgba(14,165,233,0.35); animation-duration: 16s; }
+    .bg-dots span:nth-child(3) { width: 5px; height: 5px; background: rgba(236,72,153,0.32); animation-duration: 18s; }
+    @keyframes float { from { transform: translateY(0); opacity: 0.7; } to { transform: translateY(-80px); opacity: 0.2; } }
   </style>
 </head>
 <body>
+  <div class="bg-dots">
+    <span style="top: 18%; left: 12%"></span>
+    <span style="top: 42%; left: 70%"></span>
+    <span style="top: 72%; left: 28%"></span>
+  </div>
   <div class="header">
     <div class="title">Statue Component Lab</div>
     <div class="controls">
       <label for="pageSize">Per page</label>
       <input id="pageSize" type="number" min="1" value="12" />
+      <button id="autoplay-btn" class="btn" style="margin-left:8px;">Play</button>
     </div>
   </div>
   <div class="pagination" id="pagination"></div>

@@ -6,6 +6,9 @@ const VARIANT_MAP = VARIANTS.reduce((acc, v) => {
 }, {});
 
 let currentPage = 1;
+let autoplayTimer = null;
+let isAutoplay = false;
+const AUTOPLAY_INTERVAL = 4000;
 
 const state = {
   pageSize: 12,
@@ -29,6 +32,34 @@ function togglePin(file) {
   else state.pinned.add(file);
   localStorage.setItem('statueLabPinned', JSON.stringify(Array.from(state.pinned)));
   render();
+}
+
+function toggleAutoplay() {
+  isAutoplay = !isAutoplay;
+  const btn = document.getElementById('autoplay-btn');
+  if (btn) btn.textContent = isAutoplay ? 'Pause' : 'Play';
+  if (isAutoplay) {
+    scheduleAutoplay();
+  } else {
+    clearTimeout(autoplayTimer);
+  }
+}
+
+function scheduleAutoplay() {
+  clearTimeout(autoplayTimer);
+  autoplayTimer = setTimeout(() => {
+    const next = currentPage + 1;
+    const total = totalPages();
+    changePage(next > total ? 1 : next);
+    scheduleAutoplay();
+  }, AUTOPLAY_INTERVAL);
+}
+
+function totalPages() {
+  const pinnedList = VARIANTS.filter((v) => state.pinned.has(v.file));
+  const unpinnedList = VARIANTS.filter((v) => !state.pinned.has(v.file));
+  const effectivePageSize = Math.max(0, state.pageSize - pinnedList.length);
+  return effectivePageSize > 0 ? Math.ceil(unpinnedList.length / effectivePageSize) : 1;
 }
 
 function parseInput(val) {
@@ -138,8 +169,8 @@ function render() {
   const unpinnedList = VARIANTS.filter((v) => !state.pinned.has(v.file));
 
   const effectivePageSize = Math.max(0, state.pageSize - pinnedList.length);
-  const totalPages = effectivePageSize > 0 ? Math.ceil(unpinnedList.length / effectivePageSize) : 1;
-  if (currentPage > totalPages) currentPage = totalPages;
+  const total = effectivePageSize > 0 ? Math.ceil(unpinnedList.length / effectivePageSize) : 1;
+  if (currentPage > total) currentPage = total;
   const start = (currentPage - 1) * effectivePageSize;
   const end = start + effectivePageSize;
   const pageItems = [...pinnedList, ...unpinnedList.slice(start, end)];
@@ -189,11 +220,11 @@ function render() {
     renderButtons(variant.file, !!state.modifications[variant.file]);
   });
 
-  if (totalPages > 1) {
+  if (total > 1) {
     pagination.innerHTML = `
       <a class="${currentPage === 1 ? 'disabled' : ''}" onclick="${currentPage === 1 ? '' : 'changePage(currentPage-1)'}">Prev</a>
-      <span>${currentPage} / ${totalPages}</span>
-      <a class="${currentPage === totalPages ? 'disabled' : ''}" onclick="${currentPage === totalPages ? '' : 'changePage(currentPage+1)'}">Next</a>
+      <span>${currentPage} / ${total}</span>
+      <a class="${currentPage === total ? 'disabled' : ''}" onclick="${currentPage === total ? '' : 'changePage(currentPage+1)'}">Next</a>
     `;
   }
 }
@@ -215,4 +246,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const input = document.getElementById('pageSize');
   input.addEventListener('change', (e) => updatePageSize(e.target.value));
   render();
+  const btn = document.getElementById('autoplay-btn');
+  if (btn) btn.addEventListener('click', toggleAutoplay);
 });
