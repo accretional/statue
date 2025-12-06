@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Statue Component Lab</title>
+  <style>
+    :root { color-scheme: dark; }
+    body { margin: 0; font-family: 'Inter', system-ui, -apple-system, sans-serif; background: radial-gradient(circle at 20% 20%, rgba(79, 70, 229, 0.08), transparent 26%), radial-gradient(circle at 80% 10%, rgba(14, 165, 233, 0.07), transparent 24%), #0b0b0f; color: #e5e7eb; overflow-x: hidden; animation: bgShift 14s ease-in-out infinite alternate; }
+    .header { padding: 16px 24px; border-bottom: 1px solid #1f2937; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: #0b0b0f; z-index: 10; }
+    .title { font-size: 1.1rem; font-weight: 600; }
+    .controls { display: flex; gap: 12px; align-items: center; }
+    .controls input { background: #111827; border: 1px solid #1f2937; color: #e5e7eb; padding: 6px 10px; border-radius: 6px; width: 72px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 16px; padding: 16px; }
+    .card { border: 1px solid #1f2937; border-radius: 10px; overflow: hidden; background: #0f172a; box-shadow: 0 10px 25px rgba(0,0,0,0.35); display: flex; flex-direction: column; height: 560px; opacity: 0; transform: translateY(12px); }
+    .card.pinned { border-color: #f59e0b; box-shadow: 0 10px 30px rgba(245,158,11,0.25); }
+    .card-header { padding: 10px 12px; background: #111827; border-bottom: 1px solid #1f2937; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+    .filename { font-family: "SFMono-Regular", Consolas, monospace; font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
+    .badge { background: #1f2937; color: #cbd5e1; padding: 2px 8px; border-radius: 9999px; font-size: 0.75rem; border: 1px solid #334155; }
+    .actions { display: flex; gap: 6px; flex-wrap: wrap; }
+    .btn { background: #1f2937; color: #e5e7eb; border: 1px solid #334155; padding: 6px 10px; border-radius: 6px; font-size: 0.85rem; cursor: pointer; text-decoration: none; }
+    .btn:hover { background: #273449; }
+    .btn.pin.pinned { background: #f59e0b; color: #0b0b0f; border-color: #f59e0b; font-weight: 700; }
+    .edit-panel { display: none; border-bottom: 1px solid #1f2937; padding: 10px 12px; background: #0b1220; max-height: 210px; overflow: auto; }
+    .edit-row { display: flex; gap: 8px; align-items: center; margin-bottom: 6px; }
+    .edit-row label { width: 160px; font-family: "SFMono-Regular", monospace; font-size: 0.82rem; color: #cbd5e1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .edit-row input { flex: 1; background: #0f172a; border: 1px solid #1f2937; color: #e5e7eb; padding: 6px 8px; border-radius: 6px; font-family: "SFMono-Regular", monospace; font-size: 0.85rem; }
+    .edit-actions { display: flex; justify-content: flex-end; gap: 8px; padding-top: 4px; }
+    .iframe-wrap { flex: 1; position: relative; overflow: hidden; }
+    iframe { width: 100%; height: 100%; border: none; background: #000; }
+    .pagination { padding: 0 16px 12px; display: flex; align-items: center; gap: 10px; color: #cbd5e1; }
+    .pagination a { cursor: pointer; color: #38bdf8; }
+    .pagination a.disabled { color: #475569; cursor: not-allowed; }
+    #toast { visibility: hidden; min-width: 220px; background: #111827; color: #e5e7eb; text-align: center; border-radius: 6px; padding: 12px 14px; position: fixed; z-index: 50; left: 50%; transform: translateX(-50%); bottom: 24px; border: 1px solid #1f2937; }
+    #toast.show { visibility: visible; animation: fadein 0.25s, fadeout 0.5s 2.5s; }
+    @keyframes fadein { from { bottom: 0; opacity: 0; } to { bottom: 24px; opacity: 1; } }
+    @keyframes fadeout { from { bottom: 24px; opacity: 1; } to { bottom: 0; opacity: 0; } }
+    /* Floating dots background */
+    .bg-dots { position: fixed; inset: 0; pointer-events: none; opacity: 0.6; filter: blur(0.4px); }
+    .bg-dots span { position: absolute; width: 6px; height: 6px; border-radius: 999px; background: rgba(59,130,246,0.35); animation: float 12s linear infinite; }
+    .bg-dots span:nth-child(2) { width: 8px; height: 8px; background: rgba(14,165,233,0.35); animation-duration: 16s; }
+    .bg-dots span:nth-child(3) { width: 5px; height: 5px; background: rgba(236,72,153,0.32); animation-duration: 18s; }
+    @keyframes float { from { transform: translateY(0); opacity: 0.7; } to { transform: translateY(-80px); opacity: 0.2; } }
+    @keyframes bgShift { from { background-position: 0 0, 100% 20%; } to { background-position: 40% 20%, 60% 0%; filter: hue-rotate(12deg); } }
+    @keyframes fadeSlide { from { opacity: 0; transform: translateY(16px) scale(0.99); } to { opacity: 1; transform: translateY(0) scale(1); } }
+  </style>
+</head>
+<body>
+  <div class="bg-dots">
+    <span style="top: 18%; left: 12%"></span>
+    <span style="top: 42%; left: 70%"></span>
+    <span style="top: 72%; left: 28%"></span>
+  </div>
+  <div class="header">
+    <div class="title">Statue Component Lab</div>
+    <div class="controls">
+      <label for="pageSize">Per page</label>
+      <input id="pageSize" type="number" min="1" value="12" />
+      <button id="autoplay-btn" class="btn" style="margin-left:8px;">Play</button>
+    </div>
+  </div>
+  <div class="pagination" id="pagination"></div>
+  <div class="grid" id="grid"></div>
+  <div id="toast"></div>
+  <script>
+const VARIANTS = [{"file":"CTA_primaryButtonText_Explore-Features_secondaryButtonText_Read-Documentation_theme_black-white.html","component":"CTA","theme":"black-white","props":{"title":"Ready to get started?","description":"Join the growing community of creators using Statue SSG.","primaryButtonText":"Explore Features","primaryButtonLink":"/","secondaryButtonText":"Read Documentation","secondaryButtonLink":"/docs"}},{"file":"CTA_primaryButtonText_Explore-Features_secondaryButtonText_View-Blog_theme_black-white.html","component":"CTA","theme":"black-white","props":{"title":"Ready to get started?","description":"Join the growing community of creators using Statue SSG.","primaryButtonText":"Explore Features","primaryButtonLink":"/","secondaryButtonText":"View Blog","secondaryButtonLink":"/docs"}},{"file":"CTA_primaryButtonText_Start-Free_secondaryButtonText_Read-Documentation_theme_black-white.html","component":"CTA","theme":"black-white","props":{"title":"Ready to get started?","description":"Join the growing community of creators using Statue SSG.","primaryButtonText":"Start Free","primaryButtonLink":"/","secondaryButtonText":"Read Documentation","secondaryButtonLink":"/docs"}},{"file":"CTA_primaryButtonText_Start-Free_secondaryButtonText_View-Blog_theme_black-white.html","component":"CTA","theme":"black-white","props":{"title":"Ready to get started?","description":"Join the growing community of creators using Statue SSG.","primaryButtonText":"Start Free","primaryButtonLink":"/","secondaryButtonText":"View Blog","secondaryButtonLink":"/docs"}},{"file":"CTA_primaryButtonText_Explore-Features_secondaryButtonText_Read-Documentation_theme_cyan.html","component":"CTA","theme":"cyan","props":{"title":"Ready to get started?","description":"Join the growing community of creators using Statue SSG.","primaryButtonText":"Explore Features","primaryButtonLink":"/","secondaryButtonText":"Read Documentation","secondaryButtonLink":"/docs"}},{"file":"CTA_primaryButtonText_Explore-Features_secondaryButtonText_View-Blog_theme_cyan.html","component":"CTA","theme":"cyan","props":{"title":"Ready to get started?","description":"Join the growing community of creators using Statue SSG.","primaryButtonText":"Explore Features","primaryButtonLink":"/","secondaryButtonText":"View Blog","secondaryButtonLink":"/docs"}},{"file":"CTA_primaryButtonText_Start-Free_secondaryButtonText_Read-Documentation_theme_cyan.html","component":"CTA","theme":"cyan","props":{"title":"Ready to get started?","description":"Join the growing community of creators using Statue SSG.","primaryButtonText":"Start Free","primaryButtonLink":"/","secondaryButtonText":"Read Documentation","secondaryButtonLink":"/docs"}},{"file":"CTA_primaryButtonText_Start-Free_secondaryButtonText_View-Blog_theme_cyan.html","component":"CTA","theme":"cyan","props":{"title":"Ready to get started?","description":"Join the growing community of creators using Statue SSG.","primaryButtonText":"Start Free","primaryButtonLink":"/","secondaryButtonText":"View Blog","secondaryButtonLink":"/docs"}}];
+const PROP_KEYS = ["title","description","primaryButtonText","primaryButtonLink","secondaryButtonText","secondaryButtonLink"];
+const VARIANT_MAP = VARIANTS.reduce((acc, v) => {
+  acc[v.file] = v;
+  return acc;
+}, {});
+
+let currentPage = 1;
+let autoplayTimer = null;
+let isAutoplay = false;
+const AUTOPLAY_INTERVAL = 4000;
+
+const state = {
+  pageSize: 12,
+  pinned: new Set(JSON.parse(localStorage.getItem('statueLabPinned') || '[]')),
+  modifications: {}
+};
+
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'show';
+  setTimeout(() => { el.className = el.className.replace('show', ''); }, 2800);
+}
+
+function copy(text) {
+  navigator.clipboard.writeText(text).then(() => toast('Copied!')).catch(() => {});
+}
+
+function togglePin(file) {
+  if (state.pinned.has(file)) state.pinned.delete(file);
+  else state.pinned.add(file);
+  localStorage.setItem('statueLabPinned', JSON.stringify(Array.from(state.pinned)));
+  render();
+}
+
+function toggleAutoplay() {
+  isAutoplay = !isAutoplay;
+  const btn = document.getElementById('autoplay-btn');
+  if (btn) btn.textContent = isAutoplay ? 'Pause' : 'Play';
+  if (isAutoplay) {
+    scheduleAutoplay();
+  } else {
+    clearTimeout(autoplayTimer);
+  }
+}
+
+function scheduleAutoplay() {
+  clearTimeout(autoplayTimer);
+  autoplayTimer = setTimeout(() => {
+    const next = currentPage + 1;
+    const total = totalPages();
+    changePage(next > total ? 1 : next);
+    scheduleAutoplay();
+  }, AUTOPLAY_INTERVAL);
+}
+
+function totalPages() {
+  const pinnedList = VARIANTS.filter((v) => state.pinned.has(v.file));
+  const unpinnedList = VARIANTS.filter((v) => !state.pinned.has(v.file));
+  const effectivePageSize = Math.max(0, state.pageSize - pinnedList.length);
+  return effectivePageSize > 0 ? Math.ceil(unpinnedList.length / effectivePageSize) : 1;
+}
+
+function parseInput(val) {
+  const trimmed = val.trim();
+  if (trimmed === '') return '';
+  try {
+    return JSON.parse(trimmed);
+  } catch {
+    return trimmed;
+  }
+}
+
+function renderEditInputs(file, panel) {
+  const variant = VARIANT_MAP[file];
+  panel.innerHTML = '';
+  const currentProps = state.modifications[file]?.props || variant.props || {};
+  PROP_KEYS.forEach((key) => {
+    const row = document.createElement('div');
+    row.className = 'edit-row';
+    const label = document.createElement('label');
+    label.textContent = key;
+    label.title = key;
+    const input = document.createElement('input');
+    input.id = `input-${file}-${key}`;
+    const val = currentProps[key];
+    input.value = typeof val === 'object' ? JSON.stringify(val) : (val ?? '');
+    row.appendChild(label);
+    row.appendChild(input);
+    panel.appendChild(row);
+  });
+  const actions = document.createElement('div');
+  actions.className = 'edit-actions';
+  const apply = document.createElement('button');
+  apply.className = 'btn';
+  apply.textContent = 'Apply';
+  apply.onclick = () => applyChanges(file);
+  const reset = document.createElement('button');
+  reset.className = 'btn';
+  reset.textContent = 'Reset';
+  reset.onclick = () => resetChanges(file);
+  actions.appendChild(reset);
+  actions.appendChild(apply);
+  panel.appendChild(actions);
+}
+
+function applyChanges(file) {
+  const variant = VARIANT_MAP[file];
+  const newProps = {};
+  PROP_KEYS.forEach((key) => {
+    const el = document.getElementById(`input-${file}-${key}`);
+    if (el) newProps[key] = parseInput(el.value);
+  });
+  state.modifications[file] = { props: newProps };
+  sendProps(file, newProps);
+  renderButtons(file, true);
+}
+
+function resetChanges(file) {
+  const variant = VARIANT_MAP[file];
+  delete state.modifications[file];
+  sendProps(file, variant.props || {});
+  renderButtons(file, false);
+  // Reset inputs
+  PROP_KEYS.forEach((key) => {
+    const el = document.getElementById(`input-${file}-${key}`);
+    if (!el) return;
+    const val = variant.props?.[key];
+    el.value = typeof val === 'object' ? JSON.stringify(val) : (val ?? '');
+  });
+}
+
+function sendProps(file, props) {
+  const iframe = document.getElementById(`iframe-${file}`);
+  if (!iframe) return;
+  iframe.contentWindow?.postMessage({ type: 'STATUE_LAB_APPLY', props }, '*');
+}
+
+function toggleEdit(file) {
+  const panel = document.getElementById(`edit-${file}`);
+  if (!panel) return;
+  const isHidden = panel.style.display === 'none' || !panel.style.display;
+  panel.style.display = isHidden ? 'block' : 'none';
+  if (isHidden) {
+    renderEditInputs(file, panel);
+  }
+}
+
+function renderButtons(file, modified) {
+  const container = document.getElementById(`actions-${file}`);
+  if (!container) return;
+  const isPinned = state.pinned.has(file);
+  let html = '';
+  html += `<button class="btn" onclick="toggleEdit('${file}')">Edit</button>`;
+  html += `<button class="btn" onclick="copy('${file}')">Copy Name</button>`;
+  html += `<a class="btn" href="${file}" target="_blank">Open</a>`;
+  html += `<button class="btn pin ${isPinned ? 'pinned' : ''}" onclick="togglePin('${file}')">${isPinned ? 'Unpin' : 'Pin'}</button>`;
+  container.innerHTML = html;
+}
+
+function render() {
+  const grid = document.getElementById('grid');
+  const pagination = document.getElementById('pagination');
+  grid.innerHTML = '';
+  pagination.innerHTML = '';
+
+  const pinnedList = VARIANTS.filter((v) => state.pinned.has(v.file));
+  const unpinnedList = VARIANTS.filter((v) => !state.pinned.has(v.file));
+
+  const effectivePageSize = Math.max(0, state.pageSize - pinnedList.length);
+  const total = effectivePageSize > 0 ? Math.ceil(unpinnedList.length / effectivePageSize) : 1;
+  if (currentPage > total) currentPage = total;
+  const start = (currentPage - 1) * effectivePageSize;
+  const end = start + effectivePageSize;
+  const pageItems = [...pinnedList, ...unpinnedList.slice(start, end)];
+
+  pageItems.forEach((variant, idx) => {
+    const card = document.createElement('div');
+    card.className = 'card' + (state.pinned.has(variant.file) ? ' pinned' : '');
+    card.style.animation = `fadeSlide 0.6s ease forwards`;
+    card.style.animationDelay = `${idx * 60}ms`;
+
+    const header = document.createElement('div');
+    header.className = 'card-header';
+    const name = document.createElement('div');
+    name.className = 'filename';
+    name.textContent = variant.file;
+    const badges = document.createElement('div');
+    badges.className = 'actions';
+    const badge = document.createElement('span');
+    badge.className = 'badge';
+    badge.textContent = variant.theme;
+    badges.appendChild(badge);
+    header.appendChild(name);
+    header.appendChild(badges);
+
+    const editPanel = document.createElement('div');
+    editPanel.className = 'edit-panel';
+    editPanel.id = `edit-${variant.file}`;
+
+    const actions = document.createElement('div');
+    actions.className = 'card-header';
+    actions.style.borderBottom = '1px solid #1f2937';
+    const actionContainer = document.createElement('div');
+    actionContainer.id = `actions-${variant.file}`;
+    actions.appendChild(actionContainer);
+
+    const iframeWrap = document.createElement('div');
+    iframeWrap.className = 'iframe-wrap';
+    const iframe = document.createElement('iframe');
+    iframe.id = `iframe-${variant.file}`;
+    iframe.src = variant.file;
+    iframeWrap.appendChild(iframe);
+
+    card.appendChild(header);
+    card.appendChild(actions);
+    card.appendChild(editPanel);
+    card.appendChild(iframeWrap);
+    grid.appendChild(card);
+
+    renderButtons(variant.file, !!state.modifications[variant.file]);
+  });
+
+  if (total > 1) {
+    pagination.innerHTML = `
+      <a class="${currentPage === 1 ? 'disabled' : ''}" onclick="${currentPage === 1 ? '' : 'changePage(currentPage-1)'}">Prev</a>
+      <span>${currentPage} / ${total}</span>
+      <a class="${currentPage === total ? 'disabled' : ''}" onclick="${currentPage === total ? '' : 'changePage(currentPage+1)'}">Next</a>
+    `;
+  }
+}
+
+function changePage(page) {
+  currentPage = page;
+  render();
+}
+
+function updatePageSize(size) {
+  const next = parseInt(size, 10);
+  if (!Number.isNaN(next) && next > 0) {
+    state.pageSize = next;
+    render();
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const input = document.getElementById('pageSize');
+  input.addEventListener('change', (e) => updatePageSize(e.target.value));
+  render();
+  const btn = document.getElementById('autoplay-btn');
+  if (btn) btn.addEventListener('click', toggleAutoplay);
+  const btnLabel = document.getElementById('autoplay-btn');
+  if (btnLabel) btnLabel.textContent = isAutoplay ? 'Pause' : 'Play';
+  if (isAutoplay) scheduleAutoplay();
+});
+
+  </script>
+</body>
+</html>

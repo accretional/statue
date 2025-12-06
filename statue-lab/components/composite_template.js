@@ -7,7 +7,7 @@ const VARIANT_MAP = VARIANTS.reduce((acc, v) => {
 
 let currentPage = 1;
 let autoplayTimer = null;
-let isAutoplay = true;
+let isAutoplay = false;
 const AUTOPLAY_INTERVAL = 4000;
 
 const state = {

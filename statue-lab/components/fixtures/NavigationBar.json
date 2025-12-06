@@ -8,9 +8,6 @@
       { "name": "blog", "title": "Blog", "url": "/blog" },
       { "name": "about", "title": "About", "url": "/about" }
     ],
-    "activePath": "/"
-  },
-  "variants": {
-    "activePath": ["/", "/about"]
+    "activePath": "/about"
   }
 }
