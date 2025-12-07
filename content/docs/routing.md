@@ -1,11 +1,15 @@
 ---
 title: Routing
-description: Understanding how Statue routes work
+description: How Statue handles routing for markdown content
 ---
 
 # Routing
 
-Statue uses SvelteKit's file-based routing combined with automatic content routing. Understanding how routes work helps you customize your site's structure.
+Statue extends SvelteKit's routing to automatically create pages from markdown files. This guide covers Statue-specific routing behavior.
+
+> **New to SvelteKit routing?** Read the [SvelteKit Routing docs](https://svelte.dev/docs/kit/routing) first for the basics.
+
+---
 
 ## Two Types of Routes
 
@@ -19,155 +23,210 @@ content/docs/guide.md      →  /docs/guide
 content/about.md           →  /about
 ```
 
-No route files needed - Statue handles this.
+Statue handles this automatically - no route files needed.
 
 ### 2. Custom Routes (Manual)
 
-Svelte files in `src/routes/` create custom pages:
+Standard SvelteKit routes in `src/routes/`:
 
 ```
 src/routes/pricing/+page.svelte    →  /pricing
 src/routes/contact/+page.svelte    →  /contact
 ```
 
-Full control over the page structure.
+Full control over the page. **[Learn more →](https://svelte.dev/docs/kit/routing)**
 
 ---
 
 ## How Content Routing Works
 
-### The Routes
+Statue uses two special catch-all routes to handle markdown content:
 
-Statue uses two special SvelteKit routes:
+### `[...slug]/+page.svelte`
+Renders individual markdown pages.
 
-**`src/routes/[...slug]/+page.svelte`**
-- Catches all content pages
-- Example: `/blog/my-post`, `/docs/guide`, `/about`
+**Matches:**
+- `/blog/hello-world` → `content/blog/hello-world.md`
+- `/docs/guide` → `content/docs/guide.md`
+- `/about` → `content/about.md`
 
-**`src/routes/[directory]/+page.svelte`**
-- Catches directory listing pages
-- Example: `/blog`, `/docs`
-
-### The Flow
-
+**How it works:**
 1. User visits `/blog/hello-world`
-2. SvelteKit matches `[...slug]` route
-3. Route's server file (`+page.server.js`) runs
-4. Server looks up `content/blog/hello-world.md`
-5. Markdown is parsed and processed
-6. Page component renders the content
+2. SvelteKit matches the `[...slug]` route
+3. `+page.server.js` looks up `content/blog/hello-world.md`
+4. Markdown is parsed and rendered
 
-### Directory Listings
+### `[directory]/+page.svelte`
+Lists all content in a directory.
 
+**Matches:**
+- `/blog` → Lists all files in `content/blog/`
+- `/docs` → Lists all files in `content/docs/`
+
+**How it works:**
 1. User visits `/blog`
-2. SvelteKit matches `[directory]` route
-3. Server finds all files in `content/blog/`
-4. Page component shows list of blog posts
-
----
-
-## Route Patterns
-
-### Catch-All Route: `[...slug]`
-
-The `[...slug]` pattern captures everything:
-
-```
-/blog/hello               → slug = "blog/hello"
-/docs/guides/intro        → slug = "docs/guides/intro"
-/about                    → slug = "about"
-```
-
-Used in `src/routes/[...slug]/+page.server.js`:
-
-```javascript
-export function load({ params }) {
-  const url = `/${params.slug}`;
-  const content = getContentByUrl(url);
-  return { content };
-}
-```
-
-### Directory Route: `[directory]`
-
-The `[directory]` pattern captures top-level folders:
-
-```
-/blog     → directory = "blog"
-/docs     → directory = "docs"
-```
-
-Used in `src/routes/[directory]/+page.server.js`:
-
-```javascript
-export function load({ params }) {
-  const directory = params.directory;
-  const content = getContentByDirectory(directory);
-  return { directoryContent: content };
-}
-```
+2. SvelteKit matches the `[directory]` route
+3. `+page.server.js` finds all `*.md` files in `content/blog/`
+4. Renders as a list of posts
 
 ---
 
 ## Route Priority
 
-When multiple routes match, SvelteKit uses this priority:
+When routes conflict, SvelteKit follows this priority:
 
-1. **Static routes** (`/about/+page.svelte`)
-2. **Dynamic routes** (`[directory]/+page.svelte`)
-3. **Catch-all routes** (`[...slug]/+page.svelte`)
+1. **Static routes** (e.g., `src/routes/about/+page.svelte`)
+2. **Dynamic routes** (e.g., `src/routes/[directory]/+page.svelte`)
+3. **Catch-all routes** (e.g., `src/routes/[...slug]/+page.svelte`)
 
-### Example
+### Example Conflict
 
-If you have:
-- `src/routes/about/+page.svelte` (static)
-- `content/about.md` (would match `[...slug]`)
+If you have both:
+- `src/routes/about/+page.svelte` (custom Svelte page)
+- `content/about.md` (markdown content)
 
-The static route wins. The Svelte component is shown, not the markdown.
+The Svelte page wins - the markdown won't be shown.
+
+**Fix:** Either remove the Svelte file or rename the markdown file.
+
+---
+
+## Customizing Content Pages
+
+You can customize how markdown content is displayed by editing Statue's route templates.
+
+### Content Pages Template
+**File:** `src/routes/[...slug]/+page.svelte`
+
+**What you must include:**
+```svelte
+<script>
+  export let data;  // Statue passes content here
+</script>
+```
+
+**Typical customization:**
+```svelte
+<script>
+  import { ContentHeader, ContentBody } from 'statue-ssg';
+  export let data;
+
+  $: content = data.content;  // Access the markdown content
+</script>
+
+<!-- Add your customizations here -->
+<aside class="table-of-contents">
+  <!-- Your TOC component -->
+</aside>
+
+<ContentHeader title={content.metadata.title} />
+<ContentBody content={content.content} />
+```
+
+**Available in `data.content`:**
+- `metadata.title` - From frontmatter
+- `metadata.description` - From frontmatter
+- `metadata.date` - From frontmatter
+- `content` - Rendered HTML
+
+### Directory Pages Template
+**File:** `src/routes/[directory]/+page.svelte`
+
+**What you must include:**
+```svelte
+<script>
+  export let data;  // Statue passes directory content here
+</script>
+```
+
+**Typical customization:**
+```svelte
+<script>
+  import { DirectoryHeader, DirectoryContent } from 'statue-ssg';
+  export let data;
+
+  // Add search/filter functionality
+  let searchTerm = '';
+  $: filtered = data.directoryContent.filter(post =>
+    post.metadata.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+</script>
+
+<DirectoryHeader title={data.currentDirectory.title} />
+
+<!-- Add your customizations -->
+<input bind:value={searchTerm} placeholder="Search..." />
+
+<DirectoryContent content={filtered} />
+```
+
+**Available in `data`:**
+- `currentDirectory` - Info about this directory
+- `directoryContent` - Array of content items
+- `subDirectories` - Subdirectories in this directory
+
+**Don't modify `+page.server.js` files unless you know what you're doing** - they contain the logic that loads markdown content.
+
+---
+
+## URL Structure
+
+### Content → URL Mapping
+
+```
+content/blog/hello.md               →  /blog/hello
+content/docs/guides/intro.md        →  /docs/guides/intro
+content/projects/2024/project.md    →  /projects/2024/project
+```
+
+The folder structure becomes the URL structure.
+
+### Best Practices
+
+**Use descriptive URLs:**
+```
+✅ /blog/getting-started-with-statue
+❌ /blog/post1
+```
+
+**Use hyphens, not underscores:**
+```
+✅ my-blog-post.md
+❌ my_blog_post.md
+```
+
+**Keep it simple:**
+```
+✅ /docs/routing
+❌ /documentation/advanced-concepts/routing-system
+```
 
 ---
 
 ## Creating Custom Routes
 
-### Simple Custom Page
+When creating custom pages for your Statue site, follow these patterns:
 
-Create a folder in `src/routes/`:
+### Required: Enable Prerendering
 
-```
-src/routes/pricing/
-├── +page.svelte
-└── +page.server.js (optional)
-```
+**In every `+page.server.js`, you must include:**
 
-**`+page.svelte`:**
-```svelte
-<script>
-  import { PageHero, CTA } from 'statue-ssg';
-</script>
-
-<PageHero title="Pricing" description="Choose your plan" />
-
-<div class="container mx-auto px-4 py-16">
-  <h2>Our Plans</h2>
-  <!-- Your pricing content -->
-</div>
-
-<CTA
-  title="Ready to start?"
-  primaryButtonText="Sign Up"
-  primaryButtonLink="/signup"
-/>
-```
-
-Visit `/pricing` to see your page.
-
-### Custom Page with Data Loading
-
-**`+page.server.js`:**
 ```javascript
+export const prerender = true;
+```
+
+**Why:** Statue generates static sites. Without this, SvelteKit won't generate the HTML files at build time.
+
+### Typical Data Loading Pattern
+
+**For custom pages that need data, use this pattern:**
+
+```javascript
+// src/routes/pricing/+page.server.js
 export const prerender = true;
 
 export function load() {
+  // Load your data here
   const plans = [
     { name: 'Free', price: 0 },
     { name: 'Pro', price: 29 }
@@ -177,230 +236,42 @@ export function load() {
 }
 ```
 
-**`+page.svelte`:**
+**Why:** The `load` function runs at build time and passes data to your page component.
+
+### Page Component
+
 ```svelte
+<!-- src/routes/pricing/+page.svelte -->
 <script>
-  export let data;
-  $: plans = data.plans;
+  export let data;  // Data from +page.server.js
 </script>
 
-{#each plans as plan}
+<h1>Pricing</h1>
+{#each data.plans as plan}
   <div>{plan.name}: ${plan.price}/mo</div>
 {/each}
 ```
 
----
-
-## Customizing Route Behavior
-
-### Customizing Content Pages
-
-Edit `src/routes/[...slug]/+page.svelte`:
-
-```svelte
-<script>
-  import { ContentHeader, ContentBody } from 'statue-ssg';
-
-  export let data;
-  $: content = data.content;
-</script>
-
-<!-- Add a table of contents -->
-<aside class="toc">
-  <h3>On this page</h3>
-  <!-- TOC component -->
-</aside>
-
-<ContentHeader title={content.metadata.title} />
-<ContentBody content={content.content} />
-
-<!-- Add related posts -->
-<section class="related-posts">
-  <h3>Related Posts</h3>
-  <!-- Related posts logic -->
-</section>
-```
-
-### Customizing Directory Pages
-
-Edit `src/routes/[directory]/+page.svelte`:
-
-```svelte
-<script>
-  import { DirectoryHeader, DirectoryContent } from 'statue-ssg';
-
-  export let data;
-  $: content = data.directoryContent;
-
-  // Add filtering
-  let searchTerm = '';
-  $: filtered = content.filter(post =>
-    post.metadata.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-</script>
-
-<DirectoryHeader title={data.currentDirectory.title} />
-
-<!-- Add search -->
-<input bind:value={searchTerm} placeholder="Search..." />
-
-<DirectoryContent content={filtered} />
-```
+**Want to do something different?** Check [SvelteKit's routing docs](https://svelte.dev/docs/kit/routing) for other patterns, but note that Statue requires static prerendering to work.
 
 ---
 
-## Advanced Routing
+## Common Issues
 
-### Nested Dynamic Routes
-
-Create subdirectory routes:
-
-```
-src/routes/blog/[slug]/+page.svelte
-```
-
-This creates `/blog/*` routes separate from the general `[...slug]` route.
-
-### Layout Routes
-
-Add layouts for specific sections:
-
-```
-src/routes/blog/+layout.svelte
-```
-
-This layout wraps all `/blog/*` pages.
-
-**Example:**
-```svelte
-<!-- src/routes/blog/+layout.svelte -->
-<div class="blog-layout">
-  <aside class="sidebar">
-    <h3>Categories</h3>
-    <!-- Category list -->
-  </aside>
-
-  <main>
-    <slot />  <!-- Page content goes here -->
-  </main>
-</div>
-```
-
-### Route Groups
-
-Organize routes without affecting URLs:
-
-```
-src/routes/(marketing)/pricing/+page.svelte
-src/routes/(marketing)/about/+page.svelte
-```
-
-Both pages are at `/pricing` and `/about` (no `/marketing/` in URL).
-
-**Use case:** Share layouts without adding URL segments.
-
----
-
-## Prerendering
-
-Statue sites are static, so all routes are prerendered at build time.
-
-### Enabling Prerendering
-
-In `+page.server.js`:
-```javascript
-export const prerender = true;
-```
-
-This is required for static site generation.
-
-### Prerendering Content
-
-Statue automatically prerenders:
-- All markdown files in `content/`
-- All directory pages
-- All custom routes with `prerender = true`
-
-### Build Process
-
-```bash
-npm run build
-```
-
-1. SvelteKit discovers all routes
-2. Prerenders each route to HTML
-3. Outputs static files to `build/`
-4. Ready to deploy
-
----
-
-## URL Structure Best Practices
-
-### Use Descriptive URLs
-
-```
-✅ /blog/getting-started-with-statue
-❌ /blog/post1
-```
-
-### Keep URLs Simple
-
-```
-✅ /docs/routing
-❌ /documentation/advanced-concepts/routing-system
-```
-
-### Use Hyphens, Not Underscores
-
-```
-✅ my-blog-post.md
-❌ my_blog_post.md
-```
-
-### Match Content Structure to URLs
-
-```
-content/
-├── blog/
-│   └── hello-world.md    →  /blog/hello-world  ✅
-├── docs/
-│   └── routing.md        →  /docs/routing  ✅
-```
-
----
-
-## Troubleshooting
-
-### Page shows 404 but file exists
+### 404 on existing markdown file
 
 **Check:**
-1. Is the file in `content/`?
-2. Does it have `.md` extension?
-3. Did you restart dev server?
-
-**Fix:**
-```bash
-npm run dev  # Restart server
-```
+1. File is in `content/` directory?
+2. Has `.md` extension?
+3. Restarted dev server? (`npm run dev`)
 
 ### Custom route not working
 
-**Check:**
-1. Is there a `+page.svelte` file?
-2. Is it in the right location?
-3. Check browser console for errors
+See [SvelteKit routing docs](https://svelte.dev/docs/kit/routing) for route setup.
 
-### Route conflict
+### Changes not appearing
 
-If both exist:
-- `src/routes/about/+page.svelte`
-- `content/about.md`
-
-The Svelte route takes priority. Remove one or rename.
-
-### Changes not reflecting
-
-Clear cache:
+Clear SvelteKit cache:
 ```bash
 rm -rf .svelte-kit build
 npm run dev
@@ -408,61 +279,14 @@ npm run dev
 
 ---
 
-## Route Files Reference
-
-### +page.svelte
-
-Page component - renders the UI.
-
-```svelte
-<script>
-  export let data;
-</script>
-
-<h1>{data.title}</h1>
-```
-
-### +page.server.js
-
-Server load function - fetches data.
-
-```javascript
-export const prerender = true;
-
-export function load() {
-  return { title: 'My Page' };
-}
-```
-
-### +layout.svelte
-
-Layout wrapper - wraps child pages.
-
-```svelte
-<header>Header</header>
-<slot />  <!-- Page content -->
-<footer>Footer</footer>
-```
-
-### +layout.server.js
-
-Server load for layouts - data available to all child pages.
-
-```javascript
-export function load() {
-  return { siteConfig: { /* ... */ } };
-}
-```
-
----
-
-## Next Steps
-
-- **[Get Started](./get-started)** - Create your first pages
-- **[Site Config](./site-config)** - Configure site-wide settings
-- **[Components](./components)** - Build custom route pages
-
 ## Learn More
 
-- **[SvelteKit Routing](https://kit.svelte.dev/docs/routing)** - Official SvelteKit docs
-- **[SvelteKit Advanced Routing](https://kit.svelte.dev/docs/advanced-routing)** - Advanced patterns
+### Statue Docs
+- **[Get Started](./get-started)** - Overview
+- **[Site Config](./site-config)** - Configuration
+- **[Components](./components)** - Build pages
+
+### SvelteKit Docs
+- **[Routing](https://svelte.dev/docs/kit/routing)** - File-based routing basics
+- **[Loading Data](https://svelte.dev/docs/kit/load)** - Server data loading
+- **[Advanced Routing](https://svelte.dev/docs/kit/advanced-routing)** - Layouts, groups, matchers
