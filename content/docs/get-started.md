@@ -7,6 +7,8 @@ description: Quick introduction to Statue SSG and key concepts
 
 Statue is a static site generator that transforms markdown files into a fast, modern website. It's built on SvelteKit and designed to be simple yet flexible.
 
+> **Contribute to Statue!** Built a cool component, theme, or template? Share it with the community—it only takes a single command. **[Learn how →](https://github.com/accretional/statue/blob/main/CONTRIBUTING.md)**
+
 ## What is Statue?
 
 Statue turns this:
@@ -134,6 +136,7 @@ Edit `site.config.js`.
 - **[Routing](./routing)** - How URLs work
 
 **Need help?**
+- **[Statue.dev](https://statue.dev)** - Official documentation site
 - **[GitHub Issues](https://github.com/accretional/statue/issues)** - Report bugs
 - **[Discord](https://discord.gg/accretional)** - Community chat
 

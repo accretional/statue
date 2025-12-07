@@ -7,6 +7,8 @@ description: Using and understanding Statue templates
 
 Templates provide pre-configured starting points for different types of sites. They include specific layouts, example content, and configurations tailored to particular use cases.
 
+> **Want to contribute a template?** Share your template with the Statue community! It only takes a single command to submit a PR. **[Learn how →](https://github.com/accretional/statue/blob/main/ADDING_TEMPLATES.md)**
+
 ## What Are Templates?
 
 A template is a complete set of:
@@ -157,10 +159,11 @@ We're working on additional templates:
 - Documentation-focused template (coming soon)
 - Landing page template (coming soon)
 
-Want to contribute a template? See [CONTRIBUTING.md](../../CONTRIBUTING.md).
+**Want to contribute a template?** See **[ADDING_TEMPLATES.md](https://github.com/accretional/statue/blob/main/ADDING_TEMPLATES.md)** for a step-by-step guide.
 
 ## Next Steps
 
+- **[Statue.dev](https://statue.dev)** - Official documentation
 - **[New Site Checklist](./new-site-checklist)** - Customize your site after choosing a template
 - **[Themes](./themes)** - Style your template with themes
 - **[Components](./components)** - Use components in your template pages

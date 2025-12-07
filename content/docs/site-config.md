@@ -7,6 +7,8 @@ description: Configuring your Statue site with site.config.js
 
 The `site.config.js` file is your site's central configuration. It stores information used throughout your site via template variables and component props.
 
+> **Contribute to Statue!** Built a useful component, theme, or template? Share it with the community—it only takes a single command. **[Learn how →](https://github.com/accretional/statue/blob/main/CONTRIBUTING.md)**
+
 ## Location
 
 `site.config.js` - in your project root
@@ -520,6 +522,7 @@ export interface SiteConfig {
 
 ## Next Steps
 
+- **[Statue.dev](https://statue.dev)** - Official documentation
 - **[New Site Checklist](./new-site-checklist)** - Setup walkthrough
 - **[Components](./components)** - Use config in components
 - **[Themes](./themes)** - Style your site

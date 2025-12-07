@@ -7,6 +7,8 @@ description: How Statue handles routing for markdown content
 
 Statue extends SvelteKit's routing to automatically create pages from markdown files. This guide covers Statue-specific routing behavior.
 
+> **Contribute to Statue!** Built a useful component, theme, or template? Share it with the community—it only takes a single command. **[Learn how →](https://github.com/accretional/statue/blob/main/CONTRIBUTING.md)**
+
 > **New to SvelteKit routing?** Read the [SvelteKit Routing docs](https://svelte.dev/docs/kit/routing) first for the basics.
 
 ---
@@ -282,6 +284,7 @@ npm run dev
 ## Learn More
 
 ### Statue Docs
+- **[Statue.dev](https://statue.dev)** - Official documentation
 - **[Get Started](./get-started)** - Overview
 - **[Site Config](./site-config)** - Configuration
 - **[Components](./components)** - Build pages

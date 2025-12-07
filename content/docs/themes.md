@@ -5,6 +5,8 @@ description: Styling your Statue site with themes
 
 # Themes
 
+> **Created a custom theme?** Share it with the Statue community! Contributing themes takes just one command. **[Contribute a theme →](https://github.com/accretional/statue/blob/main/ADDING_THEMES.md)**
+
 ## Change Your Theme
 
 **Edit `src/lib/index.css` and change one line:**
@@ -200,6 +202,7 @@ This requires custom JavaScript. See [Tailwind dark mode docs](https://tailwindc
 - **[Components](./components)** - Ensure components work with your theme
 - **[Get Started](./get-started)** - Build your site
 
-**Want to learn more about CSS theming?**
+**Resources:**
+- **[Statue.dev](https://statue.dev)** - Official documentation
 - [CSS Custom Properties (MDN)](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties)
 - [Tailwind CSS Docs](https://tailwindcss.com/docs)

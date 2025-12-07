@@ -7,6 +7,8 @@ description: Using Statue's pre-built components
 
 Statue includes a library of pre-built Svelte components for building your pages quickly. All components are themeable and responsive.
 
+> **Built a useful component?** Contribute it back to Statue and help the community! It only takes one command. **[Contribute a component →](https://github.com/accretional/statue/blob/main/ADDING_COMPONENTS.md)**
+
 ## Importing Components
 
 Import components from the `statue-ssg` package:
@@ -590,3 +592,6 @@ For complete component documentation with all props and examples:
 - **[Themes](./themes)** - Style components with themes
 - **[Get Started](./get-started)** - Build pages with components
 - **[Site Config](./site-config)** - Configure component data sources
+
+**Resources:**
+- **[Statue.dev](https://statue.dev)** - Official documentation

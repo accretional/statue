@@ -7,6 +7,8 @@ description: Step-by-step checklist for customizing your new Statue site
 
 Follow this checklist to replace placeholder content and make the site your own.
 
+> **Want to contribute back?** Statue welcomes contributions of components, themes, and templates. It only takes a single command to submit a PR. **[Learn more →](https://github.com/accretional/statue/blob/main/CONTRIBUTING.md)**
+
 ## 🎯 Essential Setup
 
 ### ✅ 1. Update Site Configuration
@@ -24,22 +26,7 @@ Follow this checklist to replace placeholder content and make the site your own.
 
 ---
 
-### ✅ 2. Choose Your Theme
-
-**File:** `src/lib/index.css`
-
-- [ ] Change the `@import` line to your chosen theme:
-  ```css
-  @import "statue-ssg/themes/blue.css";
-  ```
-
-Available: `blue`, `red`, `orange`, `green`, `purple`, `cyan`, `pink`, `black-white`
-
-**[See all themes →](./themes)**
-
----
-
-### ✅ 3. Update Homepage
+### ✅ 2. Update Homepage
 
 **File:** `src/routes/+page.svelte`
 
@@ -48,7 +35,40 @@ Available: `blue`, `red`, `orange`, `green`, `purple`, `cyan`, `pink`, `black-wh
 
 ---
 
-### ✅ 4. Remove Example Content
+### ✅ 3. Customize About Page
+
+**File:** `src/routes/about/+page.svelte` (if exists)
+
+- [ ] Update page content with your information
+- [ ] Use Statue components (PageHero, Mission, Team, etc.) or write custom code
+- [ ] Combine components with custom Svelte for unique layouts
+- [ ] Or delete the page if you don't need it
+
+**Tip:** You can mix Statue components with your own custom Svelte components for complete flexibility.
+
+---
+
+### ✅ 4. Update Footer
+
+**File:** `src/routes/+layout.svelte`
+
+- [ ] Update `copyrightText` with your name/company
+- [ ] Update `legalLinks` (privacy policy, terms of service)
+- [ ] Update `socialLinks` with your social media URLs
+
+---
+
+### ✅ 5. Update Assets
+
+**Location:** `static/` directory
+
+- [ ] Replace `static/favicon.png` with your favicon
+- [ ] Add your logo and images
+- [ ] Remove any placeholder assets you won't use
+
+---
+
+### ✅ 6. Remove Example Content
 
 **Location:** `content/` directory
 
@@ -58,7 +78,7 @@ Available: `blue`, `red`, `orange`, `green`, `purple`, `cyan`, `pink`, `black-wh
 
 ---
 
-### ✅ 5. Add Your Content
+### ✅ 7. Add Your Content
 
 **Location:** `content/` directory
 
@@ -78,29 +98,18 @@ content/
 
 ## 🎨 Customization (Optional)
 
-### ✅ 6. Customize About Page
+### ✅ 8. Choose Your Theme
 
-**File:** `src/routes/about/+page.svelte` (if exists)
+**File:** `src/lib/index.css`
 
-- [ ] Update PageHero, Mission, Team, WhyChooseUs components
-- [ ] Or delete the page if you don't need it
+- [ ] Change the `@import` line to your chosen theme:
+  ```css
+  @import "statue-ssg/themes/blue.css";
+  ```
 
----
+Available: `blue`, `red`, `orange`, `green`, `purple`, `cyan`, `pink`, `black-white`
 
-### ✅ 7. Update Footer
-
-**File:** `src/routes/+layout.svelte`
-
-- [ ] Update `copyrightText`, `legalLinks`, `socialLinks`
-
----
-
-### ✅ 8. Add Your Assets
-
-**Location:** `static/` directory
-
-- [ ] Replace `static/favicon.png` with your favicon
-- [ ] Add your logo and images
+**[See all themes →](./themes)**
 
 ---
 
@@ -152,11 +161,13 @@ npx wrangler pages deploy build --project-name=your-project
 
 ## Need Help?
 
+- **[Statue.dev](https://statue.dev)** - Official Statue documentation site
 - **[Getting Started](./get-started)** - Overview of Statue basics
 - **[Site Config](./site-config)** - Configuration details
 - **[Themes](./themes)** - Styling guide
 - **[Components](./components)** - Component reference
 
 **Community:**
+- [Statue.dev](https://statue.dev) - Official project site
 - [GitHub Issues](https://github.com/accretional/statue/issues)
 - [Discord](https://discord.gg/accretional)
