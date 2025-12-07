@@ -532,22 +532,49 @@ Use the automated PR script from the root of your Statue site:
 
 ```bash
 # From your Statue site's root directory
+
+# Just the template (routes, content, config, static)
 ./path/to/statue/scripts/autopr.sh template portfolio
+
+# Template + ALL custom components and themes (complete bundle)
+./path/to/statue/scripts/autopr.sh all portfolio
 ```
 
+### Template Mode
+
 **What it does:**
-1. Looks for `src/routes/`, `content/`, `site.config.js` in current directory
+1. Looks for `src/routes/`, `content/`, `site.config.js`, `static/` in current directory
 2. Forks the statue repository (if needed)
 3. Creates a new branch
 4. Copies all template files to `templates/portfolio/`
 5. Commits and pushes the changes
 6. Opens a pull request automatically
 
+### All Mode (Template + Custom Components + Themes)
+
+**What it does:**
+1. Everything from template mode, PLUS:
+2. Bundles `src/lib/index.ts` (component exports) → `templates/portfolio/src/lib/index.ts`
+3. Bundles `src/lib/index.css` (styles/theme imports) → `templates/portfolio/src/lib/index.css`
+4. Bundles all custom components from `src/lib/components/` → `templates/portfolio/src/lib/components/`
+5. Bundles all custom themes from `src/lib/themes/` → `templates/portfolio/src/lib/themes/`
+6. Preserves directory structure (e.g., `src/lib/components/forms/Input.svelte` keeps its path)
+
+**When to use `all` mode:**
+- You've built a complete Statue site with custom components and themes
+- You want to contribute the entire package as a template
+- Your custom components/themes are specific to this template
+
+**When to use `template` mode:**
+- Your site only uses built-in Statue components
+- Your custom components should be contributed separately (not template-specific)
+
 **Requirements:**
 - GitHub CLI (`gh`) installed and authenticated
 - Run from the root of your Statue site
 - Must have `src/routes/` directory (required)
 - Optionally includes `content/`, `site.config.js`, `static/`
+- For `all` mode: Automatically includes any `src/lib/components/` and `src/lib/themes/`
 
 **Note:** You'll still need to add documentation manually after the PR is created. The script just handles the git workflow.
 

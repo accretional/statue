@@ -237,6 +237,51 @@ If you modified content processing:
 
 ## Submitting a Pull Request
 
+### Automated PR Script (Recommended)
+
+**Want to skip the manual git workflow?** Use the automated PR script:
+
+```bash
+# For components (from directory containing your .svelte file)
+./scripts/autopr.sh component MyButton
+./scripts/autopr.sh component MyButton forms  # With subdirectory
+
+# For themes (from directory containing your .css file)
+./scripts/autopr.sh theme sunset-orange
+
+# For templates (from your Statue site root)
+./scripts/autopr.sh template portfolio
+
+# For complete templates with custom components/themes (from your Statue site root)
+./scripts/autopr.sh all portfolio
+```
+
+**What it does:**
+1. Checks/installs GitHub CLI (`gh`)
+2. Authenticates with GitHub
+3. Forks the statue repository (if needed)
+4. Creates a new branch with random prefix
+5. Copies your files to the correct locations
+6. Commits and pushes changes
+7. Opens a pull request automatically
+
+**Requirements:**
+- GitHub CLI (`gh`) installed or the script will help you install it
+- Files must exist in current directory (components/themes) or current directory must be a Statue site root (templates)
+
+**Note:** The script handles the git workflow. You still need to add documentation manually after the PR is created.
+
+**See detailed guides:**
+- [ADDING_COMPONENTS.md](./ADDING_COMPONENTS.md) for component contributions
+- [ADDING_TEMPLATES.md](./ADDING_TEMPLATES.md) for template contributions
+- [ADDING_THEMES.md](./ADDING_THEMES.md) for theme contributions
+
+---
+
+### Manual PR Process
+
+If you prefer to submit PRs manually or the automated script doesn't fit your workflow:
+
 ### Before Submitting
 
 - [ ] Code follows the style guidelines

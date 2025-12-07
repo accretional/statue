@@ -524,12 +524,15 @@ Use this checklist before submitting:
 Use the automated PR script:
 
 ```bash
-# Basic usage (theme file in current directory)
+# Basic usage (theme file in current directory or subdirectories)
 ./scripts/autopr.sh theme sunset-orange
+
+# Extension is optional
+./scripts/autopr.sh theme sunset-orange.css
 ```
 
 **What it does:**
-1. Looks for `sunset-orange.css` in the current directory
+1. Looks for `sunset-orange.css` in current directory, then searches subdirectories
 2. Forks the statue repository (if needed)
 3. Creates a new branch
 4. Copies your theme to `src/lib/themes/sunset-orange.css`
@@ -538,8 +541,8 @@ Use the automated PR script:
 
 **Requirements:**
 - GitHub CLI (`gh`) installed and authenticated
-- Your theme CSS file (e.g., `sunset-orange.css`) in the current directory
-- Theme name must match the filename (without .css extension)
+- Your theme CSS file (e.g., `sunset-orange.css`) in current directory or subdirectories
+- Extension (`.css`) is optional in the command
 
 **Note:** You'll still need to add documentation manually after the PR is created. The script just handles the git workflow.
 

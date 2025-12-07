@@ -373,15 +373,18 @@ Document all props, provide examples, show common use cases.
 Use the automated PR script:
 
 ```bash
-# Basic usage (component in current directory)
+# Basic usage (component in current directory or subdirectories)
 ./scripts/autopr.sh component YourComponent
+
+# Extension is optional
+./scripts/autopr.sh component YourComponent.svelte
 
 # With subdirectory (e.g., forms/YourComponent.svelte)
 ./scripts/autopr.sh component YourComponent forms
 ```
 
 **What it does:**
-1. Looks for `YourComponent.svelte` in the current directory
+1. Looks for `YourComponent.svelte` in current directory, then searches subdirectories
 2. Forks the statue repository (if needed)
 3. Creates a new branch
 4. Copies your component to `src/lib/components/[subdir/]YourComponent.svelte`
@@ -390,8 +393,8 @@ Use the automated PR script:
 
 **Requirements:**
 - GitHub CLI (`gh`) installed and authenticated
-- Your component file (e.g., `YourComponent.svelte`) in the current directory
-- Component name must match the filename
+- Your component file (e.g., `YourComponent.svelte`) in current directory or subdirectories
+- Extension (`.svelte`) is optional in the command
 
 **Note:** You'll still need to add documentation and examples manually after the PR is created. The script just handles the git workflow.
 
