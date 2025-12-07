@@ -1,0 +1,24 @@
+/* Cyan Theme */
+@theme {
+  /* Core palette - Cyan Theme */
+  --color-background: #0a1a1a; /* Dark cyan-black */
+  --color-card: #0f2a2a;       /* Very dark cyan */
+  --color-border: #1f4a5c;     /* Dark cyan */
+  --color-foreground: #ecfeff; /* Light cyan-white */
+  --color-muted: #67e8f9;      /* cyan-300 */
+
+  /* Brand colors - Cyan tones */
+  --color-primary: #06b6d4;    /* cyan-500 - bright cyan */
+  --color-secondary: #22d3ee;  /* cyan-400 - light cyan */
+  --color-accent: #0891b2;     /* cyan-600 - dark cyan */
+  
+  /* Text colors for different surfaces */
+  --color-on-primary: #ffffff;   /* Text on primary button - white */
+  --color-on-background: #0f2a2a; /* Contrast text on background - dark */
+
+  /* Hero gradients - Dark cyan tones */
+  --color-hero-from: #0a1a1a;
+  --color-hero-via: #0f2a2a;
+  --color-hero-to: #0a1a1a;
+}
+

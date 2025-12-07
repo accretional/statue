@@ -1,0 +1,24 @@
+/* Blue Theme */
+@theme {
+  /* Core palette - Navy-Blue Theme */
+  --color-background: #0b1220; /* Dark navy */
+  --color-card: #0f172a;       /* slate-900 navy */
+  --color-border: #1e3a5f;     /* Medium blue-navy */
+  --color-foreground: #e5e7eb; /* Light gray white */
+  --color-muted: #94a3b8;      /* slate-400 */
+
+  /* Brand colors - Blue tones */
+  --color-primary: #3b82f6;    /* blue-500 - bright blue */
+  --color-secondary: #60a5fa;  /* blue-400 - light blue */
+  --color-accent: #2563eb;     /* blue-600 - dark blue */
+  
+  /* Text colors for different surfaces */
+  --color-on-primary: #ffffff;   /* Text on primary button - white */
+  --color-on-background: #0f172a; /* Contrast text on background - dark */
+
+  /* Hero gradients - Navy tones */
+  --color-hero-from: #0b1220;
+  --color-hero-via: #0f172a;
+  --color-hero-to: #0b1220;
+}
+

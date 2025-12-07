@@ -1,0 +1,24 @@
+/* Green Theme */
+@theme {
+  /* Core palette - Green Theme */
+  --color-background: #0a1a0a; /* Dark green-black */
+  --color-card: #0f2a0f;       /* Very dark green */
+  --color-border: #1f4a1f;     /* Dark green */
+  --color-foreground: #f0fdf4; /* Light green-white */
+  --color-muted: #86efac;      /* green-300 */
+
+  /* Brand colors - Green tones */
+  --color-primary: #10b981;    /* emerald-500 - bright green */
+  --color-secondary: #34d399;  /* emerald-400 - light green */
+  --color-accent: #059669;     /* emerald-600 - dark green */
+  
+  /* Text colors for different surfaces */
+  --color-on-primary: #ffffff;   /* Text on primary button - white */
+  --color-on-background: #0f2a0f; /* Contrast text on background - dark */
+
+  /* Hero gradients - Dark green tones */
+  --color-hero-from: #0a1a0a;
+  --color-hero-via: #0f2a0f;
+  --color-hero-to: #0a1a0a;
+}
+

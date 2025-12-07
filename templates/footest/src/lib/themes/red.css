@@ -1,0 +1,24 @@
+/* Kırmızı Tema */
+@theme {
+  /* Core palette - Kırmızı Tema */
+  --color-background: #1a0505; /* Koyu kırmızı-siyah */
+  --color-card: #2d0a0a;       /* Çok koyu kırmızı */
+  --color-border: #5c1a1a;     /* Koyu kırmızı */
+  --color-foreground: #fef2f2; /* Açık pembe-beyaz */
+  --color-muted: #fca5a5;      /* red-300 */
+
+  /* Brand colors - Kırmızı tonları */
+  --color-primary: #ef4444;    /* red-500 - parlak kırmızı */
+  --color-secondary: #f87171;  /* red-400 - açık kırmızı */
+  --color-accent: #dc2626;     /* red-600 - koyu kırmızı */
+  
+  /* Text colors for different surfaces */
+  --color-on-primary: #ffffff;   /* primary buton üzerindeki yazı - beyaz */
+  --color-on-background: #2d0a0a; /* background üzerindeki kontrast yazı - koyu */
+
+  /* Hero gradients - Koyu kırmızı tonları */
+  --color-hero-from: #1a0505;
+  --color-hero-via: #2d0a0a;
+  --color-hero-to: #1a0505;
+}
+
