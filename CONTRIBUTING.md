@@ -35,7 +35,7 @@ Before contributing, please:
 
 1. **Check existing issues** - See if someone else is already working on it
 2. **Open an issue first** - For major changes, discuss your approach before implementing
-3. **Read the docs** - Familiarize yourself with [DEVELOPMENT.md](./DEVELOPMENT.md) and [USER_GUIDE.md](./USER_GUIDE.md)
+3. **Read the docs** - Familiarize yourself with [DEVELOPMENT.md](./DEVELOPMENT.md) and the specific contribution guides below
 
 ### Types of Contributions
 
@@ -44,10 +44,19 @@ We welcome:
 - **Bug fixes** - Fixing issues or unexpected behavior
 - **Features** - New components, templates, or functionality
 - **Documentation** - Improvements to guides, examples, or README
-- **Themes** - New color themes for the theme system
-- **Templates** - New starter templates (blog, portfolio, docs, etc.)
+- **Themes** - New color themes → See **[ADDING_THEMES.md](./ADDING_THEMES.md)**
+- **Components** - New UI components → See **[ADDING_COMPONENTS.md](./ADDING_COMPONENTS.md)**
+- **Templates** - New starter templates → See **[ADDING_TEMPLATES.md](./ADDING_TEMPLATES.md)**
 - **Examples** - Sample projects demonstrating Statue features
 - **Testing** - Additional test coverage or test improvements
+
+### Contribution Guides
+
+For specific contribution types, see these detailed guides:
+
+- **[ADDING_COMPONENTS.md](./ADDING_COMPONENTS.md)** - Step-by-step guide for adding new components
+- **[ADDING_TEMPLATES.md](./ADDING_TEMPLATES.md)** - How to create new site templates
+- **[ADDING_THEMES.md](./ADDING_THEMES.md)** - How to create new color themes
 
 ---
 
@@ -177,14 +186,16 @@ git checkout -b feature/my-new-feature
 
 ### Template Testing
 
-If you modified templates:
+If you modified templates, see **[ADDING_TEMPLATES.md](./ADDING_TEMPLATES.md)** for detailed testing instructions.
+
+Quick commands:
 
 ```bash
 # List available templates
 npm run template:list
 
 # Load a specific template
-npm run template:load blog
+npm run template:load blog --force
 
 # Test the template
 npm run dev
@@ -195,12 +206,23 @@ npm run template:save blog
 
 ### Component Testing
 
-If you added or modified components:
+If you added or modified components, see **[ADDING_COMPONENTS.md](./ADDING_COMPONENTS.md)** for detailed testing instructions.
 
+Key checks:
 - Test component with different props
 - Verify responsive behavior (mobile, tablet, desktop)
 - Check accessibility (keyboard navigation, screen readers)
 - Test with different themes
+
+### Theme Testing
+
+If you created a new theme, see **[ADDING_THEMES.md](./ADDING_THEMES.md)** for detailed testing instructions.
+
+Key checks:
+- Verify WCAG AA contrast ratios
+- Test on all page types
+- Check responsive design
+- Test with different components
 
 ### Content Testing
 
@@ -459,9 +481,12 @@ This script:
 
 ### Documentation
 
-- **[USER_GUIDE.md](./USER_GUIDE.md)** - Comprehensive user documentation
-- **[DEVELOPMENT.md](./DEVELOPMENT.md)** - Architecture and internal workings
 - **[README.md](./README.md)** - Quick start and overview
+- **[DEVELOPMENT.md](./DEVELOPMENT.md)** - Architecture and internal workings
+- **[content/docs/](./content/docs/)** - User documentation
+- **[ADDING_COMPONENTS.md](./ADDING_COMPONENTS.md)** - Component contribution guide
+- **[ADDING_TEMPLATES.md](./ADDING_TEMPLATES.md)** - Template contribution guide
+- **[ADDING_THEMES.md](./ADDING_THEMES.md)** - Theme contribution guide
 
 ### Community
 
@@ -479,11 +504,31 @@ For security issues, email: hello@accretional.com
 
 ### Component Development
 
+For adding new components, see **[ADDING_COMPONENTS.md](./ADDING_COMPONENTS.md)** for a complete step-by-step guide.
+
+General principles:
 - Keep components small and focused
 - Accept props for customization
 - Use CSS variables for theme support
-- Document all props in COMPONENTS_README.md
 - Test with different prop combinations
+
+### Theme Development
+
+For creating new themes, see **[ADDING_THEMES.md](./ADDING_THEMES.md)** for a complete step-by-step guide.
+
+General principles:
+- Use the full range of CSS variables
+- Test contrast ratios for accessibility
+- Document your theme in themes/README.md
+
+### Template Development
+
+For creating new templates, see **[ADDING_TEMPLATES.md](./ADDING_TEMPLATES.md)** for a complete step-by-step guide.
+
+General principles:
+- Keep templates minimal and focused
+- Include example content
+- Use components from the library, not custom forks
 
 ### Content Processing
 
@@ -517,20 +562,6 @@ const variables = {
 3. Document it in `content/docs/site-config.md`
 
 4. Add example usage in documentation
-
-### Theme Development
-
-- Use the full range of CSS variables
-- Test contrast ratios for accessibility
-- Provide both light and dark variants if appropriate
-- Document your theme in themes/README.md
-
-### Template Development
-
-- Keep templates minimal and focused
-- Include example content
-- Document template-specific features
-- Use components from the library, not custom forks
 
 ---
 
