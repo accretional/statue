@@ -524,6 +524,69 @@ git checkout src/routes content site.config.js
 
 ---
 
+## Automated PR Script
+
+**Want to skip the manual PR process?**
+
+Use the automated PR script from the root of your Statue site:
+
+```bash
+# From your Statue site's root directory
+./path/to/statue/scripts/autopr.sh template portfolio
+```
+
+**What it does:**
+1. Looks for `src/routes/`, `content/`, `site.config.js` in current directory
+2. Forks the statue repository (if needed)
+3. Creates a new branch
+4. Copies all template files to `templates/portfolio/`
+5. Commits and pushes the changes
+6. Opens a pull request automatically
+
+**Requirements:**
+- GitHub CLI (`gh`) installed and authenticated
+- Run from the root of your Statue site
+- Must have `src/routes/` directory (required)
+- Optionally includes `content/`, `site.config.js`, `static/`
+
+**Note:** You'll still need to add documentation manually after the PR is created. The script just handles the git workflow.
+
+---
+
+## Converting Existing Sites to Templates
+
+**Have a Statue site you want to contribute as a template?**
+
+The process is straightforward:
+
+1. **Identify the key files:**
+   - `src/routes/` - Your route files
+   - `content/` - Your example content
+   - `site.config.js` - Your config (sanitize personal info first!)
+
+2. **Copy to template directory:**
+   ```bash
+   mkdir -p templates/your-template/src
+   cp -r src/routes templates/your-template/src/
+   cp -r content templates/your-template/
+   cp site.config.js templates/your-template/
+   ```
+
+3. **Clean up the content:**
+   - Replace personal info with placeholders
+   - Use generic example content
+   - Ensure all imports use `$lib` (not `statue-ssg`)
+
+4. **Test it:**
+   ```bash
+   npm run template:load your-template --force
+   npm run dev
+   ```
+
+5. **Submit a PR** following the guidelines above
+
+---
+
 ## Questions?
 
 - Check existing templates in `templates/` for patterns

@@ -366,6 +366,37 @@ Document all props, provide examples, show common use cases.
 
 ---
 
+## Automated PR Script
+
+**Want to skip the manual PR process?**
+
+Use the automated PR script:
+
+```bash
+# Basic usage (component in current directory)
+./scripts/autopr.sh component YourComponent
+
+# With subdirectory (e.g., forms/YourComponent.svelte)
+./scripts/autopr.sh component YourComponent forms
+```
+
+**What it does:**
+1. Looks for `YourComponent.svelte` in the current directory
+2. Forks the statue repository (if needed)
+3. Creates a new branch
+4. Copies your component to `src/lib/components/[subdir/]YourComponent.svelte`
+5. Commits and pushes the changes
+6. Opens a pull request automatically
+
+**Requirements:**
+- GitHub CLI (`gh`) installed and authenticated
+- Your component file (e.g., `YourComponent.svelte`) in the current directory
+- Component name must match the filename
+
+**Note:** You'll still need to add documentation and examples manually after the PR is created. The script just handles the git workflow.
+
+---
+
 ## Questions?
 
 - Check existing components in `src/lib/components/` for patterns

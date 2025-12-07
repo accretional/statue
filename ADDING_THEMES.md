@@ -517,6 +517,34 @@ Use this checklist before submitting:
 
 ---
 
+## Automated PR Script
+
+**Want to skip the manual PR process?**
+
+Use the automated PR script:
+
+```bash
+# Basic usage (theme file in current directory)
+./scripts/autopr.sh theme sunset-orange
+```
+
+**What it does:**
+1. Looks for `sunset-orange.css` in the current directory
+2. Forks the statue repository (if needed)
+3. Creates a new branch
+4. Copies your theme to `src/lib/themes/sunset-orange.css`
+5. Commits and pushes the changes
+6. Opens a pull request automatically
+
+**Requirements:**
+- GitHub CLI (`gh`) installed and authenticated
+- Your theme CSS file (e.g., `sunset-orange.css`) in the current directory
+- Theme name must match the filename (without .css extension)
+
+**Note:** You'll still need to add documentation manually after the PR is created. The script just handles the git workflow.
+
+---
+
 ## Questions?
 
 - Check existing themes in `src/lib/themes/` for patterns
