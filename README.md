@@ -110,21 +110,42 @@ Or, write the page yourself: we recommend starting with an existing or minimal p
 
 ![editingpage2](https://github.com/user-attachments/assets/671ca181-91ca-4cce-8e5a-9ffd82184837)
 
-## Theme System (Brief)
+## Theme System
 Statue SSG ships with built-in themes. Import one in `src/lib/index.css`:
 
 ```css
 @import "tailwindcss";
-@import "statue-ssg/themes/blue.css"; /* or red.css, green.css, ... */
+@import "statue-ssg/themes/blue.css"; /* Available: blue, red, orange, green, purple, cyan, pink, black-white */
 
 @source "../";
 @source "../../node_modules/statue-ssg/src/**/*.{svelte,js,ts}";
 ```
 
-To create a custom theme or see all available themes, see `src/lib/themes/README.md` in this repository.
+Available themes: `blue.css`, `red.css`, `orange.css`, `green.css`, `purple.css`, `cyan.css`, `pink.css`, `black-white.css`
+
+For more information on theming and creating custom themes, see the [Themes Documentation](https://github.com/accretional/statue/blob/main/src/lib/themes/README.md).
 
 ## Svelte and Routes
 Markdown files are turned into pages automatically. You can keep adding SvelteKit routes under `src/routes/` (pages, layouts, endpoints). UI components can be customized with Tailwind.
+
+## Documentation
+
+### 📚 User Guides
+
+- **[Getting Started](./content/docs/get-started.md)** - Quick introduction to Statue and key concepts
+- **[New Site Checklist](./content/docs/new-site-checklist.md)** - Step-by-step setup guide for new sites
+- **[Templates](./content/docs/templates.md)** - Using and choosing templates
+- **[Themes](./content/docs/themes.md)** - Styling your site with themes and CSS
+- **[Components](./content/docs/components.md)** - Component reference and usage
+- **[Site Configuration](./content/docs/site-config.md)** - Configuring site.config.js
+- **[Routing](./content/docs/routing.md)** - Understanding how routing works
+
+### 🔧 Developer Resources
+
+- **[Components API](https://github.com/accretional/statue/blob/main/src/lib/components/COMPONENTS_README.md)** - Complete component reference with all props
+- **[Themes Guide](https://github.com/accretional/statue/blob/main/src/lib/themes/README.md)** - Creating custom themes
+- **[Development Guide](./DEVELOPMENT.md)** - Architecture and internals
+- **[Contributing](./CONTRIBUTING.md)** - How to contribute to Statue
 
 ## Build and Preview
 Generate the static site and preview it locally:

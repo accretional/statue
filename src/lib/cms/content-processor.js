@@ -279,6 +279,8 @@ const processTemplateVariables = (content) => {
     'social.facebook': siteConfig.social.facebook,
     'social.instagram': siteConfig.social.instagram,
     'social.youtube': siteConfig.social.youtube,
+    'social.discord': siteConfig.social.discord,
+    'social.reddit': siteConfig.social.reddit,
     
     // Legal information
     'legal.privacyPolicyLastUpdated': siteConfig.legal.privacyPolicyLastUpdated,
