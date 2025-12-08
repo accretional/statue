@@ -79,12 +79,41 @@
     <div class="controls">
       <label for="pageSize">Per page</label>
       <input id="pageSize" type="number" min="1" value="2" />
+      <button id="add-btn" class="btn" style="margin-left:8px;">＋ Add</button>
       <button id="autoplay-btn" class="btn" style="margin-left:8px;">Play</button>
     </div>
   </div>
   <div class="pagination" id="pagination"></div>
   <div class="grid" id="grid"></div>
   <div id="toast"></div>
+  
+  <!-- Add Variant Modal -->
+  <div id="add-modal" class="modal" style="display: none;">
+    <div class="modal-content" style="max-width: 720px;">
+      <div class="modal-header">
+        <h2>Add component preview</h2>
+        <button class="modal-close" onclick="closeAddModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <div style="margin-bottom: 12px;">
+          <input id="add-filter" type="text" placeholder="Filter by component/theme/file..." class="theme-text-input" />
+        </div>
+        <div style="max-height: 360px; overflow: auto; border: 1px solid #1f2937; border-radius: 8px;">
+          <table style="width:100%; border-collapse: collapse; font-size: 0.9rem;">
+            <thead>
+              <tr style="background:#0f172a;">
+                <th style="text-align:left; padding:8px; border-bottom:1px solid #1f2937;">Component</th>
+                <th style="text-align:left; padding:8px; border-bottom:1px solid #1f2937;">Theme</th>
+                <th style="text-align:left; padding:8px; border-bottom:1px solid #1f2937;">File</th>
+                <th style="text-align:left; padding:8px; border-bottom:1px solid #1f2937;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="add-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
   
   <!-- Save Theme Modal -->
   <div id="save-theme-modal" class="modal" style="display: none;">

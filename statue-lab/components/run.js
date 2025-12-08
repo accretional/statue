@@ -279,7 +279,7 @@ function sanitize(value) {
     .replace(/^-|-$/g, '');
 }
 
-async function createComposite(outputDir, componentName, variants, themeList = []) {
+async function createComposite(outputDir, compositeName, variants, themeList = []) {
   if (!variants.length) return;
   const templateHtml = await fs.promises.readFile(path.join(LAB_DIR, 'composite_template.html'), 'utf8');
   const templateJs = await fs.promises.readFile(path.join(LAB_DIR, 'composite_template.js'), 'utf8');
@@ -308,7 +308,7 @@ async function createComposite(outputDir, componentName, variants, themeList = [
     .replace('__FILE_SERVER_URL__', JSON.stringify(null));
 
   const finalHtml = templateHtml.replace('__COMPOSITE_JS__', jsContent);
-  const compositePath = path.join(outputDir, `${componentName}_COMPOSITE.html`);
+  const compositePath = path.join(outputDir, `${compositeName}_COMPOSITE.html`);
   await fs.promises.writeFile(compositePath, finalHtml, 'utf8');
   return compositePath;
 }
@@ -335,6 +335,9 @@ async function main() {
     compArgs.forEach((c) => components.push(c));
   }
 
+  const globalVariantsMeta = [];
+  const globalThemes = new Set();
+
   for (const componentName of components) {
     const componentPath = path.join(REPO_ROOT, 'src', 'lib', 'components', `${componentName}.svelte`);
     if (!fs.existsSync(componentPath)) {
@@ -349,12 +352,12 @@ async function main() {
     const baseOutputDir = path.join(outputRoot, componentName);
     ensureDir(baseOutputDir);
 
-    const variantsMeta = [];
     const baseProps = autoFixture.props || {};
 
     const themeValues = themeList.length ? themeList : [DEFAULT_THEME];
     const includeThemeInName = themeValues.length > 1;
     for (const theme of themeValues) {
+      globalThemes.add(theme);
       const props = { ...baseProps };
       let fileName = `${componentName}`;
       if (includeThemeInName) {
@@ -371,20 +374,24 @@ async function main() {
         outputFile
       });
 
-      variantsMeta.push({
-        file: path.basename(outputFile),
+      const relativeFile = path.relative(outputRoot, outputFile);
+      const variantEntry = {
+        file: relativeFile,
         component: componentName,
         theme,
         props
-      });
+      };
+      globalVariantsMeta.push(variantEntry);
       console.log(`✓ Generated ${path.relative(REPO_ROOT, outputFile)}`);
     }
 
-    if (opts.composite !== false) {
-      const compositePath = await createComposite(baseOutputDir, componentName, variantsMeta, themeValues);
-      if (compositePath) {
-        console.log(`✓ Composite viewer: ${path.relative(REPO_ROOT, compositePath)}`);
-      }
+    // Skip per-component composites to favor a single unified composite
+  }
+
+  if (opts.composite !== false && globalVariantsMeta.length) {
+    const compositePath = await createComposite(outputRoot, 'COMPONENTS', globalVariantsMeta, Array.from(globalThemes));
+    if (compositePath) {
+      console.log(`✓ Composite viewer: ${path.relative(REPO_ROOT, compositePath)}`);
     }
   }
 }

@@ -18,7 +18,8 @@ const state = {
   pageSize: 2,
   pinned: new Set(JSON.parse(localStorage.getItem('statueLabPinned') || '[]')),
   modifications: {},
-  themeModifications: {} // Per-variant overrides: { file: { --var: value } }
+  themeModifications: {}, // Per-variant overrides: { file: { --var: value } }
+  selected: JSON.parse(localStorage.getItem('statueLabSelected') || '[]') // Array of variant file names currently in the grid
 };
 
 function toast(msg) {
@@ -61,8 +62,9 @@ function scheduleAutoplay() {
 }
 
 function totalPages() {
-  const pinnedList = VARIANTS.filter((v) => state.pinned.has(v.file));
-  const unpinnedList = VARIANTS.filter((v) => !state.pinned.has(v.file));
+  const selected = state.selected.map((file) => VARIANT_MAP[file]).filter(Boolean);
+  const pinnedList = selected.filter((v) => state.pinned.has(v.file));
+  const unpinnedList = selected.filter((v) => !state.pinned.has(v.file));
   const effectivePageSize = Math.max(0, state.pageSize - pinnedList.length);
   return effectivePageSize > 0 ? Math.ceil(unpinnedList.length / effectivePageSize) : 1;
 }
@@ -200,6 +202,7 @@ function renderButtons(file, modified) {
   html += `<button class="btn" onclick="copy('${file}')">Copy Name</button>`;
   html += `<a class="btn" href="${file}" target="_blank">Open</a>`;
   html += `<button class="btn pin ${isPinned ? 'pinned' : ''}" onclick="togglePin('${file}')">${isPinned ? 'Unpin' : 'Pin'}</button>`;
+  html += `<button class="btn" onclick="removeVariant('${file}')">Remove</button>`;
   container.innerHTML = html;
 }
 
@@ -209,8 +212,9 @@ function render() {
   grid.innerHTML = '';
   pagination.innerHTML = '';
 
-  const pinnedList = VARIANTS.filter((v) => state.pinned.has(v.file));
-  const unpinnedList = VARIANTS.filter((v) => !state.pinned.has(v.file));
+  const selected = state.selected.map((file) => VARIANT_MAP[file]).filter(Boolean);
+  const pinnedList = selected.filter((v) => state.pinned.has(v.file));
+  const unpinnedList = selected.filter((v) => !state.pinned.has(v.file));
 
   const effectivePageSize = Math.max(0, state.pageSize - pinnedList.length);
   const total = effectivePageSize > 0 ? Math.ceil(unpinnedList.length / effectivePageSize) : 1;
@@ -218,6 +222,15 @@ function render() {
   const start = (currentPage - 1) * effectivePageSize;
   const end = start + effectivePageSize;
   const pageItems = [...pinnedList, ...unpinnedList.slice(start, end)];
+
+  if (!pageItems.length) {
+    const empty = document.createElement('div');
+    empty.style.padding = '32px';
+    empty.style.textAlign = 'center';
+    empty.style.color = '#cbd5e1';
+    empty.textContent = 'No components added yet. Click “＋ Add” to pick a component/theme preview.';
+    grid.appendChild(empty);
+  }
 
   pageItems.forEach((variant, idx) => {
     const card = document.createElement('div');
@@ -442,6 +455,84 @@ function resetTheme(file) {
   sendThemeStyles(file);
   renderButtons(file, !!state.modifications[file]);
   toast('Theme reset to defaults');
+}
+
+function addVariant(file) {
+  if (!file || !VARIANT_MAP[file]) return;
+  if (!state.selected.includes(file)) {
+    state.selected.push(file);
+    localStorage.setItem('statueLabSelected', JSON.stringify(state.selected));
+    sendThemeStyles(file);
+    render();
+    toast(`Added ${file}`);
+  }
+}
+
+function removeVariant(file) {
+  state.selected = state.selected.filter((f) => f !== file);
+  localStorage.setItem('statueLabSelected', JSON.stringify(state.selected));
+  state.pinned.delete(file);
+  localStorage.setItem('statueLabPinned', JSON.stringify(Array.from(state.pinned)));
+  delete state.modifications[file];
+  delete state.themeModifications[file];
+  render();
+}
+
+function closeAddModal() {
+  const modal = document.getElementById('add-modal');
+  if (modal) modal.style.display = 'none';
+}
+
+function openAddModal() {
+  const modal = document.getElementById('add-modal');
+  if (!modal) return;
+  modal.style.display = 'flex';
+  renderAddTable('');
+  const filter = document.getElementById('add-filter');
+  if (filter) {
+    filter.value = '';
+    filter.oninput = (e) => renderAddTable(e.target.value || '');
+  }
+}
+
+function renderAddTable(filterText) {
+  const body = document.getElementById('add-table-body');
+  if (!body) return;
+  body.innerHTML = '';
+  const ft = (filterText || '').toLowerCase();
+  const filtered = VARIANTS.filter((v) => {
+    const hay = `${v.component} ${v.theme} ${v.file}`.toLowerCase();
+    return hay.includes(ft);
+  });
+  filtered.forEach((v) => {
+    const tr = document.createElement('tr');
+    tr.style.borderBottom = '1px solid #1f2937';
+    const tdC = document.createElement('td');
+    tdC.style.padding = '8px';
+    tdC.textContent = v.component;
+    const tdT = document.createElement('td');
+    tdT.style.padding = '8px';
+    tdT.textContent = v.theme;
+    const tdF = document.createElement('td');
+    tdF.style.padding = '8px';
+    tdF.textContent = v.file;
+    const tdA = document.createElement('td');
+    tdA.style.padding = '8px';
+    const btn = document.createElement('button');
+    btn.className = 'btn';
+    btn.textContent = state.selected.includes(v.file) ? 'Added' : 'Add';
+    btn.disabled = state.selected.includes(v.file);
+    btn.onclick = () => {
+      addVariant(v.file);
+      renderAddTable(filterText);
+    };
+    tdA.appendChild(btn);
+    tr.appendChild(tdC);
+    tr.appendChild(tdT);
+    tr.appendChild(tdF);
+    tr.appendChild(tdA);
+    body.appendChild(tr);
+  });
 }
 
 window.saveTheme = function saveTheme(file) {

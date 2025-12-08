@@ -8,9 +8,9 @@ From the repo root:
 ```bash
 node statue-lab/components/run.js --component Hero
 ```
-Outputs land in `statue-lab/components/output/Hero/`:
-- `Hero_theme_black-white.html` (one file per theme)
-- `Hero_COMPOSITE.html` (viewer; open in a browser)
+Outputs land in `statue-lab/components/output/`:
+- `Hero/Hero_theme_black-white.html` (one file per theme)
+- `COMPONENTS_COMPOSITE.html` (single viewer for everything; open in a browser)
 
 Common flags:
 - `--component <Name|all|Name1 Name2 ...>`: Component(s) in `src/lib/components`. `all` scans every `.svelte` file in `src/lib/components`. Multiple names are allowed.
@@ -29,15 +29,16 @@ node statue-lab/components/run.js \
 
 - No fixture files needed. Props are inferred from each component’s `export let` defaults (non-literal defaults fall back to empty strings).
 - One HTML per theme per component (filenames get a `_theme_<name>` suffix when multiple themes are present).
-- The composite viewer for that component.
+- A single composite viewer for all generated components/themes in that run.
 
 ## Composite viewer
 
-Open `*_COMPOSITE.html` to:
-- Page through variants; pin favorites (saved to localStorage).
+Open `COMPONENTS_COMPOSITE.html` to:
+- Click “＋ Add” to pick which component/theme HTML to preview (from the generated outputs).
+- Page through selected previews; pin favorites (saved to localStorage).
 - Edit prop values inline and re‑render the iframe via `postMessage`.
 - Adjust theme variables visually, reset, or download/copy the generated theme CSS.
-- Reset to defaults or copy the variant filename.
+- Remove previews you don’t need, or copy/open any variant file.
 
 ## Notes
 
