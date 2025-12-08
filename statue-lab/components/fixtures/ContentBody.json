@@ -1,8 +1,0 @@
-{
-  "component": "ContentBody",
-  "themes": ["black-white"],
-  "props": {
-    "content": "<h1>Welcome</h1><p>This is a rich text preview with <strong>bold</strong>, <em>italic</em>, <a href='/docs'>links</a>, lists, and code.</p><ul><li>First item</li><li>Second item</li></ul><pre><code>npm run dev</code></pre>"
-  },
-  "variants": {}
-}
