@@ -1,5 +1,9 @@
 const VARIANTS = __VARIANTS_JSON__;
 const PROP_KEYS = __PROP_KEYS_JSON__;
+const THEME_VARIABLES = __THEME_VARIABLES_JSON__;
+const DEFAULT_THEME = __DEFAULT_THEME__;
+const REPO_ROOT = __REPO_ROOT__;
+const FILE_SERVER_URL = __FILE_SERVER_URL__;
 const VARIANT_MAP = VARIANTS.reduce((acc, v) => {
   acc[v.file] = v;
   return acc;
@@ -11,9 +15,10 @@ let isAutoplay = false;
 const AUTOPLAY_INTERVAL = 4000;
 
 const state = {
-  pageSize: 12,
+  pageSize: 2,
   pinned: new Set(JSON.parse(localStorage.getItem('statueLabPinned') || '[]')),
-  modifications: {}
+  modifications: {},
+  themeModifications: {} // Per-component theme modifications: { file: { --var: value } }
 };
 
 function toast(msg) {
@@ -137,6 +142,37 @@ function sendProps(file, props) {
   iframe.contentWindow?.postMessage({ type: 'STATUE_LAB_APPLY', props }, '*');
 }
 
+function sendThemeStyles(file) {
+  if (!file) return;
+  const themeMods = state.themeModifications[file] || {};
+  const cssVars = {};
+  for (const [key, value] of Object.entries(themeMods)) {
+    cssVars[key] = value;
+  }
+  // Send to specific iframe
+  const iframe = document.getElementById(`iframe-${file}`);
+  if (iframe) {
+    iframe.contentWindow?.postMessage({ 
+      type: 'STATUE_LAB_APPLY_THEME', 
+      cssVars 
+    }, '*');
+  }
+}
+
+function getThemeForFile(file) {
+  // Get theme modifications for this file, or default theme variables
+  if (state.themeModifications[file]) {
+    return state.themeModifications[file];
+  }
+  // Initialize with default theme variables
+  const defaults = {};
+  for (const [key, data] of Object.entries(THEME_VARIABLES || {})) {
+    defaults[key] = data.value;
+  }
+  state.themeModifications[file] = defaults;
+  return defaults;
+}
+
 function toggleEdit(file) {
   const panel = document.getElementById(`edit-${file}`);
   if (!panel) return;
@@ -151,8 +187,10 @@ function renderButtons(file, modified) {
   const container = document.getElementById(`actions-${file}`);
   if (!container) return;
   const isPinned = state.pinned.has(file);
+  const hasThemeMods = state.themeModifications[file] && Object.keys(state.themeModifications[file]).length > 0;
   let html = '';
-  html += `<button class="btn" onclick="toggleEdit('${file}')">Edit</button>`;
+  html += `<button class="btn" onclick="toggleEdit('${file}')">Edit Props</button>`;
+  html += `<button class="btn ${hasThemeMods ? 'btn-theme-active' : ''}" onclick="toggleThemeEditor('${file}')">🎨 Theme</button>`;
   html += `<button class="btn" onclick="copy('${file}')">Copy Name</button>`;
   html += `<a class="btn" href="${file}" target="_blank">Open</a>`;
   html += `<button class="btn pin ${isPinned ? 'pinned' : ''}" onclick="togglePin('${file}')">${isPinned ? 'Unpin' : 'Pin'}</button>`;
@@ -199,6 +237,11 @@ function render() {
     editPanel.className = 'edit-panel';
     editPanel.id = `edit-${variant.file}`;
 
+    const themePanel = document.createElement('div');
+    themePanel.className = 'edit-panel theme-panel';
+    themePanel.id = `theme-${variant.file}`;
+    themePanel.style.display = 'none';
+
     const actions = document.createElement('div');
     actions.className = 'card-header';
     actions.style.borderBottom = '1px solid #1f2937';
@@ -216,8 +259,12 @@ function render() {
     card.appendChild(header);
     card.appendChild(actions);
     card.appendChild(editPanel);
+    card.appendChild(themePanel);
     card.appendChild(iframeWrap);
     grid.appendChild(card);
+    
+    // Initialize theme for this variant
+    getThemeForFile(variant.file);
 
     renderButtons(variant.file, !!state.modifications[variant.file]);
   });
@@ -244,8 +291,269 @@ function updatePageSize(size) {
   }
 }
 
+function toggleThemeEditor(file) {
+  const panel = document.getElementById(`theme-${file}`);
+  if (!panel) return;
+  const isHidden = panel.style.display === 'none' || !panel.style.display;
+  panel.style.display = isHidden ? 'block' : 'none';
+  if (isHidden) {
+    renderThemeEditor(file, panel);
+  }
+}
+
+function renderThemeEditor(file, panel) {
+  if (!panel) return;
+  panel.innerHTML = '';
+  
+  // Get theme variables for this file
+  const themeVars = getThemeForFile(file);
+  const variables = Object.entries(THEME_VARIABLES || {}).sort(([a], [b]) => a.localeCompare(b));
+  
+  variables.forEach(([key, data]) => {
+    const row = document.createElement('div');
+    row.className = 'theme-edit-row';
+    
+    const label = document.createElement('label');
+    label.textContent = data.label || key;
+    label.title = key;
+    label.className = 'theme-edit-label';
+    
+    const currentValue = themeVars[key] || data.value;
+    
+    if (data.type === 'color') {
+      const colorInput = document.createElement('input');
+      colorInput.type = 'color';
+      colorInput.id = `theme-${file}-${key}`;
+      colorInput.value = normalizeColorValue(currentValue);
+      colorInput.className = 'theme-color-input';
+      colorInput.addEventListener('input', (e) => {
+        if (!state.themeModifications[file]) {
+          state.themeModifications[file] = {};
+        }
+        state.themeModifications[file][key] = e.target.value;
+        textInput.value = e.target.value;
+        sendThemeStyles(file);
+        renderButtons(file, !!state.modifications[file]);
+      });
+      
+      const textInput = document.createElement('input');
+      textInput.type = 'text';
+      textInput.value = currentValue;
+      textInput.className = 'theme-text-input';
+      textInput.addEventListener('input', (e) => {
+        const newValue = e.target.value;
+        if (!state.themeModifications[file]) {
+          state.themeModifications[file] = {};
+        }
+        state.themeModifications[file][key] = newValue;
+        const normalized = normalizeColorValue(newValue);
+        if (colorInput.value !== normalized) {
+          colorInput.value = normalized;
+        }
+        sendThemeStyles(file);
+        renderButtons(file, !!state.modifications[file]);
+      });
+      
+      const inputGroup = document.createElement('div');
+      inputGroup.className = 'theme-input-group';
+      inputGroup.appendChild(colorInput);
+      inputGroup.appendChild(textInput);
+      
+      row.appendChild(label);
+      row.appendChild(inputGroup);
+    } else {
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.id = `theme-${file}-${key}`;
+      input.value = currentValue;
+      input.className = 'theme-text-input';
+      input.addEventListener('input', (e) => {
+        if (!state.themeModifications[file]) {
+          state.themeModifications[file] = {};
+        }
+        state.themeModifications[file][key] = e.target.value;
+        sendThemeStyles(file);
+        renderButtons(file, !!state.modifications[file]);
+      });
+      row.appendChild(label);
+      row.appendChild(input);
+    }
+    
+    panel.appendChild(row);
+  });
+  
+  const actions = document.createElement('div');
+  actions.className = 'theme-editor-actions';
+  const resetBtn = document.createElement('button');
+  resetBtn.className = 'btn';
+  resetBtn.textContent = 'Reset';
+  resetBtn.onclick = () => resetTheme(file);
+  const saveBtn = document.createElement('button');
+  saveBtn.className = 'btn btn-primary';
+  saveBtn.textContent = 'Save Theme';
+  saveBtn.onclick = function() {
+    if (window.saveTheme) {
+      window.saveTheme(file);
+    } else {
+      console.error('saveTheme function not found');
+      toast('Save theme function not available. Please refresh the page.');
+    }
+  };
+  actions.appendChild(resetBtn);
+  actions.appendChild(saveBtn);
+  panel.appendChild(actions);
+}
+
+function normalizeColorValue(value) {
+  // Convert various color formats to hex for color input
+  if (value.startsWith('#')) return value;
+  if (value.startsWith('rgb')) {
+    // Simple RGB to hex conversion (basic)
+    const match = value.match(/\d+/g);
+    if (match && match.length >= 3) {
+      const r = parseInt(match[0]).toString(16).padStart(2, '0');
+      const g = parseInt(match[1]).toString(16).padStart(2, '0');
+      const b = parseInt(match[2]).toString(16).padStart(2, '0');
+      return `#${r}${g}${b}`;
+    }
+  }
+  // Try to map common color names
+  const colorMap = {
+    'white': '#ffffff',
+    'black': '#000000',
+    'red': '#ff0000',
+    'green': '#00ff00',
+    'blue': '#0000ff'
+  };
+  return colorMap[value.toLowerCase()] || '#000000';
+}
+
+function resetTheme(file) {
+  if (!file) return;
+  delete state.themeModifications[file];
+  const panel = document.getElementById(`theme-${file}`);
+  if (panel) {
+    renderThemeEditor(file, panel);
+  }
+  sendThemeStyles(file);
+  renderButtons(file, !!state.modifications[file]);
+  toast('Theme reset to defaults');
+}
+
+window.saveTheme = function saveTheme(file) {
+  if (!file) {
+    console.error('saveTheme called without file parameter');
+    toast('Error: No component selected');
+    return;
+  }
+  
+  try {
+    const themeName = prompt('Enter theme name (e.g., my-custom-blue):', `lab-custom-${Date.now()}`);
+    if (!themeName || !themeName.trim()) {
+      return;
+    }
+    
+    const sanitizedName = themeName.trim().toLowerCase().replace(/[^a-z0-9-]/g, '-');
+    
+    // Get theme modifications for this file
+    const themeVars = state.themeModifications[file] || {};
+    
+    // Generate CSS content
+    let css = `/* ${themeName} Theme - Generated by Statue Lab */\n@theme {\n`;
+    // Use theme vars if available, otherwise use defaults
+    const allVars = {};
+    for (const [key, data] of Object.entries(THEME_VARIABLES || {})) {
+      allVars[key] = themeVars[key] !== undefined ? themeVars[key] : data.value;
+    }
+    for (const [key, value] of Object.entries(allVars).sort(([a], [b]) => a.localeCompare(b))) {
+      css += `  ${key}: ${value};\n`;
+    }
+    css += '}\n';
+    
+    // Show save dialog with download option
+    const modal = document.getElementById('save-theme-modal');
+    if (!modal) {
+      console.error('Save theme modal not found');
+      toast('Error: Modal element not found');
+      return;
+    }
+    
+    // Disconnect observer temporarily to prevent loops
+    if (window.saveThemeObserver) {
+      window.saveThemeObserver.disconnect();
+    }
+    
+    // Update all elements at once
+    const nameEl = document.getElementById('save-theme-name');
+    const cssEl = document.getElementById('save-theme-css');
+    const pathEl = document.getElementById('save-theme-path');
+    const name2El = document.getElementById('save-theme-name-2');
+    const name3El = document.getElementById('save-theme-name-3');
+    
+    if (nameEl) nameEl.textContent = sanitizedName;
+    if (cssEl) cssEl.textContent = css;
+    if (pathEl) pathEl.textContent = `src/lib/themes/${sanitizedName}.css`;
+    if (name2El) name2El.textContent = sanitizedName;
+    if (name3El) name3El.textContent = sanitizedName;
+    
+    // Show modal
+    modal.style.display = 'flex';
+    
+    // Reconnect observer after a delay to prevent loops
+    setTimeout(() => {
+      if (window.saveThemeObserver && modal) {
+        window.saveThemeObserver.observe(modal, { childList: true, subtree: true, characterData: true });
+      }
+    }, 200);
+    
+    // Setup copy buttons
+    const copyCssBtn = document.getElementById('copy-css-btn');
+    const copyImportBtn = document.getElementById('copy-import-btn');
+    const downloadBtn = document.getElementById('download-theme-btn');
+    
+    if (copyCssBtn) {
+      copyCssBtn.onclick = () => {
+        copy(css);
+        toast('CSS copied to clipboard!');
+      };
+    }
+    
+    if (copyImportBtn) {
+      copyImportBtn.onclick = () => {
+        const importLine = `@import "statue-ssg/src/lib/themes/${sanitizedName}.css";`;
+        copy(importLine);
+        toast('Import line copied!');
+      };
+    }
+    
+    if (downloadBtn) {
+      downloadBtn.onclick = () => {
+        const blob = new Blob([css], { type: 'text/css' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${sanitizedName}.css`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        toast('Theme file downloaded!');
+      };
+    }
+  } catch (error) {
+    console.error('Error showing save theme modal:', error);
+    toast('Error showing save dialog');
+  }
+};
+
+window.closeSaveThemeModal = function closeSaveThemeModal() {
+  const modal = document.getElementById('save-theme-modal');
+  if (modal) modal.style.display = 'none';
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   const input = document.getElementById('pageSize');
+  if (input) input.value = state.pageSize;
   input.addEventListener('change', (e) => updatePageSize(e.target.value));
   render();
   const btn = document.getElementById('autoplay-btn');

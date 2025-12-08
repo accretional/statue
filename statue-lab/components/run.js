@@ -128,6 +128,39 @@ async function loadThemeCss(themeName) {
   return normalized;
 }
 
+function extractThemeVariables(css) {
+  const variables = {};
+  // Match CSS variable declarations: --variable-name: value;
+  const regex = /--([a-zA-Z0-9-]+):\s*([^;]+);/g;
+  let match;
+  while ((match = regex.exec(css)) !== null) {
+    const varName = `--${match[1]}`;
+    const value = match[2].trim();
+    variables[varName] = value;
+  }
+  return variables;
+}
+
+function isColorValue(value) {
+  // Check if value looks like a color (hex, rgb, rgba, hsl, named colors)
+  const colorPattern = /^(#[0-9a-fA-F]{3,8}|rgb\(|rgba\(|hsl\(|hsla\(|[a-zA-Z]+)$/;
+  return colorPattern.test(value.trim());
+}
+
+async function loadThemeVariables(themeName) {
+  const css = await loadThemeCss(themeName);
+  const variables = extractThemeVariables(css);
+  const themeData = {};
+  for (const [key, value] of Object.entries(variables)) {
+    themeData[key] = {
+      value: value,
+      type: isColorValue(value) ? 'color' : 'text',
+      label: key.replace(/^--color-/, '').replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+    };
+  }
+  return themeData;
+}
+
 function baseStyles() {
   return `
     :root { color-scheme: dark; }
@@ -194,9 +227,17 @@ async function buildVariantHTML({ componentPath, componentName, props, theme, ou
     }
     render(initialProps);
     window.addEventListener('message', (event) => {
-      if (!event.data || event.data.type !== 'STATUE_LAB_APPLY') return;
+      if (!event.data) return;
+      if (event.data.type === 'STATUE_LAB_APPLY') {
       const next = event.data.props || {};
       render(next);
+      } else if (event.data.type === 'STATUE_LAB_APPLY_THEME') {
+        const cssVars = event.data.cssVars || {};
+        const root = document.documentElement;
+        for (const [key, value] of Object.entries(cssVars)) {
+          root.style.setProperty(key, value);
+        }
+      }
     });
     window.__STATUE_LAB_APPLY = (props) => render(props);
   </script>
@@ -213,7 +254,7 @@ function sanitize(value) {
     .replace(/^-|-$/g, '');
 }
 
-async function createComposite(outputDir, componentName, variants) {
+async function createComposite(outputDir, componentName, variants, themeList = []) {
   if (!variants.length) return;
   const templateHtml = await fs.promises.readFile(path.join(LAB_DIR, 'composite_template.html'), 'utf8');
   const templateJs = await fs.promises.readFile(path.join(LAB_DIR, 'composite_template.js'), 'utf8');
@@ -225,9 +266,17 @@ async function createComposite(outputDir, componentName, variants) {
     }, new Set())
   );
 
+  // Load theme variables for the first theme (or default)
+  const defaultTheme = themeList.length > 0 ? themeList[0] : DEFAULT_THEME;
+  const themeVariables = await loadThemeVariables(defaultTheme);
+
   const jsContent = templateJs
     .replace('__VARIANTS_JSON__', JSON.stringify(variants))
-    .replace('__PROP_KEYS_JSON__', JSON.stringify(propKeys));
+    .replace('__PROP_KEYS_JSON__', JSON.stringify(propKeys))
+    .replace('__THEME_VARIABLES_JSON__', JSON.stringify(themeVariables))
+    .replace('__DEFAULT_THEME__', JSON.stringify(defaultTheme))
+    .replace('__REPO_ROOT__', JSON.stringify(REPO_ROOT))
+    .replace('__FILE_SERVER_URL__', JSON.stringify(null));
 
   const finalHtml = templateHtml.replace('__COMPOSITE_JS__', jsContent);
   const compositePath = path.join(outputDir, `${componentName}_COMPOSITE.html`);
@@ -335,7 +384,7 @@ async function main() {
     }
 
     if (opts.composite !== false) {
-      const compositePath = await createComposite(baseOutputDir, componentName, variantsMeta);
+      const compositePath = await createComposite(baseOutputDir, componentName, variantsMeta, themeValues);
       if (compositePath) {
         console.log(`✓ Composite viewer: ${path.relative(REPO_ROOT, compositePath)}`);
       }

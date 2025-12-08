@@ -12,6 +12,9 @@
     .controls { display: flex; gap: 12px; align-items: center; }
     .controls input { background: #111827; border: 1px solid #1f2937; color: #e5e7eb; padding: 6px 10px; border-radius: 6px; width: 72px; }
     .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 16px; padding: 16px; }
+    @media (min-width: 900px) {
+      .grid { grid-template-columns: repeat(2, 1fr); }
+    }
     .card { border: 1px solid #1f2937; border-radius: 10px; overflow: hidden; background: #0f172a; box-shadow: 0 10px 25px rgba(0,0,0,0.35); display: flex; flex-direction: column; height: 560px; opacity: 0; transform: translateY(12px); }
     .card.pinned { border-color: #f59e0b; box-shadow: 0 10px 30px rgba(245,158,11,0.25); }
     .card-header { padding: 10px 12px; background: #111827; border-bottom: 1px solid #1f2937; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
@@ -22,6 +25,9 @@
     .btn:hover { background: #273449; }
     .btn.pin.pinned { background: #f59e0b; color: #0b0b0f; border-color: #f59e0b; font-weight: 700; }
     .edit-panel { display: none; border-bottom: 1px solid #1f2937; padding: 10px 12px; background: #0b1220; max-height: 210px; overflow: auto; }
+    .theme-panel { max-height: 300px; }
+    .btn-theme-active { background: #3b82f6; border-color: #3b82f6; color: white; }
+    .btn-theme-active:hover { background: #2563eb; }
     .edit-row { display: flex; gap: 8px; align-items: center; margin-bottom: 6px; }
     .edit-row label { width: 160px; font-family: "SFMono-Regular", monospace; font-size: 0.82rem; color: #cbd5e1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .edit-row input { flex: 1; background: #0f172a; border: 1px solid #1f2937; color: #e5e7eb; padding: 6px 8px; border-radius: 6px; font-family: "SFMono-Regular", monospace; font-size: 0.85rem; }
@@ -43,6 +49,23 @@
     @keyframes float { from { transform: translateY(0); opacity: 0.7; } to { transform: translateY(-80px); opacity: 0.2; } }
     @keyframes bgShift { from { background-position: 0 0, 100% 20%; } to { background-position: 40% 20%, 60% 0%; filter: hue-rotate(12deg); } }
     @keyframes fadeSlide { from { opacity: 0; transform: translateY(16px) scale(0.99); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    /* Theme Editor Styles */
+    .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .modal-content { background: #0f172a; border: 1px solid #1f2937; border-radius: 10px; max-width: 800px; width: 100%; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+    .modal-header { padding: 16px 20px; border-bottom: 1px solid #1f2937; display: flex; justify-content: space-between; align-items: center; }
+    .modal-header h2 { margin: 0; font-size: 1.2rem; }
+    .modal-close { background: none; border: none; color: #e5e7eb; font-size: 24px; cursor: pointer; padding: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 4px; }
+    .modal-close:hover { background: #1f2937; }
+    .modal-body { padding: 20px; overflow-y: auto; flex: 1; }
+    .theme-edit-row { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; }
+    .theme-edit-label { width: 180px; font-size: 0.9rem; color: #cbd5e1; flex-shrink: 0; }
+    .theme-input-group { display: flex; gap: 8px; flex: 1; align-items: center; }
+    .theme-color-input { width: 60px; height: 36px; border: 1px solid #1f2937; border-radius: 6px; cursor: pointer; background: #0f172a; }
+    .theme-text-input { flex: 1; background: #0f172a; border: 1px solid #1f2937; color: #e5e7eb; padding: 8px 10px; border-radius: 6px; font-family: "SFMono-Regular", monospace; font-size: 0.85rem; }
+    .theme-editor-actions { display: flex; justify-content: flex-end; gap: 8px; padding-top: 16px; border-top: 1px solid #1f2937; margin-top: 16px; }
+    .btn-primary { background: #3b82f6; border-color: #3b82f6; color: white; }
+    .btn-primary:hover { background: #2563eb; }
+    code { background: #1f2937; padding: 2px 6px; border-radius: 4px; font-size: 0.85rem; }
   </style>
 </head>
 <body>
@@ -55,15 +78,69 @@
     <div class="title">Statue Component Lab</div>
     <div class="controls">
       <label for="pageSize">Per page</label>
-      <input id="pageSize" type="number" min="1" value="12" />
+      <input id="pageSize" type="number" min="1" value="2" />
       <button id="autoplay-btn" class="btn" style="margin-left:8px;">Play</button>
     </div>
   </div>
   <div class="pagination" id="pagination"></div>
   <div class="grid" id="grid"></div>
   <div id="toast"></div>
+  
+  <!-- Save Theme Modal -->
+  <div id="save-theme-modal" class="modal" style="display: none;">
+    <div class="modal-content" style="max-width: 600px;">
+      <div class="modal-header">
+        <h2>Save Theme: <span id="save-theme-name"></span></h2>
+        <button class="modal-close" onclick="closeSaveThemeModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <details>
+          <summary style="cursor: pointer; margin-bottom: 8px;">Preview CSS</summary>
+          <pre id="save-theme-css" style="background: #111827; padding: 12px; border-radius: 6px; overflow: auto; max-height: 300px; font-size: 0.85rem;"></pre>
+        </details>
+        <p style="margin-top: 16px; font-size: 0.9rem; opacity: 0.8;">
+          <strong>Next steps:</strong><br>
+          1. Download the CSS file and save it to <code>src/lib/themes/<span id="save-theme-name-2"></span>.css</code><br>
+          2. Add <code>@import "statue-ssg/src/lib/themes/<span id="save-theme-name-3"></span>.css";</code> to your <code>src/lib/index.css</code><br>
+          <em style="font-size: 0.85rem; opacity: 0.7;">Note: This saves the theme for the current component variant only.</em>
+        </p>
+        <div style="margin-bottom: 16px;">
+          <button id="download-theme-btn" class="btn btn-primary" style="margin-right: 8px;">Download CSS File</button>
+          <button id="copy-css-btn" class="btn">Copy CSS</button>
+          <button id="copy-import-btn" class="btn">Copy Import Line</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
   <script>
 __COMPOSITE_JS__
+  </script>
+  <script>
+    // Simple placeholder updater - no complex wrapping needed
+    function updateSaveThemeNamePlaceholders() {
+      const name = document.getElementById('save-theme-name')?.textContent;
+      if (name) {
+        const name2 = document.getElementById('save-theme-name-2');
+        const name3 = document.getElementById('save-theme-name-3');
+        if (name2 && name2.textContent !== name) name2.textContent = name;
+        if (name3 && name3.textContent !== name) name3.textContent = name;
+      }
+    }
+    
+    // Watch for changes to update placeholders (with debouncing to prevent loops)
+    const saveThemeModal = document.getElementById('save-theme-modal');
+    if (saveThemeModal) {
+      let updateTimeout = null;
+      window.saveThemeObserver = new MutationObserver(() => {
+        // Debounce updates to prevent infinite loops
+        if (updateTimeout) clearTimeout(updateTimeout);
+        updateTimeout = setTimeout(() => {
+          updateSaveThemeNamePlaceholders();
+        }, 50);
+      });
+      window.saveThemeObserver.observe(saveThemeModal, { childList: true, subtree: true, characterData: true });
+    }
   </script>
 </body>
 </html>
