@@ -1,4 +1,12 @@
 #!/bin/bash
+## autopr.sh - Automate PR submissions to Statue repo
+#
+# Usage:
+#   ./autopr.sh component <Name> [subdir]   # Submit a Svelte component
+#   ./autopr.sh theme <name>                # Submit a CSS theme
+#   ./autopr.sh template <name>             # Submit a template
+#   ./autopr.sh all <name>                  # Template + components + themes
+#
 
 set -e  # Exit on error
 
