@@ -96,20 +96,12 @@
       </div>
       <div class="modal-body">
         <div style="margin-bottom: 12px;">
-          <input id="add-filter" type="text" placeholder="Filter by component/theme/file..." class="theme-text-input" />
+          <input id="add-filter-components" type="text" placeholder="Filter components..." class="theme-text-input" />
         </div>
-        <div style="max-height: 360px; overflow: auto; border: 1px solid #1f2937; border-radius: 8px;">
-          <table style="width:100%; border-collapse: collapse; font-size: 0.9rem;">
-            <thead>
-              <tr style="background:#0f172a;">
-                <th style="text-align:left; padding:8px; border-bottom:1px solid #1f2937;">Component</th>
-                <th style="text-align:left; padding:8px; border-bottom:1px solid #1f2937;">Theme</th>
-                <th style="text-align:left; padding:8px; border-bottom:1px solid #1f2937;">File</th>
-                <th style="text-align:left; padding:8px; border-bottom:1px solid #1f2937;">Action</th>
-              </tr>
-            </thead>
-            <tbody id="add-table-body"></tbody>
-          </table>
+        <div id="component-list" style="max-height: 200px; overflow: auto; border: 1px solid #1f2937; border-radius: 8px; margin-bottom: 12px;"></div>
+        <div id="theme-list" style="max-height: 160px; overflow: auto; border: 1px solid #1f2937; border-radius: 8px; display: none;"></div>
+        <div style="margin-top: 12px; display: flex; gap: 8px; justify-content: flex-end;">
+          <button class="btn" onclick="closeAddModal()">Close</button>
         </div>
       </div>
     </div>

@@ -487,52 +487,94 @@ function openAddModal() {
   const modal = document.getElementById('add-modal');
   if (!modal) return;
   modal.style.display = 'flex';
-  renderAddTable('');
-  const filter = document.getElementById('add-filter');
+  renderComponentList('');
+  const filter = document.getElementById('add-filter-components');
   if (filter) {
     filter.value = '';
-    filter.oninput = (e) => renderAddTable(e.target.value || '');
+    filter.oninput = (e) => renderComponentList(e.target.value || '');
   }
 }
 
-function renderAddTable(filterText) {
-  const body = document.getElementById('add-table-body');
-  if (!body) return;
-  body.innerHTML = '';
+function renderComponentList(filterText) {
+  const compList = document.getElementById('component-list');
+  const themeList = document.getElementById('theme-list');
+  if (!compList || !themeList) return;
+  compList.innerHTML = '';
+  themeList.style.display = 'none';
+  themeList.innerHTML = '';
+
   const ft = (filterText || '').toLowerCase();
-  const filtered = VARIANTS.filter((v) => {
-    const hay = `${v.component} ${v.theme} ${v.file}`.toLowerCase();
-    return hay.includes(ft);
+  const byComponent = VARIANTS.reduce((acc, v) => {
+    acc[v.component] = acc[v.component] || [];
+    acc[v.component].push(v);
+    return acc;
+  }, {});
+
+  const components = Object.keys(byComponent)
+    .filter((name) => name.toLowerCase().includes(ft))
+    .sort((a, b) => a.localeCompare(b));
+
+  components.forEach((name) => {
+    const card = document.createElement('div');
+    card.style.padding = '10px 12px';
+    card.style.borderBottom = '1px solid #1f2937';
+    card.style.cursor = 'pointer';
+    card.onmouseenter = () => (card.style.background = '#111827');
+    card.onmouseleave = () => (card.style.background = 'transparent');
+    card.textContent = name;
+    card.onclick = () => renderThemeList(name, byComponent[name]);
+    compList.appendChild(card);
   });
-  filtered.forEach((v) => {
-    const tr = document.createElement('tr');
-    tr.style.borderBottom = '1px solid #1f2937';
-    const tdC = document.createElement('td');
-    tdC.style.padding = '8px';
-    tdC.textContent = v.component;
-    const tdT = document.createElement('td');
-    tdT.style.padding = '8px';
-    tdT.textContent = v.theme;
-    const tdF = document.createElement('td');
-    tdF.style.padding = '8px';
-    tdF.textContent = v.file;
-    const tdA = document.createElement('td');
-    tdA.style.padding = '8px';
-    const btn = document.createElement('button');
-    btn.className = 'btn';
-    btn.textContent = state.selected.includes(v.file) ? 'Added' : 'Add';
-    btn.disabled = state.selected.includes(v.file);
-    btn.onclick = () => {
-      addVariant(v.file);
-      renderAddTable(filterText);
-    };
-    tdA.appendChild(btn);
-    tr.appendChild(tdC);
-    tr.appendChild(tdT);
-    tr.appendChild(tdF);
-    tr.appendChild(tdA);
-    body.appendChild(tr);
-  });
+
+  if (!components.length) {
+    const empty = document.createElement('div');
+    empty.style.padding = '10px 12px';
+    empty.textContent = 'No components match.';
+    empty.style.color = '#cbd5e1';
+    compList.appendChild(empty);
+  }
+}
+
+function renderThemeList(componentName, variants) {
+  const themeList = document.getElementById('theme-list');
+  if (!themeList) return;
+  themeList.style.display = 'block';
+  themeList.innerHTML = '';
+
+  const byTheme = variants.reduce((acc, v) => {
+    acc[v.theme] = acc[v.theme] || [];
+    acc[v.theme].push(v);
+    return acc;
+  }, {});
+
+  Object.entries(byTheme)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .forEach(([theme, entries]) => {
+      const row = document.createElement('div');
+      row.style.padding = '10px 12px';
+      row.style.borderBottom = '1px solid #1f2937';
+      const label = document.createElement('div');
+      label.style.fontWeight = '600';
+      label.textContent = `${componentName} · ${theme}`;
+      const files = document.createElement('div');
+      files.style.display = 'flex';
+      files.style.flexWrap = 'wrap';
+      files.style.gap = '8px';
+      entries.forEach((v) => {
+        const btn = document.createElement('button');
+        btn.className = 'btn';
+        btn.textContent = state.selected.includes(v.file) ? 'Added' : 'Add';
+        btn.disabled = state.selected.includes(v.file);
+        btn.onclick = () => {
+          addVariant(v.file);
+          renderThemeList(componentName, variants);
+        };
+        files.appendChild(btn);
+      });
+      row.appendChild(label);
+      row.appendChild(files);
+      themeList.appendChild(row);
+    });
 }
 
 window.saveTheme = function saveTheme(file) {
@@ -659,9 +701,5 @@ document.addEventListener('DOMContentLoaded', () => {
   if (isAutoplay) scheduleAutoplay();
   const addBtn = document.getElementById('add-btn');
   if (addBtn) addBtn.addEventListener('click', openAddModal);
-  if (!state.selected.length) {
-    openAddModal();
-  } else {
-    render();
-  }
+  render();
 });
