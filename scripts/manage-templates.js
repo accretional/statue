@@ -41,7 +41,12 @@ program
 
     console.log(chalk.blue(`📂 Loading template '${templateName}' into workspace...`));
     if (!options.force) {
-        console.log(chalk.yellow('⚠️  Warning: This will overwrite your src/routes and content directories.'));
+        console.log(chalk.yellow('⚠️  Warning: This will overwrite:'));
+        console.log(chalk.yellow('   - src/routes/'));
+        console.log(chalk.yellow('   - content/'));
+        console.log(chalk.yellow('   - src/lib/components/ (if template has custom components)'));
+        console.log(chalk.yellow('   - src/lib/themes/ (if template has custom themes)'));
+        console.log(chalk.yellow('   - src/lib/index.ts and src/lib/index.css (if template has them)'));
         console.log(chalk.yellow('   Ensure you have committed your changes to "default" (or other templates).'));
         console.error(chalk.red('Operation aborted. Use -f or --force to proceed.'));
         return;
@@ -51,6 +56,10 @@ program
     const targetRoutes = path.join(rootDir, 'src/routes');
     const targetContent = path.join(rootDir, 'content');
     const targetConfig = path.join(rootDir, 'site.config.js');
+    const targetLibIndexTs = path.join(rootDir, 'src/lib/index.ts');
+    const targetLibIndexCss = path.join(rootDir, 'src/lib/index.css');
+    const targetLibComponents = path.join(rootDir, 'src/lib/components');
+    const targetLibThemes = path.join(rootDir, 'src/lib/themes');
 
     // 1. Clear current workspace
     console.log(chalk.gray('Cleaning current workspace...'));
@@ -62,16 +71,51 @@ program
         // Routes
         if (fs.existsSync(path.join(sourceTemplateDir, 'src/routes'))) {
             fs.copySync(path.join(sourceTemplateDir, 'src/routes'), targetRoutes);
+            console.log(chalk.gray('  ✓ Copied src/routes'));
         }
         // Content
         if (fs.existsSync(path.join(sourceTemplateDir, 'content'))) {
             fs.copySync(path.join(sourceTemplateDir, 'content'), targetContent);
+            console.log(chalk.gray('  ✓ Copied content'));
         }
         // Config
         if (fs.existsSync(path.join(sourceTemplateDir, 'site.config.js'))) {
             fs.copySync(path.join(sourceTemplateDir, 'site.config.js'), targetConfig);
+            console.log(chalk.gray('  ✓ Copied site.config.js'));
         }
-        
+
+        // src/lib/index.ts
+        if (fs.existsSync(path.join(sourceTemplateDir, 'src/lib/index.ts'))) {
+            fs.copySync(path.join(sourceTemplateDir, 'src/lib/index.ts'), targetLibIndexTs);
+            console.log(chalk.gray('  ✓ Copied src/lib/index.ts'));
+        }
+
+        // src/lib/index.css
+        if (fs.existsSync(path.join(sourceTemplateDir, 'src/lib/index.css'))) {
+            fs.copySync(path.join(sourceTemplateDir, 'src/lib/index.css'), targetLibIndexCss);
+            console.log(chalk.gray('  ✓ Copied src/lib/index.css'));
+        }
+
+        // src/lib/components
+        if (fs.existsSync(path.join(sourceTemplateDir, 'src/lib/components'))) {
+            // Clear existing custom components
+            if (fs.existsSync(targetLibComponents)) {
+                fs.emptyDirSync(targetLibComponents);
+            }
+            fs.copySync(path.join(sourceTemplateDir, 'src/lib/components'), targetLibComponents);
+            console.log(chalk.gray('  ✓ Copied src/lib/components'));
+        }
+
+        // src/lib/themes
+        if (fs.existsSync(path.join(sourceTemplateDir, 'src/lib/themes'))) {
+            // Clear existing custom themes
+            if (fs.existsSync(targetLibThemes)) {
+                fs.emptyDirSync(targetLibThemes);
+            }
+            fs.copySync(path.join(sourceTemplateDir, 'src/lib/themes'), targetLibThemes);
+            console.log(chalk.gray('  ✓ Copied src/lib/themes'));
+        }
+
         console.log(chalk.green(`✅ Template '${templateName}' loaded successfully!`));
         console.log(chalk.yellow('Run "npm run dev" to test it.'));
     } catch (e) {
@@ -99,9 +143,14 @@ program
     const sourceRoutes = path.join(rootDir, 'src/routes');
     const sourceContent = path.join(rootDir, 'content');
     const sourceConfig = path.join(rootDir, 'site.config.js');
+    const sourceLibIndexTs = path.join(rootDir, 'src/lib/index.ts');
+    const sourceLibIndexCss = path.join(rootDir, 'src/lib/index.css');
+    const sourceLibComponents = path.join(rootDir, 'src/lib/components');
+    const sourceLibThemes = path.join(rootDir, 'src/lib/themes');
 
     // 1. Ensure template dir exists
     fs.ensureDirSync(path.join(targetTemplateDir, 'src'));
+    fs.ensureDirSync(path.join(targetTemplateDir, 'src/lib'));
 
     // 2. Copy Workspace -> Template
     try {
@@ -109,17 +158,52 @@ program
         if (fs.existsSync(sourceRoutes)) {
             fs.emptyDirSync(path.join(targetTemplateDir, 'src/routes'));
             fs.copySync(sourceRoutes, path.join(targetTemplateDir, 'src/routes'));
+            console.log(chalk.gray('  ✓ Saved src/routes'));
         }
         // Content
         if (fs.existsSync(sourceContent)) {
             fs.emptyDirSync(path.join(targetTemplateDir, 'content'));
             fs.copySync(sourceContent, path.join(targetTemplateDir, 'content'));
+            console.log(chalk.gray('  ✓ Saved content'));
         }
         // Config
         if (fs.existsSync(sourceConfig)) {
             fs.copySync(sourceConfig, path.join(targetTemplateDir, 'site.config.js'));
+            console.log(chalk.gray('  ✓ Saved site.config.js'));
         }
-        
+
+        // src/lib/index.ts
+        if (fs.existsSync(sourceLibIndexTs)) {
+            fs.copySync(sourceLibIndexTs, path.join(targetTemplateDir, 'src/lib/index.ts'));
+            console.log(chalk.gray('  ✓ Saved src/lib/index.ts'));
+        }
+
+        // src/lib/index.css
+        if (fs.existsSync(sourceLibIndexCss)) {
+            fs.copySync(sourceLibIndexCss, path.join(targetTemplateDir, 'src/lib/index.css'));
+            console.log(chalk.gray('  ✓ Saved src/lib/index.css'));
+        }
+
+        // src/lib/components
+        if (fs.existsSync(sourceLibComponents)) {
+            const targetComponents = path.join(targetTemplateDir, 'src/lib/components');
+            if (fs.existsSync(targetComponents)) {
+                fs.emptyDirSync(targetComponents);
+            }
+            fs.copySync(sourceLibComponents, targetComponents);
+            console.log(chalk.gray('  ✓ Saved src/lib/components'));
+        }
+
+        // src/lib/themes
+        if (fs.existsSync(sourceLibThemes)) {
+            const targetThemes = path.join(targetTemplateDir, 'src/lib/themes');
+            if (fs.existsSync(targetThemes)) {
+                fs.emptyDirSync(targetThemes);
+            }
+            fs.copySync(sourceLibThemes, targetThemes);
+            console.log(chalk.gray('  ✓ Saved src/lib/themes'));
+        }
+
         console.log(chalk.green(`✅ Workspace saved to template '${templateName}'!`));
     } catch (e) {
         console.error(chalk.red('Error saving template:'), e);
