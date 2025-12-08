@@ -82,8 +82,9 @@ function parseInput(val) {
 function renderEditInputs(file, panel) {
   const variant = VARIANT_MAP[file];
   panel.innerHTML = '';
+  const keys = getPropKeysForVariant(file, variant);
   const currentProps = state.modifications[file]?.props || variant.props || {};
-  PROP_KEYS.forEach((key) => {
+  keys.forEach((key) => {
     const row = document.createElement('div');
     row.className = 'edit-row';
     const label = document.createElement('label');
@@ -110,6 +111,18 @@ function renderEditInputs(file, panel) {
   actions.appendChild(reset);
   actions.appendChild(apply);
   panel.appendChild(actions);
+}
+
+function getPropKeysForVariant(file, variant) {
+  const variantProps = variant?.props || {};
+  const modifiedProps = state.modifications[file]?.props || {};
+  const rawKeys = Array.from(new Set([...Object.keys(variantProps), ...Object.keys(modifiedProps)]));
+  const nonEmpty = rawKeys.filter((key) => {
+    const val = (modifiedProps[key] !== undefined ? modifiedProps[key] : variantProps[key]);
+    return val !== undefined && val !== null && `${val}` !== '';
+  });
+  if (nonEmpty.length) return nonEmpty;
+  return rawKeys.length ? rawKeys : PROP_KEYS;
 }
 
 function applyChanges(file) {
