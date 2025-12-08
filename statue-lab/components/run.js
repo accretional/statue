@@ -75,8 +75,40 @@ function inferPropsFromComponent(componentPath) {
     }
     return props;
   } catch (err) {
-    console.warn(`⚠️  Could not infer props from ${componentPath}: ${err.message}`);
-    return {};
+    // Fallback: simple regex scan for `export let` with optional defaults (handles TS interfaces)
+    try {
+      const source = fs.readFileSync(componentPath, 'utf8');
+      const props = {};
+      const scriptMatches = Array.from(source.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/gi));
+      const toValue = (raw) => {
+        if (!raw) return '';
+        const trimmed = raw.trim();
+        // String literal (single/double/backtick)
+        if ((trimmed.startsWith('"') && trimmed.endsWith('"')) || (trimmed.startsWith("'") && trimmed.endsWith("'")) || (trimmed.startsWith('`') && trimmed.endsWith('`'))) {
+          return trimmed.slice(1, -1);
+        }
+        if (trimmed === 'true') return true;
+        if (trimmed === 'false') return false;
+        if (trimmed === 'null') return null;
+        if (!Number.isNaN(Number(trimmed))) return Number(trimmed);
+        // Fallback to empty string for complex expressions
+        return '';
+      };
+      for (const match of scriptMatches) {
+        const content = match[1] || '';
+        const exportRegex = /export\s+let\s+(\w+)(?:\s*:[^=;]+)?(?:\s*=\s*([^;]+))?/g;
+        let m;
+        while ((m = exportRegex.exec(content)) !== null) {
+          const name = m[1];
+          const rawDefault = m[2];
+          props[name] = toValue(rawDefault);
+        }
+      }
+      return props;
+    } catch (fallbackErr) {
+      console.warn(`⚠️  Could not infer props from ${componentPath}: ${err.message}`);
+      return {};
+    }
   }
 }
 

@@ -652,10 +652,16 @@ document.addEventListener('DOMContentLoaded', () => {
     input.value = state.pageSize;
     input.addEventListener('change', (e) => updatePageSize(e.target.value));
   }
-  render();
   const btn = document.getElementById('autoplay-btn');
   if (btn) btn.addEventListener('click', toggleAutoplay);
   const btnLabel = document.getElementById('autoplay-btn');
   if (btnLabel) btnLabel.textContent = isAutoplay ? 'Pause' : 'Play';
   if (isAutoplay) scheduleAutoplay();
+  const addBtn = document.getElementById('add-btn');
+  if (addBtn) addBtn.addEventListener('click', openAddModal);
+  if (!state.selected.length) {
+    openAddModal();
+  } else {
+    render();
+  }
 });
