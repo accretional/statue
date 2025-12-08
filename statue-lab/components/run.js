@@ -95,6 +95,10 @@ function sveltePlugin() {
   return {
     name: 'svelte-compile',
     setup(buildApi) {
+      buildApi.onResolve({ filter: /^\$app\/environment$/ }, () => {
+        return { path: 'virtual:$app/environment', namespace: 'statue-lab-virt' };
+      });
+
       buildApi.onResolve({ filter: /^(\$lib)(\/.*)?$/ }, (args) => {
         const [, , rest] = args.path.match(/^(\$lib)(\/.*)?$/) || [];
         const resolved = path.resolve(REPO_ROOT, 'src/lib' + (rest || ''));
@@ -138,6 +142,19 @@ function sveltePlugin() {
           loader: 'js',
           resolveDir: path.dirname(args.path)
         };
+      });
+
+      buildApi.onLoad({ filter: /.*/, namespace: 'statue-lab-virt' }, (args) => {
+        if (args.path === 'virtual:$app/environment') {
+          return {
+            contents: `export const browser = true;
+export const dev = false;
+export const building = false;
+export const version = 'lab';`,
+            loader: 'js'
+          };
+        }
+        return null;
       });
     }
   };
@@ -316,7 +333,7 @@ async function createComposite(outputDir, compositeName, variants, themeList = [
 async function main() {
   const program = new Command();
   program
-    .requiredOption('-c, --component <name...>', 'Component name(s) (or "all" to use all components in src/lib/components)')
+    .option('-c, --component <name...>', 'Component name(s) (or "all" to use all components in src/lib/components)')
     .option('--output_dir <path>', 'Output directory', DEFAULT_OUTPUT)
     .option('--theme <names>', 'Comma separated themes (defaults to a small preset list)')
     .option('--no-composite', 'Skip composite viewer')
@@ -327,7 +344,7 @@ async function main() {
   ensureDir(outputRoot);
 
   const components = [];
-  const compArgs = Array.isArray(opts.component) ? opts.component : [opts.component];
+  const compArgs = opts.component ? (Array.isArray(opts.component) ? opts.component : [opts.component]) : ['all'];
   if (compArgs.includes('all')) {
     const compFiles = fs.readdirSync(path.join(REPO_ROOT, 'src', 'lib', 'components')).filter((f) => f.endsWith('.svelte'));
     compFiles.forEach((file) => components.push(path.basename(file, '.svelte')));
