@@ -25,7 +25,7 @@
   }
 </script>
 
-<nav class="bg-transparent text-[var(--color-foreground)] fixed w-full top-0 z-50 transition-transform duration-300 will-change-transform {isHidden ? '-translate-y-full' : 'translate-y-0'}">
+<nav class="bg-[var(--color-background)] {activePath === '/' && !isMenuOpen ? 'md:!bg-transparent' : ''} text-[var(--color-foreground)] fixed w-full top-0 z-50 transition-transform duration-300 will-change-transform {isHidden ? '-translate-y-full' : 'translate-y-0'}">
   <div class="container mx-auto px-4">
     <div class="flex items-center justify-between h-16">
       <div class="flex items-center">
@@ -96,7 +96,7 @@
   
   <!-- Mobile Menu -->
   {#if isMenuOpen}
-    <div class="md:hidden bg-transparent">
+    <div class="md:hidden bg-[var(--color-background)]">
       <div class="px-2 pt-2 pb-3 space-y-1">
         <a 
           href="/" 

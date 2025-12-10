@@ -1,6 +1,7 @@
 ---
 title: Getting Started with Statue
 description: Quick introduction to Statue SSG and key concepts
+order: 1
 ---
 
 # Getting Started with Statue
