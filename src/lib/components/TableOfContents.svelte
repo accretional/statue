@@ -100,7 +100,7 @@
 </script>
 
 {#if visibleHeadings.length > 0}
-  <aside class="toc-sidebar">
+  <aside class="toc-sidebar pr-4">
     <h4 class="text-sm font-semibold text-[var(--color-foreground)] mb-4">
       {title}
     </h4>
