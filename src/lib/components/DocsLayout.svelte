@@ -87,7 +87,7 @@
 
   <div class="container mx-auto px-4 pt-16">
     <div class="flex">
-      <!-- Left Sidebar - Desktop -->
+      <!-- Left Sidebar - Desktop only -->
       <div class="hidden lg:block w-64 flex-shrink-0">
         <div class="sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto">
           <DocsSidebar
@@ -99,9 +99,9 @@
         </div>
       </div>
 
-      <!-- Left Sidebar - Mobile -->
+      <!-- Left Sidebar - Mobile (slide-in) -->
       <div
-        class="fixed left-0 top-16 h-[calc(100vh-4rem)] z-50 transform transition-transform duration-300 lg:hidden
+        class="fixed left-0 top-16 h-[calc(100vh-4rem)] w-64 z-50 transform transition-transform duration-300 lg:hidden bg-[var(--color-background)]
           {isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'}"
       >
         <DocsSidebar
@@ -112,8 +112,10 @@
         />
       </div>
 
-      <!-- Main content area -->
-      <main class="flex-1 min-h-[calc(100vh-4rem)] lg:border-l lg:border-[var(--color-border)]">
+      <!-- Main content area - full width on mobile -->
+      <main class="flex-1 min-w-0 min-h-[calc(100vh-4rem)] relative">
+        <!-- Border line starting below "On this page" title level -->
+        <div class="hidden lg:block absolute left-0 top-12 bottom-0 w-px bg-[var(--color-border)]"></div>
         <div class="px-4 sm:px-6 lg:px-8 py-8">
           <slot />
         </div>

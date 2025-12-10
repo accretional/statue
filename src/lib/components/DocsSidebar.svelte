@@ -89,8 +89,11 @@
   }
 
   function isActive(url) {
-    if (!url) return false;
-    return activePath === url;
+    if (!url || !activePath) return false;
+    // Normalize URLs by removing trailing slashes for comparison
+    const normalizedUrl = url.endsWith('/') ? url.slice(0, -1) : url;
+    const normalizedActivePath = activePath.endsWith('/') ? activePath.slice(0, -1) : activePath;
+    return normalizedActivePath === normalizedUrl;
   }
 
   function hasActiveChild(item) {
@@ -103,7 +106,7 @@
 
 <aside class="docs-sidebar w-64 flex-shrink-0 h-full overflow-y-auto bg-[var(--color-background)]">
 
-  <!-- Navigation - aligned with navbar logo -->
+  <!-- Navigation -->
   <nav class="pt-5 pb-4 pr-4">
     <ul class="space-y-1">
       {#each filteredItems as item, index}

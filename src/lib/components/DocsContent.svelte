@@ -181,7 +181,7 @@
     margin-top: 1rem;
     margin-bottom: 1rem;
     line-height: 1.75;
-    color: var(--color-muted);
+    color: color-mix(in srgb, var(--color-foreground) 70%, var(--color-muted) 30%);
   }
 
   :global(.prose-docs a) {
@@ -217,7 +217,7 @@
   :global(.prose-docs li) {
     margin-top: 0.25rem;
     margin-bottom: 0.25rem;
-    color: var(--color-muted);
+    color: color-mix(in srgb, var(--color-foreground) 70%, var(--color-muted) 30%);
     line-height: 1.75;
   }
 
@@ -288,7 +288,7 @@
   :global(.prose-docs td) {
     padding: 0.75rem 1rem;
     border-bottom: 1px solid var(--color-border);
-    color: var(--color-muted);
+    color: color-mix(in srgb, var(--color-foreground) 70%, var(--color-muted) 30%);
   }
 
   :global(.prose-docs img) {
