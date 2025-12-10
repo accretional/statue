@@ -59,9 +59,12 @@
   $: resolvedSecondaryUrl = secondaryButtonUrl || featuredContent[1]?.url || '';
 </script>
 
-<article class="docs-directory">
+<article class="docs-directory relative">
+  <!-- Background glow effect - positioned at right -->
+  <div class="absolute top-32 -right-20 w-[500px] h-[500px] bg-[var(--color-primary)] opacity-[0.08] blur-[150px] rounded-full pointer-events-none"></div>
+
   <!-- Hero Section -->
-  <header class="text-center mb-12 pt-8">
+  <header class="text-center mb-12 pt-8 relative z-10">
     <h1 class="text-4xl sm:text-5xl font-bold text-[var(--color-foreground)] mb-4">
       {title}
     </h1>
@@ -98,7 +101,7 @@
 
   <!-- Feature Cards Grid -->
   {#if sortedContent && sortedContent.length > 0}
-    <section class="mb-12">
+    <section class="mb-12 relative z-10">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         {#each sortedContent as item, index}
           <a
