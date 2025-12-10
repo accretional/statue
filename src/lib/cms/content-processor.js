@@ -311,6 +311,87 @@ const processTemplateVariables = (content) => {
   return processedContent;
 };
 
+// Function to build sidebar navigation tree for a directory
+const getSidebarTree = (directory) => {
+  const allContent = getAllContent();
+
+  // Filter content for this directory
+  const directoryContent = allContent.filter(entry =>
+    entry.directory === directory || entry.directory.startsWith(directory + '/')
+  );
+
+  // Group by subdirectory
+  const groups = {};
+
+  directoryContent.forEach(entry => {
+    // Get relative path from the main directory
+    const relativePath = entry.directory === directory
+      ? ''
+      : entry.directory.replace(directory + '/', '');
+
+    const parts = relativePath.split('/').filter(Boolean);
+    const groupKey = parts[0] || '_root';
+
+    if (!groups[groupKey]) {
+      groups[groupKey] = {
+        title: groupKey === '_root' ? formatTitle(directory) : formatTitle(groupKey),
+        items: []
+      };
+    }
+
+    groups[groupKey].items.push({
+      title: entry.metadata.title,
+      url: entry.url,
+      order: entry.metadata.order || 999
+    });
+  });
+
+  // Sort items within each group
+  Object.values(groups).forEach(group => {
+    group.items.sort((a, b) => a.order - b.order);
+  });
+
+  // Convert to sidebar format
+  const result = [];
+
+  // Add root items first
+  if (groups._root) {
+    groups._root.items.forEach(item => {
+      result.push(item);
+    });
+    delete groups._root;
+  }
+
+  // Add grouped items
+  Object.entries(groups).forEach(([key, group]) => {
+    result.push({
+      title: group.title,
+      children: group.items
+    });
+  });
+
+  return result;
+};
+
+// Function to get all directories as sidebar navigation
+const getAllDirectoriesSidebar = () => {
+  const directories = getContentDirectories();
+  const result = [];
+
+  directories.forEach(dir => {
+    const dirContent = getSidebarTree(dir.name);
+    if (dirContent.length > 0) {
+      result.push({
+        title: dir.title,
+        url: dir.url,
+        children: dirContent
+      });
+    }
+  });
+
+  return result;
+};
+
 // Export functions
 export {
   scanContentDirectory,
@@ -322,5 +403,7 @@ export {
   getContentByDirectory,
   clearContentCache,
   getSubDirectories,
-  processTemplateVariables
+  processTemplateVariables,
+  getSidebarTree,
+  getAllDirectoriesSidebar
 }; 

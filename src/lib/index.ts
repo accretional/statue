@@ -24,3 +24,10 @@ export { default as BuiltBy } from './components/BuiltBy.svelte';
 
 export { default as CollapsibleTree } from './components/CollapsibleTree.svelte';
 
+// Documentation components
+export { default as DocsSidebar } from './components/DocsSidebar.svelte';
+export { default as TableOfContents } from './components/TableOfContents.svelte';
+export { default as DocsLayout } from './components/DocsLayout.svelte';
+export { default as DocsContent } from './components/DocsContent.svelte';
+export { default as DocsDirectoryList } from './components/DocsDirectoryList.svelte';
+

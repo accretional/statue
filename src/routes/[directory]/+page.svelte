@@ -3,15 +3,15 @@
   import DirectoryHeader from '$lib/components/DirectoryHeader.svelte';
   import SubDirectories from '$lib/components/SubDirectories.svelte';
   import DirectoryContent from '$lib/components/DirectoryContent.svelte';
-  
+
   // Loaded content
   export let data;
-  
+
   $: directories = data.directories;
   $: directoryContent = data.directoryContent;
   $: currentDirectory = data.currentDirectory;
   $: subDirectories = data.subDirectories;
-  
+
   // Filter contents only in the current directory
   // Not contents in subdirectories
   $: currentDirContent = directoryContent.filter(page => {
@@ -20,11 +20,11 @@
     // But blog/category/post.md is not in blog/ directory
     return page.directory === currentDirectory.name;
   });
-  
+
   // Get all contents in subdirectories
   $: subDirContent = directoryContent.filter(page => {
     // Contents in directories under this directory
-    return page.directory !== currentDirectory.name && 
+    return page.directory !== currentDirectory.name &&
            page.directory.startsWith(currentDirectory.name + '/');
   });
 </script>
@@ -39,13 +39,13 @@
 <div class="min-h-screen text-white bg-gradient-to-b from-[var(--color-hero-from)] via-[var(--color-hero-via)] to-[var(--color-hero-to)]">
   <div class="container mx-auto px-4 py-16">
     <DirectoryHeader title={currentDirectory.title} />
-    
+
     <!-- Subdirectories -->
     <SubDirectories {subDirectories} />
-    
+
     <!-- Contents in this directory -->
     <DirectoryContent content={currentDirContent} />
-    
+
     <!-- Contents in subdirectories -->
     {#if subDirContent && subDirContent.length > 0}
       <div>
@@ -53,7 +53,7 @@
         <DirectoryContent content={subDirContent} showDirectory={true} />
       </div>
     {/if}
-    
+
     {#if !currentDirContent.length && !subDirContent.length && (!subDirectories || !subDirectories.length)}
       <DirectoryContent content={[]} emptyMessage="No content found in this directory." />
     {/if}
@@ -62,4 +62,4 @@
 
 <style>
   /* Page specific styles can go here */
-</style> 
+</style>
