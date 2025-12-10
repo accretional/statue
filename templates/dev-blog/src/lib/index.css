@@ -1,0 +1,92 @@
+@import 'tailwindcss';
+
+/* JetBrains Mono - Kodlama fontu */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+/* Tailwind v4 content config */
+@source "../";
+
+:root {
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-sans: 'Inter', system-ui, sans-serif;
+
+  /* Renk paleti - Tatlı ve sıcak tonlar */
+  --bg-primary: #fefcfb;
+  --bg-secondary: #fff8f5;
+  --bg-code: #2d2a2e;
+  --text-primary: #2d2a2e;
+  --text-secondary: #6b5b5b;
+  --accent-primary: #ff6b6b;
+  --accent-secondary: #feca57;
+  --accent-tertiary: #48dbfb;
+  --accent-green: #1dd1a1;
+  --border-color: #f0e6e0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.7;
+}
+
+code, pre, .mono {
+  font-family: var(--font-mono);
+}
+
+::selection {
+  background: var(--accent-primary);
+  color: white;
+}
+
+/* Scrollbar stillemesi */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #e55a5a;
+}
+
+/* Link animasyonları */
+a {
+  transition: all 0.2s ease;
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glow efekti */
+.glow {
+  box-shadow: 0 0 20px rgba(255, 107, 107, 0.3);
+}
+
+/* Kod bloğu syntax renkleri */
+.token-keyword { color: #ff79c6; }
+.token-string { color: #f1fa8c; }
+.token-function { color: #50fa7b; }
+.token-comment { color: #6272a4; }
+.token-number { color: #bd93f9; }
