@@ -24,6 +24,52 @@ const removeFirstH1 = (html) => {
   return html.replace(/<h1[^>]*>(.*?)<\/h1>/, '');
 };
 
+/**
+ * Creates a custom marked renderer that transforms internal markdown links
+ * to proper URLs based on the current file's location in the content tree
+ *
+ * @param {string} currentDirectory - The directory of the current content file (e.g., 'docs', 'blog')
+ * @returns {marked.Renderer} - A configured marked renderer
+ */
+const createLinkTransformer = (currentDirectory) => {
+  const renderer = new marked.Renderer();
+  const originalLinkRenderer = renderer.link.bind(renderer);
+
+  renderer.link = function(token) {
+    // In marked v15+, the link renderer receives a token object
+    let href = token.href || '';
+    const title = token.title || null;
+    const text = token.text || '';
+
+    // Only transform relative links that point to .md files or local paths
+    // Do not transform external links (http://, https://) or anchor links (#)
+    if (href && typeof href === 'string' && !href.startsWith('http://') && !href.startsWith('https://') && !href.startsWith('#')) {
+      // Handle .md file links - remove the extension
+      if (href.endsWith('.md')) {
+        href = href.slice(0, -3);
+      }
+
+      // Handle relative paths (./file, ../dir/file)
+      if (href.startsWith('./') || href.startsWith('../')) {
+        // Resolve the path relative to the current directory
+        const resolvedPath = path.join('/', currentDirectory, href);
+        // Normalize path separators and remove any trailing slashes
+        href = resolvedPath.replace(/\\/g, '/').replace(/\/$/, '');
+      } else if (!href.startsWith('/')) {
+        // If it's not absolute and not explicitly relative, treat as relative to current dir
+        // This handles cases like [link](other-file.md) without ./ prefix
+        href = path.join('/', currentDirectory, href).replace(/\\/g, '/');
+      }
+    }
+
+    // Create modified token with transformed href
+    const modifiedToken = { ...token, href };
+    return originalLinkRenderer(modifiedToken);
+  };
+
+  return renderer;
+};
+
 // Scans all markdown files and folders in the content directory
 const scanContentDirectory = () => {
   const contentPath = path.resolve('content');
@@ -77,12 +123,15 @@ const scanContentDirectory = () => {
           author: processedMetadata.author || null,
           ...processedMetadata
         };
-        
-        // Parse markdown to HTML and then remove the first h1 heading
-        const html = removeFirstH1(marked.parse(processedMarkdownContent));
-        
+
         // Fix directory - use full path
         let directory = relativePath.replace(/\\/g, '/');
+
+        // Create custom renderer for link transformation based on the file's directory
+        const renderer = createLinkTransformer(directory);
+
+        // Parse markdown to HTML with link transformation, then remove the first h1 heading
+        const html = removeFirstH1(marked.parse(processedMarkdownContent, { renderer }));
         
         // Add main directory information to create content tree
         // Example: blog/categories/js -> blog
