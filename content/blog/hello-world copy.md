@@ -3,7 +3,7 @@ title: Hello World
 date: 2025-11-21
 author: Statue User
 description: Your first blog post
-thumbnail: /thumbnails/blog_thumbnail1.jpg
+thumbnail: /thumbnails/blog_thumbnail2.jpg
 ---
 
 # Hello World

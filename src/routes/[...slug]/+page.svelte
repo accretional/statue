@@ -6,6 +6,7 @@
   import ContentBody from '$lib/components/ContentBody.svelte';
   import DocsLayout from '$lib/components/DocsLayout.svelte';
   import DocsContent from '$lib/components/DocsContent.svelte';
+  import BlogPostLayout from '$lib/components/BlogPostLayout.svelte';
 
   // Loaded content
   export let data;
@@ -17,6 +18,9 @@
 
   // Check if this is docs content
   $: isDocsContent = content?.directory?.startsWith('docs');
+
+  // Check if this is blog content
+  $: isBlogContent = content?.directory === 'blog' || content?.directory?.startsWith('blog/');
 
   // Active URL for highlighting (for navigation bar)
   $: activePath = $page.url.pathname;
@@ -102,6 +106,21 @@
         bind:headings
       />
     </DocsLayout>
+  {:else if isBlogContent}
+    <!-- Blog Post Layout -->
+    <BlogPostLayout
+      title={content.metadata.title}
+      description={content.metadata.description}
+      date={content.metadata.date}
+      author={content.metadata.author}
+      authorAvatar={content.metadata.authorAvatar}
+      thumbnail={content.metadata.thumbnail}
+      content={content.content}
+      {backLink}
+      {backLinkText}
+      navbarItems={directories}
+      {activePath}
+    />
   {:else}
     <!-- Default Layout -->
     <NavigationBar navbarItems={directories} {activePath} />

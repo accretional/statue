@@ -5,6 +5,7 @@
   import DirectoryContent from '$lib/components/DirectoryContent.svelte';
   import DocsLayout from '$lib/components/DocsLayout.svelte';
   import DocsDirectoryList from '$lib/components/DocsDirectoryList.svelte';
+  import BlogLayout from '$lib/components/BlogLayout.svelte';
 
   // Loaded content
   export let data;
@@ -17,6 +18,9 @@
 
   // Check if this is docs directory
   $: isDocsDirectory = currentDirectory.name === 'docs';
+
+  // Check if this is blog directory
+  $: isBlogDirectory = currentDirectory.name === 'blog';
 
   // Filter contents only in the current directory
   // Not contents in subdirectories
@@ -59,6 +63,14 @@
       {subDirectories}
     />
   </DocsLayout>
+{:else if isBlogDirectory}
+  <!-- Blog Layout -->
+  <BlogLayout
+    title={currentDirectory.title}
+    posts={currentDirContent}
+    navbarItems={directories}
+    activePath={currentDirectory.url}
+  />
 {:else}
   <!-- Default Layout -->
   <NavigationBar navbarItems={directories} activePath={currentDirectory.url} />

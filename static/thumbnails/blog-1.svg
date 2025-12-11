@@ -1,0 +1,21 @@
+<svg width="800" height="500" viewBox="0 0 800 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="500" fill="#111"/>
+  <!-- Network/connection diagram -->
+  <g stroke="#333" stroke-width="1">
+    <!-- Horizontal lines -->
+    <line x1="150" y1="200" x2="400" y2="200"/>
+    <line x1="150" y1="250" x2="500" y2="250"/>
+    <line x1="150" y1="300" x2="450" y2="300"/>
+    <!-- Vertical connectors -->
+    <line x1="400" y1="200" x2="550" y2="150"/>
+    <line x1="500" y1="250" x2="600" y2="250"/>
+    <line x1="450" y1="300" x2="550" y2="350"/>
+  </g>
+  <!-- Nodes -->
+  <circle cx="400" cy="200" r="5" fill="#ef4444"/>
+  <circle cx="500" cy="250" r="5" fill="#666"/>
+  <circle cx="450" cy="300" r="5" fill="#666"/>
+  <circle cx="550" cy="150" r="5" fill="#666"/>
+  <circle cx="600" cy="250" r="5" fill="#666"/>
+  <circle cx="550" cy="350" r="5" fill="#666"/>
+</svg>
