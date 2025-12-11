@@ -64,15 +64,17 @@ program
   });
 
 program
-  .command('sync')
-  .description('Sync routes from statue-ssg package (adds missing files without overwriting existing ones)')
-  .option('-f, --force', 'Force overwrite existing files', false)
-  .action(async (options) => {
-    console.log(chalk.blue('🗿 Statue SSG - Syncing routes...'));
+  .command('sync-routes')
+  .description('Force sync core route folders ([...slug] and [directory]) from statue-ssg package')
+  .action(async () => {
+    console.log(chalk.blue('🗿 Statue SSG - Syncing core routes...'));
 
     const targetDir = process.cwd();
     const sourceRoutes = path.join(packageDir, 'src', 'routes');
     const targetRoutes = path.join(targetDir, 'src', 'routes');
+
+    // Only these folders will be synced (force overwrite)
+    const routeFolders = ['[...slug]', '[directory]'];
 
     // Check if target routes exists
     if (!fs.existsSync(targetRoutes)) {
@@ -88,7 +90,7 @@ program
       return code;
     };
 
-    // Walk and transform files
+    // Walk and transform files in a directory
     const transformFiles = (dir) => {
       const exts = new Set(['.svelte', '.js', '.ts']);
       const entries = fs.readdirSync(dir);
@@ -110,81 +112,40 @@ program
       }
     };
 
-    // Get all directories/files in source routes
-    const syncedFiles = [];
-    const skippedFiles = [];
-
-    const syncDir = (srcDir, destDir, relativePath = '') => {
-      if (!fs.existsSync(srcDir)) return;
-
-      const entries = fs.readdirSync(srcDir);
-
-      for (const entry of entries) {
-        const srcPath = path.join(srcDir, entry);
-        const destPath = path.join(destDir, entry);
-        const relPath = path.join(relativePath, entry);
-        const stat = fs.statSync(srcPath);
-
-        if (stat.isDirectory()) {
-          // If directory doesn't exist in target, copy entire directory
-          if (!fs.existsSync(destPath)) {
-            fs.copySync(srcPath, destPath);
-            syncedFiles.push(relPath + '/');
-            // Transform imports in newly copied directory
-            transformFiles(destPath);
-          } else {
-            // Directory exists, recurse into it
-            syncDir(srcPath, destPath, relPath);
-          }
-        } else {
-          // It's a file
-          if (!fs.existsSync(destPath)) {
-            // File doesn't exist, copy it
-            fs.copySync(srcPath, destPath);
-            syncedFiles.push(relPath);
-            // Transform imports if it's a code file
-            const ext = path.extname(destPath);
-            if (['.svelte', '.js', '.ts'].includes(ext)) {
-              const orig = fs.readFileSync(destPath, 'utf8');
-              const next = transformImports(orig);
-              if (orig !== next) {
-                fs.writeFileSync(destPath, next);
-              }
-            }
-          } else if (options.force) {
-            // Force overwrite
-            fs.copySync(srcPath, destPath);
-            syncedFiles.push(relPath + ' (overwritten)');
-            const ext = path.extname(destPath);
-            if (['.svelte', '.js', '.ts'].includes(ext)) {
-              const orig = fs.readFileSync(destPath, 'utf8');
-              const next = transformImports(orig);
-              if (orig !== next) {
-                fs.writeFileSync(destPath, next);
-              }
-            }
-          } else {
-            skippedFiles.push(relPath);
-          }
-        }
-      }
-    };
-
     try {
-      syncDir(sourceRoutes, targetRoutes);
+      const syncedFolders = [];
 
-      if (syncedFiles.length > 0) {
-        console.log(chalk.green('✓ Synced files:'));
-        syncedFiles.forEach(f => console.log(chalk.green(`  + ${f}`)));
+      for (const folder of routeFolders) {
+        const srcPath = path.join(sourceRoutes, folder);
+        const destPath = path.join(targetRoutes, folder);
+
+        // Check if source folder exists
+        if (!fs.existsSync(srcPath)) {
+          console.log(chalk.yellow(`⚠ Source folder not found: ${folder}`));
+          continue;
+        }
+
+        // Remove existing folder if it exists
+        if (fs.existsSync(destPath)) {
+          fs.removeSync(destPath);
+          console.log(chalk.gray(`  Removed existing: ${folder}/`));
+        }
+
+        // Copy folder from source
+        fs.copySync(srcPath, destPath);
+
+        // Transform imports
+        transformFiles(destPath);
+
+        syncedFolders.push(folder);
+        console.log(chalk.green(`  ✓ Synced: ${folder}/`));
+      }
+
+      if (syncedFolders.length > 0) {
+        console.log(chalk.green.bold(`\n✨ Successfully synced ${syncedFolders.length} route folder(s)!`));
       } else {
-        console.log(chalk.yellow('No new files to sync.'));
+        console.log(chalk.yellow('\nNo folders were synced.'));
       }
-
-      if (skippedFiles.length > 0 && !options.force) {
-        console.log(chalk.gray(`\nSkipped ${skippedFiles.length} existing file(s). Use --force to overwrite.`));
-      }
-
-      console.log(chalk.green.bold('\n✨ Sync completed!'));
 
     } catch (error) {
       console.error(chalk.red('❌ Error syncing routes:'), error);
