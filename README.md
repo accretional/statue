@@ -4,9 +4,73 @@ Statue is a blazingly-fast static site generator based on Markdown, SvelteKit, a
 
 **One-line setup:**
 
+<details open>
+<summary>npm</summary>
+
+**In current directory:**
+
 ```bash
 yes | npx sv create . --template minimal --types ts --no-add-ons --install npm && npm install statue-ssg && npx statue init && npm install && npm run dev
 ```
+
+**Or in a new folder (replace 'my-statue-site' with your desired name):**
+
+```bash
+yes | npx sv create my-statue-site --template minimal --types ts --no-add-ons --install npm && cd my-statue-site && npm install statue-ssg && npx statue init && npm install && npm run dev
+```
+
+</details>
+
+<details>
+<summary>bun</summary>
+
+**In current directory:**
+
+```bash
+yes | npx sv create . --template minimal --types ts --no-add-ons --install bun && bun add statue-ssg && npx statue init && bun install && bun run dev
+```
+
+**Or in a new folder (replace 'my-statue-site' with your desired name):**
+
+```bash
+yes | npx sv create my-statue-site --template minimal --types ts --no-add-ons --install bun && cd my-statue-site && bun add statue-ssg && npx statue init && bun install && bun run dev
+```
+
+</details>
+
+<details>
+<summary>pnpm</summary>
+
+**In current directory:**
+
+```bash
+yes | npx sv create . --template minimal --types ts --no-add-ons --install pnpm && pnpm add statue-ssg && npx statue init && pnpm install && pnpm run dev
+```
+
+**Or in a new folder (replace 'my-statue-site' with your desired name):**
+
+```bash
+yes | npx sv create my-statue-site --template minimal --types ts --no-add-ons --install pnpm && cd my-statue-site && pnpm add statue-ssg && npx statue init && pnpm install && pnpm run dev
+```
+
+</details>
+
+<details>
+<summary>yarn</summary>
+
+**In current directory:**
+
+```bash
+yes | npx sv create . --template minimal --types ts --no-add-ons --install yarn && yarn add statue-ssg && npx statue init && yarn install && yarn run dev
+```
+
+**Or in a new folder (replace 'my-statue-site' with your desired name):**
+
+```bash
+yes | npx sv create my-statue-site --template minimal --types ts --no-add-ons --install yarn && cd my-statue-site && yarn add statue-ssg && npx statue init && yarn install && yarn run dev
+```
+
+</details>
 
 Content like blogs and documentation can be added and modified directly through `.md` files, with pages and the site structure itself based on Svelte components. Statue sites are fully static, so **management is simple, development can be non-technical, and hosting is cheap or free. [Join us on Discord! 🗿](https://discord.gg/accretional)**
 
@@ -30,6 +94,7 @@ Statue is **Fast, Simple, and Flexible from start to finish**. It takes only one
 After running the setup command above, your site is live at `http://localhost:5173`.
 
 **Next steps:**
+
 1. **[Complete the New Site Checklist](./content/docs/new-site-checklist.md)** - Customize your site step-by-step
 2. **[Read Getting Started](./content/docs/get-started.md)** - Learn key concepts
 3. **Add content** - Create `.md` files in `content/` and they become pages automatically
