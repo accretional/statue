@@ -1,5 +1,4 @@
-import { getContentByUrl } from '$lib/cms/content-processor';
-import { getContentDirectories } from '$lib/cms/content-processor';
+import { getContentByUrl, getContentDirectories, getSidebarTree } from '$lib/cms/content-processor';
 
 // Make this page pre-rendered as a static page
 export const prerender = true;
@@ -31,16 +30,21 @@ export function load({ params }) {
   // Get folders in content directory for navigation links
   const directories = getContentDirectories();
 
+  // Get sidebar items for docs content
+  const isDocsContent = content?.directory?.startsWith('docs') || url.startsWith('/docs');
+  const sidebarItems = isDocsContent ? getSidebarTree('docs') : [];
+
   // If content is not found
   if (!content) {
     // Allow SvelteKit to handle routing
     // If a Svelte component exists, it will be shown, otherwise it will return 404
-    return { notFound: true, directories };
+    return { notFound: true, directories, sidebarItems };
   }
 
   // Return content
   return {
     content,
-    directories
+    directories,
+    sidebarItems
   };
 }
