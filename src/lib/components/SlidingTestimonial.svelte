@@ -38,6 +38,16 @@
     }
   }
 
+  function manualNext() {
+    currentIndex = (currentIndex + 1) % reviews.length;
+    resetInterval();
+  }
+
+  function prevSlide() {
+    currentIndex = (currentIndex - 1 + reviews.length) % reviews.length;
+    resetInterval();
+  }
+
   function goToSlide(index: number) {
     currentIndex = index;
     resetInterval();
@@ -123,29 +133,56 @@
       {/each}
     </div>
 
-    <!-- Thumbnail navigation -->
-    <div class="thumbnails-container">
-      <div class="thumbnails-wrapper">
-        {#each reviews as review, index (review.id)}
+    <!-- Navigation Controls -->
+    <div class="navigation-container">
+      <!-- Previous Arrow -->
+      <button
+        onclick={prevSlide}
+        class="nav-arrow"
+        aria-label="Previous testimonial"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="2"
+          stroke="currentColor"
+          class="arrow-icon"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+        </svg>
+      </button>
+
+      <!-- Dot Indicators -->
+      <div class="dots-wrapper">
+        {#each reviews as _, dotIndex}
           <button
-            class="thumbnail-button"
-            class:active={currentIndex === index}
-            onclick={() => goToSlide(index)}
-            aria-label="Go to testimonial {index + 1}"
-            aria-current={currentIndex === index ? 'true' : 'false'}
-          >
-            <img
-              src={review.thumbnailSrc}
-              alt={review.name}
-              class="thumbnail-image"
-              loading="lazy"
-            />
-            {#if currentIndex === index}
-              <div class="thumbnail-overlay"></div>
-            {/if}
-          </button>
+            onclick={() => goToSlide(dotIndex)}
+            class="dot-button"
+            class:active={dotIndex === currentIndex}
+            aria-label="Go to testimonial {dotIndex + 1}"
+            aria-current={dotIndex === currentIndex ? 'true' : 'false'}
+          ></button>
         {/each}
       </div>
+
+      <!-- Next Arrow -->
+      <button
+        onclick={manualNext}
+        class="nav-arrow"
+        aria-label="Next testimonial"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="2"
+          stroke="currentColor"
+          class="arrow-icon"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+        </svg>
+      </button>
     </div>
   </div>
 </div>
@@ -259,51 +296,63 @@
     margin: 0;
   }
 
-  .thumbnails-container {
-    position: relative;
+  .navigation-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
     padding: 2rem 1rem;
   }
 
-  .thumbnails-wrapper {
+  .nav-arrow {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.15);
+    border: none;
     display: flex;
-    gap: 1rem;
-    justify-content: center;
     align-items: center;
-    flex-wrap: wrap;
-  }
-
-  .thumbnail-button {
-    position: relative;
-    width: 60px;
-    height: 72px;
-    border-radius: 0.5rem;
-    overflow: hidden;
-    border: 2px solid transparent;
-    transition: all 0.3s ease;
+    justify-content: center;
     cursor: pointer;
-    padding: 0;
-    background: none;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    color: white;
   }
 
-  .thumbnail-button:hover {
+  .nav-arrow:hover {
+    background-color: rgba(255, 255, 255, 0.25);
     transform: scale(1.05);
   }
 
-  .thumbnail-button.active {
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  .arrow-icon {
+    width: 1.25rem;
+    height: 1.25rem;
   }
 
-  .thumbnail-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
+  .dots-wrapper {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
   }
 
-  .thumbnail-overlay {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
+  .dot-button {
+    height: 0.5rem;
+    border-radius: 9999px;
+    transition: all 0.2s ease;
+    background-color: rgba(255, 255, 255, 0.4);
+    width: 0.5rem;
+    border: none;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .dot-button:hover {
+    background-color: rgba(255, 255, 255, 0.6);
+  }
+
+  .dot-button.active {
+    background-color: white;
+    width: 2rem;
   }
 
   @media (max-width: 767px) {
@@ -315,9 +364,19 @@
       font-size: 1.125rem;
     }
 
-    .thumbnail-button {
-      width: 50px;
-      height: 60px;
+    .navigation-container {
+      gap: 1rem;
+      padding: 1.5rem 0.5rem;
+    }
+
+    .nav-arrow {
+      width: 2rem;
+      height: 2rem;
+    }
+
+    .arrow-icon {
+      width: 1rem;
+      height: 1rem;
     }
   }
 </style>
