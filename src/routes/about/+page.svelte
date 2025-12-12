@@ -25,22 +25,33 @@
     description="Customize your Statue about page at src/routes/about/+page.svelte"
   />
   <!-- Content Sections -->
-  <div>
-    <div class="container mx-auto px-4 py-16">
-      <p style="text-align: center;">Statue is an <a href="https://https://github.com/accretional/statue" target="_blank">open source</a> static site generator brought you to by <a href="https://accretional.com" target="_blank">Accretional</a>, a developer tools company.</p>
-      <p style="text-align: center;">Make this site yours with the components below!</p><br>
-      <!-- Our Mission Section -->
-      <Mission />
-      
-      <!-- Team Section -->
-      <Team />
-      
-      <!-- Why Choose Us Section -->
-      <WhyChooseUs />
-
-      <!-- CTA Section -->
-      <CTA />
+  <div class="container mx-auto px-4 pb-32">
+    <!-- Introduction Section -->
+    <div class="text-center mb-16">
+      <img
+        src="/favicon.png"
+        alt="Statue Logo"
+        class="w-64 h-64 mx-auto mb-8"
+      />
+      <p class="text-lg mb-4">
+        Statue is an <a href="https://github.com/accretional/statue" target="_blank" class="underline hover:text-blue-300 transition-colors">open source</a> static site generator brought to you by <a href="https://accretional.com" target="_blank" class="underline hover:text-blue-300 transition-colors">Accretional</a>, a developer tools company.
+      </p>
+      <p class="text-lg">
+        Make this site yours with the components below!
+      </p>
     </div>
+
+    <!-- Our Mission Section -->
+    <Mission />
+
+    <!-- Team Section -->
+    <Team />
+
+    <!-- Why Choose Us Section -->
+    <WhyChooseUs />
+
+    <!-- CTA Section -->
+    <CTA />
   </div>
 </div>
 
