@@ -113,7 +113,7 @@
         >
             {yearlyLabel}
         </button>
-        {#if isYearly && savingsText}
+        {#if savingsText}
             <span class="savings-badge">{savingsText}</span>
         {/if}
     </div>
