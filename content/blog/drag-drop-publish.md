@@ -3,7 +3,6 @@ title: Drag, Drop, Done
 description: How publishing a blog post became as easy as saving a text file
 date: 2025-12-11
 author: Accretional Team
-authorAvatar: https://accretional.com/_app/immutable/assets/semih.DUZhZcba.jpg
 category: tutorial
 thumbnail: /blog_thumbnail1.jpg
 order: 1
