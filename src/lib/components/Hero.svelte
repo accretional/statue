@@ -2,8 +2,8 @@
   // Hero component - Homepage hero section
   export let badgeText = '<a href="https://github.com/accretional/statue" target="_blank">✨ Powered by Statue SSG</a>';
   export let titleLine1 = 'Welcome to Your Site!';
-  export let titleLine2 = '(Statue 🗿 Default)';
-  export let description = 'Create amazing static sites easily with Statue SSG using Markdown and Svelte. Fast, secure, and SEO-friendly sites ready in minutes.';
+  export let titleLine2 = '(Statue <img src="/favicon.png" alt="Statue" class="inline-block w-16 h-16 align-middle" /> Default)';
+  export let description = 'Create amazing static sites easily with Statue using Markdown and Svelte. Fast, secure, and SEO-friendly sites ready in minutes.';
   export let primaryButtonText = 'Explore Content';
   export let primaryButtonLink = '#directories';
   export let secondaryButtonText = 'Documentation';
@@ -28,7 +28,7 @@
           {titleLine1}<br />
         </span>
         <span class="text-[var(--color-secondary)]">
-          {titleLine2}
+          {@html titleLine2}
         </span>
       </h1>
       
