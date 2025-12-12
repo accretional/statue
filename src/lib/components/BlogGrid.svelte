@@ -1,5 +1,5 @@
 <script>
-  // BlogGrid component - Linear-style 2-column blog grid
+  // BlogGrid component - Masonry-style mixed blog grid
   import BlogCard from './BlogCard.svelte';
 
   export let posts = [];
@@ -8,17 +8,32 @@
 
 {#if posts && posts.length > 0}
   <div class="blog-grid">
-    {#each posts as post}
-      <BlogCard
-        title={post.metadata?.title || 'Untitled'}
-        description={post.metadata?.description || ''}
-        date={post.metadata?.date || ''}
-        author={post.metadata?.author || ''}
-        authorAvatar={post.metadata?.authorAvatar || ''}
-        thumbnail={post.metadata?.thumbnail || ''}
-        url={post.url}
-      />
-    {/each}
+    <div class="blog-grid-column">
+      {#each posts.filter((_, i) => i % 2 === 0) as post}
+        <BlogCard
+          title={post.metadata?.title || 'Untitled'}
+          description={post.metadata?.description || ''}
+          date={post.metadata?.date || ''}
+          author={post.metadata?.author || ''}
+          authorAvatar={post.metadata?.authorAvatar || ''}
+          thumbnail={post.metadata?.thumbnail || ''}
+          url={post.url}
+        />
+      {/each}
+    </div>
+    <div class="blog-grid-column">
+      {#each posts.filter((_, i) => i % 2 === 1) as post}
+        <BlogCard
+          title={post.metadata?.title || 'Untitled'}
+          description={post.metadata?.description || ''}
+          date={post.metadata?.date || ''}
+          author={post.metadata?.author || ''}
+          authorAvatar={post.metadata?.authorAvatar || ''}
+          thumbnail={post.metadata?.thumbnail || ''}
+          url={post.url}
+        />
+      {/each}
+    </div>
   </div>
 {:else}
   <div class="empty-state">
@@ -28,15 +43,25 @@
 
 <style>
   .blog-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 48px 32px;
+    display: flex;
+    gap: 32px;
+  }
+
+  .blog-grid-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
   }
 
   @media (max-width: 768px) {
     .blog-grid {
-      grid-template-columns: 1fr;
-      gap: 40px;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .blog-grid-column {
+      gap: 24px;
     }
   }
 

@@ -4,6 +4,7 @@ date: 2025-12-8
 author: Brant Feick
 description: Components just got even easier
 authorAvatar: https://accretional.com/_app/immutable/assets/brant.ewNVXXxy.jpg
+thumbnail: /thumbnails/blog_thumbnail1.jpg
 ---
 
 # Introducing the Statue Component Library: Drop-In Svelte Components That Just Work

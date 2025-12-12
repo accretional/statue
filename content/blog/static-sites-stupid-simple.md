@@ -6,6 +6,7 @@ author: Brant Feick
 authorAvatar: https://accretional.com/_app/immutable/assets/brant.ewNVXXxy.jpg
 category: statue
 order: 1
+thumbnail: /thumbnails/blog_thumbnail1.jpg
 ---
 
 ## Static Sites, Stupid Simple

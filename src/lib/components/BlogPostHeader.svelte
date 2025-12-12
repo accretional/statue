@@ -18,23 +18,8 @@
     day: '2-digit'
   }) : '';
 
-  // Default placeholder thumbnails
-  const defaultThumbnails = [
-    '/thumbnails/blog_thumbnail1.jpg',
-    '/thumbnails/blog_thumbnail2.jpg'
-  ];
-
-  // Generate consistent index based on title
-  function getDefaultThumbnail(title) {
-    let hash = 0;
-    for (let i = 0; i < title.length; i++) {
-      hash = title.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    return defaultThumbnails[Math.abs(hash) % defaultThumbnails.length];
-  }
-
-  // Use provided thumbnail (local path or URL) or fallback to default
-  $: thumbnailSrc = thumbnail || getDefaultThumbnail(title);
+  // Check if thumbnail exists
+  $: hasThumbnail = !!thumbnail;
 </script>
 
 <header class="blog-post-header">
@@ -56,15 +41,17 @@
     <p class="description">{description}</p>
   {/if}
 
-  <!-- Thumbnail -->
-  <div class="thumbnail-container">
-    <img src={thumbnailSrc} alt={title} class="thumbnail" />
-  </div>
+  <!-- Thumbnail (only if provided) -->
+  {#if hasThumbnail}
+    <div class="thumbnail-container">
+      <img src={thumbnail} alt={title} class="thumbnail" />
+    </div>
+  {/if}
 
   <!-- Meta: Author & Date -->
   <div class="meta">
     {#if author}
-      <div class="avatar-wrapper">
+      <div class="avatar-wrapper" class:has-image={!!authorAvatar}>
         <AuthorAvatar {author} avatar={authorAvatar} size={null} />
       </div>
       <span class="author">{author}</span>
@@ -141,10 +128,13 @@
   .avatar-wrapper {
     width: 36px;
     height: 36px;
+  }
+
+  .avatar-wrapper.has-image {
     transition: width 0.15s ease-out, height 0.15s ease-out;
   }
 
-  .avatar-wrapper:hover {
+  .avatar-wrapper.has-image:hover {
     width: 108px;
     height: 108px;
   }

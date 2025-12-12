@@ -1,5 +1,5 @@
 <script>
-  // BlogCard component - Linear-style blog card with thumbnail
+  // BlogCard component - Linear-style blog card with thumbnail or minimal design
   import { onMount, onDestroy } from 'svelte';
   import { browser } from '$app/environment';
   import AuthorAvatar from './AuthorAvatar.svelte';
@@ -13,30 +13,18 @@
   export let url = '';
   export let enableScrollAnimation = false;
 
+  // Check if thumbnail exists
+  $: hasThumbnail = !!thumbnail;
+
+  // Get title initial for minimal card
+  $: titleInitial = title ? title.trim().charAt(0).toUpperCase() : '?';
+
   // Format date
   $: formattedDate = date ? new Date(date).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'short',
     day: '2-digit'
   }) : '';
-
-  // Default placeholder thumbnails
-  const defaultThumbnails = [
-    '/thumbnails/blog_thumbnail1.jpg',
-    '/thumbnails/blog_thumbnail2.jpg'
-  ];
-
-  // Generate consistent index based on title (so same post always gets same thumbnail)
-  function getDefaultThumbnail(title) {
-    let hash = 0;
-    for (let i = 0; i < title.length; i++) {
-      hash = title.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    return defaultThumbnails[Math.abs(hash) % defaultThumbnails.length];
-  }
-
-  // Use provided thumbnail (local path or URL) or fallback to default
-  $: thumbnailSrc = thumbnail || getDefaultThumbnail(title);
 
   // Scroll-based transform
   let cardElement;
@@ -92,24 +80,44 @@
   });
 </script>
 
-<a href={url} class="blog-card group block" bind:this={cardElement}>
-  <!-- Thumbnail -->
-  <div class="thumbnail-container">
-    <img
-      src={thumbnailSrc}
-      alt={title}
-      class="thumbnail"
-      style={enableScrollAnimation ? `transform: scale(${scale}) rotate(${rotation}deg);` : ''}
-    />
-  </div>
+{#if hasThumbnail}
+  <!-- Card with Thumbnail -->
+  <a href={url} class="blog-card blog-card--with-thumbnail" bind:this={cardElement}>
+    <div class="thumbnail-container">
+      <img
+        src={thumbnail}
+        alt={title}
+        class="thumbnail"
+        style={enableScrollAnimation ? `transform: scale(${scale}) rotate(${rotation}deg);` : ''}
+      />
+    </div>
 
-  <!-- Content -->
-  <div class="card-content">
-    <!-- Author & Date -->
+    <div class="card-content">
+      {#if author || formattedDate}
+        <div class="meta">
+          {#if author}
+            <AuthorAvatar {author} avatar={authorAvatar} size={28} />
+            <span class="author">{author}</span>
+          {/if}
+          {#if author && formattedDate}<span class="separator">·</span>{/if}
+          {#if formattedDate}<span class="date">{formattedDate}</span>{/if}
+        </div>
+      {/if}
+
+      <h3 class="title">{title}</h3>
+
+      {#if description}
+        <p class="description">{description}</p>
+      {/if}
+    </div>
+  </a>
+{:else}
+  <!-- Minimal text-only card without Thumbnail -->
+  <a href={url} class="blog-card blog-card--minimal" bind:this={cardElement}>
     {#if author || formattedDate}
       <div class="meta">
         {#if author}
-          <AuthorAvatar {author} avatar={authorAvatar} size={28} />
+          <AuthorAvatar {author} avatar={authorAvatar} size={24} />
           <span class="author">{author}</span>
         {/if}
         {#if author && formattedDate}<span class="separator">·</span>{/if}
@@ -117,15 +125,13 @@
       </div>
     {/if}
 
-    <!-- Title -->
     <h3 class="title">{title}</h3>
 
-    <!-- Description -->
     {#if description}
       <p class="description">{description}</p>
     {/if}
-  </div>
-</a>
+  </a>
+{/if}
 
 <style>
   .blog-card {
@@ -133,7 +139,13 @@
     text-decoration: none;
   }
 
-  .thumbnail-container {
+  /* Card with Thumbnail */
+  .blog-card--with-thumbnail {
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .blog-card--with-thumbnail .thumbnail-container {
     width: 100%;
     aspect-ratio: 16 / 10;
     border-radius: 12px;
@@ -149,6 +161,28 @@
     object-fit: cover;
     will-change: transform;
     transition: transform 0.1s ease-out;
+  }
+
+  /* Minimal Card without Thumbnail */
+  .blog-card--minimal {
+    display: block;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .blog-card--minimal .title {
+    font-size: 18px;
+    margin-bottom: 6px;
+  }
+
+  .blog-card--minimal .description {
+    -webkit-line-clamp: 2;
+    font-size: 14px;
+  }
+
+  .blog-card--minimal .meta {
+    margin-bottom: 8px;
+    font-size: 13px;
   }
 
   .card-content {
