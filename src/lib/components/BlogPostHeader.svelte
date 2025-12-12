@@ -17,6 +17,24 @@
     month: 'long',
     day: '2-digit'
   }) : '';
+
+  // Default placeholder thumbnails
+  const defaultThumbnails = [
+    '/thumbnails/blog_thumbnail1.jpg',
+    '/thumbnails/blog_thumbnail2.jpg'
+  ];
+
+  // Generate consistent index based on title
+  function getDefaultThumbnail(title) {
+    let hash = 0;
+    for (let i = 0; i < title.length; i++) {
+      hash = title.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return defaultThumbnails[Math.abs(hash) % defaultThumbnails.length];
+  }
+
+  // Use provided thumbnail (local path or URL) or fallback to default
+  $: thumbnailSrc = thumbnail || getDefaultThumbnail(title);
 </script>
 
 <header class="blog-post-header">
@@ -39,16 +57,16 @@
   {/if}
 
   <!-- Thumbnail -->
-  {#if thumbnail}
-    <div class="thumbnail-container">
-      <img src={thumbnail} alt={title} class="thumbnail" />
-    </div>
-  {/if}
+  <div class="thumbnail-container">
+    <img src={thumbnailSrc} alt={title} class="thumbnail" />
+  </div>
 
   <!-- Meta: Author & Date -->
   <div class="meta">
     {#if author}
-      <AuthorAvatar {author} avatar={authorAvatar} size={24} />
+      <div class="avatar-wrapper">
+        <AuthorAvatar {author} avatar={authorAvatar} size={null} />
+      </div>
       <span class="author">{author}</span>
     {/if}
     {#if author && formattedDate}<span class="separator">·</span>{/if}
@@ -115,9 +133,20 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    font-size: 14px;
+    gap: 10px;
+    font-size: 16px;
     color: var(--color-muted);
+  }
+
+  .avatar-wrapper {
+    width: 36px;
+    height: 36px;
+    transition: width 0.15s ease-out, height 0.15s ease-out;
+  }
+
+  .avatar-wrapper:hover {
+    width: 108px;
+    height: 108px;
   }
 
   .author {

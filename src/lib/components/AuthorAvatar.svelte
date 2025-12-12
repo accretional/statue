@@ -15,7 +15,8 @@
 
 <div
   class="author-avatar"
-  style="width: {size}px; height: {size}px; font-size: {size * 0.45}px;"
+  style={size ? `width: ${size}px; height: ${size}px; font-size: ${size * 0.45}px;` : ''}
+  class:full-size={!size}
 >
   {#if avatar}
     <img src={avatar} alt={author} class="avatar-image" />
@@ -31,6 +32,12 @@
     flex-shrink: 0;
     border-radius: 50%;
     overflow: hidden;
+  }
+
+  .author-avatar.full-size {
+    width: 100%;
+    height: 100%;
+    font-size: 1em;
   }
 
   .avatar-image {

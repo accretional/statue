@@ -1,9 +1,10 @@
 ---
 title: Hello World
 date: 2025-11-21
-author: Statue User
+author: Semih Polat
+authorAvatar: https://accretional.com/_app/immutable/assets/semih.DUZhZcba.jpg
 description: Your first blog post
-thumbnail: /thumbnails/blog_thumbnail2.jpg
+thumbnail: /thumbnails/blog_thumbnail1.jpg
 ---
 
 # Hello World
