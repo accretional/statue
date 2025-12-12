@@ -1,6 +1,5 @@
 <script>
   import { page } from '$app/stores';
-  import NavigationBar from '$lib/components/NavigationBar.svelte';
   import Warning from '$lib/components/Warning.svelte';
   import ContentHeader from '$lib/components/ContentHeader.svelte';
   import ContentBody from '$lib/components/ContentBody.svelte';
@@ -64,7 +63,6 @@
       sidebarTitle="Docs"
       showToc={false}
       headings={[]}
-      navbarItems={directories}
     >
       <div class="text-center py-12">
         <h1 class="text-2xl font-bold text-[var(--color-foreground)] mb-4">Page Not Found</h1>
@@ -90,7 +88,6 @@
       {headings}
       {activePath}
       sidebarTitle="Docs"
-      navbarItems={directories}
     >
       {#if content.metadata.warning}
         <div class="mb-6">
@@ -118,13 +115,9 @@
       content={content.content}
       {backLink}
       {backLinkText}
-      navbarItems={directories}
-      {activePath}
     />
   {:else}
     <!-- Default Layout -->
-    <NavigationBar navbarItems={directories} {activePath} />
-
     <div class="min-h-screen text-white bg-gradient-to-b from-[var(--color-hero-from)] via-[var(--color-hero-via)] to-[var(--color-hero-to)]">
       <div class="container mx-auto px-4 py-16">
         <div class="max-w-6xl mx-auto">

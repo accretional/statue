@@ -1,5 +1,4 @@
 <script>
-  import NavigationBar from '$lib/components/NavigationBar.svelte';
   import DirectoryHeader from '$lib/components/DirectoryHeader.svelte';
   import SubDirectories from '$lib/components/SubDirectories.svelte';
   import DirectoryContent from '$lib/components/DirectoryContent.svelte';
@@ -55,7 +54,6 @@
     sidebarTitle={currentDirectory.title}
     showToc={false}
     headings={[]}
-    navbarItems={directories}
   >
     <DocsDirectoryList
       title={currentDirectory.title}
@@ -68,13 +66,9 @@
   <BlogLayout
     title={currentDirectory.title}
     posts={currentDirContent}
-    navbarItems={directories}
-    activePath={currentDirectory.url}
   />
 {:else}
   <!-- Default Layout -->
-  <NavigationBar navbarItems={directories} activePath={currentDirectory.url} />
-
   <div class="min-h-screen text-white bg-gradient-to-b from-[var(--color-hero-from)] via-[var(--color-hero-via)] to-[var(--color-hero-to)]">
     <div class="container mx-auto px-4 py-16">
       <DirectoryHeader title={currentDirectory.title} />

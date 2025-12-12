@@ -1,16 +1,11 @@
 <script>
   // BlogLayout component - Linear-style blog layout wrapper
-  import NavigationBar from './NavigationBar.svelte';
   import BlogHeader from './BlogHeader.svelte';
   import BlogGrid from './BlogGrid.svelte';
 
   export let title = 'Blog';
   export let posts = [];
-  export let navbarItems = [];
-  export let activePath = '/blog';
 </script>
-
-<NavigationBar {navbarItems} {activePath} />
 
 <div class="blog-layout">
   <div class="blog-container">

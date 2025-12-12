@@ -1,4 +1,5 @@
 <script>
+  import NavigationBar from '$lib/components/NavigationBar.svelte';
   import Footer from '$lib/components/Footer.svelte';
   import { page } from '$app/stores';
   import { onNavigate } from '$app/navigation';
@@ -29,6 +30,8 @@
     });
   });
 </script>
+
+<NavigationBar navbarItems={globalDirectories} />
 
 <main>
   <slot />

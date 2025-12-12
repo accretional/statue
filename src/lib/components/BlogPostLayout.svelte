@@ -1,6 +1,5 @@
 <script>
   // BlogPostLayout component - Linear-style blog post layout wrapper
-  import NavigationBar from './NavigationBar.svelte';
   import BlogPostHeader from './BlogPostHeader.svelte';
   import BlogPostContent from './BlogPostContent.svelte';
 
@@ -13,11 +12,7 @@
   export let content = '';
   export let backLink = '/blog';
   export let backLinkText = 'Blog';
-  export let navbarItems = [];
-  export let activePath = '';
 </script>
-
-<NavigationBar {navbarItems} {activePath} />
 
 <div class="blog-post-layout">
   <div class="blog-post-container">

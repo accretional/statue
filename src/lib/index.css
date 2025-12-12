@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./themes/black-red.css";
 /* Tailwind v4 content config - scans src directory for classes */
 @source "../";
 
