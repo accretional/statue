@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "./themes/charcoal.css";
 /* Tailwind v4 content config - scans src directory for classes */
 @source "../";
 

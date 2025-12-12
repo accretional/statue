@@ -5,8 +5,8 @@ date: 2025-12-11
 author: Accretional Team
 authorAvatar: https://accretional.com/_app/immutable/assets/semih.DUZhZcba.jpg
 category: tutorial
-thumbnail: /thumbnails/blog_thumbnail1.jpg
-order: 2
+thumbnail: /blog_thumbnail1.jpg
+order: 1
 ---
 
 In 1440, Johannes Gutenberg looked at a wine press and thought, "What if books?" Four hundred years of monks hand-copying manuscripts, and suddenly any literate person could own a Bible. The gatekeepers didn't disappear overnight, but the gate got a whole lot wider.
