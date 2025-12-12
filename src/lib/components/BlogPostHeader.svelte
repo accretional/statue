@@ -1,5 +1,6 @@
 <script>
   // BlogPostHeader component - Linear-style blog post header with thumbnail
+  import { page } from '$app/stores';
   import AuthorAvatar from './AuthorAvatar.svelte';
 
   export let title = '';
@@ -20,6 +21,10 @@
 
   // Check if thumbnail exists
   $: hasThumbnail = !!thumbnail;
+
+  // Generate matching view transition name from current URL - use slug only
+  $: slug = $page.url.pathname ? $page.url.pathname.split('/').filter(Boolean).pop() : '';
+  $: transitionName = slug ? `blog-thumb-${slug}` : '';
 </script>
 
 <header class="blog-post-header">
@@ -43,7 +48,7 @@
 
   <!-- Thumbnail (only if provided) -->
   {#if hasThumbnail}
-    <div class="thumbnail-container">
+    <div class="thumbnail-container" style="view-transition-name: {transitionName};">
       <img src={thumbnail} alt={title} class="thumbnail" />
     </div>
   {/if}

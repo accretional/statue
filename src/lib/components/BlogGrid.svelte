@@ -7,9 +7,14 @@
 </script>
 
 {#if posts && posts.length > 0}
+  {@const leftColumn = posts.filter((_, i) => i % 2 === 0)}
+  {@const rightColumn = posts.filter((_, i) => i % 2 === 1)}
   <div class="blog-grid">
     <div class="blog-grid-column">
-      {#each posts.filter((_, i) => i % 2 === 0) as post}
+      {#each leftColumn as post, i}
+        {@const nextPost = leftColumn[i + 1]}
+        {@const nextHasThumbnail = nextPost?.metadata?.thumbnail ? true : false}
+        {@const isLast = i === leftColumn.length - 1}
         <BlogCard
           title={post.metadata?.title || 'Untitled'}
           description={post.metadata?.description || ''}
@@ -18,11 +23,16 @@
           authorAvatar={post.metadata?.authorAvatar || ''}
           thumbnail={post.metadata?.thumbnail || ''}
           url={post.url}
+          {nextHasThumbnail}
+          {isLast}
         />
       {/each}
     </div>
     <div class="blog-grid-column">
-      {#each posts.filter((_, i) => i % 2 === 1) as post}
+      {#each rightColumn as post, i}
+        {@const nextPost = rightColumn[i + 1]}
+        {@const nextHasThumbnail = nextPost?.metadata?.thumbnail ? true : false}
+        {@const isLast = i === rightColumn.length - 1}
         <BlogCard
           title={post.metadata?.title || 'Untitled'}
           description={post.metadata?.description || ''}
@@ -31,6 +41,8 @@
           authorAvatar={post.metadata?.authorAvatar || ''}
           thumbnail={post.metadata?.thumbnail || ''}
           url={post.url}
+          {nextHasThumbnail}
+          {isLast}
         />
       {/each}
     </div>

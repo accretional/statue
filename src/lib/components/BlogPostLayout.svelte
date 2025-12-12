@@ -50,7 +50,7 @@
 
   @media (max-width: 768px) {
     .blog-post-container {
-      padding: 40px 24px 80px;
+      padding: 80px 24px 80px;
     }
   }
 </style>

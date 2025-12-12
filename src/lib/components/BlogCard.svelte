@@ -12,9 +12,15 @@
   export let thumbnail = '';
   export let url = '';
   export let enableScrollAnimation = false;
+  export let nextHasThumbnail = false;
+  export let isLast = false;
 
   // Check if thumbnail exists
   $: hasThumbnail = !!thumbnail;
+
+  // Generate unique view transition name from URL - use slug only
+  $: slug = url ? url.split('/').filter(Boolean).pop() : '';
+  $: transitionName = slug ? `blog-thumb-${slug}` : '';
 
   // Get title initial for minimal card
   $: titleInitial = title ? title.trim().charAt(0).toUpperCase() : '?';
@@ -82,8 +88,8 @@
 
 {#if hasThumbnail}
   <!-- Card with Thumbnail -->
-  <a href={url} class="blog-card blog-card--with-thumbnail" bind:this={cardElement}>
-    <div class="thumbnail-container">
+  <a href={url} class="blog-card blog-card--with-thumbnail" class:no-border={nextHasThumbnail || isLast} bind:this={cardElement}>
+    <div class="thumbnail-container" style="view-transition-name: {transitionName};">
       <img
         src={thumbnail}
         alt={title}
@@ -143,6 +149,10 @@
   .blog-card--with-thumbnail {
     padding-bottom: 24px;
     border-bottom: 1px solid var(--color-border);
+  }
+
+  .blog-card--with-thumbnail.no-border {
+    border-bottom: none;
   }
 
   .blog-card--with-thumbnail .thumbnail-container {
