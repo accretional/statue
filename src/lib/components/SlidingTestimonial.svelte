@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
-  import { spring } from 'svelte/motion';
+  import { tweened } from 'svelte/motion';
+  import { linear } from 'svelte/easing';
 
   interface Review {
     id: number;
@@ -22,10 +23,10 @@
   let container: HTMLDivElement;
   let isPaused = $state(false);
 
-  // Spring animation for smooth transitions
-  const offset = spring(0, {
-    stiffness: 0.1,
-    damping: 0.5
+  // Tweened animation with linear easing for smooth, constant-speed transitions
+  const offset = tweened(0, {
+    duration: 600,
+    easing: linear
   });
 
   $effect(() => {
@@ -205,7 +206,6 @@
 
   .slides-wrapper {
     display: flex;
-    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     will-change: transform;
   }
 
