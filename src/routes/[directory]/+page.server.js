@@ -1,4 +1,4 @@
-import { getContentDirectories, getContentByDirectory, getSubDirectories } from '$lib/cms/content-processor';
+import { getContentDirectories, getContentByDirectory, getSubDirectories, getSidebarTree } from '$lib/cms/content-processor';
 
 // Make this page prerendered as a static page
 export const prerender = true;
@@ -7,12 +7,6 @@ export const prerender = true;
 export function load({ params }) {
   // Get directory name
   const directoryName = params.directory;
-
-  // For blog/ or docs/ directories, show the top-level route,
-  // but don't show sublevel "[slug]" routes
-  if (directoryName === 'blog' || directoryName === 'docs') {
-    // Continue to get content from this directory, but we'll filter subdirectories
-  }
 
   // Get all directories
   const directories = getContentDirectories();
@@ -29,10 +23,14 @@ export function load({ params }) {
     title: directoryName.charAt(0).toUpperCase() + directoryName.slice(1)
   };
 
+  // Get sidebar tree for docs directory
+  const sidebarItems = directoryName === 'docs' ? getSidebarTree(directoryName) : [];
+
   return {
     directories,
     directoryContent,
     subDirectories,
-    currentDirectory
+    currentDirectory,
+    sidebarItems
   };
 }

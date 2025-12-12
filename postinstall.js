@@ -168,6 +168,27 @@ async function setupStatueSSG(options = {}) {
     console.error(chalk.red('An error occurred while creating app.css:'), err);
   }
 
+  // 3.5. Copy src/app.html (required for favicon and meta tags)
+  try {
+    const templateAppHtml = path.join(templateDir, 'src/app.html');
+    const rootAppHtml = path.join(sourceDir, 'src/app.html');
+    const targetAppHtml = path.join(targetSrc, 'app.html');
+
+    let sourcePath = null;
+    if (fs.existsSync(templateAppHtml)) {
+      sourcePath = templateAppHtml;
+    } else if (fs.existsSync(rootAppHtml)) {
+      sourcePath = rootAppHtml;
+    }
+
+    if (sourcePath) {
+      fs.copySync(sourcePath, targetAppHtml, { overwrite: true });
+      console.log(chalk.green('✓ src/app.html copied successfully'));
+    }
+  } catch (err) {
+    console.error(chalk.red('An error occurred while copying app.html:'), err);
+  }
+
   // 4. Copy Root Configuration Files from Template (or fallback to source root)
   try {
     const configFiles = ['site.config.js', 'svelte.config.js', 'vite.config.js', 'postcss.config.js'];
@@ -246,36 +267,30 @@ async function setupStatueSSG(options = {}) {
     console.error(chalk.red('An error occurred while updating package.json:'), err);
   }
 
-  // 6. Copy Static Assets (Favicon)
+  // 6. Copy Static Assets (entire static folder)
   try {
     const targetStatic = path.join(targetDir, 'static');
     if (!fs.existsSync(targetStatic)) fs.ensureDirSync(targetStatic);
 
-    const faviconFile = 'favicon.png';
     // templateDir could be the same as sourceDir (default template)
-    const templateStaticPath = path.join(templateDir, 'static', faviconFile);
-    const rootStaticPath = path.join(sourceDir, 'static', faviconFile);
-    const targetFaviconPath = path.join(targetStatic, faviconFile);
+    const templateStaticPath = path.join(templateDir, 'static');
+    const rootStaticPath = path.join(sourceDir, 'static');
 
     let sourcePath = null;
 
-    // 1. Try template specific static/favicon.png
+    // 1. Try template specific static folder
     if (fs.existsSync(templateStaticPath)) {
       sourcePath = templateStaticPath;
-    } 
-    // 2. Fallback to root static/favicon.png if not found in template
-    // (This covers the case where templateDir != sourceDir but template has no favicon)
+    }
+    // 2. Fallback to root static folder if not found in template
     else if (fs.existsSync(rootStaticPath)) {
       sourcePath = rootStaticPath;
     }
 
     if (sourcePath) {
-      
-      fs.copySync(sourcePath, targetFaviconPath, { overwrite: true });
-      console.log(chalk.green(`✓ ${faviconFile} copied successfully`));
-    } else {
-        // Optional: warn if no favicon found at all, though unlikely if root has it
-        // console.warn(chalk.yellow(`! No ${faviconFile} found to copy.`));
+      // Copy all static files, preserving structure
+      fs.copySync(sourcePath, targetStatic, { overwrite: true, errorOnExist: false });
+      console.log(chalk.green('✓ static folder copied successfully'));
     }
   } catch (err) {
     console.error(chalk.red('An error occurred while copying static assets:'), err);
