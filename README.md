@@ -1,156 +1,73 @@
-# Statue SSG
+# Statue [![npm version](https://img.shields.io/npm/v/statue-ssg.svg)](https://www.npmjs.com/package/statue-ssg) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-A lightning-fast static site generator that combines the power of Markdown content with SvelteKit. Create beautiful static websites in minutes, with SvelteKit integration.
+Statue is a blazingly-fast static site generator based on Markdown, SvelteKit, and a component library.
 
-[![npm version](https://img.shields.io/npm/v/statue-ssg.svg)](https://www.npmjs.com/package/statue-ssg)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-
-## Features
-
-- 📝 **Markdown-Powered**: Write content in Markdown with frontmatter for metadata
-- 🚀 **Zero Configuration**: Get started with zero configuration
-- 🔍 **SEO Friendly**: Optimized for search engines
-- 🔄 **Fast Build Times**: Generate your site in seconds
-- 📂 **Organized Content**: Automatically organizes content by directories
-- 🎨 **Beautiful UI**: Includes a modern UI with Tailwind CSS
-
-## Quick Start Guide
-
-### One-Liner Setup (Recommended)
-
-For a quick setup, run this single command:
+**One-line setup:**
 
 ```bash
-yes | npx sv create . --template minimal --types ts --no-add-ons --install npm && npm install statue-ssg && npx statue init
+yes | npx sv create . --template minimal --types ts --no-add-ons --install npm && npm install statue-ssg && npx statue init && npm install && npm run dev
 ```
 
-This command will create a SvelteKit project, install Statue SSG, and set up everything automatically.
+Content like blogs and documentation can be added and modified directly through `.md` files, with pages and the site structure itself based on Svelte components. Statue sites are fully static, so **management is simple, development can be non-technical, and hosting is cheap or free. [Join us on Discord! 🗿](https://discord.gg/accretional)**
 
-### Step-by-Step Guide
+![area3-github](https://github.com/user-attachments/assets/9a53e186-60fd-443e-b87b-9907d217df20)
 
-### Step 1: Create a SvelteKit Project
+## Why Statue?
 
-First, you need to create a SvelteKit project:
+Statue is **Fast, Simple, and Flexible from start to finish**. It takes only one command to get started, builds and deployments are fast, hosting is simple, sites are extensible, and developing a Statue site is about building what you want rather than battling, learning, and conforming to the tool itself.
+
+- **Markdown-first**: Build out your site content by writing `.md` files: no coding required.
+- **Powered by SvelteKit**: Familiar Svelte features and ecosystem, based on an elegant declarative model ideal for static sites.
+- **Tailwind + Components**: Customize the UI easily with Tailwind CSS, and a library of included components.
+- **Easy to Use and Extend**: The Declarative Component Model is easy to use, and with LLMs, easy for even non-technical users to work with.
+- **Ultra-cheap hosting**: Deploy static output to Netlify, Vercel, Cloudflare Pages, GitHub Pages, etc.
+- **Low Maintenance**: Static sites are almost maintenance-free, and Statue itself is much less complex than other web tools.
+
+![area4-github](https://github.com/user-attachments/assets/0026d024-9aa3-4ced-a71d-d99c2ee7e8f2)
+
+## Getting Started
+
+After running the setup command above, your site is live at `http://localhost:5173`.
+
+**Next steps:**
+1. **[Complete the New Site Checklist](./content/docs/new-site-checklist.md)** - Customize your site step-by-step
+2. **[Read Getting Started](./content/docs/get-started.md)** - Learn key concepts
+3. **Add content** - Create `.md` files in `content/` and they become pages automatically
+
+## Documentation
+
+### 📚 For Users
+
+- **[Getting Started](./content/docs/get-started.md)** - Key concepts and quick start
+- **[New Site Checklist](./content/docs/new-site-checklist.md)** - Step-by-step customization guide
+- **[Site Configuration](./content/docs/site-config.md)** - Configure site.config.js
+- **[Themes](./content/docs/themes.md)** - Built-in themes and customization
+- **[Components](./content/docs/components.md)** - Component reference
+- **[Templates](./content/docs/templates.md)** - Using templates
+- **[Routing](./content/docs/routing.md)** - How URLs work
+
+### 🔧 For Developers
+
+- **[Development Guide](./DEVELOPMENT.md)** - Architecture and internals
+- **[Contributing](./CONTRIBUTING.md)** - How to contribute
+- **[Components API](https://github.com/accretional/statue/blob/main/src/lib/components/COMPONENTS_README.md)** - Full component reference
+- **[Themes API](https://github.com/accretional/statue/blob/main/src/lib/themes/README.md)** - Creating custom themes
+
+## Deploy
+
+Build and deploy your static site:
 
 ```bash
-npx sv create . --template minimal --types ts --no-add-ons --install npm
-
-npm install
+npm run build
 ```
 
-### Step 2: Install Statue SSG
+Deploy the `build/` directory to any static host. **[See deployment guide →](./content/docs/get-started.md#4-build-and-deploy)**
 
-Add Statue SSG to your SvelteKit project:
+## Community
 
-```bash
-npm install statue-ssg
-```
-
-### Step 3: Set Up Statue SSG
-
-After installation, the setup process will automatically run. If it doesn't, you can manually run:
-
-```bash
-npx statue init
-```
-
-This will:
-- Copy statue files to your project
-- Set up the content directory structure
-- Configure routes for your Markdown content
-- Add necessary dependencies
-
-### Step 4: Start Developing
-
-Start the development server:
-
-```bash
-npm run dev -- --open
-```
-
-That's it! You now have a fully functional static site generator with your SvelteKit project.
-
-## Creating Content
-
-Add your Markdown content to the `content` directory:
-
-```
-content/
-├── blog/           # Blog posts
-│   └── post1.md    # Example: /blog/post1
-├── docs/           # Documentation
-│   └── guide.md    # Example: /docs/guide
-└── static/         # Static pages
-    └── about.md    # Example: /static/about
-```
-
-### Markdown Example
-
-Create Markdown files with frontmatter metadata:
-
-```markdown
----
-title: My First Post
-description: This is my first blog post
-date: 2025-04-03
----
-
-# Hello World
-
-This is my first post using Statue SSG.
-
-## Features
-
-- Simple Markdown content
-- Automatic routing
-- Beautiful UI
-```
-
-## 🗣️ Troubleshooting
-
-If you encounter any issues during installation:
-
-1. Make sure the `--ignore-scripts` setting is not enabled in your NPM configuration
-
-## Developer Notes
-
-During the setup and build processes, the following occurs:
-
-- **Project Setup:**  
-  The SvelteKit project is initialized using `npx sv create` followed by installing dependencies.
-
-- **Library Installation:**  
-  Running `npm install statue-ssg` integrates the Statue SSG library into your project.
-
-- **Initialization:**  
-  Executing `npx statue init` triggers a post-install script. This script copies the template folder from within the library to your project, and updates configuration files (e.g., `svelte.config.js` and others) accordingly.
-
-- **Content Management:**  
-  Once set up, you can rapidly create a site by editing the Markdown files in the `content` folder. Group your content by simply creating new folders and adding Markdown files to them. If you want to modify the homepage, edit the `page.svelte` file under the `routes` folder. Additionally, you can extend your site by creating your own Svelte files within the `routes` folder.
-
-- **Static Site Generation:**  
-  When you run `npm run build`, the build process executes `hooks/server.js`. This file uses an `entries` method to scan all your project's root routes and converts them into static pages.
-
-  The rest of the rendering process relies on SvelteKit's default behavior, where `+page.svelte` and `+page.server.js` files are rendered.
-
-- **Preview:**  
-  Finally, use `npm run preview` to view the generated static site.
-
-These additional notes provide insight into the inner workings of Statue SSG, helping you understand and troubleshoot the setup and build processes when needed.
-
-### Updating the Project
-
-If you want to update the project:
-- Increase the version in your `package.json`.
-- Commit your changes.
-- Run `npm run release` to release the update.
-
-### Local Testing
-
-If you want to test your changes locally before publishing:
-- Run `npm pack` to compile your project into a local package.
-- Then, use `npm install <path-to-compiled-folder>` to install and test the compiled version locally.
-This allows you to verify all your changes in a local environment.
+- **[Discord](https://discord.gg/accretional)** - Chat with the community
+- **[GitHub Issues](https://github.com/accretional/statue/issues)** - Report bugs or request features
+- **[GitHub Discussions](https://github.com/accretional/statue/discussions)** - Ask questions
 
 ## License
 
