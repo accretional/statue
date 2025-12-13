@@ -41,9 +41,12 @@ const createLinkTransformer = (currentDirectory) => {
     const title = token.title || null;
     const text = token.text || '';
 
+    // Check if link has a protocol (mailto:, tel:, http:, https:, ftp:, etc.)
+    const hasProtocol = href && typeof href === 'string' && /^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(href);
+
     // Only transform relative links that point to .md files or local paths
-    // Do not transform external links (http://, https://) or anchor links (#)
-    if (href && typeof href === 'string' && !href.startsWith('http://') && !href.startsWith('https://') && !href.startsWith('#')) {
+    // Do not transform links with protocols or anchor links (#)
+    if (href && typeof href === 'string' && !hasProtocol && !href.startsWith('#')) {
       // Handle .md file links - remove the extension
       if (href.endsWith('.md')) {
         href = href.slice(0, -3);
