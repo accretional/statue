@@ -164,6 +164,6 @@ We're working on additional templates:
 ## Next Steps
 
 - **[Statue.dev](https://statue.dev)** - Official documentation
-- **[New Site Checklist](./new-site-checklist)** - Customize your site after choosing a template
-- **[Themes](./themes)** - Style your template with themes
-- **[Components](./components)** - Use components in your template pages
+- **[New Site Checklist](./new-site-checklist.md)** - Customize your site after choosing a template
+- **[Themes](./themes.md)** - Style your template with themes
+- **[Components](./components.md)** - Use components in your template pages

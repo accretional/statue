@@ -523,6 +523,6 @@ export interface SiteConfig {
 ## Next Steps
 
 - **[Statue.dev](https://statue.dev)** - Official documentation
-- **[New Site Checklist](./new-site-checklist)** - Setup walkthrough
-- **[Components](./components)** - Use config in components
-- **[Themes](./themes)** - Style your site
+- **[New Site Checklist](./new-site-checklist.md)** - Setup walkthrough
+- **[Components](./components.md)** - Use config in components
+- **[Themes](./themes.md)** - Style your site

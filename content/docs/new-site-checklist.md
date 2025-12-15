@@ -22,7 +22,7 @@ Follow this checklist to replace placeholder content and make the site your own.
 
 **Why:** Template variables like `{{site.name}}` will show your info throughout the site.
 
-**[Full config guide →](./site-config)**
+**[Full config guide →](./site-config.md)**
 
 ---
 
@@ -109,7 +109,7 @@ content/
 
 Available: `blue`, `red`, `orange`, `green`, `purple`, `cyan`, `pink`, `black-white`
 
-**[See all themes →](./themes)**
+**[See all themes →](./themes.md)**
 
 ---
 
@@ -162,10 +162,10 @@ npx wrangler pages deploy build --project-name=your-project
 ## Need Help?
 
 - **[Statue.dev](https://statue.dev)** - Official Statue documentation site
-- **[Getting Started](./get-started)** - Overview of Statue basics
-- **[Site Config](./site-config)** - Configuration details
-- **[Themes](./themes)** - Styling guide
-- **[Components](./components)** - Component reference
+- **[Getting Started](./get-started.md)** - Overview of Statue basics
+- **[Site Config](./site-config.md)** - Configuration details
+- **[Themes](./themes.md)** - Styling guide
+- **[Components](./components.md)** - Component reference
 
 **Community:**
 - [Statue.dev](https://statue.dev) - Official project site

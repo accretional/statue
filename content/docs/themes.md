@@ -198,9 +198,9 @@ This requires custom JavaScript. See [Tailwind dark mode docs](https://tailwindc
 
 ## Next Steps
 
-- **[Site Config](./site-config)** - Configure site settings
-- **[Components](./components)** - Ensure components work with your theme
-- **[Get Started](./get-started)** - Build your site
+- **[Site Config](./site-config.md)** - Configure site settings
+- **[Components](./components.md)** - Ensure components work with your theme
+- **[Get Started](./get-started.md)** - Build your site
 
 **Resources:**
 - **[Statue.dev](https://statue.dev)** - Official documentation
