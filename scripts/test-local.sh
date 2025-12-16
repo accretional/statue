@@ -7,7 +7,7 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
-TEST_DIR="$PROJECT_ROOT/../test-preview"
+TEST_DIR="$PROJECT_ROOT/build/test-preview"
 TARBALL_NAME="statue-ssg-local.tgz"
 
 echo "🗿 Testing local statue-ssg package..."
@@ -46,7 +46,7 @@ npx statue init
 
 echo "📥 Installing dependencies..."
 npm install
-npm install "./$TARBALL_NAME"
+
 # 6. Clean up tarball
 echo "🗑️  Cleaning up tarball..."
 rm -f "$TARBALL_NAME"
@@ -56,4 +56,4 @@ echo "✨ Setup complete!"
 echo "📍 Test project location: $TEST_DIR"
 echo ""
 echo "🏃 Starting dev server..."
-npm run build && npm run postbuild && npm run preview
+npm run build && npm run preview
