@@ -44,7 +44,7 @@
 		"dev": "vite dev",
 		"build": "vite build",
 		"postbuild": "node scripts/generate-seo-files.js && node scripts/run-pagefind.js",
-		"preview": "npx -y serve build -p 4173",
+		"preview": "npx -y serve build",
 		"preview:vite": "vite preview",
 		"prepublishOnly": "npm run build",
 		"setup": "node postinstall.js",
