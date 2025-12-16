@@ -590,9 +590,9 @@ For complete component documentation with all props and examples:
 
 ## Next Steps
 
-- **[Themes](./themes)** - Style components with themes
-- **[Get Started](./get-started)** - Build pages with components
-- **[Site Config](./site-config)** - Configure component data sources
+- **[Themes](./themes.md)** - Style components with themes
+- **[Get Started](./get-started.md)** - Build pages with components
+- **[Site Config](./site-config.md)** - Configure component data sources
 
 **Resources:**
 - **[Statue.dev](https://statue.dev)** - Official documentation

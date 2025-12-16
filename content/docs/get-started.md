@@ -45,7 +45,7 @@ Change your entire site's look by switching one line in `src/lib/index.css`:
 @import "statue-ssg/themes/blue.css";
 ```
 
-Eight built-in themes available. **[Learn more →](./themes)**
+Eight built-in themes available. **[Learn more →](./themes.md)**
 
 ### 🧩 Components Build Pages
 
@@ -57,7 +57,7 @@ Use pre-built components to construct your pages:
 <Categories {directories} />
 ```
 
-Or create your own. **[See all components →](./components)**
+Or create your own. **[See all components →](./components.md)**
 
 ### ⚙️ Config Sets Globals
 
@@ -71,7 +71,7 @@ export const siteConfig = {
 };
 ```
 
-Use these values anywhere with `{{site.name}}`. **[Configure your site →](./site-config)**
+Use these values anywhere with `{{site.name}}`. **[Configure your site →](./site-config.md)**
 
 ### 📐 Templates Provide Structure
 
@@ -82,7 +82,7 @@ npx statue init --template blog    # Blog-focused
 npx statue init                     # Default
 ```
 
-**[Learn about templates →](./templates)**
+**[Learn about templates →](./templates.md)**
 
 ---
 
@@ -127,14 +127,14 @@ Edit `site.config.js`.
 ## Next Steps
 
 **New to Statue?** Follow the checklist:
-- **[New Site Checklist](./new-site-checklist)** - Step-by-step customization
+- **[New Site Checklist](./new-site-checklist.md)** - Step-by-step customization
 
 **Want to learn more?**
-- **[Site Configuration](./site-config)** - All config options
-- **[Themes](./themes)** - Styling your site
-- **[Components](./components)** - Component reference
-- **[Templates](./templates)** - Using templates
-- **[Routing](./routing)** - How URLs work
+- **[Site Configuration](./site-config.md)** - All config options
+- **[Themes](./themes.md)** - Styling your site
+- **[Components](./components.md)** - Component reference
+- **[Templates](./templates.md)** - Using templates
+- **[Routing](./routing.md)** - How URLs work
 
 **Need help?**
 - **[Statue.dev](https://statue.dev)** - Official documentation site

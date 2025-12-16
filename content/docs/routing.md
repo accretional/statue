@@ -285,9 +285,9 @@ npm run dev
 
 ### Statue Docs
 - **[Statue.dev](https://statue.dev)** - Official documentation
-- **[Get Started](./get-started)** - Overview
-- **[Site Config](./site-config)** - Configuration
-- **[Components](./components)** - Build pages
+- **[Get Started](./get-started.md)** - Overview
+- **[Site Config](./site-config.md)** - Configuration
+- **[Components](./components.md)** - Build pages
 
 ### SvelteKit Docs
 - **[Routing](https://svelte.dev/docs/kit/routing)** - File-based routing basics
