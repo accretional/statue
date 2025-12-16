@@ -224,22 +224,32 @@ async function setupStatueSSG(options = {}) {
     const targetPackageJsonPath = path.join(targetDir, 'package.json');
     if (fs.existsSync(targetPackageJsonPath)) {
       const packageJson = JSON.parse(fs.readFileSync(targetPackageJsonPath, 'utf8'));
-      
+
       // Dependencies required by the framework
       const dependencies = {
         'marked': '^15.0.7',
         'gray-matter': '^4.0.3'
       };
-      
+
       const devDependencies = {
         '@sveltejs/adapter-static': '^3.0.0',
         '@tailwindcss/postcss': '^4.1.14',
         'tailwindcss': '^4.0.0',
         '@types/node': '^22.13.13',
         'autoprefixer': '^10.4.21',
-        'postcss': '^8.5.3'
+        'postcss': '^8.5.3',
+        'pagefind': '^1.1.1'
       };
-      
+
+      // Scripts required by the framework
+      const requiredScripts = {
+        'postbuild': 'node scripts/generate-seo-files.js && node scripts/run-pagefind.js',
+        'preview': 'npx -y serve build'
+      };
+
+      // Scripts that should always be overwritten (even if they exist)
+      const scriptsToOverwrite = new Set(['preview', 'postbuild']);
+
       let dependenciesAdded = false;
       for (const [dep, version] of Object.entries(dependencies)) {
         if (!packageJson.dependencies || !packageJson.dependencies[dep]) {
@@ -248,7 +258,7 @@ async function setupStatueSSG(options = {}) {
           dependenciesAdded = true;
         }
       }
-      
+
       for (const [dep, version] of Object.entries(devDependencies)) {
         if (!packageJson.devDependencies || !packageJson.devDependencies[dep]) {
           packageJson.devDependencies = packageJson.devDependencies || {};
@@ -256,10 +266,28 @@ async function setupStatueSSG(options = {}) {
           dependenciesAdded = true;
         }
       }
-      
-      if (dependenciesAdded) {
+
+      let scriptsAdded = false;
+      packageJson.scripts = packageJson.scripts || {};
+      for (const [scriptName, scriptCommand] of Object.entries(requiredScripts)) {
+        const shouldOverwrite = scriptsToOverwrite.has(scriptName);
+        const scriptExists = packageJson.scripts[scriptName];
+        const scriptMatches = scriptExists && packageJson.scripts[scriptName] === scriptCommand;
+
+        if (!scriptExists || (shouldOverwrite && !scriptMatches)) {
+          packageJson.scripts[scriptName] = scriptCommand;
+          scriptsAdded = true;
+        }
+      }
+
+      if (dependenciesAdded || scriptsAdded) {
         fs.writeFileSync(targetPackageJsonPath, JSON.stringify(packageJson, null, 2));
-        console.log(chalk.green('✓ package.json updated with required dependencies'));
+        if (dependenciesAdded) {
+          console.log(chalk.green('✓ package.json updated with required dependencies'));
+        }
+        if (scriptsAdded) {
+          console.log(chalk.green('✓ package.json updated with required scripts'));
+        }
         console.log(chalk.blue('Please run: npm install'));
       }
     }
@@ -267,7 +295,30 @@ async function setupStatueSSG(options = {}) {
     console.error(chalk.red('An error occurred while updating package.json:'), err);
   }
 
-  // 6. Copy Static Assets (entire static folder)
+  // 6. Copy Scripts (required for postbuild)
+  try {
+    const targetScripts = path.join(targetDir, 'scripts');
+    if (!fs.existsSync(targetScripts)) fs.ensureDirSync(targetScripts);
+
+    const sourceScripts = path.join(sourceDir, 'scripts');
+    const requiredScripts = ['generate-seo-files.js', 'run-pagefind.js'];
+
+    if (fs.existsSync(sourceScripts)) {
+      requiredScripts.forEach(scriptFile => {
+        const sourceScriptPath = path.join(sourceScripts, scriptFile);
+        const targetScriptPath = path.join(targetScripts, scriptFile);
+
+        if (fs.existsSync(sourceScriptPath)) {
+          fs.copySync(sourceScriptPath, targetScriptPath, { overwrite: true });
+        }
+      });
+      console.log(chalk.green('✓ required scripts copied successfully'));
+    }
+  } catch (err) {
+    console.error(chalk.red('An error occurred while copying scripts:'), err);
+  }
+
+  // 7. Copy Static Assets (entire static folder)
   try {
     const targetStatic = path.join(targetDir, 'static');
     if (!fs.existsSync(targetStatic)) fs.ensureDirSync(targetStatic);
