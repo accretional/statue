@@ -42,6 +42,4 @@ export { default as BlogPostContent } from './components/BlogPostContent.svelte'
 export { default as BlogPostHeader } from './components/BlogPostHeader.svelte';
 export { default as BlogPostLayout } from './components/BlogPostLayout.svelte';
 
-// Config utilities
-export { siteConfig } from './safe-config.js';
 

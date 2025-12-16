@@ -1,12 +1,12 @@
 <script>
-
   import { page } from '$app/stores';
   import Search from './Search.svelte';
-  import { siteConfig } from '../safe-config.js';
+  import { siteConfig } from '/site.config.js';
 
   export let navbarItems = [];
   export let activePath = '';
-  export let showSearch = siteConfig?.search?.enabled ?? false;
+  // Disable search in dev mode (Pagefind only works after build)
+  export let showSearch = import.meta.env.DEV ? false : (siteConfig?.search?.enabled ?? false);
   export let searchPlaceholder = siteConfig?.search?.placeholder ?? "Search...";
   
   let isMenuOpen = false;
