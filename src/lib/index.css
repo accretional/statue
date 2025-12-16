@@ -1,10 +1,10 @@
 @import "tailwindcss";
+@import "./themes/black-white.css";
 /* Tailwind v4 content config - scans src directory for classes */
 @source "../";
 
 /* Theme selection - Import your desired theme (development mode uses direct src path)
 example: @import "./themes/black-white.css"; to the 2nd line */
-@import "statue-ssg/src/lib/themes/black-white.css";
 
 /* Other theme options:
 @import "statue-ssg/src/lib/themes/black-white.css";
