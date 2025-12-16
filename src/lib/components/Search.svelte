@@ -314,7 +314,7 @@
   {#if isOpen && results.length > 0}
     <div
       id="search-results"
-      class="search-results absolute top-full left-0 right-0 mt-2 max-h-[400px] overflow-y-auto rounded-lg border border-[var(--color-border)] backdrop-blur-md bg-[var(--color-card)] shadow-lg z-[60] {resultsClass}"
+      class="search-results absolute top-full left-0 right-0 mt-2 max-h-[400px] overflow-y-auto rounded-lg border border-[var(--color-border)] bg-[var(--color-card)] shadow-lg z-[60] {resultsClass}"
       role="listbox"
       aria-label="Search results"
     >
@@ -326,20 +326,20 @@
         <a
           id="search-result-{index}"
           href={result.url}
-          class="search-result block p-3 hover:bg-[var(--color-background)]/50 border-b border-[var(--color-border)]/30 last:border-b-0 transition-colors {selectedIndex === index ? 'bg-[var(--color-background)]/50' : ''}"
+          class="search-result block p-3 border-b border-[var(--color-border)] last:border-b-0 transition-colors {selectedIndex === index ? 'bg-[var(--color-primary)] text-[var(--color-on-primary)]' : ''}"
           role="option"
           aria-selected={selectedIndex === index}
           on:mouseenter={() => selectedIndex = index}
         >
           <!-- Title -->
           <div class="flex items-start justify-between gap-2 mb-1">
-            <h3 class="text-sm font-medium text-[var(--color-foreground)] line-clamp-1">
+            <h3 class="text-sm font-medium line-clamp-1 {selectedIndex === index ? '' : 'text-[var(--color-foreground)]'}">
               {@html result.meta?.title || result.title || 'Untitled'}
             </h3>
 
             <!-- Category badge -->
             {#if showCategories}
-              <span class="flex-shrink-0 px-2 py-0.5 text-xs rounded-full bg-[var(--color-primary)]/10 text-[var(--color-primary)] border border-[var(--color-primary)]/20">
+              <span class="flex-shrink-0 px-2 py-0.5 text-xs rounded-full {selectedIndex === index ? 'bg-[var(--color-on-primary)] text-[var(--color-primary)]' : 'bg-[var(--color-border)] text-[var(--color-foreground)]'} border border-[var(--color-border)]">
                 {getCategory(result.url)}
               </span>
             {/if}
@@ -347,13 +347,13 @@
 
           <!-- Excerpt -->
           {#if showExcerpts && result.excerpt}
-            <p class="text-xs text-[var(--color-muted)] line-clamp-2 mb-1">
+            <p class="text-xs line-clamp-2 mb-1 {selectedIndex === index ? 'opacity-90' : 'text-[var(--color-muted)]'}">
               {@html truncateText(result.excerpt)}
             </p>
           {/if}
 
           <!-- Meta info -->
-          <div class="flex items-center gap-2 text-xs text-[var(--color-muted)]">
+          <div class="flex items-center gap-2 text-xs {selectedIndex === index ? 'opacity-80' : 'text-[var(--color-muted)]'}">
             <span>{result.url}</span>
             {#if showDates && result.meta?.date}
               <span>•</span>
@@ -368,11 +368,11 @@
   <!-- Empty state -->
   {#if isOpen && !isLoading && query.length >= minQueryLength && results.length === 0}
     <div
-      class="search-empty absolute top-full left-0 right-0 mt-2 p-6 rounded-lg border border-[var(--color-border)] backdrop-blur-md bg-[var(--color-card)] shadow-lg z-[60] text-center"
+      class="search-empty absolute top-full left-0 right-0 mt-2 p-6 rounded-lg border border-[var(--color-border)] bg-[var(--color-card)] shadow-lg z-[60] text-center"
       role="status"
     >
       <svg
-        class="w-12 h-12 mx-auto mb-3 text-[var(--color-muted)]/50"
+        class="w-12 h-12 mx-auto mb-3 text-[var(--color-muted)]"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"

@@ -56,4 +56,4 @@ echo "✨ Setup complete!"
 echo "📍 Test project location: $TEST_DIR"
 echo ""
 echo "🏃 Starting dev server..."
-npm run dev
+npm run build && npm run preview

@@ -1,6 +1,6 @@
 ---
 title: Search
-description: Built-in client-side search powered by Pagefind
+description: Indexing site content for users to search
 icon: document
 ---
 
