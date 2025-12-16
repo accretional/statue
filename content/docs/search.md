@@ -1,3 +1,8 @@
+---
+title: Search
+description: Indexing site content for users to search
+---
+
 # Search
 
 Statue SSG includes built-in client-side search powered by [Pagefind](https://github.com/pagefind/pagefind), providing fast, scalable search for static sites of any size.
