@@ -2,6 +2,7 @@
 title: Components
 description: Using Statue's pre-built components
 order: 2
+icon: components
 ---
 
 # Components

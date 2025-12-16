@@ -1,6 +1,7 @@
 ---
 title: Routing
 description: How Statue handles routing for markdown content
+icon: map
 ---
 
 # Routing

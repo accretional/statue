@@ -1,6 +1,7 @@
 ---
 title: Templates
 description: Using and understanding Statue templates
+icon: components
 ---
 
 # Templates

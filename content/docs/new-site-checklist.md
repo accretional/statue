@@ -1,6 +1,7 @@
 ---
 title: New Site Checklist
 description: Step-by-step checklist for customizing your new Statue site
+icon: checklist
 ---
 
 # New Site Checklist

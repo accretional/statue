@@ -1,6 +1,7 @@
 ---
 title: Site Configuration
 description: Configuring your Statue site with site.config.js
+icon: settings
 ---
 
 # Site Configuration
