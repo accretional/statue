@@ -2,7 +2,7 @@
 
   import { page } from '$app/stores';
   import Search from './Search.svelte';
-  import { siteConfig } from '/site.config.js';
+  import { siteConfig } from '../safe-config.js';
 
   export let navbarItems = [];
   export let activePath = '';

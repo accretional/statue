@@ -15,10 +15,11 @@ export default defineConfig({
     alias: {
       '$content': path.resolve(__dirname, 'content'),
       '$components': path.resolve(__dirname, 'src/lib/components'),
-      '$cms': path.resolve(__dirname, 'src/lib/cms')
+      '$cms': path.resolve(__dirname, 'src/lib/cms'),
+      '/site.config.js': path.resolve(__dirname, 'site.config.js')
     }
   },
-  
+
   // Development server
   server: {
     port: 3000,
