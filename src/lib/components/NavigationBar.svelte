@@ -1,8 +1,13 @@
 <script>
+
   import { page } from '$app/stores';
+  import Search from './Search.svelte';
+  import { siteConfig } from '/site.config.js';
 
   export let navbarItems = [];
-
+  export let activePath = '';
+  export let showSearch = siteConfig?.search?.enabled ?? false;
+  
   let isMenuOpen = false;
   let isHidden = false;
   let lastScrollY = 0;
@@ -82,6 +87,13 @@
             </a>
           {/if}
         {/each}
+
+        <!-- Search component -->
+        {#if showSearch}
+          <div class="ml-2 w-56">
+            <Search placeholder="Search..." />
+          </div>
+        {/if}
         
         <a href="/docs" class="ml-4 px-4 py-2 rounded-lg bg-[var(--color-primary)] hover:brightness-110 text-[var(--color-on-primary)] text-sm font-medium transition-colors duration-200">
           Documentation
@@ -109,6 +121,12 @@
   {#if isMenuOpen}
     <div class="md:hidden bg-[var(--color-background)]">
       <div class="px-2 pt-2 pb-3 space-y-1">
+        <!-- Search in mobile menu -->
+        {#if showSearch}
+          <div class="px-3 py-2">
+            <Search placeholder="Search..." />
+          </div>
+        {/if}
         <a
           href="/"
           class="block px-3 py-2 rounded-md text-base font-medium {isActive('/', currentPath) ? 'bg-surface text-white' : 'text-slate-300 hover:bg-surface hover:text-white'}"
