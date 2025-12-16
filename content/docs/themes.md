@@ -1,6 +1,7 @@
 ---
 title: Themes
 description: Styling your Statue site with themes
+icon: palette
 ---
 
 # Themes

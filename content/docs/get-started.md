@@ -2,6 +2,7 @@
 title: Getting Started with Statue
 description: Quick introduction to Statue SSG and key concepts
 order: 1
+icon: bolt
 ---
 
 # Getting Started with Statue

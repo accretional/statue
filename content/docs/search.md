@@ -1,6 +1,7 @@
 ---
 title: Search
 description: Indexing site content for users to search
+icon: document
 ---
 
 # Search
