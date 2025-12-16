@@ -1,10 +1,10 @@
 <script>
-  import NavigationBar from '$lib/components/NavigationBar.svelte';
   import DirectoryHeader from '$lib/components/DirectoryHeader.svelte';
   import SubDirectories from '$lib/components/SubDirectories.svelte';
   import DirectoryContent from '$lib/components/DirectoryContent.svelte';
   import DocsLayout from '$lib/components/DocsLayout.svelte';
   import DocsDirectoryList from '$lib/components/DocsDirectoryList.svelte';
+  import BlogLayout from '$lib/components/BlogLayout.svelte';
 
   // Loaded content
   export let data;
@@ -17,6 +17,9 @@
 
   // Check if this is docs directory
   $: isDocsDirectory = currentDirectory.name === 'docs';
+
+  // Check if this is blog directory
+  $: isBlogDirectory = currentDirectory.name === 'blog';
 
   // Filter contents only in the current directory
   // Not contents in subdirectories
@@ -51,7 +54,6 @@
     sidebarTitle={currentDirectory.title}
     showToc={false}
     headings={[]}
-    navbarItems={directories}
   >
     <DocsDirectoryList
       title={currentDirectory.title}
@@ -59,10 +61,14 @@
       {subDirectories}
     />
   </DocsLayout>
+{:else if isBlogDirectory}
+  <!-- Blog Layout -->
+  <BlogLayout
+    title={currentDirectory.title}
+    posts={currentDirContent}
+  />
 {:else}
   <!-- Default Layout -->
-  <NavigationBar navbarItems={directories} activePath={currentDirectory.url} />
-
   <div class="min-h-screen text-white bg-gradient-to-b from-[var(--color-hero-from)] via-[var(--color-hero-via)] to-[var(--color-hero-to)]">
     <div class="container mx-auto px-4 py-16">
       <DirectoryHeader title={currentDirectory.title} />

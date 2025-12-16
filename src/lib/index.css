@@ -1,5 +1,4 @@
 @import "tailwindcss";
-
 /* Tailwind v4 content config - scans src directory for classes */
 @source "../";
 

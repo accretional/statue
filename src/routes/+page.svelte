@@ -1,13 +1,12 @@
 <script>
-  import NavigationBar from '$lib/components/NavigationBar.svelte';
   import Hero from '$lib/components/Hero.svelte';
   import Stats from '$lib/components/Stats.svelte';
   import Categories from '$lib/components/Categories.svelte';
   import LatestContent from '$lib/components/LatestContent.svelte';
   import BuiltBy from '$lib/components/BuiltBy.svelte';
-  
+
   export let data;
-  
+
   $: directories = data.directories;
   $: rootContent = data.rootContent;
 </script>
@@ -16,8 +15,6 @@
   <title>Statue</title>
   <meta name="description" content="Statue SSG powered by Svelte, generates static sites from markdown content." />
 </svelte:head>
-
-<NavigationBar navbarItems={directories} activePath="/" />
 
 <div class="min-h-screen bg-gradient-to-b from-[var(--color-hero-from)] via-[var(--color-hero-via)] to-[var(--color-hero-to)]">
   <!-- Hero Section -->

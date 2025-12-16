@@ -1,11 +1,11 @@
 <script>
   import { page } from '$app/stores';
-  import NavigationBar from '$lib/components/NavigationBar.svelte';
   import Warning from '$lib/components/Warning.svelte';
   import ContentHeader from '$lib/components/ContentHeader.svelte';
   import ContentBody from '$lib/components/ContentBody.svelte';
   import DocsLayout from '$lib/components/DocsLayout.svelte';
   import DocsContent from '$lib/components/DocsContent.svelte';
+  import BlogPostLayout from '$lib/components/BlogPostLayout.svelte';
 
   // Loaded content
   export let data;
@@ -17,6 +17,9 @@
 
   // Check if this is docs content
   $: isDocsContent = content?.directory?.startsWith('docs');
+
+  // Check if this is blog content
+  $: isBlogContent = content?.directory === 'blog' || content?.directory?.startsWith('blog/');
 
   // Active URL for highlighting (for navigation bar)
   $: activePath = $page.url.pathname;
@@ -60,7 +63,6 @@
       sidebarTitle="Docs"
       showToc={false}
       headings={[]}
-      navbarItems={directories}
     >
       <div class="text-center py-12">
         <h1 class="text-2xl font-bold text-[var(--color-foreground)] mb-4">Page Not Found</h1>
@@ -86,7 +88,6 @@
       {headings}
       {activePath}
       sidebarTitle="Docs"
-      navbarItems={directories}
     >
       {#if content.metadata.warning}
         <div class="mb-6">
@@ -102,10 +103,21 @@
         bind:headings
       />
     </DocsLayout>
+  {:else if isBlogContent}
+    <!-- Blog Post Layout -->
+    <BlogPostLayout
+      title={content.metadata.title}
+      description={content.metadata.description}
+      date={content.metadata.date}
+      author={content.metadata.author}
+      authorAvatar={content.metadata.authorAvatar}
+      thumbnail={content.metadata.thumbnail}
+      content={content.content}
+      {backLink}
+      {backLinkText}
+    />
   {:else}
     <!-- Default Layout -->
-    <NavigationBar navbarItems={directories} {activePath} />
-
     <div class="min-h-screen text-white bg-gradient-to-b from-[var(--color-hero-from)] via-[var(--color-hero-via)] to-[var(--color-hero-to)]">
       <div class="container mx-auto px-4 py-16">
         <div class="max-w-6xl mx-auto">

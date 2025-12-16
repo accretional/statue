@@ -32,7 +32,6 @@
 <script>
   import DocsSidebar from './DocsSidebar.svelte';
   import TableOfContents from './TableOfContents.svelte';
-  import NavigationBar from './NavigationBar.svelte';
 
   export let sidebarItems = [];
   export let headings = [];
@@ -40,7 +39,6 @@
   export let sidebarTitle = 'Documentation';
   export let showSearch = true;
   export let showToc = true;
-  export let navbarItems = [];
 
   let isMobileSidebarOpen = false;
 
@@ -54,9 +52,6 @@
 </script>
 
 <div class="docs-layout min-h-screen bg-[var(--color-background)]">
-  <!-- Use existing NavigationBar -->
-  <NavigationBar {navbarItems} {activePath} />
-
   <!-- Mobile sidebar toggle button -->
   <button
     class="fixed bottom-4 right-4 z-50 lg:hidden flex items-center justify-center w-12 h-12 rounded-full bg-[var(--color-primary)] text-[var(--color-on-primary)] shadow-lg"
