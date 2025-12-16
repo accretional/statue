@@ -2,12 +2,11 @@
 
   import { page } from '$app/stores';
   import Search from './Search.svelte';
-  import { siteConfig } from '/site.config.js';
 
   export let navbarItems = [];
   export let activePath = '';
-  export let showSearch = siteConfig?.search?.enabled ?? false;
-  export let searchPlaceholder = siteConfig?.search?.placeholder ?? "Search...";
+  export let showSearch = false;
+  export let searchPlaceholder = "Search...";
   
   let isMenuOpen = false;
   let isHidden = false;
