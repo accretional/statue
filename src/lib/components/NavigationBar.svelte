@@ -12,6 +12,7 @@
   let isMenuOpen = false;
   let isHidden = false;
   let lastScrollY = 0;
+  let scrollY = 0;
 
   // Reactive current path from SvelteKit store
   $: currentPath = $page.url.pathname;
@@ -30,6 +31,7 @@
 
   function handleScroll() {
     const currentY = window.scrollY || 0;
+    scrollY = currentY;
     const delta = currentY - lastScrollY;
     // Hide on scroll down, show on scroll up
     if (Math.abs(delta) > 6) {
@@ -43,7 +45,7 @@
   }
 </script>
 
-<nav class="bg-[var(--color-background)] {currentPath === '/' && !isMenuOpen ? 'md:!bg-transparent' : ''} text-[var(--color-foreground)] fixed w-full top-0 z-50 transition-transform duration-300 will-change-transform {isHidden ? '-translate-y-full' : 'translate-y-0'}" style="view-transition-name: navbar;">
+<nav class="bg-[var(--color-background)] {currentPath === '/' && !isMenuOpen && scrollY < 10 ? 'md:!bg-transparent' : ''} text-[var(--color-foreground)] fixed w-full top-0 z-50 transition-transform duration-300 will-change-transform {isHidden ? '-translate-y-full' : 'translate-y-0'}" style="view-transition-name: navbar;">
   <div class="container mx-auto px-4">
     <div class="flex items-center justify-between h-16">
       <div class="flex items-center">
