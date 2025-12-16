@@ -394,6 +394,6 @@ Track search queries by adding an event listener:
 ## Further Reading
 
 - [Pagefind Documentation](https://pagefind.app/)
-- [Component API Reference](/docs/components#search)
-- [Site Configuration Guide](/docs/site-config)
-- [Theming Guide](/docs/themes)
+- [Component API Reference](./components.md)
+- [Site Configuration Guide](./site-config.md)
+- [Theming Guide](./themes.md)
