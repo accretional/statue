@@ -63,21 +63,6 @@ npm run build
 
 Deploy the `build/` directory to any static host. **[See deployment guide →](./content/docs/get-started.md#4-build-and-deploy)**
 
-## Updating
-
-After updating statue-ssg, sync new routes and features:
-
-```bash
-npm update statue-ssg
-npx statue sync
-```
-
-This adds any new routes (like `/docs`) without overwriting your customizations. Use `--force` to overwrite existing files:
-
-```bash
-npx statue sync --force
-```
-
 ## Community
 
 - **[Discord](https://discord.gg/accretional)** - Chat with the community
