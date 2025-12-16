@@ -1,8 +1,10 @@
 <script>
-  import NavigationBar from '$lib/components/NavigationBar.svelte';
   import DirectoryHeader from '$lib/components/DirectoryHeader.svelte';
   import SubDirectories from '$lib/components/SubDirectories.svelte';
   import DirectoryContent from '$lib/components/DirectoryContent.svelte';
+  import DocsLayout from '$lib/components/DocsLayout.svelte';
+  import DocsDirectoryList from '$lib/components/DocsDirectoryList.svelte';
+  import BlogLayout from '$lib/components/BlogLayout.svelte';
 
   // Loaded content
   export let data;
@@ -11,6 +13,13 @@
   $: directoryContent = data.directoryContent;
   $: currentDirectory = data.currentDirectory;
   $: subDirectories = data.subDirectories;
+  $: sidebarItems = data.sidebarItems || [];
+
+  // Check if this is docs directory
+  $: isDocsDirectory = currentDirectory.name === 'docs';
+
+  // Check if this is blog directory
+  $: isBlogDirectory = currentDirectory.name === 'blog';
 
   // Filter contents only in the current directory
   // Not contents in subdirectories
@@ -27,6 +36,9 @@
     return page.directory !== currentDirectory.name &&
            page.directory.startsWith(currentDirectory.name + '/');
   });
+
+  // Combined content for docs
+  $: allDocsContent = [...currentDirContent, ...subDirContent];
 </script>
 
 <svelte:head>
@@ -34,31 +46,53 @@
   <meta name="description" content="{currentDirectory.title} page - Created by Statue SSG" />
 </svelte:head>
 
-<NavigationBar navbarItems={directories} activePath={currentDirectory.url} />
+{#if isDocsDirectory}
+  <!-- Docs Layout -->
+  <DocsLayout
+    {sidebarItems}
+    activePath="/docs"
+    sidebarTitle={currentDirectory.title}
+    showToc={false}
+    headings={[]}
+  >
+    <DocsDirectoryList
+      title={currentDirectory.title}
+      content={allDocsContent}
+      {subDirectories}
+    />
+  </DocsLayout>
+{:else if isBlogDirectory}
+  <!-- Blog Layout -->
+  <BlogLayout
+    title={currentDirectory.title}
+    posts={currentDirContent}
+  />
+{:else}
+  <!-- Default Layout -->
+  <div class="min-h-screen text-white bg-gradient-to-b from-[var(--color-hero-from)] via-[var(--color-hero-via)] to-[var(--color-hero-to)]">
+    <div class="container mx-auto px-4 py-16">
+      <DirectoryHeader title={currentDirectory.title} />
 
-<div class="min-h-screen text-white bg-gradient-to-b from-[var(--color-hero-from)] via-[var(--color-hero-via)] to-[var(--color-hero-to)]">
-  <div class="container mx-auto px-4 py-16">
-    <DirectoryHeader title={currentDirectory.title} />
+      <!-- Subdirectories -->
+      <SubDirectories {subDirectories} />
 
-    <!-- Subdirectories -->
-    <SubDirectories {subDirectories} />
+      <!-- Contents in this directory -->
+      <DirectoryContent content={currentDirContent} />
 
-    <!-- Contents in this directory -->
-    <DirectoryContent content={currentDirContent} />
+      <!-- Contents in subdirectories -->
+      {#if subDirContent && subDirContent.length > 0}
+        <div>
+          <h2 class="text-2xl font-bold mb-6 text-white">Contents in Subdirectories</h2>
+          <DirectoryContent content={subDirContent} showDirectory={true} />
+        </div>
+      {/if}
 
-    <!-- Contents in subdirectories -->
-    {#if subDirContent && subDirContent.length > 0}
-      <div>
-        <h2 class="text-2xl font-bold mb-6 text-white">Contents in Subdirectories</h2>
-        <DirectoryContent content={subDirContent} showDirectory={true} />
-      </div>
-    {/if}
-
-    {#if !currentDirContent.length && !subDirContent.length && (!subDirectories || !subDirectories.length)}
-      <DirectoryContent content={[]} emptyMessage="No content found in this directory." />
-    {/if}
+      {#if !currentDirContent.length && !subDirContent.length && (!subDirectories || !subDirectories.length)}
+        <DirectoryContent content={[]} emptyMessage="No content found in this directory." />
+      {/if}
+    </div>
   </div>
-</div>
+{/if}
 
 <style>
   /* Page specific styles can go here */

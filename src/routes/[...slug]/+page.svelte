@@ -1,9 +1,11 @@
 <script>
   import { page } from '$app/stores';
-  import NavigationBar from '$lib/components/NavigationBar.svelte';
   import Warning from '$lib/components/Warning.svelte';
   import ContentHeader from '$lib/components/ContentHeader.svelte';
   import ContentBody from '$lib/components/ContentBody.svelte';
+  import DocsLayout from '$lib/components/DocsLayout.svelte';
+  import DocsContent from '$lib/components/DocsContent.svelte';
+  import BlogPostLayout from '$lib/components/BlogPostLayout.svelte';
 
   // Loaded content
   export let data;
@@ -11,6 +13,13 @@
   // Show content if not having error (notFound: true)
   $: content = data.content;
   $: directories = data.directories;
+  $: sidebarItems = data.sidebarItems || [];
+
+  // Check if this is docs content
+  $: isDocsContent = content?.directory?.startsWith('docs');
+
+  // Check if this is blog content
+  $: isBlogContent = content?.directory === 'blog' || content?.directory?.startsWith('blog/');
 
   // Active URL for highlighting (for navigation bar)
   $: activePath = $page.url.pathname;
@@ -22,6 +31,9 @@
   // Create back link
   $: backLink = content ? getBackLink(content.directory) : '/';
   $: backLinkText = content ? getBackLinkText(content.directory) : 'Home';
+
+  // Headings for table of contents (will be extracted by DocsContent)
+  let headings = [];
 
   // Helper functions for back link
   function getBackLink(directory) {
@@ -43,36 +55,90 @@
 </svelte:head>
 
 {#if data.notFound}
-  <!-- Content not found, let Svelte route handle it -->
-  <div class="bg-red-100 p-4 rounded-md my-8 max-w-prose mx-auto">
-    <h2 class="text-xl font-bold text-red-700">DEBUG: Content not found</h2>
-    <p class="my-2">URL: {$page.url.pathname}</p>
-    <p class="my-2">Params: {JSON.stringify($page.params)}</p>
-    <p class="my-2">Data: {JSON.stringify(data)}</p>
-  </div>
+  <!-- Content not found -->
+  {#if isDocsContent || activePath.startsWith('/docs')}
+    <DocsLayout
+      {sidebarItems}
+      {activePath}
+      sidebarTitle="Docs"
+      showToc={false}
+      headings={[]}
+    >
+      <div class="text-center py-12">
+        <h1 class="text-2xl font-bold text-[var(--color-foreground)] mb-4">Page Not Found</h1>
+        <p class="text-[var(--color-muted)]">The documentation page you're looking for doesn't exist.</p>
+        <a href="/docs" class="mt-4 inline-block text-[var(--color-primary)] hover:underline">
+          Back to Documentation
+        </a>
+      </div>
+    </DocsLayout>
+  {:else}
+    <div class="bg-red-100 p-4 rounded-md my-8 max-w-prose mx-auto">
+      <h2 class="text-xl font-bold text-red-700">DEBUG: Content not found</h2>
+      <p class="my-2">URL: {$page.url.pathname}</p>
+      <p class="my-2">Params: {JSON.stringify($page.params)}</p>
+      <p class="my-2">Data: {JSON.stringify(data)}</p>
+    </div>
+  {/if}
 {:else if content}
-  <NavigationBar navbarItems={directories} {activePath} />
-
-  <div class="min-h-screen text-white bg-gradient-to-b from-[var(--color-hero-from)] via-[var(--color-hero-via)] to-[var(--color-hero-to)]">
-    <div class="container mx-auto px-4 py-16">
-      <div class="max-w-6xl mx-auto">
-        <ContentHeader
-          title={content.metadata.title}
-          date={content.metadata.date}
-          author={content.metadata.author}
-          {backLink}
-          {backLinkText}
-        />
-
-        <!-- Warning component - show if warning exists in frontmatter -->
-        {#if content.metadata.warning}
+  {#if isDocsContent}
+    <!-- Docs Layout -->
+    <DocsLayout
+      {sidebarItems}
+      {headings}
+      {activePath}
+      sidebarTitle="Docs"
+    >
+      {#if content.metadata.warning}
+        <div class="mb-6">
           <Warning warning={content.metadata.warning} />
-        {/if}
+        </div>
+      {/if}
 
-        <ContentBody content={content.content} />
+      <DocsContent
+        content={content.content}
+        title={content.metadata.title}
+        description={content.metadata.description}
+        lastUpdated={content.metadata.date}
+        bind:headings
+      />
+    </DocsLayout>
+  {:else if isBlogContent}
+    <!-- Blog Post Layout -->
+    <BlogPostLayout
+      title={content.metadata.title}
+      description={content.metadata.description}
+      date={content.metadata.date}
+      author={content.metadata.author}
+      authorAvatar={content.metadata.authorAvatar}
+      thumbnail={content.metadata.thumbnail}
+      content={content.content}
+      {backLink}
+      {backLinkText}
+    />
+  {:else}
+    <!-- Default Layout -->
+    <div class="min-h-screen text-white bg-gradient-to-b from-[var(--color-hero-from)] via-[var(--color-hero-via)] to-[var(--color-hero-to)]">
+      <div class="container mx-auto px-4 py-16">
+        <div class="max-w-6xl mx-auto">
+          <ContentHeader
+            title={content.metadata.title}
+            date={content.metadata.date}
+            author={content.metadata.author}
+            {backLink}
+            {backLinkText}
+          />
+
+          <!-- Warning component - show if warning exists in frontmatter -->
+          {#if content.metadata.warning}
+            <Warning warning={content.metadata.warning} />
+          {/if}
+
+          <ContentBody content={content.content} />
+        </div>
       </div>
     </div>
-  </div>
+  {/if}
 {:else}
   <div class="bg-yellow-100 p-4 rounded-md my-8 max-w-prose mx-auto">
     <h2 class="text-xl font-bold text-yellow-700">DEBUG: Content is undefined or empty</h2>

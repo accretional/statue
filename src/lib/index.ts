@@ -32,3 +32,13 @@ export { default as DocsLayout } from './components/DocsLayout.svelte';
 export { default as DocsContent } from './components/DocsContent.svelte';
 export { default as DocsDirectoryList } from './components/DocsDirectoryList.svelte';
 
+// Blog components
+export { default as AuthorAvatar } from './components/AuthorAvatar.svelte';
+export { default as BlogCard } from './components/BlogCard.svelte';
+export { default as BlogGrid } from './components/BlogGrid.svelte';
+export { default as BlogHeader } from './components/BlogHeader.svelte';
+export { default as BlogLayout } from './components/BlogLayout.svelte';
+export { default as BlogPostContent } from './components/BlogPostContent.svelte';
+export { default as BlogPostHeader } from './components/BlogPostHeader.svelte';
+export { default as BlogPostLayout } from './components/BlogPostLayout.svelte';
+

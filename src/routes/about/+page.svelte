@@ -1,13 +1,12 @@
 <script>
-  import NavigationBar from '$lib/components/NavigationBar.svelte';
   import PageHero from '$lib/components/PageHero.svelte';
   import Mission from '$lib/components/Mission.svelte';
   import Team from '$lib/components/Team.svelte';
   import WhyChooseUs from '$lib/components/WhyChooseUs.svelte';
   import CTA from '$lib/components/CTA.svelte';
-  
+
   export let data;
-  
+
   $: directories = data.directories;
 </script>
 
@@ -15,8 +14,6 @@
   <title>About Your Site</title>
   <meta name="description" content="Learn about your Site, and how it was created." />
 </svelte:head>
-
-<NavigationBar navbarItems={directories} activePath="/about" />
 
 <div class="min-h-screen text-white bg-gradient-to-b from-[var(--color-hero-from)] via-[var(--color-hero-via)] to-[var(--color-hero-to)]">
   <!-- Hero Section -->
