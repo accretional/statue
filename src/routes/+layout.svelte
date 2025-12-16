@@ -8,6 +8,7 @@
   export let data;
 
   $: globalDirectories = data.globalDirectories;
+  $: searchConfig = data.searchConfig;
   $: currentPath = $page.url.pathname;
 
   // Enable View Transitions API only for blog pages
@@ -31,7 +32,11 @@
   });
 </script>
 
-<NavigationBar navbarItems={globalDirectories} />
+<NavigationBar
+  navbarItems={globalDirectories}
+  showSearch={searchConfig?.enabled ?? false}
+  searchPlaceholder={searchConfig?.placeholder ?? "Search..."}
+/>
 
 <main>
   <slot />
