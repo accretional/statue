@@ -8,53 +8,27 @@ yes | npx sv create statue-site --template minimal --types ts --no-add-ons --ins
 ```
 
 <details>
-<summary>bun</summary>
+<summary>bun, pnpm, yarn, windows</summary>
 
-**In current directory:**
-
-```bash
-yes | npx sv create . --template minimal --types ts --no-add-ons --install bun && bun add statue-ssg && npx statue init && bun install && bun run dev
-```
-
-**Or in a new folder (replace 'my-statue-site' with your desired name):**
+bun:
 
 ```bash
-yes | npx sv create my-statue-site --template minimal --types ts --no-add-ons --install bun && cd my-statue-site && bun add statue-ssg && npx statue init && bun install && bun run dev
+yes | npx sv create statue-site --template minimal --types ts --no-add-ons --install bun && cd statue-site && bun add statue-ssg && npx statue init && bun install && bun run dev
 ```
 
-</details>
-
-<details>
-<summary>pnpm</summary>
-
-**In current directory:**
+pnpm:
 
 ```bash
-yes | npx sv create . --template minimal --types ts --no-add-ons --install pnpm && pnpm add statue-ssg && npx statue init && pnpm install && pnpm run dev
+yes | npx sv create statue-site --template minimal --types ts --no-add-ons --install pnpm && cd statue-site && pnpm add statue-ssg && npx statue init && pnpm install && pnpm run dev
 ```
 
-**Or in a new folder (replace 'my-statue-site' with your desired name):**
+yarn:
 
 ```bash
-yes | npx sv create my-statue-site --template minimal --types ts --no-add-ons --install pnpm && cd my-statue-site && pnpm add statue-ssg && npx statue init && pnpm install && pnpm run dev
+yes | npx sv create statue-site --template minimal --types ts --no-add-ons --install yarn && cd statue-site && yarn add statue-ssg && npx statue init && yarn install && yarn run dev
 ```
 
-</details>
-
-<details>
-<summary>yarn</summary>
-
-**In current directory:**
-
-```bash
-yes | npx sv create . --template minimal --types ts --no-add-ons --install yarn && yarn add statue-ssg && npx statue init && yarn install && yarn run dev
-```
-
-**Or in a new folder (replace 'my-statue-site' with your desired name):**
-
-```bash
-yes | npx sv create my-statue-site --template minimal --types ts --no-add-ons --install yarn && cd my-statue-site && yarn add statue-ssg && npx statue init && yarn install && yarn run dev
-```
+windows: Statue requires pathing changes before it can work on Windows. There are no regular Windows users in Statue's dev team, so we cannot guarantee or maintain consistent support for Windows: contact us if you're interested in interested in implementing support for Windows or maintaining that functionality!
 
 </details>
 
