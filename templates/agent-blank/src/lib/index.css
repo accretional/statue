@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+/* Tailwind v4 content config */
+@source "../";
+@source "../../node_modules/statue-ssg/src/**/*.{svelte,js,ts}";
+
+/*
+ * =============================================================================
+ * AI AGENT: BLANK TEMPLATE THEME
+ * =============================================================================
+ * Simple, minimal theme inspired by early web design.
+ * Feel free to modify, replace, or remove any of these styles.
+ *
+ * You can:
+ * - Change colors in @theme section
+ * - Remove the border styles (.placeholder-box, .navbar-box)
+ * - Replace with your own design system
+ * - Use standard Tailwind classes instead
+ * =============================================================================
+ */
+
+@theme {
+  /* AI AGENT: Change these colors to match your design */
+  --color-bg: #ffffff;
+  --color-bg-secondary: #f5f5f5;
+
+  /* AI AGENT: Text colors */
+  --color-text-primary: #000000;
+  --color-text-secondary: #333333;
+  --color-text-muted: #666666;
+
+  /* AI AGENT: Border/line colors */
+  --color-line: #000000;
+  --color-line-light: #cccccc;
+}
+
+:root {
+  color-scheme: light;
+}
+
+/* AI AGENT: Base styles - modify or replace as needed */
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 16px;
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@layer utilities {
+  /* AI AGENT: Custom color utilities */
+  .bg-page { background-color: var(--color-bg); }
+  .bg-secondary { background-color: var(--color-bg-secondary); }
+  .text-primary { color: var(--color-text-primary); }
+  .text-secondary { color: var(--color-text-secondary); }
+  .text-muted { color: var(--color-text-muted); }
+  .border-line { border-color: var(--color-line); }
+
+  /*
+   * AI AGENT: Placeholder styles below are for the wireframe look.
+   * You can safely remove .placeholder-box and .navbar-box classes
+   * and replace with your own design.
+   */
+
+  .placeholder-box {
+    border: 2px dashed var(--color-line);
+    border-radius: 4px;
+    padding: 1rem;
+    margin: 1rem 0;
+    background: transparent;
+  }
+
+  .navbar-box {
+    border: 2px dashed var(--color-line);
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background: transparent;
+  }
+}
