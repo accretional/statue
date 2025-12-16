@@ -228,14 +228,14 @@
         font-weight: 700;
         line-height: 1.2;
         letter-spacing: -0.02em;
-        color: #f1f5f9;
+        color: var(--color-foreground);
     }
 
     .pricing-description {
         font-size: 1.125rem;
         max-width: 42rem;
         margin: 0 auto;
-        color: #cbd5e1;
+        color: var(--color-muted);
     }
 
     .billing-toggle-wrapper {
@@ -251,25 +251,25 @@
         font-size: 0.875rem;
         font-weight: 500;
         padding: 0.5rem 1rem;
-        border: 1px solid #475569;
+        border: 1px solid var(--color-border);
         border-radius: 0.375rem;
         cursor: pointer;
         transition: all 0.2s;
         background: transparent;
-        color: #94a3b8;
+        color: var(--color-muted);
     }
 
     .billing-button:hover {
-        background: #1e293b;
-        border-color: #60a5fa;
-        color: #e2e8f0;
+        background: var(--color-card);
+        border-color: var(--color-secondary);
+        color: var(--color-foreground);
     }
 
     .billing-button.active {
         font-weight: 600;
-        background: #3b82f6;
-        border-color: #3b82f6;
-        color: white;
+        background: var(--color-primary);
+        border-color: var(--color-primary);
+        color: var(--color-on-primary);
     }
 
     .savings-badge {
@@ -277,7 +277,7 @@
         font-weight: 500;
         margin-left: 0.5rem;
         background: #10b981;
-        color: white;
+        color: var(--color-on-primary);
         padding: 0.25rem 0.75rem;
         border-radius: 9999px;
     }
@@ -307,8 +307,8 @@
         position: relative;
         display: flex;
         flex-direction: column;
-        background: #1e293b;
-        border: 1px solid #334155;
+        background: var(--color-card);
+        border: 1px solid var(--color-border);
         border-radius: 0.5rem;
         padding: 1.5rem;
         transition: all 0.2s;
@@ -316,14 +316,14 @@
     }
 
     .pricing-card:hover {
-        border-color: #475569;
+        border-color: var(--color-border);
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
     }
 
     .pricing-card.highlighted {
-        background: #1e293b;
-        border: 2px solid #3b82f6;
-        box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+        background: var(--color-card);
+        border: 2px solid var(--color-primary);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
         transform: scale(1.02);
     }
 
@@ -346,8 +346,8 @@
         font-weight: 600;
         padding: 0.25rem 0.75rem;
         border-radius: 9999px;
-        background: #3b82f6;
-        color: white;
+        background: var(--color-primary);
+        color: var(--color-on-primary);
     }
 
     .card-header {
@@ -358,12 +358,12 @@
         font-size: 1.5rem;
         font-weight: 600;
         margin-bottom: 0.5rem;
-        color: #f1f5f9;
+        color: var(--color-foreground);
     }
 
     .card-description {
         font-size: 0.875rem;
-        color: #94a3b8;
+        color: var(--color-muted);
     }
 
     .card-content {
@@ -390,18 +390,19 @@
         font-weight: 700;
         line-height: 1;
         letter-spacing: -0.02em;
-        color: #f1f5f9;
+        color: var(--color-foreground);
     }
 
     .price-period {
         font-size: 0.875rem;
-        color: #94a3b8;
+        color: var(--color-muted);
     }
 
     .billing-details {
         font-size: 0.875rem;
         margin: 0;
-        color: #64748b;
+        color: var(--color-muted);
+        opacity: 0.8;
     }
 
     .savings-text {
@@ -443,11 +444,12 @@
 
     .feature-text {
         font-size: 0.875rem;
-        color: #cbd5e1;
+        color: var(--color-muted);
     }
 
     .feature-limit {
-        color: #94a3b8;
+        color: var(--color-muted);
+        opacity: 0.7;
     }
 
     .tooltip-wrapper {
@@ -460,11 +462,12 @@
         padding: 0;
         cursor: pointer;
         transition: all 0.2s;
-        color: #64748b;
+        color: var(--color-muted);
+        opacity: 0.6;
     }
 
     .tooltip-trigger:hover {
-        color: #94a3b8;
+        opacity: 1;
     }
 
     .info-icon {
@@ -484,9 +487,9 @@
         max-width: 16rem;
         white-space: normal;
         z-index: 50;
-        background: #0f172a;
-        color: #e2e8f0;
-        border: 1px solid #334155;
+        background: var(--color-background);
+        color: var(--color-foreground);
+        border: 1px solid var(--color-border);
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
     }
 
@@ -508,25 +511,25 @@
     }
 
     .plan-button.primary {
-        background: #3b82f6;
-        color: white;
-        border: 1px solid #3b82f6;
+        background: var(--color-primary);
+        color: var(--color-on-primary);
+        border: 1px solid var(--color-primary);
     }
 
     .plan-button.primary:hover {
-        background: #2563eb;
-        border-color: #2563eb;
+        background: var(--color-accent);
+        border-color: var(--color-accent);
     }
 
     .plan-button.outline {
         background: transparent;
-        color: #e2e8f0;
-        border: 1px solid #475569;
+        color: var(--color-foreground);
+        border: 1px solid var(--color-border);
     }
 
     .plan-button.outline:hover {
-        background: #334155;
-        border-color: #60a5fa;
-        color: #f1f5f9;
+        background: var(--color-card);
+        border-color: var(--color-secondary);
+        color: var(--color-foreground);
     }
 </style>

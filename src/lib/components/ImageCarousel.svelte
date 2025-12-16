@@ -155,7 +155,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    transition: opacity 0.5s ease-in-out;
+    transition: opacity 0.3s ease-in-out;
   }
 
   .slide-image {
@@ -190,7 +190,7 @@
   .slide-title {
     font-size: 2.5rem;
     font-weight: 700;
-    color: white;
+    color: var(--color-on-primary);
     margin-bottom: 1rem;
   }
 
@@ -202,17 +202,17 @@
 
   .slide-button {
     padding: 0.75rem 1.5rem;
-    background-color: white;
-    color: black;
+    background-color: var(--color-primary);
+    color: var(--color-on-primary);
     font-weight: 600;
     border-radius: 0.5rem;
     border: none;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: all 0.2s ease;
   }
 
   .slide-button:hover {
-    background-color: #f3f4f6;
+    background-color: var(--color-secondary);
   }
 
   .nav-arrow {
@@ -222,25 +222,25 @@
     width: 3rem;
     height: 3rem;
     border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: color-mix(in srgb, var(--color-primary) 25%, transparent);
     backdrop-filter: blur(4px);
     border: none;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
+    color: var(--color-foreground);
     z-index: 20;
     cursor: pointer;
     transition: all 0.2s ease;
   }
 
   .nav-arrow:hover:not(:disabled) {
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: color-mix(in srgb, var(--color-primary) 40%, transparent);
   }
 
   .nav-arrow:disabled {
     opacity: 0.5;
-    cursor: not-allowed;
+    cursor: default;
   }
 
   .nav-arrow-left {
@@ -270,23 +270,23 @@
     height: 0.5rem;
     border-radius: 9999px;
     transition: all 0.2s ease;
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: color-mix(in srgb, var(--color-primary) 40%, transparent);
     width: 0.5rem;
     border: none;
     cursor: pointer;
   }
 
   .dot-button:hover:not(:disabled) {
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: color-mix(in srgb, var(--color-primary) 60%, transparent);
   }
 
   .dot-button.active {
-    background-color: white;
+    background-color: var(--color-primary);
     width: 2rem;
   }
 
   .dot-button:disabled {
     opacity: 0.5;
-    cursor: not-allowed;
+    cursor: default;
   }
 </style>

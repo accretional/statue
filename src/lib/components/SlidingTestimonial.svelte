@@ -202,6 +202,7 @@
     overflow: hidden;
     border-radius: 1rem;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    background-color: var(--color-card);
   }
 
   .slides-wrapper {
@@ -266,6 +267,7 @@
     width: 3rem;
     height: 3rem;
     margin-bottom: 1.5rem;
+    color: var(--color-primary);
   }
 
   .quote-text {
@@ -273,6 +275,7 @@
     line-height: 1.8;
     margin: 0 0 2rem 0;
     font-weight: 400;
+    color: var(--color-foreground);
   }
 
   @media (min-width: 768px) {
@@ -289,11 +292,13 @@
     font-size: 1.125rem;
     font-weight: 600;
     margin: 0 0 0.25rem 0;
+    color: var(--color-foreground);
   }
 
   .author-affiliation {
     font-size: 0.875rem;
     margin: 0;
+    color: var(--color-muted);
   }
 
   .navigation-container {
@@ -308,7 +313,7 @@
     width: 2.5rem;
     height: 2.5rem;
     border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.15);
+    background-color: color-mix(in srgb, var(--color-primary) 20%, transparent);
     border: none;
     display: flex;
     align-items: center;
@@ -316,11 +321,11 @@
     cursor: pointer;
     transition: all 0.2s ease;
     flex-shrink: 0;
-    color: white;
+    color: var(--color-foreground);
   }
 
   .nav-arrow:hover {
-    background-color: rgba(255, 255, 255, 0.25);
+    background-color: color-mix(in srgb, var(--color-primary) 35%, transparent);
     transform: scale(1.05);
   }
 
@@ -339,7 +344,7 @@
     height: 0.5rem;
     border-radius: 9999px;
     transition: all 0.2s ease;
-    background-color: rgba(255, 255, 255, 0.4);
+    background-color: color-mix(in srgb, var(--color-primary) 30%, transparent);
     width: 0.5rem;
     border: none;
     cursor: pointer;
@@ -347,11 +352,11 @@
   }
 
   .dot-button:hover {
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: color-mix(in srgb, var(--color-primary) 50%, transparent);
   }
 
   .dot-button.active {
-    background-color: white;
+    background-color: var(--color-primary);
     width: 2rem;
   }
 

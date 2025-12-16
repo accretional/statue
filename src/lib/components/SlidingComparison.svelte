@@ -213,7 +213,7 @@
     top: 0;
     bottom: 0;
     width: 4px;
-    background-color: white;
+    background-color: var(--color-primary);
     cursor: ew-resize;
     transform: translateX(-50%);
     transition: width 0.2s ease;
@@ -230,7 +230,7 @@
     transform: translate(-50%, -50%);
     width: 2.5rem;
     height: 2.5rem;
-    background-color: white;
+    background-color: var(--color-primary);
     border-radius: 50%;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
     display: flex;
@@ -251,11 +251,12 @@
   .handle-icon {
     width: 1.5rem;
     height: 1.5rem;
-    color: #374151;
-    transition: color 0.2s ease;
+    color: var(--color-on-primary);
+    opacity: 0.9;
+    transition: opacity 0.2s ease;
   }
 
   .slider-line:hover .handle-icon {
-    color: #1f2937;
+    opacity: 1;
   }
 </style>

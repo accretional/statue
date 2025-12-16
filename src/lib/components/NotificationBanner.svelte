@@ -66,6 +66,13 @@
 </div>
 
 <style>
+  .banner-container {
+    background-color: var(--color-card);
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+    padding: 1rem 1.5rem;
+  }
+
   .banner-content {
     display: flex;
     align-items: center;
@@ -82,6 +89,7 @@
   .description-text {
     margin: 0;
     line-height: 1.5;
+    color: var(--color-foreground);
   }
 
   .banner-actions {
@@ -91,11 +99,37 @@
   }
 
   .action-button {
+    padding: 0.5rem 1rem;
+    background-color: var(--color-primary);
+    color: var(--color-on-primary);
+    border: none;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    font-size: 0.875rem;
     cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .action-button:hover {
+    background-color: var(--color-secondary);
   }
 
   .close-button {
+    padding: 0.5rem;
+    background-color: transparent;
+    color: var(--color-muted);
+    border: none;
+    border-radius: 0.375rem;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  .close-button:hover {
+    background-color: color-mix(in srgb, var(--color-primary) 15%, transparent);
+    color: var(--color-foreground);
   }
 
   .close-icon {
