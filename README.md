@@ -2,24 +2,10 @@
 
 Statue is a blazingly-fast static site generator based on Markdown, SvelteKit, and a component library.
 
-**One-line setup:**
-
-<details open>
-<summary>npm</summary>
-
-**In current directory:**
-
+**One-line setup (npm):**
 ```bash
 yes | npx sv create . --template minimal --types ts --no-add-ons --install npm && npm install statue-ssg && npx statue init && npm install && npm run dev
 ```
-
-**Or in a new folder (replace 'my-statue-site' with your desired name):**
-
-```bash
-yes | npx sv create my-statue-site --template minimal --types ts --no-add-ons --install npm && cd my-statue-site && npm install statue-ssg && npx statue init && npm install && npm run dev
-```
-
-</details>
 
 <details>
 <summary>bun</summary>
