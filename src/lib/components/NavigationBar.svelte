@@ -7,6 +7,7 @@
   export let navbarItems = [];
   export let activePath = '';
   export let showSearch = siteConfig?.search?.enabled ?? false;
+  export let searchPlaceholder = siteConfig?.search?.placeholder ?? "Search...";
   
   let isMenuOpen = false;
   let isHidden = false;
@@ -91,7 +92,7 @@
         <!-- Search component -->
         {#if showSearch}
           <div class="ml-2 w-56">
-            <Search placeholder="Search..." />
+            <Search placeholder={searchPlaceholder} />
           </div>
         {/if}
         
@@ -124,7 +125,7 @@
         <!-- Search in mobile menu -->
         {#if showSearch}
           <div class="px-3 py-2">
-            <Search placeholder="Search..." />
+            <Search placeholder={searchPlaceholder} />
           </div>
         {/if}
         <a
