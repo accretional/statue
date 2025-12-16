@@ -66,7 +66,7 @@ export const siteConfig = {
   // Search configuration
   search: {
     // Enable/disable search functionality
-    enabled: false,
+    enabled: true,
 
     // UI options
     placeholder: 'Search...',
