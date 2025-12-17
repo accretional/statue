@@ -13,7 +13,7 @@ test/hermetic/
 ├── .dockerignore          # Docker ignore patterns
 ├── Dockerfile             # Container image definition
 ├── install_statue.sh      # Container setup script
-├── test_local.sh          # Host testing script
+├── docker_test.sh         # Host Docker testing script
 └── docker-testing-guide.md # This documentation
 ```
 
@@ -38,7 +38,7 @@ test/hermetic/
 - Runs `statue init` and builds project
 - Starts preview server on port 3000
 
-### 3. `test/hermetic/test_local.sh` (Host Script)
+### 3. `test/hermetic/docker_test.sh` (Host Script)
 - Navigates to project root directory
 - Cleans up previous `.tgz` files
 - Creates new npm package with `npm pack`
@@ -56,7 +56,10 @@ npm run docker:build
 
 ### Testing Workflow
 ```bash
-# Run complete test cycle after code changes
+# Run complete Docker test cycle after code changes
+npm run docker:test
+
+# Or run local test (non-Docker)
 npm run test:local
 ```
 
@@ -95,14 +98,17 @@ npm run docker:test
 After making code changes:
 
 ```bash
-# Quick test (from project root)
+# Quick Docker test (from project root)
+npm run docker:test
+
+# Quick local test (non-Docker, from project root)
 npm run test:local
 
 # View detailed output
-npm run test:local 2>&1 | tee test-output.log
+npm run docker:test 2>&1 | tee test-output.log
 
 # Manual execution (from project root)
-./test/hermetic/test_local.sh
+./test/hermetic/docker_test.sh
 ```
 
 ## Technical Details
