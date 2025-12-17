@@ -36,7 +36,7 @@ test/hermetic/
 - Creates fresh SvelteKit project
 - Installs mounted `.tgz` package
 - Runs `statue init` and builds project
-- Starts preview server on port 4173
+- Starts preview server on port 3000
 
 ### 3. `test/hermetic/test_local.sh` (Host Script)
 - Navigates to project root directory
@@ -107,7 +107,7 @@ npm run test:local 2>&1 | tee test-output.log
 
 ## Technical Details
 
-- **Port**: 4173 (SvelteKit preview default)
+- **Port**: 3000
 - **Timeout**: 60 seconds maximum wait time
 - **Mount Point**: Package file mounted to `/test-project/`
 - **Base Image**: `node:18-alpine`
