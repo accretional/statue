@@ -353,7 +353,7 @@ const processTemplateVariables = (content) => {
   // Process {{variable}} format variables
   processedContent = processedContent.replace(/\{\{([^}]+)\}\}/g, (match, variableName) => {
     const trimmedName = variableName.trim();
-    if (variables.hasOwnProperty(trimmedName)) {
+    if (Object.hasOwn(variables, trimmedName)) {
       return variables[trimmedName];
     }
     console.warn(`Template variable not found: ${trimmedName}`);

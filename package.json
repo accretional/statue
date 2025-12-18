@@ -76,6 +76,7 @@
 		"esbuild": "^0.20.2",
 		"eslint": "^8.56.0",
 		"eslint-plugin-svelte": "^2.35.1",
+		"@typescript-eslint/parser": "^6.21.0",
 		"jsdom": "^23.0.1",
 		"pagefind": "^1.1.1",
 		"postcss": "^8.5.3",
