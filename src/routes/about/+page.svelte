@@ -1,57 +1,50 @@
 <script>
-  import PageHero from '$lib/components/PageHero.svelte';
-  import Mission from '$lib/components/Mission.svelte';
-  import Team from '$lib/components/Team.svelte';
-  import WhyChooseUs from '$lib/components/WhyChooseUs.svelte';
-  import CTA from '$lib/components/CTA.svelte';
+	import NavigationBar from '$lib/components/NavigationBar.svelte';
+	import PageHero from '$lib/components/PageHero.svelte';
+	import Mission from '$lib/components/Mission.svelte';
+	import Team from '$lib/components/Team.svelte';
+	import WhyChooseUs from '$lib/components/WhyChooseUs.svelte';
 
-  export let data;
+	export let data;
 
-  $: directories = data.directories;
+	$: directories = data.directories;
 </script>
 
 <svelte:head>
-  <title>About Your Site</title>
-  <meta name="description" content="Learn about your Site, and how it was created." />
+	<title>About Your Site</title>
+	<meta name="description" content="Learn about your Site, and how it was created." />
 </svelte:head>
 
-<div class="min-h-screen text-white bg-gradient-to-b from-[var(--color-hero-from)] via-[var(--color-hero-via)] to-[var(--color-hero-to)]">
-  <!-- Hero Section -->
-  <PageHero 
-    title="About Your Statue Static Site" 
-    description="Customize your Statue about page at src/routes/about/+page.svelte"
-  />
-  <!-- Content Sections -->
-  <div class="container mx-auto px-4 pb-32">
-    <!-- Introduction Section -->
-    <div class="text-center mb-16">
-      <img
-        src="/favicon.png"
-        alt="Statue Logo"
-        class="w-64 h-64 mx-auto mb-8"
-      />
-      <p class="text-lg mb-4">
-        Statue is an <a href="https://github.com/accretional/statue" target="_blank" class="underline hover:text-blue-300 transition-colors">open source</a> static site generator brought to you by <a href="https://accretional.com" target="_blank" class="underline hover:text-blue-300 transition-colors">Accretional</a>, a developer tools company.
-      </p>
-      <p class="text-lg">
-        Make this site yours with the components below!
-      </p>
-    </div>
+<NavigationBar navbarItems={directories} activePath="/about" />
 
-    <!-- Our Mission Section -->
-    <Mission />
+<div>
+	<PageHero
+		title="About Your Statue Static Site"
+		description="Customize your Statue about page at src/routes/about/+page.svelte"
+	/>
 
-    <!-- Team Section -->
-    <Team />
+	<div>
+		<div class="container mx-auto px-4 py-16">
+			<p style="text-align: center;">
+				Statue is an <a href="https://github.com/accretional/statue" target="_blank">open source</a>
+				static site generator brought you to by
+				<a href="https://accretional.com" target="_blank">Accretional</a>, a developer tools
+				company.
+			</p>
+			<p style="text-align: center;">Make this site yours with the components below!</p>
+			<br />
+			<!-- Our Mission Section -->
+			<Mission />
 
-    <!-- Why Choose Us Section -->
-    <WhyChooseUs />
+			<!-- Team Section -->
+			<Team />
 
-    <!-- CTA Section -->
-    <CTA />
-  </div>
+			<!-- Why Choose Us Section -->
+			<WhyChooseUs />
+		</div>
+	</div>
 </div>
 
 <style>
-  /* Page specific styles can go here */
-</style> 
+	/* Page specific styles can go here */
+</style>

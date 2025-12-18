@@ -1,0 +1,66 @@
+@import 'tailwindcss';
+@import '@fontsource/ibm-plex-sans';
+@import '@fontsource-variable/fraunces';
+
+:root {
+	--bg: #101012;
+	--bg-2: #1b1d21;
+	--text: #f6f6f6;
+	--text-2: #838484;
+	--brand: #f54900;
+	--brand-2: #a066ff;
+	--divider: #23252a;
+
+	--font-text: 'IBM Plex Sans', sans-serif;
+	--font-title: 'Fraunces Variable', serif;
+
+	--nav-height: 64px;
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	background: var(--bg);
+	color: var(--text);
+	font-family: var(--font-text);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: var(--font-title);
+	font-weight: 300;
+}
+
+h1 {
+	@apply text-4xl font-light md:text-5xl;
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+	@apply scroll-mt-20 text-xl md:text-2xl;
+}
+
+.flow > * + * {
+	margin-block-start: var(--flow-space, 1em);
+}
+
+hr {
+	background: var(--divider);
+}
+
+pre {
+	overflow-x: scroll;
+}
+
+strong {
+	font-weight: 600;
+}

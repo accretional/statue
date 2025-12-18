@@ -1,157 +1,100 @@
 <script>
+	import { resolve } from '$app/paths';
+	import { page } from '$app/state';
+	import Button from '$lib/components/ui/Button.svelte';
 
-  import { page } from '$app/stores';
-  import Search from './Search.svelte';
+	const { navbarItems = [], activePath = '' } = $props();
 
-  export let navbarItems = [];
-  export let activePath = '';
-  export let showSearch = false;
-  export let searchPlaceholder = "Search...";
-  
-  let isMenuOpen = false;
-  let isHidden = false;
-  let lastScrollY = 0;
-  let scrollY = 0;
+	let menuOpen = $state(false);
 
-  // Reactive current path from SvelteKit store
-  $: currentPath = $page.url.pathname;
+	const isHome = page.url.pathname === '/';
 
-  // Check if a nav item is active (exact match for home, startsWith for others)
-  function isActive(itemUrl, path) {
-    if (itemUrl === '/') {
-      return path === '/';
-    }
-    return path === itemUrl || path.startsWith(itemUrl + '/');
-  }
-
-  function toggleMenu() {
-    isMenuOpen = !isMenuOpen;
-  }
-
-  function handleScroll() {
-    const currentY = window.scrollY || 0;
-    scrollY = currentY;
-    const delta = currentY - lastScrollY;
-    // Hide on scroll down, show on scroll up
-    if (Math.abs(delta) > 6) {
-      isHidden = delta > 0 && currentY > 24;
-      lastScrollY = currentY;
-    }
-  }
-
-  if (typeof window !== 'undefined') {
-    window.addEventListener('scroll', handleScroll, { passive: true });
-  }
+	const closeMenu = () => (menuOpen = false);
+	const toggleMenu = () => (menuOpen = !menuOpen);
 </script>
 
-<nav class="bg-[var(--color-background)] {currentPath === '/' && !isMenuOpen && scrollY < 10 ? 'md:!bg-transparent' : ''} text-[var(--color-foreground)] fixed w-full top-0 z-50 transition-transform duration-300 will-change-transform {isHidden ? '-translate-y-full' : 'translate-y-0'}" style="view-transition-name: navbar;">
-  <div class="container mx-auto px-4">
-    <div class="flex items-center justify-between h-16">
-      <div class="flex items-center">
-        <a href="/" class="flex items-center space-x-2">
-          <!-- Logo icon - custom SVG similar to BotGauge -->
-          <div class="text-[var(--color-primary)] w-8 h-8">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
-              <path d="M8 12H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              <path d="M12 8L12 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <span class="font-bold text-xl">
-            <span class="text-[var(--color-primary)]">Statue</span>SSG
-          </span>
-        </a>
-      </div>
-      
-      <!-- Desktop Menu -->
-      <div class="hidden md:flex items-center space-x-4">
-        <a
-          href="/"
-          class="py-2 px-3 font-medium text-sm transition-colors duration-200 {isActive('/', currentPath) ? 'text-[var(--color-primary)]' : 'text-[var(--color-foreground)] hover:text-[var(--color-primary)]'}"
-        >
-          Home
-        </a>
+<svelte:window
+	onkeydown={(e) => {
+		if (menuOpen && e.key === 'Escape') {
+			menuOpen = false;
+		}
+	}}
+/>
 
-        <a
-          href="/about"
-          class="py-2 px-3 font-medium text-sm transition-colors duration-200 {isActive('/about', currentPath) ? 'text-[var(--color-primary)]' : 'text-[var(--color-foreground)] hover:text-[var(--color-primary)]'}"
-        >
-          About
-        </a>
+<nav
+	class={[
+		'fixed top-0 z-50 h-(--nav-height) w-full bg-(--bg)',
+		!isHome && 'border-b border-b-(--divider)'
+	]}
+>
+	<div class="container mx-auto px-4">
+		<div class="flex h-16 items-center justify-between">
+			<div class="flex items-center">
+				<a href={resolve('/')} class="flex items-center space-x-2">
+					<div class="h-8 w-8 text-(--color-primary)">
+						<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<rect
+								x="3"
+								y="3"
+								width="18"
+								height="18"
+								rx="2"
+								stroke="currentColor"
+								stroke-width="2"
+							/>
+							<path d="M8 12H16" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+							<path d="M12 8L12 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+						</svg>
+					</div>
+					<span class="text-xl font-bold">
+						<span class="text-(--color-primary)">Statue</span>SSG
+					</span>
+				</a>
+			</div>
 
-        {#each navbarItems as item}
-          {#if item.name !== 'legal'}
-            <a
-              href={item.url}
-              class="py-2 px-3 font-medium text-sm transition-colors duration-200 {isActive(item.url, currentPath) ? 'text-[var(--color-primary)]' : 'text-[var(--color-foreground)] hover:text-[var(--color-primary)]'}"
-            >
-              {item.title}
-            </a>
-          {/if}
-        {/each}
+			<!-- Desktop Menu -->
+			<div class="hidden items-center space-x-4 md:flex">
+				<Button href="/about" variant="link">About</Button>
+				<Button href="/docs" variant="link">Documentation</Button>
+			</div>
 
-        <!-- Search component -->
-        {#if showSearch}
-          <div class="ml-2 w-56">
-            <Search placeholder={searchPlaceholder} />
-          </div>
-        {/if}
-        
-        <a href="/docs" class="ml-4 px-4 py-2 rounded-lg bg-[var(--color-primary)] hover:brightness-110 text-[var(--color-on-primary)] text-sm font-medium transition-colors duration-200">
-          Documentation
-        </a>
-      </div>
-      
-      <!-- Mobile menu button -->
-      <div class="md:hidden">
-        <button on:click={toggleMenu} class="text-[var(--color-muted)] hover:text-[var(--color-primary)] focus:outline-none">
-          {#if isMenuOpen}
-            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          {:else}
-            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          {/if}
-        </button>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Mobile Menu -->
-  {#if isMenuOpen}
-    <div class="md:hidden bg-[var(--color-background)]">
-      <div class="px-2 pt-2 pb-3 space-y-1">
-        <!-- Search in mobile menu -->
-        {#if showSearch}
-          <div class="px-3 py-2">
-            <Search placeholder={searchPlaceholder} />
-          </div>
-        {/if}
-        <a
-          href="/"
-          class="block px-3 py-2 rounded-md text-base font-medium {isActive('/', currentPath) ? 'bg-surface text-white' : 'text-slate-300 hover:bg-surface hover:text-white'}"
-        >
-          Home
-        </a>
+			<!-- Mobile menu button -->
+			<div class="relative md:hidden">
+				<button aria-label="Toggle menu" aria-expanded={menuOpen} onclick={toggleMenu} class="p-2">
+					{#if !menuOpen}
+						<!-- Hamburger -->
+						<svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M4 6h16M4 12h16M4 18h16"
+							/>
+						</svg>
+					{:else}
+						<!-- Close -->
+						<svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M6 18L18 6M6 6l12 12"
+							/>
+						</svg>
+					{/if}
+				</button>
 
-        {#each navbarItems as item}
-          {#if item.name !== 'legal'}
-            <a
-              href={item.url}
-              class="block px-3 py-2 rounded-md text-base font-medium {isActive(item.url, currentPath) ? 'bg-surface text-white' : 'text-slate-300 hover:bg-surface hover:text-white'}"
-            >
-              {item.title}
-            </a>
-          {/if}
-        {/each}
-        
-        <a href="/docs" class="block px-3 py-2 rounded-md text-base font-medium bg-[var(--color-primary)] hover:brightness-110 text-[var(--color-on-primary)] mt-3">
-          Documentation
-        </a>
-      </div>
-    </div>
-  {/if}
+				{#if menuOpen}
+					<!-- Mobile Menu -->
+					<div class="fixed top-16 right-0 left-0 bg-(--bg-2) shadow-lg md:hidden">
+						<div class="flex flex-col space-y-1 px-2 py-3">
+							<Button href="/" variant="link" on:click={closeMenu}>Home</Button>
+							<Button href="/about" variant="link" on:click={closeMenu}>About</Button>
+							<Button href="/docs" variant="link" on:click={closeMenu}>Documentation</Button>
+						</div>
+					</div>
+				{/if}
+			</div>
+		</div>
+	</div>
 </nav>
-
