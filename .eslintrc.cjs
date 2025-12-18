@@ -37,6 +37,7 @@ module.exports = {
 				'scripts/**/*.js',
 				'postinstall.js',
 				'test/**/*.js',
+				'src/lib/cms/content-processor.js',
 				'*.config.js'
 			],
 			rules: {
