@@ -55,7 +55,6 @@
           src="/assets/example.pdf"
           title="Example"
           height="1300px"
-          scale={0.9}
         />
       </div>
     </section>

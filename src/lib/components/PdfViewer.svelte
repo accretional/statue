@@ -3,14 +3,9 @@
   export let title: string = 'PDF Document';
   export let height: string = '600px';
   export let width: string = '100%';
-  export let scale: number = 1;
   export let showToolbar: boolean = true;
   export let showDownload: boolean = false;
   export let showFullscreen: boolean = true;
-
-  // Calculate scaled dimensions
-  $: scaledHeight = `${parseFloat(height) * scale}px`;
-  $: transformOrigin = 'top center';
 
   let containerElement: HTMLDivElement;
   let isFullscreen = false;
@@ -43,15 +38,11 @@
 <svelte:document on:fullscreenchange={handleFullscreenChange} />
 
 <div
-  class="pdf-viewer-wrapper"
-  style="width: {width}; height: {scaledHeight}; overflow: hidden;"
+  class="pdf-viewer-container"
+  class:fullscreen={isFullscreen}
+  style="width: {width}; height: {height};"
+  bind:this={containerElement}
 >
-  <div
-    class="pdf-viewer-container"
-    class:fullscreen={isFullscreen}
-    style="width: {width}; height: {height}; transform: scale({scale}); transform-origin: {transformOrigin};"
-    bind:this={containerElement}
-  >
     <!-- PDF Content -->
     <div class="pdf-embed-wrapper">
       <embed
@@ -100,7 +91,6 @@
         {/if}
       </div>
     {/if}
-  </div>
 </div>
 
 <style>
@@ -124,7 +114,6 @@
     height: 100vh !important;
     border-radius: 0;
     border: none;
-    transform: none !important;
   }
 
   .pdf-embed {
