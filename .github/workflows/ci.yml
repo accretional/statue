@@ -53,4 +53,4 @@ jobs:
         run: npm test
 
       - name: Run Docker test
-        rune: npm run docker:test
+        run: npm run docker:test
