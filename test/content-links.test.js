@@ -8,6 +8,7 @@
  * that the SSG creates (e.g., ./file.md → /docs/file, ../blog/post.md → /blog/post)
  */
 
+import { describe, test, expect } from 'vitest';
 import { marked } from 'marked';
 import path from 'path';
 

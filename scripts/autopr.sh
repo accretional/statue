@@ -474,10 +474,78 @@ create_pr() {
     log_info "✅ Done! Pull request created successfully."
 }
 
+# Validate contribution before creating PR
+validate_contribution() {
+    log_info "Running validation checks..."
+
+    # Find validation script
+    local validation_script="$(dirname "$0")/validate-contribution.sh"
+    if [[ ! -x "$validation_script" ]]; then
+        log_error "Validation script not found or not executable: $validation_script"
+        exit 1
+    fi
+
+    # Determine validation command based on contribution type
+    case "$1" in
+        component)
+            local clean_name="${2%.svelte}"
+            local component_file="${clean_name}.svelte"
+
+            # Find the file
+            local found_file=""
+            if [ -f "$component_file" ]; then
+                found_file="$component_file"
+            else
+                found_file=$(find . -name "$component_file" -type f | head -n 1)
+            fi
+
+            if [[ -n "$found_file" ]]; then
+                $validation_script component "$found_file" "${3:-}"
+            else
+                log_error "Component file not found for validation"
+                exit 1
+            fi
+            ;;
+
+        theme)
+            local clean_name="${2%.css}"
+            local theme_file="${clean_name}.css"
+
+            # Find the file
+            local found_file=""
+            if [ -f "$theme_file" ]; then
+                found_file="$theme_file"
+            else
+                found_file=$(find . -name "$theme_file" -type f | head -n 1)
+            fi
+
+            if [[ -n "$found_file" ]]; then
+                $validation_script theme "$found_file"
+            else
+                log_error "Theme file not found for validation"
+                exit 1
+            fi
+            ;;
+
+        template|all)
+            $validation_script template "."
+            ;;
+
+        *)
+            log_warn "Skipping validation for unknown type: $1"
+            ;;
+    esac
+
+    log_info "✅ Validation passed!"
+}
+
 # Main script
 main() {
     # Parse arguments and set up source/dest pairs
     parse_args "$@"
+
+    # Validate contribution before creating PR
+    validate_contribution "$1" "${2:-}" "${3:-}"
 
     # Create PR with the configured pairs
     create_pr

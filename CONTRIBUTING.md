@@ -235,6 +235,48 @@ If you modified content processing:
 
 ---
 
+### Validation
+
+All contributions are automatically validated before PR creation. The validation checks:
+
+**For Components:**
+- ✅ Valid Svelte syntax
+- ✅ Uses CSS variables (var(--color-*))
+- ✅ Exported in src/lib/index.ts
+- ⚠️  Documented in COMPONENTS_README.md (warning only)
+- ⚠️  TypeScript usage (warning only)
+- ⚠️  No hardcoded colors (warning only)
+
+**For Themes:**
+- ✅ Uses @theme {} block
+- ✅ Contains all 13 required CSS variables
+- ✅ Follows naming convention (lowercase-with-hyphens.css)
+
+**For Templates:**
+- ✅ Has required routes: [...slug] and [directory]
+- ✅ All +page.server.js files have prerender = true
+- ✅ Uses $lib imports (not statue-ssg)
+- ✅ Template builds successfully
+
+**Running Validation Manually:**
+
+```bash
+# Component
+./scripts/validate-contribution.sh component MyComponent.svelte
+
+# Theme
+./scripts/validate-contribution.sh theme my-theme.css
+
+# Template
+./scripts/validate-contribution.sh template templates/my-template
+```
+
+**Troubleshooting Validation Errors:**
+
+See [VALIDATION_GUIDE.md](./VALIDATION_GUIDE.md) for common issues and solutions.
+
+---
+
 ## Submitting a Pull Request
 
 ### Automated PR Script (Recommended)
