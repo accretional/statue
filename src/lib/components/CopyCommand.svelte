@@ -149,22 +149,6 @@
 			var(--copy-scrollbar-track, var(--color-card));
 	}
 
-	.copy-command::-webkit-scrollbar-thumb {
-		background: var(--copy-scrollbar-thumb, rgba(255, 255, 255, 0.6));
-		border-radius: 4px;
-	}
-
-	.copy-command::-webkit-scrollbar-thumb:hover {
-		background: var(--copy-scrollbar-thumb-hover, rgba(255, 255, 255, 0.8));
-	}
-
-	/* Firefox scrollbar */
-	.copy-command {
-		scrollbar-width: thin;
-		scrollbar-color: var(--copy-scrollbar-thumb, rgba(255, 255, 255, 0.6))
-			var(--copy-scrollbar-track, rgba(31, 41, 55, 0.3));
-	}
-
 	.copy-icon {
 		flex-shrink: 0;
 		width: 20px;

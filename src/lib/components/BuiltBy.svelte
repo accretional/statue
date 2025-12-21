@@ -135,10 +135,6 @@
 		color: var(--color-foreground);
 	}
 
-	.statue-link:hover {
-		color: #d1d5db;
-	}
-
 	.accretion-icon,
 	.statue-icon {
 		/* Keep sizing for compatibility but rely on attributes/Tailwind mostly */
