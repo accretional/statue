@@ -1,17 +1,15 @@
-## What this PR does / why we need it
+**Purpose of this pull request:** Description
 
-Description
+**(optional) Issues fixed**: fixes #<issue number>, fixes #<issue number>
 
-## Which issue(s) this PR fixes (optional)
+## IMPORTANT - UI CHANGE DEMONSTRATION
 
-(optional, using `fixes #<issue number>(, fixes #<issue_number>, ...)` format, will close the issue(s) when the PR gets merged)*
+If making a change that changes the existing UI, or adds/changes new UI elements like components, themes, or templates, you MUST include screenshots or demos/recordings of your changes:
 
-Fixes #
+Screenshots:
 
-## Acceptance Criteria Met
+Site preview link:
 
-- [ ] Testing changes if needed
-- [ ] All workflow checks passing (automatically enforced)
-- [ ] All review conversations resolved (automatically enforced)
+## Other things worth discussing regarding PR:
 
-**Special notes for your reviewer**:
+Anything not covered by previous sections
