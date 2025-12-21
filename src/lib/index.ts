@@ -42,3 +42,12 @@ export { default as BlogPostContent } from './components/BlogPostContent.svelte'
 export { default as BlogPostHeader } from './components/BlogPostHeader.svelte';
 export { default as BlogPostLayout } from './components/BlogPostLayout.svelte';
 
+export { default as AccordionMenu } from './components/AccordionMenu.svelte';
+export { default as CopyCommand } from './components/CopyCommand.svelte';
+export { default as GitHubStats } from './components/GitHubStats.svelte';
+export { default as ImageCarousel } from './components/ImageCarousel.svelte';
+export { default as NotificationBanner } from './components/NotificationBanner.svelte';
+export { default as PricingSection } from './components/PricingSection.svelte';
+export { default as ScrollingLogos } from './components/ScrollingLogos.svelte';
+export { default as SlidingComparison } from './components/SlidingComparison.svelte';
+export { default as SlidingTestimonial } from './components/SlidingTestimonial.svelte';
