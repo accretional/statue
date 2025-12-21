@@ -48,6 +48,7 @@ export { default as GitHubStats } from './components/GitHubStats.svelte';
 export { default as ImageCarousel } from './components/ImageCarousel.svelte';
 export { default as NotificationBanner } from './components/NotificationBanner.svelte';
 export { default as PricingSection } from './components/PricingSection.svelte';
-export { default as ScrollingLogos } from './components/ScrollingLogos.svelte';
 export { default as SlidingComparison } from './components/SlidingComparison.svelte';
 export { default as SlidingTestimonial } from './components/SlidingTestimonial.svelte';
+
+export { default as Table } from './components/Table.svelte';
