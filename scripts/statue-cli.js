@@ -3,7 +3,7 @@
 import { Command } from 'commander';
 import path from 'path';
 import fs from 'fs-extra';
-import { fileURLToPath } from 'url';
+import { fileURLToPath, pathToFileURL } from 'url';
 import chalk from 'chalk';
 
 // Get __dirname with ESM
@@ -48,7 +48,7 @@ program
 
       // Run the postinstall script with options
       const postinstallPath = path.join(packageDir, 'postinstall.js');
-      const { default: postinstall } = await import(postinstallPath);
+      const { default: postinstall } = await import(pathToFileURL(postinstallPath).href);
       
       // Execute setup with the selected template
       if (typeof postinstall === 'function') {
