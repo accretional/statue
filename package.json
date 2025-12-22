@@ -70,13 +70,13 @@
 		"@testing-library/jest-dom": "^6.1.5",
 		"@testing-library/svelte": "^4.0.5",
 		"@types/node": "^22.13.13",
+		"@typescript-eslint/parser": "^6.21.0",
 		"@vitest/coverage-v8": "^1.0.4",
 		"@vitest/ui": "^1.0.4",
 		"autoprefixer": "^10.4.21",
 		"esbuild": "^0.20.2",
 		"eslint": "^8.56.0",
 		"eslint-plugin-svelte": "^2.35.1",
-		"@typescript-eslint/parser": "^6.21.0",
 		"jsdom": "^23.0.1",
 		"pagefind": "^1.1.1",
 		"postcss": "^8.5.3",
@@ -94,7 +94,8 @@
 		"commander": "^13.1.0",
 		"fs-extra": "^11.3.0",
 		"gray-matter": "^4.0.3",
-		"marked": "^15.0.7"
+		"marked": "^15.0.7",
+		"sql.js": "^1.13.0"
 	},
 	"keywords": [
 		"static-site-generator",
