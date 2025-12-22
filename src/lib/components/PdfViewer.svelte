@@ -1,6 +1,5 @@
 <script lang="ts">
   export let src: string;
-  export let title: string = 'PDF Document';
   export let height: string = '600px';
   export let width: string = '100%';
   export let showToolbar: boolean = true;
@@ -30,7 +29,7 @@
   function downloadPdf() {
     const link = document.createElement('a');
     link.href = src;
-    link.download = title + '.pdf';
+    link.download = 'document.pdf';
     link.click();
   }
 </script>
@@ -49,15 +48,11 @@
         src={pdfSrc}
         type="application/pdf"
         class="pdf-embed"
-        title={title}
       />
     </div>
 
     <!-- Floating Toolbar - overlaid on PDF -->
     {#if showToolbar && (showDownload || showFullscreen)}
-      <div class="pdf-title-badge">
-        {title}
-      </div>
       <div class="pdf-actions-badge">
         {#if showDownload}
           <button
@@ -123,32 +118,11 @@
     background-color: #525659;
   }
 
-  /* Floating title badge - top left */
-  .pdf-title-badge {
-    position: absolute;
-    top: 0.75rem;
-    left: 0.75rem;
-    padding: 0.5rem 1rem;
-    background-color: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(8px);
-    border-radius: 0.375rem;
-    font-weight: 500;
-    color: #ffffff;
-    font-size: 0.875rem;
-    z-index: 10;
-    max-width: 50%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
   /* Floating actions badge - top right */
   .pdf-actions-badge {
     position: absolute;
-    top: 0.75rem;
-    right: 0.75rem;
+    top: 2rem;
+    right: 1.25rem;
     display: flex;
     gap: 0.5rem;
     z-index: 10;
@@ -157,7 +131,6 @@
   }
 
   /* Show on hover */
-  .pdf-viewer-container:hover .pdf-title-badge,
   .pdf-viewer-container:hover .pdf-actions-badge {
     opacity: 1;
   }
@@ -174,11 +147,11 @@
     border: none;
     color: #ffffff;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: opacity 0.2s ease;
   }
 
   .toolbar-button:hover {
-    background-color: var(--color-primary, #6366f1);
+    opacity: 0.8;
   }
 
   .icon {

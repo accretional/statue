@@ -53,7 +53,6 @@
       <div class="max-w-4xl mx-auto">
         <PdfViewer
           src="/assets/example.pdf"
-          title="Example"
           height="1300px"
         />
       </div>
