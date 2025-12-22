@@ -20,7 +20,7 @@ echo "Package created: $PACKAGE_FILE"
 
 # Step: Run Docker container with mounted .tgz file
 echo "Starting Docker container with mounted package..."
-CONTAINER_ID=$(docker run -d -p 4173:4173 -v "$(pwd)/$PACKAGE_FILE:/test-project/$PACKAGE_FILE" statue-ssg)
+CONTAINER_ID=$(docker run -d -p 3000:3000 -v "$(pwd)/$PACKAGE_FILE:/package/$PACKAGE_FILE" statue-ssg)
 
 echo "Container ID: $CONTAINER_ID"
 echo "Waiting for preview server to start..."
@@ -29,7 +29,7 @@ echo "Waiting for preview server to start..."
 MAX_ATTEMPTS=30
 ATTEMPT=0
 SUCCESS=false
-SERVER_URL="http://localhost:4173"
+SERVER_URL="http://localhost:3000"
 
 echo "Testing server availability at: $SERVER_URL"
 echo "Maximum attempts: $MAX_ATTEMPTS"

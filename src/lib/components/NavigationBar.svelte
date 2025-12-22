@@ -1,10 +1,28 @@
 <script>
+
+  import { page } from '$app/stores';
+  import Search from './Search.svelte';
+
   export let navbarItems = [];
   export let activePath = '';
+  export let showSearch = false;
+  export let searchPlaceholder = "Search...";
   
   let isMenuOpen = false;
   let isHidden = false;
   let lastScrollY = 0;
+  let scrollY = 0;
+
+  // Reactive current path from SvelteKit store
+  $: currentPath = $page.url.pathname;
+
+  // Check if a nav item is active (exact match for home, startsWith for others)
+  function isActive(itemUrl, path) {
+    if (itemUrl === '/') {
+      return path === '/';
+    }
+    return path === itemUrl || path.startsWith(itemUrl + '/');
+  }
 
   function toggleMenu() {
     isMenuOpen = !isMenuOpen;
@@ -12,6 +30,7 @@
 
   function handleScroll() {
     const currentY = window.scrollY || 0;
+    scrollY = currentY;
     const delta = currentY - lastScrollY;
     // Hide on scroll down, show on scroll up
     if (Math.abs(delta) > 6) {
@@ -19,13 +38,13 @@
       lastScrollY = currentY;
     }
   }
-  
+
   if (typeof window !== 'undefined') {
     window.addEventListener('scroll', handleScroll, { passive: true });
   }
 </script>
 
-<nav class="bg-transparent text-[var(--color-foreground)] fixed w-full top-0 z-50 transition-transform duration-300 will-change-transform {isHidden ? '-translate-y-full' : 'translate-y-0'}">
+<nav class="bg-[var(--color-background)] {currentPath === '/' && !isMenuOpen && scrollY < 10 ? 'md:!bg-transparent' : ''} text-[var(--color-foreground)] fixed w-full top-0 z-50 transition-transform duration-300 will-change-transform {isHidden ? '-translate-y-full' : 'translate-y-0'}" style="view-transition-name: navbar;">
   <div class="container mx-auto px-4">
     <div class="flex items-center justify-between h-16">
       <div class="flex items-center">
@@ -46,31 +65,37 @@
       
       <!-- Desktop Menu -->
       <div class="hidden md:flex items-center space-x-4">
-        <a 
-          href="/" 
-          class="py-2 px-3 font-medium text-sm transition-colors duration-200 {activePath === '/' ? 'text-[var(--color-primary)]' : 'text-[var(--color-foreground)] hover:text-[var(--color-primary)]'}"
+        <a
+          href="/"
+          class="py-2 px-3 font-medium text-sm transition-colors duration-200 {isActive('/', currentPath) ? 'text-[var(--color-primary)]' : 'text-[var(--color-foreground)] hover:text-[var(--color-primary)]'}"
         >
           Home
         </a>
 
-        <a 
-        href="/about" 
-        class="py-2 px-3 font-medium text-sm transition-colors duration-200 {activePath === '/about' ? 'text-[var(--color-primary)]' : 'text-[var(--color-foreground)] hover:text-[var(--color-primary)]'}"
-      >
-        About
-      </a>
-      
-        
+        <a
+          href="/about"
+          class="py-2 px-3 font-medium text-sm transition-colors duration-200 {isActive('/about', currentPath) ? 'text-[var(--color-primary)]' : 'text-[var(--color-foreground)] hover:text-[var(--color-primary)]'}"
+        >
+          About
+        </a>
+
         {#each navbarItems as item}
           {#if item.name !== 'legal'}
-            <a 
-              href={item.url} 
-              class="py-2 px-3 font-medium text-sm transition-colors duration-200 {activePath === item.url ? 'text-[var(--color-primary)]' : 'text-[var(--color-foreground)] hover:text-[var(--color-primary)]'}"
+            <a
+              href={item.url}
+              class="py-2 px-3 font-medium text-sm transition-colors duration-200 {isActive(item.url, currentPath) ? 'text-[var(--color-primary)]' : 'text-[var(--color-foreground)] hover:text-[var(--color-primary)]'}"
             >
               {item.title}
             </a>
           {/if}
         {/each}
+
+        <!-- Search component -->
+        {#if showSearch}
+          <div class="ml-2 w-56">
+            <Search placeholder={searchPlaceholder} />
+          </div>
+        {/if}
         
         <a href="/docs" class="ml-4 px-4 py-2 rounded-lg bg-[var(--color-primary)] hover:brightness-110 text-[var(--color-on-primary)] text-sm font-medium transition-colors duration-200">
           Documentation
@@ -96,20 +121,26 @@
   
   <!-- Mobile Menu -->
   {#if isMenuOpen}
-    <div class="md:hidden bg-transparent">
+    <div class="md:hidden bg-[var(--color-background)]">
       <div class="px-2 pt-2 pb-3 space-y-1">
-        <a 
-          href="/" 
-          class="block px-3 py-2 rounded-md text-base font-medium {activePath === '/' ? 'bg-surface text-white' : 'text-slate-300 hover:bg-surface hover:text-white'}"
+        <!-- Search in mobile menu -->
+        {#if showSearch}
+          <div class="px-3 py-2">
+            <Search placeholder={searchPlaceholder} />
+          </div>
+        {/if}
+        <a
+          href="/"
+          class="block px-3 py-2 rounded-md text-base font-medium {isActive('/', currentPath) ? 'bg-surface text-white' : 'text-slate-300 hover:bg-surface hover:text-white'}"
         >
           Home
         </a>
-        
+
         {#each navbarItems as item}
           {#if item.name !== 'legal'}
-            <a 
-              href={item.url} 
-              class="block px-3 py-2 rounded-md text-base font-medium {activePath === item.url ? 'bg-surface text-white' : 'text-slate-300 hover:bg-surface hover:text-white'}"
+            <a
+              href={item.url}
+              class="block px-3 py-2 rounded-md text-base font-medium {isActive(item.url, currentPath) ? 'bg-surface text-white' : 'text-slate-300 hover:bg-surface hover:text-white'}"
             >
               {item.title}
             </a>

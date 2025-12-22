@@ -63,6 +63,27 @@ export const siteConfig = {
     }
   },
 
+  // Search configuration
+  search: {
+    // Enable/disable search functionality
+    enabled: true,
+
+    // UI options
+    placeholder: 'Search...',
+    noResultsText: 'No results found',
+
+    // Search behavior
+    debounceMs: 300,
+    minQueryLength: 2,
+    maxResults: 10,
+
+    // Result display options
+    showCategories: true,
+    showDates: true,
+    showExcerpts: true,
+    excerptLength: 30
+  },
+
   // SEO and meta information
   seo: {
     defaultTitle: "Statue SSG - Static Site Generator",

@@ -168,6 +168,27 @@ async function setupStatueSSG(options = {}) {
     console.error(chalk.red('An error occurred while creating app.css:'), err);
   }
 
+  // 3.5. Copy src/app.html (required for favicon and meta tags)
+  try {
+    const templateAppHtml = path.join(templateDir, 'src/app.html');
+    const rootAppHtml = path.join(sourceDir, 'src/app.html');
+    const targetAppHtml = path.join(targetSrc, 'app.html');
+
+    let sourcePath = null;
+    if (fs.existsSync(templateAppHtml)) {
+      sourcePath = templateAppHtml;
+    } else if (fs.existsSync(rootAppHtml)) {
+      sourcePath = rootAppHtml;
+    }
+
+    if (sourcePath) {
+      fs.copySync(sourcePath, targetAppHtml, { overwrite: true });
+      console.log(chalk.green('✓ src/app.html copied successfully'));
+    }
+  } catch (err) {
+    console.error(chalk.red('An error occurred while copying app.html:'), err);
+  }
+
   // 4. Copy Root Configuration Files from Template (or fallback to source root)
   try {
     const configFiles = ['site.config.js', 'svelte.config.js', 'vite.config.js', 'postcss.config.js'];
@@ -203,22 +224,32 @@ async function setupStatueSSG(options = {}) {
     const targetPackageJsonPath = path.join(targetDir, 'package.json');
     if (fs.existsSync(targetPackageJsonPath)) {
       const packageJson = JSON.parse(fs.readFileSync(targetPackageJsonPath, 'utf8'));
-      
+
       // Dependencies required by the framework
       const dependencies = {
         'marked': '^15.0.7',
         'gray-matter': '^4.0.3'
       };
-      
+
       const devDependencies = {
         '@sveltejs/adapter-static': '^3.0.0',
         '@tailwindcss/postcss': '^4.1.14',
         'tailwindcss': '^4.0.0',
         '@types/node': '^22.13.13',
         'autoprefixer': '^10.4.21',
-        'postcss': '^8.5.3'
+        'postcss': '^8.5.3',
+        'pagefind': '^1.1.1'
       };
-      
+
+      // Scripts required by the framework
+      const requiredScripts = {
+        'postbuild': 'node scripts/generate-seo-files.js && node scripts/run-pagefind.js',
+        'preview': 'npx -y serve build'
+      };
+
+      // Scripts that should always be overwritten (even if they exist)
+      const scriptsToOverwrite = new Set(['preview', 'postbuild']);
+
       let dependenciesAdded = false;
       for (const [dep, version] of Object.entries(dependencies)) {
         if (!packageJson.dependencies || !packageJson.dependencies[dep]) {
@@ -227,7 +258,7 @@ async function setupStatueSSG(options = {}) {
           dependenciesAdded = true;
         }
       }
-      
+
       for (const [dep, version] of Object.entries(devDependencies)) {
         if (!packageJson.devDependencies || !packageJson.devDependencies[dep]) {
           packageJson.devDependencies = packageJson.devDependencies || {};
@@ -235,10 +266,28 @@ async function setupStatueSSG(options = {}) {
           dependenciesAdded = true;
         }
       }
-      
-      if (dependenciesAdded) {
+
+      let scriptsAdded = false;
+      packageJson.scripts = packageJson.scripts || {};
+      for (const [scriptName, scriptCommand] of Object.entries(requiredScripts)) {
+        const shouldOverwrite = scriptsToOverwrite.has(scriptName);
+        const scriptExists = packageJson.scripts[scriptName];
+        const scriptMatches = scriptExists && packageJson.scripts[scriptName] === scriptCommand;
+
+        if (!scriptExists || (shouldOverwrite && !scriptMatches)) {
+          packageJson.scripts[scriptName] = scriptCommand;
+          scriptsAdded = true;
+        }
+      }
+
+      if (dependenciesAdded || scriptsAdded) {
         fs.writeFileSync(targetPackageJsonPath, JSON.stringify(packageJson, null, 2));
-        console.log(chalk.green('✓ package.json updated with required dependencies'));
+        if (dependenciesAdded) {
+          console.log(chalk.green('✓ package.json updated with required dependencies'));
+        }
+        if (scriptsAdded) {
+          console.log(chalk.green('✓ package.json updated with required scripts'));
+        }
         console.log(chalk.blue('Please run: npm install'));
       }
     }
@@ -246,36 +295,53 @@ async function setupStatueSSG(options = {}) {
     console.error(chalk.red('An error occurred while updating package.json:'), err);
   }
 
-  // 6. Copy Static Assets (Favicon)
+  // 6. Copy Scripts (required for postbuild)
+  try {
+    const targetScripts = path.join(targetDir, 'scripts');
+    if (!fs.existsSync(targetScripts)) fs.ensureDirSync(targetScripts);
+
+    const sourceScripts = path.join(sourceDir, 'scripts');
+    const requiredScripts = ['generate-seo-files.js', 'run-pagefind.js'];
+
+    if (fs.existsSync(sourceScripts)) {
+      requiredScripts.forEach(scriptFile => {
+        const sourceScriptPath = path.join(sourceScripts, scriptFile);
+        const targetScriptPath = path.join(targetScripts, scriptFile);
+
+        if (fs.existsSync(sourceScriptPath)) {
+          fs.copySync(sourceScriptPath, targetScriptPath, { overwrite: true });
+        }
+      });
+      console.log(chalk.green('✓ required scripts copied successfully'));
+    }
+  } catch (err) {
+    console.error(chalk.red('An error occurred while copying scripts:'), err);
+  }
+
+  // 7. Copy Static Assets (entire static folder)
   try {
     const targetStatic = path.join(targetDir, 'static');
     if (!fs.existsSync(targetStatic)) fs.ensureDirSync(targetStatic);
 
-    const faviconFile = 'favicon.png';
     // templateDir could be the same as sourceDir (default template)
-    const templateStaticPath = path.join(templateDir, 'static', faviconFile);
-    const rootStaticPath = path.join(sourceDir, 'static', faviconFile);
-    const targetFaviconPath = path.join(targetStatic, faviconFile);
+    const templateStaticPath = path.join(templateDir, 'static');
+    const rootStaticPath = path.join(sourceDir, 'static');
 
     let sourcePath = null;
 
-    // 1. Try template specific static/favicon.png
+    // 1. Try template specific static folder
     if (fs.existsSync(templateStaticPath)) {
       sourcePath = templateStaticPath;
-    } 
-    // 2. Fallback to root static/favicon.png if not found in template
-    // (This covers the case where templateDir != sourceDir but template has no favicon)
+    }
+    // 2. Fallback to root static folder if not found in template
     else if (fs.existsSync(rootStaticPath)) {
       sourcePath = rootStaticPath;
     }
 
     if (sourcePath) {
-      
-      fs.copySync(sourcePath, targetFaviconPath, { overwrite: true });
-      console.log(chalk.green(`✓ ${faviconFile} copied successfully`));
-    } else {
-        // Optional: warn if no favicon found at all, though unlikely if root has it
-        // console.warn(chalk.yellow(`! No ${faviconFile} found to copy.`));
+      // Copy all static files, preserving structure
+      fs.copySync(sourcePath, targetStatic, { overwrite: true, errorOnExist: false });
+      console.log(chalk.green('✓ static folder copied successfully'));
     }
   } catch (err) {
     console.error(chalk.red('An error occurred while copying static assets:'), err);

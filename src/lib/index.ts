@@ -21,6 +21,34 @@ export { default as Sitemap } from './components/Sitemap.svelte';
 export { default as Warning } from './components/Warning.svelte';
 export { default as Signup } from './components/Signup.svelte';
 export { default as BuiltBy } from './components/BuiltBy.svelte';
+export { default as Search } from './components/Search.svelte';
+export { default as PdfViewer } from './components/PdfViewer.svelte';
 
 export { default as CollapsibleTree } from './components/CollapsibleTree.svelte';
 
+// Documentation components
+export { default as DocsSidebar } from './components/DocsSidebar.svelte';
+export { default as TableOfContents } from './components/TableOfContents.svelte';
+export { default as DocsLayout } from './components/DocsLayout.svelte';
+export { default as DocsContent } from './components/DocsContent.svelte';
+export { default as DocsDirectoryList } from './components/DocsDirectoryList.svelte';
+
+// Blog components
+export { default as AuthorAvatar } from './components/AuthorAvatar.svelte';
+export { default as BlogCard } from './components/BlogCard.svelte';
+export { default as BlogGrid } from './components/BlogGrid.svelte';
+export { default as BlogHeader } from './components/BlogHeader.svelte';
+export { default as BlogLayout } from './components/BlogLayout.svelte';
+export { default as BlogPostContent } from './components/BlogPostContent.svelte';
+export { default as BlogPostHeader } from './components/BlogPostHeader.svelte';
+export { default as BlogPostLayout } from './components/BlogPostLayout.svelte';
+
+export { default as AccordionMenu } from './components/AccordionMenu.svelte';
+export { default as CopyCommand } from './components/CopyCommand.svelte';
+export { default as GitHubStats } from './components/GitHubStats.svelte';
+export { default as ImageCarousel } from './components/ImageCarousel.svelte';
+export { default as NotificationBanner } from './components/NotificationBanner.svelte';
+export { default as PricingSection } from './components/PricingSection.svelte';
+export { default as ScrollingLogos } from './components/ScrollingLogos.svelte';
+export { default as SlidingComparison } from './components/SlidingComparison.svelte';
+export { default as SlidingTestimonial } from './components/SlidingTestimonial.svelte';
