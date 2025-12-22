@@ -1,18 +1,14 @@
-import { defineConfig } from 'vite/config';
-import { playwright } from '@vitest/browser-playwright';
+import { defineConfig } from 'vite';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { fileURLToPath } from 'url';
 import path from 'path';
 
-// Let's recreate __dirname property for ESM
 const __filename = fileURLToPath(import.meta.url);
-
 const __dirname = path.dirname(__filename);
 
 export default defineConfig({
 	plugins: [sveltekit()],
 
-	// Define custom paths
 	resolve: {
 		alias: {
 			$content: path.resolve(__dirname, 'content'),
@@ -21,33 +17,31 @@ export default defineConfig({
 		}
 	},
 
-	// Development server
-	server: { port: 3000, open: true },
+	server: {
+		port: 3000,
+		open: true
+	},
 
 	test: {
-		expect: { requireAssertions: true },
+		// Global test configuration
+		globals: true,
 
+		// Multi-project setup for different test environments
 		projects: [
 			{
-				extends: './vite.config.js',
-
+				// Client-side tests (Svelte components)
+				extends: true, // Inherits main config
 				test: {
 					name: 'client',
-
-					browser: {
-						enabled: true,
-						provider: playwright(),
-						instances: [{ browser: 'chromium', headless: true }]
-					},
-
+					environment: 'jsdom', // or 'happy-dom' for faster alternative
 					include: ['src/**/*.svelte.{test,spec}.{js,ts}'],
-					exclude: ['src/lib/server/**']
+					exclude: ['src/lib/server/**'],
+					setupFiles: ['./test/setup.js']
 				}
 			},
-
 			{
-				extends: './vite.config.js',
-
+				// Server-side tests
+				extends: true,
 				test: {
 					name: 'server',
 					environment: 'node',
@@ -55,6 +49,21 @@ export default defineConfig({
 					exclude: ['src/**/*.svelte.{test,spec}.{js,ts}']
 				}
 			}
-		]
+		],
+
+		// Coverage configuration
+		coverage: {
+			provider: 'v8',
+			reporter: ['text', 'json', 'html'],
+			exclude: [
+				'node_modules/',
+				'test/',
+				'**/*.test.js',
+				'build/',
+				'.svelte-kit/',
+				'scripts/',
+				'postinstall.js'
+			]
+		}
 	}
 });
