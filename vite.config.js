@@ -23,18 +23,19 @@ export default defineConfig({
 	},
 
 	test: {
-		// Global test configuration
 		globals: true,
 
-		// Multi-project setup for different test environments
 		projects: [
 			{
 				// Client-side tests (Svelte components)
-				extends: true, // Inherits main config
+				extends: true,
 				test: {
 					name: 'client',
-					environment: 'jsdom', // or 'happy-dom' for faster alternative
-					include: ['src/**/*.svelte.{test,spec}.{js,ts}'],
+					environment: 'jsdom',
+					include: [
+						'src/**/*.svelte.{test,spec}.{js,ts}',
+						'test/**/*.svelte.{test,spec}.{js,ts}' // Added root test directory
+					],
 					exclude: ['src/lib/server/**'],
 					setupFiles: ['./test/setup.js']
 				}
@@ -45,13 +46,18 @@ export default defineConfig({
 				test: {
 					name: 'server',
 					environment: 'node',
-					include: ['src/**/*.{test,spec}.{js,ts}'],
-					exclude: ['src/**/*.svelte.{test,spec}.{js,ts}']
+					include: [
+						'src/**/*.{test,spec}.{js,ts}',
+						'test/**/*.{test,spec}.{js,ts}' // Added root test directory
+					],
+					exclude: [
+						'src/**/*.svelte.{test,spec}.{js,ts}',
+						'test/**/*.svelte.{test,spec}.{js,ts}' // Exclude Svelte tests from server
+					]
 				}
 			}
 		],
 
-		// Coverage configuration
 		coverage: {
 			provider: 'v8',
 			reporter: ['text', 'json', 'html'],
