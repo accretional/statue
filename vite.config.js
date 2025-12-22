@@ -1,18 +1,14 @@
-import { defineConfig } from 'vitest/config';
-import { playwright } from '@vitest/browser-playwright';
+import { defineConfig } from 'vite';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { fileURLToPath } from 'url';
 import path from 'path';
 
-// Let's recreate __dirname property for ESM
 const __filename = fileURLToPath(import.meta.url);
-
 const __dirname = path.dirname(__filename);
 
 export default defineConfig({
 	plugins: [sveltekit()],
 
-	// Define custom paths
 	resolve: {
 		alias: {
 			$content: path.resolve(__dirname, 'content'),
@@ -21,40 +17,59 @@ export default defineConfig({
 		}
 	},
 
-	// Development server
-	server: { port: 3000, open: true },
+	server: {
+		port: 3000,
+		open: true
+	},
 
 	test: {
-		expect: { requireAssertions: true },
+		globals: true,
 
 		projects: [
 			{
-				extends: './vite.config.js',
-
+				// Client-side tests (Svelte components)
+				extends: true,
 				test: {
 					name: 'client',
-
-					browser: {
-						enabled: true,
-						provider: playwright(),
-						instances: [{ browser: 'chromium', headless: true }]
-					},
-
-					include: ['src/**/*.svelte.{test,spec}.{js,ts}'],
-					exclude: ['src/lib/server/**']
+					environment: 'jsdom',
+					include: [
+						'src/**/*.svelte.{test,spec}.{js,ts}',
+						'test/**/*.svelte.{test,spec}.{js,ts}' // Added root test directory
+					],
+					exclude: ['src/lib/server/**'],
+					setupFiles: ['./test/setup.js']
 				}
 			},
-
 			{
-				extends: './vite.config.js',
-
+				// Server-side tests
+				extends: true,
 				test: {
 					name: 'server',
 					environment: 'node',
-					include: ['src/**/*.{test,spec}.{js,ts}'],
-					exclude: ['src/**/*.svelte.{test,spec}.{js,ts}']
+					include: [
+						'src/**/*.{test,spec}.{js,ts}',
+						'test/**/*.{test,spec}.{js,ts}' // Added root test directory
+					],
+					exclude: [
+						'src/**/*.svelte.{test,spec}.{js,ts}',
+						'test/**/*.svelte.{test,spec}.{js,ts}' // Exclude Svelte tests from server
+					]
 				}
 			}
-		]
+		],
+
+		coverage: {
+			provider: 'v8',
+			reporter: ['text', 'json', 'html'],
+			exclude: [
+				'node_modules/',
+				'test/',
+				'**/*.test.js',
+				'build/',
+				'.svelte-kit/',
+				'scripts/',
+				'postinstall.js'
+			]
+		}
 	}
 });
