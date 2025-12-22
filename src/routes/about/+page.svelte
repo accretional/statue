@@ -4,6 +4,7 @@
   import Team from '$lib/components/Team.svelte';
   import WhyChooseUs from '$lib/components/WhyChooseUs.svelte';
   import CTA from '$lib/components/CTA.svelte';
+  import PdfViewer from '$lib/components/PdfViewer.svelte';
 
   export let data;
 
@@ -46,6 +47,16 @@
 
     <!-- Why Choose Us Section -->
     <WhyChooseUs />
+
+    <!-- PDF Viewer Example Section -->
+    <section class="mb-16">
+      <div class="max-w-4xl mx-auto">
+        <PdfViewer
+          src="/assets/example.pdf"
+          height="1300px"
+        />
+      </div>
+    </section>
 
     <!-- CTA Section -->
     <CTA />
