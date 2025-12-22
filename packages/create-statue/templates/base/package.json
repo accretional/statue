@@ -1,0 +1,31 @@
+{
+	"name": "statue-project",
+	"version": "0.0.1",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"preview": "npx -y serve build",
+		"postbuild": "node scripts/generate-seo-files.js && node scripts/run-pagefind.js"
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-static": "^3.0.0",
+		"@sveltejs/kit": "^2.0.0",
+		"@sveltejs/vite-plugin-svelte": "^3.1.2",
+		"@tailwindcss/postcss": "^4.1.14",
+		"tailwindcss": "^4.0.0",
+		"@types/node": "^22.13.13",
+		"autoprefixer": "^10.4.21",
+		"postcss": "^8.5.3",
+		"pagefind": "^1.1.1",
+		"svelte": "^4.2.7",
+		"typescript": "^5.0.0",
+		"vite": "^5.4.11"
+	},
+	"dependencies": {
+		"statue-ssg": "^0.2.15",
+		"marked": "^15.0.7",
+		"gray-matter": "^4.0.3"
+	}
+}
