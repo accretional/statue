@@ -23,7 +23,7 @@
 	},
 	"bin": {
 		"statue-setup": "./postinstall.js",
-		"statue": "./scripts/statue-cli.js"
+		"statue": "./scripts/statue-cli.sh"
 	},
 	"files": [
 		"src",
@@ -43,7 +43,7 @@
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
-		"postbuild": "node scripts/generate-seo-files.js && node scripts/run-pagefind.js",
+		"postbuild": "./scripts/generate-seo-files.sh && ./scripts/run-pagefind.sh",
 		"preview": "npx -y serve build",
 		"preview:vite": "vite preview",
 		"prepublishOnly": "npm run build",
@@ -58,9 +58,9 @@
 		"test:local": "./scripts/test-local.sh",
 		"docker:build": "cd test/hermetic && docker build -t statue-ssg .",
 		"docker:test": "npm run docker:build && ./test/hermetic/docker_test.sh",
-		"template:load": "node scripts/manage-templates.js load",
-		"template:save": "node scripts/manage-templates.js save",
-		"template:list": "node scripts/manage-templates.js list",
+		"template:load": "./scripts/manage-templates.sh load",
+		"template:save": "./scripts/manage-templates.sh save",
+		"template:list": "./scripts/manage-templates.sh list",
 		"test:unit": "vitest"
 	},
 	"devDependencies": {
