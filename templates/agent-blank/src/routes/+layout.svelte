@@ -5,6 +5,7 @@
   // Available: Footer
 
   import { page } from '$app/stores';
+  import Navbar from '$lib/components/Navbar.svelte';
   import '$lib/index.css';
 
   export let data;
@@ -19,6 +20,10 @@
 
 <!-- AI AGENT: ROOT LAYOUT -->
 <div class="min-h-screen flex flex-col">
+  
+  <!-- NAVIGATION BAR (Global) -->
+  <Navbar directories={globalDirectories} activePath={currentPath} />
+
   <!-- MAIN CONTENT SLOT -->
   <main class="flex-1">
     <slot />

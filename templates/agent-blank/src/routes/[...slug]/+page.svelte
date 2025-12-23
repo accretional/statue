@@ -4,7 +4,6 @@
   // URL pattern: /any/path/to/content (catches all nested routes)
 
   import { page } from '$app/stores';
-  import Navbar from '$lib/components/Navbar.svelte';
 
   interface Directory {
     name: string;
@@ -72,9 +71,6 @@
 
 <!-- AI AGENT: CONTENT PAGE LAYOUT -->
 <div class="p-4">
-
-  <!-- NAVIGATION BAR -->
-  <Navbar {directories} {activePath} />
 
   {#if data.notFound}
     <!-- 404 STATE -->

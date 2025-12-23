@@ -2,8 +2,6 @@
   // AI AGENT: This is the HOME PAGE
   // Design your landing page here - add hero sections, features, content grids, etc.
 
-  import Navbar from '$lib/components/Navbar.svelte';
-
   export let data;
 
   $: directories = data.directories;
@@ -17,9 +15,6 @@
 
 <!-- AI AGENT: HOME PAGE LAYOUT -->
 <div class="p-4 min-h-screen flex flex-col">
-
-  <!-- NAVIGATION BAR -->
-  <Navbar {directories} activePath="/" />
 
   <!-- HOME PAGE -->
   <div class="flex-1 flex items-center justify-center">

@@ -1,11 +1,6 @@
 <script>
-  // AI AGENT: This is the DIRECTORY PAGE (category/section listing)
-  // This page displays all content within a directory/category
-  // URL pattern: /blog, /docs, /products, etc.
-  // Import components from statue-ssg as needed
-  // Available: NavigationBar, DirectoryHeader, SubDirectories, DirectoryContent
-
-  import Navbar from '$lib/components/Navbar.svelte';
+  import { page } from '$app/stores';
+  import { goto } from '$app/navigation';
 
   export let data;
 
@@ -41,17 +36,9 @@
 </svelte:head>
 
 <!-- AI AGENT: DIRECTORY PAGE LAYOUT -->
-<div class="p-4">
+<div class="min-h-screen p-4">
 
-  <!-- NAVIGATION BAR -->
-  <Navbar {directories} activePath={currentDirectory?.url || '/'} />
-
-  <!-- DIRECTORY HEADER -->
-  <section class="placeholder-box">
-    <span class="text-xl font-semibold text-primary uppercase tracking-wider">DIRECTORY HEADER</span>
-    <p class="text-sm text-secondary mt-2">Title: {currentDirectory?.title || 'Category'}</p>
-    <p class="text-sm text-secondary mt-1">Description, banner image, or intro text</p>
-  </section>
+  <h1 class="text-2xl font-bold mb-4 capitalize">Directory: {data.directory}</h1>
 
   <!-- SUBDIRECTORIES (if any) -->
   {#if subDirectories && subDirectories.length > 0}
