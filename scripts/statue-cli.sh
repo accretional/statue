@@ -97,7 +97,7 @@ main() {
             done
             
             log_info "Initializing Statue SSG with template: $template"
-            node "$SCRIPT_DIR/../postinstall.js" --template "$template"
+            npx statue-setup --template "$template"
             ;;
         
         template)
