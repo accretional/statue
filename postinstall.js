@@ -16,7 +16,7 @@ async function setupStatueSSG(options = {}) {
 
   // User's project directory (working directory)
   const targetDir = process.cwd();
-  console.log(chalk.blue(`🗿 Statue SSG - Initializing '${templateName}' template...`));
+  console.log(chalk.blue(`🗿 Statue SSG - Initializing...`));
   console.log(chalk.gray(`Target directory: ${targetDir}`));
 
   // Source folders (files in this project)
@@ -62,58 +62,46 @@ async function setupStatueSSG(options = {}) {
 
   // 1. Copy Routes from Template
   try {
-    const sourceRoutes = path.join(templateDir, 'src/routes');
+    const baseRoutes = path.join(sourceDir, 'src/routes');
+    const templateRoutes = path.join(templateDir, 'src/routes');
+    
     if (!fs.existsSync(targetSrc)) fs.ensureDirSync(targetSrc);
     if (!fs.existsSync(targetRoutes)) fs.ensureDirSync(targetRoutes);
 
-    if (fs.existsSync(sourceRoutes)) {
-        // Copy routes
-        fs.copySync(sourceRoutes, targetRoutes, { overwrite: true, errorOnExist: false });
-        console.log(chalk.green(`✓ routes folder copied from ${isDefaultTemplate ? 'default (root)' : templateName}`));
-
+    // 1a. Always install and transform base routes first
+    if (fs.existsSync(baseRoutes)) {
+        fs.copySync(baseRoutes, targetRoutes, { overwrite: true });
+        
         // Helper: transform file imports in a string
         const transformImports = (code) => {
-        // 1) Component default imports from $lib/components/X.svelte -> import { X } from 'statue-ssg'
-        code = code.replace(/import\s+([A-Za-z0-9_]+)\s+from\s+['"]\$lib\/components\/\1\.svelte['"];?/g, (m, name) => `import { ${name} } from 'statue-ssg';`);
-
-        // 2) Bulk replace any remaining $lib/components/<Any>.svelte -> named import
-        code = code.replace(/import\s+([A-Za-z0-9_]+)\s+from\s+['"]\$lib\/components\/([A-Za-z0-9_]+)\.svelte['"];?/g, (m, local, comp) => `import { ${comp} } from 'statue-ssg';`);
-
-        // 3) Replace stylesheet import - keep as $lib/index.css
-        // No replacement needed - it stays as $lib/index.css
-
-        // 4) Replace server cms imports
-        code = code.replace(/from\s+['"]\$lib\/cms\/content-processor['"]/g, "from 'statue-ssg/cms/content-processor'");
-
-        return code;
+          code = code.replace(/import\s+([A-Za-z0-9_]+)\s+from\s+['"]\$lib\/components\/\1\.svelte['"];?/g, (m, name) => `import { ${name} } from 'statue-ssg';`);
+          code = code.replace(/import\s+([A-Za-z0-9_]+)\s+from\s+['"]\$lib\/components\/([A-Za-z0-9_]+)\.svelte['"];?/g, (m, local, comp) => `import { ${comp} } from 'statue-ssg';`);
+          code = code.replace(/from\s+['"]\$lib\/cms\/content-processor['"]/g, "from 'statue-ssg/cms/content-processor'");
+          return code;
         };
 
-        // Walk through all files in routes and transform svelte/js/ts files
         const exts = new Set(['.svelte', '.js', '.ts']);
         const walk = (dir) => {
-        const entries = fs.readdirSync(dir);
-        for (const entry of entries) {
+          const entries = fs.readdirSync(dir);
+          for (const entry of entries) {
             const full = path.join(dir, entry);
             const stat = fs.statSync(full);
-            if (stat.isDirectory()) {
-            walk(full);
-            } else {
-            const ext = path.extname(full);
-            if (exts.has(ext)) {
-                const orig = fs.readFileSync(full, 'utf8');
-                const next = transformImports(orig);
-                if (orig !== next) {
-                fs.writeFileSync(full, next);
-                }
+            if (stat.isDirectory()) walk(full);
+            else if (exts.has(path.extname(full))) {
+              const orig = fs.readFileSync(full, 'utf8');
+              const next = transformImports(orig);
+              if (orig !== next) fs.writeFileSync(full, next);
             }
-            }
-        }
+          }
         };
-
         walk(targetRoutes);
-        console.log(chalk.green('✓ route imports transformed to use "statue-ssg"'));
-    } else {
-        console.warn(chalk.yellow(`! Template '${templateName}' does not have a src/routes directory.`));
+        console.log(chalk.green('✓ base routes installed and transformed'));
+    }
+
+    // 1b. Overlay custom template routes (no transformation)
+    if (!isDefaultTemplate && fs.existsSync(templateRoutes)) {
+        fs.copySync(templateRoutes, targetRoutes, { overwrite: true });
+        console.log(chalk.green(`✓ template routes overlaid from ${templateName}`));
     }
   } catch (err) {
     console.error(chalk.red('An error occurred while copying routes or transforming imports:'), err);
@@ -121,16 +109,22 @@ async function setupStatueSSG(options = {}) {
 
   // 2. Copy Content from Template
   try {
-    const sourceContent = path.join(templateDir, 'content');
+    const baseContent = path.join(sourceDir, 'content');
+    const templateContent = path.join(templateDir, 'content');
     
-    if (fs.existsSync(sourceContent)) {
-        if (!fs.existsSync(targetContent)) {
-            fs.ensureDirSync(targetContent);
-            fs.copySync(sourceContent, targetContent, { overwrite: true, errorOnExist: false });
-            console.log(chalk.green(`✓ content folder copied from ${isDefaultTemplate ? 'default (root)' : templateName}`));
-        } else {
-            console.log(chalk.yellow('! content folder already exists, content not copied'));
-        }
+    // Always ensure target content exists
+    if (!fs.existsSync(targetContent)) fs.ensureDirSync(targetContent);
+
+    // 2a. Copy base content if target is empty
+    if (fs.existsSync(baseContent) && fs.readdirSync(targetContent).length === 0) {
+        fs.copySync(baseContent, targetContent, { overwrite: true });
+        console.log(chalk.green('✓ base content installed'));
+    }
+
+    // 2b. Overlay template content
+    if (!isDefaultTemplate && fs.existsSync(templateContent)) {
+        fs.copySync(templateContent, targetContent, { overwrite: true });
+        console.log(chalk.green(`✓ template content overlaid from ${templateName}`));
     }
   } catch (err) {
     console.error(chalk.red('An error occurred while copying content folder:'), err);
@@ -164,9 +158,16 @@ async function setupStatueSSG(options = {}) {
       fs.writeFileSync(indexCssPath, appCssContent);
       console.log(chalk.green('✓ src/lib/index.css created'));
     }
+
+    // 3.1 Overlay src/lib from template (for custom components, themes, etc)
+    if (!isDefaultTemplate && fs.existsSync(path.join(templateDir, 'src/lib'))) {
+        fs.copySync(path.join(templateDir, 'src/lib'), targetLib, { overwrite: true });
+        console.log(chalk.green(`✓ src/lib folder content copied from ${templateName}`));
+    }
   } catch (err) {
     console.error(chalk.red('An error occurred while creating app.css:'), err);
   }
+
 
   // 3.5. Copy src/app.html (required for favicon and meta tags)
   try {
@@ -345,6 +346,19 @@ async function setupStatueSSG(options = {}) {
     }
   } catch (err) {
     console.error(chalk.red('An error occurred while copying static assets:'), err);
+  }
+
+  // 8. Auto Install Dependencies
+  // We'll only run this if NOT running as part of a package install lifecycle to avoid loops
+  if (!process.env.npm_lifecycle_event || process.env.npm_lifecycle_event === 'init') {
+    const { execSync } = await import('child_process');
+    console.log(chalk.blue('📦 Installing dependencies...'));
+    try {
+      execSync('npm install', { stdio: 'inherit', cwd: targetDir });
+      console.log(chalk.green('✓ Dependencies installed'));
+    } catch (e) {
+      console.error(chalk.yellow('! Failed to install dependencies automatically. Please run "npm install".'));
+    }
   }
 
   console.log(chalk.green.bold('✨ Statue SSG setup completed!'));
