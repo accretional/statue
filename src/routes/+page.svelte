@@ -75,71 +75,35 @@
 		days: ContributionDay[];
 	}
 
+	export let data: { repositories: Repository[] };
+	let repositories: Repository[] = [];
+	let leftRepos: Repository[] = [];
+	let rightRepos: Repository[] = [];
+
+	$: repositories = data.repositories ?? [];
+
 	// --- CONSTANTS ---
 	const USER_PROFILE: UserProfile = {
-		name: "Semih Polat",
-		username: "semihpolat",
+		name: "My Name",
+		username: "myusername",
 		avatarUrl: "/avatar.png",
-		bio: "10 years of coding, 2 YC MVPs. I build software that launches dreams (and maybe a few bugs).",
-		followers: 11,
-		following: 7,
-		location: "San Francisco",
-		website: "https://semihpolat.xyz",
-		linkedin: "in/semihpolat",
+		bio: "Creative developer building thoughtful digital products.",
+		followers: 128,
+		following: 64,
+		location: "Your City",
+		website: "https://example.com",
+		linkedin: "in/myname",
 		company: undefined,
 		email: undefined,
 		status: {
 			emoji: "🚀",
-			message: "Building cool stuff"
+			message: "Building something new"
 		}
 	};
 
-	const REPOSITORIES: Repository[] = [
-		{
-			name: "flutter_the_eye",
-			description: "Flutter CustomPaint Library kullanarak göz çizimi yapan bir uygulama.",
-			language: "Dart",
-			languageColor: "#00B4AB",
-			stars: 2,
-			forks: 0,
-			isPublic: true,
-			link: "https://github.com/semihpolat/flutter_the_eye"
-		},
-		{
-			name: "littleagents",
-			description: "300+ ücretsiz AI aracı içeren küratöryel bir liste. 19 kategoride organize edilmiş, kalite odaklı bir koleksiyon.",
-			language: "Markdown",
-			languageColor: "#083fa1",
-			stars: 2,
-			forks: 0,
-			isPublic: true,
-			link: "https://github.com/semihpolat/littleagents"
-		},
-		{
-			name: "stories_w_supabase",
-			description: "Arkadaşlarınızla birlikte gerçek zamanlı hikaye yazmanızı sağlayan işbirlikçi bir uygulama.",
-			language: "Dart",
-			languageColor: "#00B4AB",
-			stars: 1,
-			forks: 0,
-			isPublic: true,
-			link: "https://github.com/semihpolat/stories_w_supabase"
-		},
-		{
-			name: "vscode-multi-ai",
-			description: "GitHub Copilot'a açık kaynaklı bir alternatif. VSCode eklentisi olarak kodlama deneyimini geliştiren AI asistan.",
-			language: "TypeScript",
-			languageColor: "#3178c6",
-			stars: 1,
-			forks: 1,
-			isPublic: true,
-			link: "https://github.com/semihpolat/vscode-multi-ai"
-		}
-	];
-
 	// Split repos: first 2 on left, last 2 on right
-	const LEFT_REPOS = REPOSITORIES.slice(0, 2);
-	const RIGHT_REPOS = REPOSITORIES.slice(2, 4);
+	$: leftRepos = repositories.slice(0, 2);
+	$: rightRepos = repositories.slice(2, 4);
 
 	// Generate contribution data
 	function generateContributions(): YearContribution {
@@ -196,7 +160,7 @@
 	<main class="main-content">
 		<!-- Left repos -->
 		<div class="repo-column left">
-			{#each LEFT_REPOS as repo}
+			{#each leftRepos as repo}
 				<RepoCard {repo} />
 			{/each}
 		</div>
@@ -208,7 +172,7 @@
 
 		<!-- Right repos -->
 		<div class="repo-column right">
-			{#each RIGHT_REPOS as repo}
+			{#each rightRepos as repo}
 				<RepoCard {repo} />
 			{/each}
 			<a href="/repositoriespage" class="view-all-repos">view all repos</a>
@@ -224,7 +188,7 @@
 
 	<!-- Mobile: All Repos below profile -->
 	<div class="mobile-repos">
-		{#each REPOSITORIES as repo}
+		{#each repositories as repo}
 			<RepoCard {repo} />
 		{/each}
 

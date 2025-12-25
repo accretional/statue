@@ -22,11 +22,6 @@ export default defineConfig({
   // Development server
   server: {
     port: 5173,
-    open: true,
-    hmr: {
-      clientPort: 443,
-      host: 'c2296dff1b2b.ngrok-free.app',
-      protocol: 'wss'
-    }
+    open: true
   }
 }); 

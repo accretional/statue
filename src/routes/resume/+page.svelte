@@ -2,14 +2,14 @@
 	function downloadResume() {
 		const link = document.createElement('a');
 		link.href = '/resume.pdf';
-		link.download = 'Semih_Polat_Resume.pdf';
+		link.download = 'My_Name_Resume.pdf';
 		link.click();
 	}
 </script>
 
 <svelte:head>
-	<title>Resume - Semih Polat</title>
-	<meta name="description" content="Semih Polat's Resume" />
+	<title>Resume - My Name</title>
+	<meta name="description" content="Resume - My Name" />
 </svelte:head>
 
 <div class="min-h-screen bg-canvas-default flex items-center justify-center p-4 md:p-8 relative overflow-hidden">
@@ -26,7 +26,7 @@
 		<div class="relative group">
 			<img
 				src="/resume.png"
-				alt="Semih Polat - Resume"
+				alt="My Name - Resume"
 				class="w-full h-auto rounded-lg border border-border-default shadow-2xl"
 			/>
 			<!-- Hover actions -->

@@ -80,7 +80,7 @@
 				</div>
 
 				<div class="flex justify-center gap-3">
-					<a href="https://github.com/semihpolat" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 px-6 py-2 bg-white text-black rounded-full font-bold text-sm hover:scale-105 transition-transform shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+					<a href="https://github.com/myusername" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 px-6 py-2 bg-white text-black rounded-full font-bold text-sm hover:scale-105 transition-transform shadow-[0_0_15px_rgba(255,255,255,0.3)]">
 						<Github size={16} />
 						GitHub
 					</a>

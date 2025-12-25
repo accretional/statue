@@ -30,7 +30,7 @@
 		{
 			id: 'website',
 			name: 'My Website',
-			url: 'https://www.semihpolat.xyz/',
+			url: 'https://example.com/',
 			defaultPosition: { x: 50, y: 50 },
 			iconComponent: Monitor,
 			color: '#2563eb'
@@ -38,7 +38,7 @@
 		{
 			id: 'linkedin-1',
 			name: 'LinkedIn Video',
-			url: 'https://www.linkedin.com/feed/update/urn:li:activity:6909175509754990592/',
+			url: 'https://www.linkedin.com/feed/update/urn:li:activity:0000000000000000001/',
 			defaultPosition: { x: 50, y: 180 },
 			iconComponent: Linkedin,
 			color: '#0a66c2',
@@ -47,7 +47,7 @@
 		{
 			id: 'linkedin-2',
 			name: 'LinkedIn Post 1',
-			url: 'https://www.linkedin.com/feed/update/urn:li:activity:6972859934946279425/',
+			url: 'https://www.linkedin.com/feed/update/urn:li:activity:0000000000000000002/',
 			defaultPosition: { x: 200, y: 50 },
 			iconComponent: Linkedin,
 			color: '#0a66c2',
@@ -56,7 +56,7 @@
 		{
 			id: 'linkedin-3',
 			name: 'LinkedIn Post 2',
-			url: 'https://www.linkedin.com/feed/update/urn:li:activity:6912068576023560192/',
+			url: 'https://www.linkedin.com/feed/update/urn:li:activity:0000000000000000003/',
 			defaultPosition: { x: 350, y: 50 },
 			iconComponent: Linkedin,
 			color: '#0a66c2',
@@ -65,7 +65,7 @@
 		{
 			id: 'linkedin-4',
 			name: 'LinkedIn Post 3',
-			url: 'https://www.linkedin.com/feed/update/urn:li:activity:6962864980631175168/',
+			url: 'https://www.linkedin.com/feed/update/urn:li:activity:0000000000000000004/',
 			defaultPosition: { x: 500, y: 50 },
 			iconComponent: Linkedin,
 			color: '#0a66c2',
@@ -74,7 +74,7 @@
 		{
 			id: 'youtube',
 			name: 'YouTube Video',
-			url: 'https://www.youtube.com/watch?v=LKFKy9_FyYo',
+			url: 'https://www.youtube.com/watch?v=VIDEO_ID',
 			defaultPosition: { x: 650, y: 150 },
 			iconComponent: Youtube,
 			color: '#ff0000'

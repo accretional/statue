@@ -25,7 +25,7 @@
 			stars: 2,
 			forks: 0,
 			isPublic: true,
-			link: "https://github.com/semihpolat/flutter_the_eye"
+			link: "https://github.com/myusername/flutter_the_eye"
 		},
 		{
 			name: "littleagents",
@@ -35,7 +35,7 @@
 			stars: 2,
 			forks: 0,
 			isPublic: true,
-			link: "https://github.com/semihpolat/littleagents"
+			link: "https://github.com/myusername/littleagents"
 		},
 		{
 			name: "stories_w_supabase",
@@ -45,7 +45,7 @@
 			stars: 1,
 			forks: 0,
 			isPublic: true,
-			link: "https://github.com/semihpolat/stories_w_supabase"
+			link: "https://github.com/myusername/stories_w_supabase"
 		},
 		{
 			name: "vscode-multi-ai",
@@ -55,7 +55,7 @@
 			stars: 1,
 			forks: 1,
 			isPublic: true,
-			link: "https://github.com/semihpolat/vscode-multi-ai"
+			link: "https://github.com/myusername/vscode-multi-ai"
 		},
 		{
 			name: "statue-portfolio",
@@ -65,7 +65,7 @@
 			stars: 5,
 			forks: 2,
 			isPublic: true,
-			link: "https://github.com/semihpolat/statue-portfolio"
+			link: "https://github.com/myusername/statue-portfolio"
 		},
 		{
 			name: "ai-chat-assistant",
@@ -75,7 +75,7 @@
 			stars: 12,
 			forks: 3,
 			isPublic: true,
-			link: "https://github.com/semihpolat/ai-chat-assistant"
+			link: "https://github.com/myusername/ai-chat-assistant"
 		},
 		{
 			name: "react-dashboard",
@@ -85,7 +85,7 @@
 			stars: 8,
 			forks: 4,
 			isPublic: true,
-			link: "https://github.com/semihpolat/react-dashboard"
+			link: "https://github.com/myusername/react-dashboard"
 		},
 		{
 			name: "go-microservices",
@@ -95,7 +95,7 @@
 			stars: 15,
 			forks: 5,
 			isPublic: true,
-			link: "https://github.com/semihpolat/go-microservices"
+			link: "https://github.com/myusername/go-microservices"
 		},
 		{
 			name: "rust-cli-tools",
@@ -105,7 +105,7 @@
 			stars: 20,
 			forks: 7,
 			isPublic: true,
-			link: "https://github.com/semihpolat/rust-cli-tools"
+			link: "https://github.com/myusername/rust-cli-tools"
 		},
 		{
 			name: "nextjs-blog",
@@ -115,7 +115,7 @@
 			stars: 6,
 			forks: 2,
 			isPublic: true,
-			link: "https://github.com/semihpolat/nextjs-blog"
+			link: "https://github.com/myusername/nextjs-blog"
 		},
 		{
 			name: "swift-ios-app",
@@ -125,7 +125,7 @@
 			stars: 4,
 			forks: 1,
 			isPublic: true,
-			link: "https://github.com/semihpolat/swift-ios-app"
+			link: "https://github.com/myusername/swift-ios-app"
 		},
 		{
 			name: "kubernetes-configs",
@@ -135,20 +135,20 @@
 			stars: 10,
 			forks: 6,
 			isPublic: true,
-			link: "https://github.com/semihpolat/kubernetes-configs"
+			link: "https://github.com/myusername/kubernetes-configs"
 		}
 	];
 
 	// --- STATE ---
-	let scrollY = $state(0);
-	let targetScrollY = $state(0);
-	let cardSpacing = $state(160); 
-	let viewportHeight = $state(800);
+	let scrollY = 0;
+	let targetScrollY = 0;
+	let cardSpacing = 160; 
+	let viewportHeight = 800;
 	let rafId: number | null = null;
 	let isScrolling = false;
 
 	// Selected repo for the window
-	let selectedRepo: Repository | null = $state(null);
+	let selectedRepo: Repository | null = null;
 
 	// Handle card click
 	function handleCardClick(repo: Repository) {
@@ -281,8 +281,8 @@
 </svelte:head>
 
 <svelte:window
-	ontouchstart={handleTouchStart}
-	ontouchmove={handleTouchMove}
+	on:touchstart={handleTouchStart}
+	on:touchmove={handleTouchMove}
 />
 
 <div class="helix-container">
@@ -298,7 +298,7 @@
 						transform: translate({transform.x}px, {transform.y}px) scale({transform.scale});
 						opacity: {transform.opacity};
 					"
-					onclick={() => handleCardClick(repo)}
+					on:click={() => handleCardClick(repo)}
 				>
 					<div class="card-inner {selectedRepo?.name === repo.name ? 'selected' : ''}">
 						<RepoCard {repo} />
@@ -315,7 +315,7 @@
 			<!-- Title Bar -->
 			<div class="mac-titlebar">
 				<div class="mac-buttons">
-					<button class="mac-btn close" onclick={closeWindow}></button>
+					<button class="mac-btn close" on:click={closeWindow}></button>
 					<button class="mac-btn minimize"></button>
 					<button class="mac-btn maximize"></button>
 				</div>
