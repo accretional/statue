@@ -252,6 +252,7 @@ async function setupStatueSSG(options = {}) {
       const scriptsToOverwrite = new Set(['preview', 'postbuild']);
 
       let dependenciesAdded = false;
+      let templateDependenciesAdded = false;
       for (const [dep, version] of Object.entries(dependencies)) {
         if (!packageJson.dependencies || !packageJson.dependencies[dep]) {
           packageJson.dependencies = packageJson.dependencies || {};
@@ -268,6 +269,31 @@ async function setupStatueSSG(options = {}) {
         }
       }
 
+      if (!isDefaultTemplate) {
+        const templatePackageJsonPath = path.join(templateDir, 'package.json');
+        if (fs.existsSync(templatePackageJsonPath)) {
+          const templatePkg = JSON.parse(fs.readFileSync(templatePackageJsonPath, 'utf8'));
+          if (templatePkg.dependencies) {
+            packageJson.dependencies = packageJson.dependencies || {};
+            for (const [dep, version] of Object.entries(templatePkg.dependencies)) {
+              if (!packageJson.dependencies[dep]) {
+                packageJson.dependencies[dep] = version;
+                templateDependenciesAdded = true;
+              }
+            }
+          }
+          if (templatePkg.devDependencies) {
+            packageJson.devDependencies = packageJson.devDependencies || {};
+            for (const [dep, version] of Object.entries(templatePkg.devDependencies)) {
+              if (!packageJson.devDependencies[dep]) {
+                packageJson.devDependencies[dep] = version;
+                templateDependenciesAdded = true;
+              }
+            }
+          }
+        }
+      }
+
       let scriptsAdded = false;
       packageJson.scripts = packageJson.scripts || {};
       for (const [scriptName, scriptCommand] of Object.entries(requiredScripts)) {
@@ -281,10 +307,13 @@ async function setupStatueSSG(options = {}) {
         }
       }
 
-      if (dependenciesAdded || scriptsAdded) {
+      if (dependenciesAdded || templateDependenciesAdded || scriptsAdded) {
         fs.writeFileSync(targetPackageJsonPath, JSON.stringify(packageJson, null, 2));
         if (dependenciesAdded) {
           console.log(chalk.green('✓ package.json updated with required dependencies'));
+        }
+        if (templateDependenciesAdded) {
+          console.log(chalk.green('✓ package.json updated with template dependencies'));
         }
         if (scriptsAdded) {
           console.log(chalk.green('✓ package.json updated with required scripts'));
