@@ -48,20 +48,20 @@
 
 	// --- CONSTANTS ---
 	const USER_PROFILE: UserProfile = {
-		name: "Semih Polat",
-		username: "semihpolat",
+		name: "My Name",
+		username: "myusername",
 		avatarUrl: "/avatar.png",
-		bio: "10 years of coding, 2 YC MVPs. I build software that launches dreams (and maybe a few bugs).",
-		followers: 11,
-		following: 7,
-		location: "San Francisco",
-		website: "https://semihpolat.xyz",
-		linkedin: "in/semihpolat",
+		bio: "Creative developer building thoughtful digital products.",
+		followers: 128,
+		following: 64,
+		location: "Your City",
+		website: "https://example.com",
+		linkedin: "in/myname",
 		company: undefined,
 		email: undefined,
 		status: {
 			emoji: "🚀",
-			message: "Building cool stuff"
+			message: "Building something new"
 		}
 	};
 
@@ -74,7 +74,7 @@
 			stars: 2,
 			forks: 0,
 			isPublic: true,
-			link: "https://github.com/semihpolat/flutter_the_eye"
+			link: "https://github.com/myusername/flutter_the_eye"
 		},
 		{
 			name: "littleagents",
@@ -84,7 +84,7 @@
 			stars: 2,
 			forks: 0,
 			isPublic: true,
-			link: "https://github.com/semihpolat/littleagents"
+			link: "https://github.com/myusername/littleagents"
 		},
 		{
 			name: "stories_w_supabase",
@@ -94,7 +94,7 @@
 			stars: 1,
 			forks: 0,
 			isPublic: true,
-			link: "https://github.com/semihpolat/stories_w_supabase"
+			link: "https://github.com/myusername/stories_w_supabase"
 		},
 		{
 			name: "vscode-multi-ai",
@@ -104,7 +104,7 @@
 			stars: 1,
 			forks: 1,
 			isPublic: true,
-			link: "https://github.com/semihpolat/vscode-multi-ai"
+			link: "https://github.com/myusername/vscode-multi-ai"
 		}
 	];
 

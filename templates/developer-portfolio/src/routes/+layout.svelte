@@ -37,7 +37,7 @@
 <nav class="navbar" class:scrolled={scrollY > 10}>
   <div class="nav-container">
     <a href="/" class="logo">
-      <span class="logo-text">Semih</span>
+      <span class="logo-text">My Name</span>
     </a>
 
     <div class="nav-links">

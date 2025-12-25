@@ -5,7 +5,8 @@
 #   ./autopr.sh component <Name> [subdir]   # Submit a Svelte component
 #   ./autopr.sh theme <name>                # Submit a CSS theme
 #   ./autopr.sh template <name>             # Submit a template
-#   ./autopr.sh all <name>                  # Tem\\\\\
+#   ./autopr.sh all <name>                  # Template + components + themes
+#
 
 set -e  # Exit on error
 
@@ -133,20 +134,15 @@ show_usage() {
     echo "  $0 theme sunset-orange"
     echo "  $0 theme sunset-orange.css            # Extension optional"
     echo "  $0 template portfolio"
-    echo "  $0 all portfolio                      # Same as template (legacy alias)"
+    echo "  $0 all portfolio                      # Template + all custom components & themes"
     echo ""
     echo "Notes:"
     echo "  - For components: Looks for ComponentName.svelte (extension optional)"
     echo "    Searches current directory first, then subdirectories"
     echo "  - For themes: Looks for theme-name.css (extension optional)"
     echo "    Searches current directory first, then subdirectories"
-    echo "  - For templates: Copies complete project structure:"
-    echo "      * src/ (routes, lib, components, themes)"
-    echo "      * static/"
-    echo "      * content/"
-    echo "      * site.config.js"
-    echo "      * package.json (template-specific dependencies only)"
-    echo "  - For all: Same as template (legacy command, kept for compatibility)"
+    echo "  - For templates: Copies src/routes/, content/, site.config.js from current directory"
+    echo "  - For all: Template + bundles all custom components and themes into the template"
 }
 
 # Parse arguments and set up source/dest pairs
@@ -238,19 +234,17 @@ parse_args() {
             ;;
 
         template)
-            # Template: current dir (src/, static/, content/, site.config.js, package.json) -> templates/template-name/
-            if [ ! -d "src" ]; then
-                log_error "src/ directory not found in current directory"
+            # Template: current dir (src/routes/, content/, site.config.js) -> templates/template-name/
+            if [ ! -d "src/routes" ]; then
+                log_error "src/routes/ directory not found in current directory"
                 log_error "Make sure you're in the root of a Statue site"
                 exit 1
             fi
 
-            # Required: entire src folder
-            SOURCE_PATHS+=("src")
-            DEST_PATHS+=("templates/$name/src")
-            log_info "Including src/ directory"
+            # Required files/directories
+            SOURCE_PATHS+=("src/routes")
+            DEST_PATHS+=("templates/$name/src/routes")
 
-            # Required: content folder
             if [ -d "content" ]; then
                 SOURCE_PATHS+=("content")
                 DEST_PATHS+=("templates/$name/content")
@@ -258,7 +252,6 @@ parse_args() {
                 log_warn "content/ directory not found, skipping"
             fi
 
-            # Required: site.config.js
             if [ -f "site.config.js" ]; then
                 SOURCE_PATHS+=("site.config.js")
                 DEST_PATHS+=("templates/$name/site.config.js")
@@ -266,96 +259,34 @@ parse_args() {
                 log_warn "site.config.js not found, skipping"
             fi
 
-            # Required: static directory
+            # Optional: static directory
             if [ -d "static" ]; then
+                log_info "Found static/ directory, including in template"
                 SOURCE_PATHS+=("static")
                 DEST_PATHS+=("templates/$name/static")
-                log_info "Including static/ directory"
-            else
-                log_warn "static/ directory not found, skipping"
-            fi
-
-            # Optional: package.json (for template-specific dependencies)
-            if [ -f "package.json" ]; then
-                # Create a filtered package.json with only template-specific deps
-                log_info "Processing package.json for template-specific dependencies..."
-
-                # Create temp file with filtered package.json
-                TEMP_PKG=$(mktemp)
-                node -e "
-                    const fs = require('fs');
-                    const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
-
-                    // Core deps to exclude
-                    const coreDeps = new Set(['statue-ssg', 'marked', 'gray-matter', 'chalk', 'commander', 'fs-extra']);
-                    const coreDevDeps = new Set([
-                        '@sveltejs/adapter-static', '@sveltejs/kit', '@sveltejs/vite-plugin-svelte',
-                        '@tailwindcss/postcss', 'autoprefixer', 'postcss', 'tailwindcss',
-                        '@types/node', 'typescript', 'vite', 'svelte', 'pagefind'
-                    ]);
-
-                    const result = {};
-
-                    if (pkg.dependencies) {
-                        const deps = {};
-                        for (const [k, v] of Object.entries(pkg.dependencies)) {
-                            if (!coreDeps.has(k)) deps[k] = v;
-                        }
-                        if (Object.keys(deps).length) result.dependencies = deps;
-                    }
-
-                    if (pkg.devDependencies) {
-                        const deps = {};
-                        for (const [k, v] of Object.entries(pkg.devDependencies)) {
-                            if (!coreDevDeps.has(k)) deps[k] = v;
-                        }
-                        if (Object.keys(deps).length) result.devDependencies = deps;
-                    }
-
-                    if (Object.keys(result).length) {
-                        fs.writeFileSync('$TEMP_PKG', JSON.stringify(result, null, 2));
-                        console.log('HAS_DEPS');
-                    } else {
-                        console.log('NO_DEPS');
-                    }
-                " 2>/dev/null
-
-                if [ -s "$TEMP_PKG" ]; then
-                    SOURCE_PATHS+=("$TEMP_PKG")
-                    DEST_PATHS+=("templates/$name/package.json")
-                    log_info "Including template-specific dependencies from package.json"
-                fi
             fi
 
             BRANCH_NAME="$(generate_random_prefix)-template-${name}"
             COMMIT_MSG="Add $name template"
             PR_TITLE="Add $name template"
-            PR_BODY="This PR adds the $name template to the library.
-
-Includes:
-- Full src/ directory (routes, lib, components, themes)
-- content/ directory
-- static/ assets
-- site.config.js
-- Template-specific dependencies (if any)"
+            PR_BODY="This PR adds the $name template to the library."
             ;;
 
         all)
-            # All: Complete template bundle (src/, static/, content/, package.json, site.config.js)
-            if [ ! -d "src" ]; then
-                log_error "src/ directory not found in current directory"
+            # All: Template + custom components + custom themes -> templates/template-name/
+            if [ ! -d "src/routes" ]; then
+                log_error "src/routes/ directory not found in current directory"
                 log_error "Make sure you're in the root of a Statue site"
                 exit 1
             fi
 
-            log_info "Bundling complete template..."
+            log_info "Bundling complete template with custom components and themes..."
 
-            # Required: entire src folder (includes routes, lib, components, themes, etc.)
-            SOURCE_PATHS+=("src")
-            DEST_PATHS+=("templates/$name/src")
-            log_info "Including src/ directory (routes, lib, components, themes)"
+            # Required: routes
+            SOURCE_PATHS+=("src/routes")
+            DEST_PATHS+=("templates/$name/src/routes")
 
-            # Required: content
+            # Optional: content
             if [ -d "content" ]; then
                 SOURCE_PATHS+=("content")
                 DEST_PATHS+=("templates/$name/content")
@@ -363,7 +294,7 @@ Includes:
                 log_warn "content/ directory not found, skipping"
             fi
 
-            # Required: site.config.js
+            # Optional: site.config.js
             if [ -f "site.config.js" ]; then
                 SOURCE_PATHS+=("site.config.js")
                 DEST_PATHS+=("templates/$name/site.config.js")
@@ -371,75 +302,63 @@ Includes:
                 log_warn "site.config.js not found, skipping"
             fi
 
-            # Required: static
+            # Optional: static
             if [ -d "static" ]; then
+                log_info "Found static/ directory, including in template"
                 SOURCE_PATHS+=("static")
                 DEST_PATHS+=("templates/$name/static")
-                log_info "Including static/ directory"
-            else
-                log_warn "static/ directory not found, skipping"
             fi
 
-            # Optional: package.json (for template-specific dependencies)
-            if [ -f "package.json" ]; then
-                log_info "Processing package.json for template-specific dependencies..."
+            # Optional: src/lib/index.ts (component exports)
+            if [ -f "src/lib/index.ts" ]; then
+                log_info "Found src/lib/index.ts, including in template"
+                SOURCE_PATHS+=("src/lib/index.ts")
+                DEST_PATHS+=("templates/$name/src/lib/index.ts")
+            fi
 
-                TEMP_PKG=$(mktemp)
-                node -e "
-                    const fs = require('fs');
-                    const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+            # Optional: src/lib/index.css (styles and theme imports)
+            if [ -f "src/lib/index.css" ]; then
+                log_info "Found src/lib/index.css, including in template"
+                SOURCE_PATHS+=("src/lib/index.css")
+                DEST_PATHS+=("templates/$name/src/lib/index.css")
+            fi
 
-                    const coreDeps = new Set(['statue-ssg', 'marked', 'gray-matter', 'chalk', 'commander', 'fs-extra']);
-                    const coreDevDeps = new Set([
-                        '@sveltejs/adapter-static', '@sveltejs/kit', '@sveltejs/vite-plugin-svelte',
-                        '@tailwindcss/postcss', 'autoprefixer', 'postcss', 'tailwindcss',
-                        '@types/node', 'typescript', 'vite', 'svelte', 'pagefind'
-                    ]);
+            # Bundle custom components (if they exist)
+            if [ -d "src/lib/components" ]; then
+                log_info "Found custom components, bundling into template..."
+                local component_count=0
+                while IFS= read -r -d '' component_file; do
+                    # Get relative path from src/lib/components/
+                    local rel_path="${component_file#src/lib/components/}"
+                    SOURCE_PATHS+=("$component_file")
+                    DEST_PATHS+=("templates/$name/src/lib/components/$rel_path")
+                    component_count=$((component_count + 1))
+                done < <(find src/lib/components -type f -name "*.svelte" -print0)
+                log_info "Bundled $component_count custom component(s)"
+            else
+                log_info "No custom components directory found (src/lib/components/)"
+            fi
 
-                    const result = {};
-
-                    if (pkg.dependencies) {
-                        const deps = {};
-                        for (const [k, v] of Object.entries(pkg.dependencies)) {
-                            if (!coreDeps.has(k)) deps[k] = v;
-                        }
-                        if (Object.keys(deps).length) result.dependencies = deps;
-                    }
-
-                    if (pkg.devDependencies) {
-                        const deps = {};
-                        for (const [k, v] of Object.entries(pkg.devDependencies)) {
-                            if (!coreDevDeps.has(k)) deps[k] = v;
-                        }
-                        if (Object.keys(deps).length) result.devDependencies = deps;
-                    }
-
-                    if (Object.keys(result).length) {
-                        fs.writeFileSync('$TEMP_PKG', JSON.stringify(result, null, 2));
-                        console.log('HAS_DEPS');
-                    } else {
-                        console.log('NO_DEPS');
-                    }
-                " 2>/dev/null
-
-                if [ -s "$TEMP_PKG" ]; then
-                    SOURCE_PATHS+=("$TEMP_PKG")
-                    DEST_PATHS+=("templates/$name/package.json")
-                    log_info "Including template-specific dependencies from package.json"
-                fi
+            # Bundle custom themes (if they exist)
+            if [ -d "src/lib/themes" ]; then
+                log_info "Found custom themes, bundling into template..."
+                local theme_count=0
+                while IFS= read -r -d '' theme_file; do
+                    # Get relative path from src/lib/themes/
+                    local rel_path="${theme_file#src/lib/themes/}"
+                    SOURCE_PATHS+=("$theme_file")
+                    DEST_PATHS+=("templates/$name/src/lib/themes/$rel_path")
+                    theme_count=$((theme_count + 1))
+                done < <(find src/lib/themes -type f -name "*.css" -print0)
+                log_info "Bundled $theme_count custom theme(s)"
+            else
+                log_info "No custom themes directory found (src/lib/themes/)"
             fi
 
             BRANCH_NAME="$(generate_random_prefix)-all-${name}"
-            COMMIT_MSG="Add $name template (complete bundle)"
+            COMMIT_MSG="Add $name template with custom components and themes"
             PR_TITLE="Add $name template (complete)"
-            PR_BODY="This PR adds the $name template to the library.
-
-Includes:
-- Full src/ directory (routes, lib, components, themes)
-- content/ directory
-- static/ assets
-- site.config.js
-- Template-specific dependencies (if any)"
+            PR_BODY="This PR adds the $name template to the library, including custom components and themes."
             ;;
 
         *)

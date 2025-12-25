@@ -15,140 +15,21 @@
 		link: string;
 	}
 
-	// --- PLACEHOLDER DATA ---
-	const REPOSITORIES: Repository[] = [
-		{
-			name: "flutter_the_eye",
-			description: "Flutter CustomPaint Library kullanarak göz çizimi yapan bir uygulama.",
-			language: "Dart",
-			languageColor: "#00B4AB",
-			stars: 2,
-			forks: 0,
-			isPublic: true,
-			link: "https://github.com/semihpolat/flutter_the_eye"
-		},
-		{
-			name: "littleagents",
-			description: "300+ ücretsiz AI aracı içeren küratöryel bir liste. 19 kategoride organize edilmiş.",
-			language: "Markdown",
-			languageColor: "#083fa1",
-			stars: 2,
-			forks: 0,
-			isPublic: true,
-			link: "https://github.com/semihpolat/littleagents"
-		},
-		{
-			name: "stories_w_supabase",
-			description: "Arkadaşlarınızla birlikte gerçek zamanlı hikaye yazmanızı sağlayan işbirlikçi uygulama.",
-			language: "Dart",
-			languageColor: "#00B4AB",
-			stars: 1,
-			forks: 0,
-			isPublic: true,
-			link: "https://github.com/semihpolat/stories_w_supabase"
-		},
-		{
-			name: "vscode-multi-ai",
-			description: "GitHub Copilot'a açık kaynaklı bir alternatif. VSCode AI asistan eklentisi.",
-			language: "TypeScript",
-			languageColor: "#3178c6",
-			stars: 1,
-			forks: 1,
-			isPublic: true,
-			link: "https://github.com/semihpolat/vscode-multi-ai"
-		},
-		{
-			name: "statue-portfolio",
-			description: "GitHub tarzı geliştirici portfolyo sitesi. Svelte ve TailwindCSS ile yapıldı.",
-			language: "Svelte",
-			languageColor: "#ff3e00",
-			stars: 5,
-			forks: 2,
-			isPublic: true,
-			link: "https://github.com/semihpolat/statue-portfolio"
-		},
-		{
-			name: "ai-chat-assistant",
-			description: "Modern AI sohbet asistanı. GPT-4 ve Claude entegrasyonu ile.",
-			language: "Python",
-			languageColor: "#3572A5",
-			stars: 12,
-			forks: 3,
-			isPublic: true,
-			link: "https://github.com/semihpolat/ai-chat-assistant"
-		},
-		{
-			name: "react-dashboard",
-			description: "Admin dashboard template. React, TypeScript ve Tailwind CSS.",
-			language: "TypeScript",
-			languageColor: "#3178c6",
-			stars: 8,
-			forks: 4,
-			isPublic: true,
-			link: "https://github.com/semihpolat/react-dashboard"
-		},
-		{
-			name: "go-microservices",
-			description: "Microservices architecture örneği. Go, gRPC ve Kubernetes.",
-			language: "Go",
-			languageColor: "#00ADD8",
-			stars: 15,
-			forks: 5,
-			isPublic: true,
-			link: "https://github.com/semihpolat/go-microservices"
-		},
-		{
-			name: "rust-cli-tools",
-			description: "Performanslı CLI araçları koleksiyonu. Rust ile yazıldı.",
-			language: "Rust",
-			languageColor: "#dea584",
-			stars: 20,
-			forks: 7,
-			isPublic: true,
-			link: "https://github.com/semihpolat/rust-cli-tools"
-		},
-		{
-			name: "nextjs-blog",
-			description: "Kişisel blog template. Next.js 14, MDX ve Tailwind.",
-			language: "TypeScript",
-			languageColor: "#3178c6",
-			stars: 6,
-			forks: 2,
-			isPublic: true,
-			link: "https://github.com/semihpolat/nextjs-blog"
-		},
-		{
-			name: "swift-ios-app",
-			description: "iOS uygulama örneği. SwiftUI ve Combine framework.",
-			language: "Swift",
-			languageColor: "#F05138",
-			stars: 4,
-			forks: 1,
-			isPublic: true,
-			link: "https://github.com/semihpolat/swift-ios-app"
-		},
-		{
-			name: "kubernetes-configs",
-			description: "Production-ready Kubernetes konfigürasyonları ve Helm charts.",
-			language: "YAML",
-			languageColor: "#cb171e",
-			stars: 10,
-			forks: 6,
-			isPublic: true,
-			link: "https://github.com/semihpolat/kubernetes-configs"
-		}
-	];
+	export let data: { repositories: Repository[] };
+	let repositories: Repository[] = [];
+
+	$: repositories = data.repositories ?? [];
 
 	// --- STATE ---
-	let scrollY = $state(0);
-	let targetScrollY = $state(0);
-	let cardSpacing = $state(160); 
-	let viewportHeight = $state(800);
+	let scrollY = 0;
+	let targetScrollY = 0;
+	let cardSpacing = 160; 
+	let viewportHeight = 800;
 	let rafId: number | null = null;
 	let isScrolling = false;
 
 	// Selected repo for the window
-	let selectedRepo: Repository | null = $state(null);
+	let selectedRepo: Repository | null = null;
 
 	// Pinch gesture state
 	let initialPinchDistance = 0;
@@ -156,7 +37,7 @@
 	let initialPinchIntensity = 1;
 
     // --- ASCII WAVE ANIMATION ---
-    let asciiFrame = $state('');
+    let asciiFrame = '';
     let asciiRafId: number | null = null;
     let frameCount = 0;
 
@@ -257,7 +138,7 @@
 	function handleTouchMove(event: TouchEvent) {
 		if (event.touches.length === 1) {
 			const deltaY = touchStartY - event.touches[0].clientY;
-			const maxScroll = (REPOSITORIES.length - 1) * cardSpacing;
+			const maxScroll = Math.max(0, (repositories.length - 1) * cardSpacing);
 			targetScrollY = touchStartScrollY + deltaY * 1.5;
 			targetScrollY = Math.max(-viewportHeight * 0.3, Math.min(maxScroll + viewportHeight * 0.3, targetScrollY));
 
@@ -278,7 +159,7 @@
 	// Main wheel handler
 	function handleWheelEvent(e: WheelEvent) {
 		e.preventDefault();
-		const maxScroll = (REPOSITORIES.length - 1) * cardSpacing;
+		const maxScroll = Math.max(0, (repositories.length - 1) * cardSpacing);
 		targetScrollY += e.deltaY * 0.8;
 		targetScrollY = Math.max(-viewportHeight * 0.3, Math.min(maxScroll + viewportHeight * 0.3, targetScrollY));
 
@@ -318,14 +199,14 @@
 </svelte:head>
 
 <svelte:window
-	ontouchstart={handleTouchStart}
-	ontouchmove={handleTouchMove}
+	on:touchstart={handleTouchStart}
+	on:touchmove={handleTouchMove}
 />
 
 <div class="helix-container">
 	<!-- List Scene -->
 	<div class="helix-scene">
-		{#each REPOSITORIES as repo, index}
+		{#each repositories as repo, index}
 			{@const transform = getListTransform(index, scrollY, cardSpacing, viewportHeight)}
 			{#if transform.isVisible}
 				<button
@@ -334,7 +215,7 @@
 						transform: translate({transform.x}px, {transform.y}px) scale({transform.scale});
 					opacity: {transform.opacity};
 				"
-				onclick={() => handleCardClick(repo)}
+				on:click={() => handleCardClick(repo)}
 			>
 					<div class="card-inner">
 						<RepoCard {repo} />
@@ -350,7 +231,7 @@
 			<!-- Title Bar -->
 			<div class="mac-titlebar">
 				<div class="mac-buttons">
-					<button class="mac-btn close" onclick={closeWindow}></button>
+					<button class="mac-btn close" on:click={closeWindow}></button>
 					<button class="mac-btn minimize"></button>
 					<button class="mac-btn maximize"></button>
 				</div>

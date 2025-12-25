@@ -1,4 +1,4 @@
-import { getContentByUrl, getContentDirectories, getSidebarTree } from 'statue-ssg/cms/content-processor';
+import { getContentByUrl, getContentDirectories, getSidebarTree } from '$lib/cms/content-processor';
 
 // Make this page pre-rendered as a static page
 export const prerender = true;
