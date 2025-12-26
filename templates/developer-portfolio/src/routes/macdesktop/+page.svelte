@@ -1,7 +1,7 @@
 <script lang="ts">
 	import MacWindow from '$lib/components/MacWindow.svelte';
 	import { onMount } from 'svelte';
-	import { Home, Globe, Mail, Folder, Youtube, Linkedin, Monitor } from 'lucide-svelte';
+	import { Home, Globe, Mail, Folder, Youtube, Monitor } from 'lucide-svelte';
 
 	interface DesktopItem {
 		id: string;
@@ -30,51 +30,15 @@
 		{
 			id: 'website',
 			name: 'My Website',
-			url: 'https://example.com/',
+			url: 'https://statue.dev/',
 			defaultPosition: { x: 50, y: 50 },
 			iconComponent: Monitor,
 			color: '#2563eb'
 		},
 		{
-			id: 'linkedin-1',
-			name: 'LinkedIn Video',
-			url: 'https://www.linkedin.com/feed/update/urn:li:activity:0000000000000000001/',
-			defaultPosition: { x: 50, y: 180 },
-			iconComponent: Linkedin,
-			color: '#0a66c2',
-			height: 850
-		},
-		{
-			id: 'linkedin-2',
-			name: 'LinkedIn Post 1',
-			url: 'https://www.linkedin.com/feed/update/urn:li:activity:0000000000000000002/',
-			defaultPosition: { x: 200, y: 50 },
-			iconComponent: Linkedin,
-			color: '#0a66c2',
-			height: 850
-		},
-		{
-			id: 'linkedin-3',
-			name: 'LinkedIn Post 2',
-			url: 'https://www.linkedin.com/feed/update/urn:li:activity:0000000000000000003/',
-			defaultPosition: { x: 350, y: 50 },
-			iconComponent: Linkedin,
-			color: '#0a66c2',
-			height: 850
-		},
-		{
-			id: 'linkedin-4',
-			name: 'LinkedIn Post 3',
-			url: 'https://www.linkedin.com/feed/update/urn:li:activity:0000000000000000004/',
-			defaultPosition: { x: 500, y: 50 },
-			iconComponent: Linkedin,
-			color: '#0a66c2',
-			height: 850
-		},
-		{
 			id: 'youtube',
 			name: 'YouTube Video',
-			url: 'https://www.youtube.com/watch?v=VIDEO_ID',
+			url: 'https://www.youtube.com/watch?v=LKFKy9_FyYo',
 			defaultPosition: { x: 650, y: 150 },
 			iconComponent: Youtube,
 			color: '#ff0000'
@@ -105,9 +69,6 @@
 	function transformUrl(url: string): string {
 		if (url.includes('youtube.com/watch')) {
 			return url.replace('watch?v=', 'embed/');
-		}
-		if (url.includes('linkedin.com/feed/update')) {
-			return url.replace('linkedin.com/feed/update', 'linkedin.com/embed/feed/update');
 		}
 		return url;
 	}

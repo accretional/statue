@@ -89,9 +89,9 @@
 		</div>
 
 		<!-- Hover Hint Label (Only visible when hovering) -->
-		<div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-300 pointer-events-none">
-			<span class="text-xs uppercase tracking-[0.2em] text-accent-fg font-semibold bg-canvas-default/80 px-3 py-1 rounded-full border border-accent-fg/20">
-				Contribution Activity
+		<div class="absolute bottom-4 left-6 z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-150 pointer-events-none">
+			<span class="text-[10px] uppercase tracking-[0.14em] text-fg-muted font-semibold bg-canvas-default/70 px-2.5 py-1 rounded-full border border-border-default/60 whitespace-nowrap">
+				Contribution activity
 			</span>
 		</div>
 

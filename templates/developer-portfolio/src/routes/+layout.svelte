@@ -6,7 +6,6 @@
   // Navbar items
   const navbarItems = [
     { title: 'Blog', url: '/blog' },
-    { title: 'Docs', url: '/docs' }
   ];
 
   let scrollY = 0;

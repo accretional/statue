@@ -20,10 +20,4 @@ Thumbs.db
 
 # Vite
 vite.config.js.timestamp-*
-vite.config.ts.timestamp-*
-
-# Test
-statue_test_env/
-
-# Default template backup (local only)
-templates/_default/
+vite.config.ts.timestamp-*statue_test_env/

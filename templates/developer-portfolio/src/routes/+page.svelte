@@ -86,7 +86,7 @@
 	const USER_PROFILE: UserProfile = {
 		name: "My Name",
 		username: "myusername",
-		avatarUrl: "/avatar.png",
+		avatarUrl: "/avatar.jpg",
 		bio: "Creative developer building thoughtful digital products.",
 		followers: 128,
 		following: 64,

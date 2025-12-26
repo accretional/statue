@@ -10,7 +10,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 const templatesDir = path.join(rootDir, 'templates');
-const defaultTemplateDir = path.join(templatesDir, '_default');
 
 const program = new Command();
 
@@ -19,186 +18,106 @@ program
   .description('Manage Statue SSG templates for development')
   .version('1.0.0');
 
-// Helper: Get template-specific dependencies from package.json
-// Excludes statue-ssg core dependencies
-function getTemplatePackageJson(packageJsonPath) {
-    if (!fs.existsSync(packageJsonPath)) return null;
-
-    const pkg = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
-
-    // Core dependencies that should NOT be saved with template
-    const coreDeps = new Set([
-        'statue-ssg', 'marked', 'gray-matter', 'chalk', 'commander', 'fs-extra'
-    ]);
-    const coreDevDeps = new Set([
-        '@sveltejs/adapter-static', '@sveltejs/kit', '@sveltejs/vite-plugin-svelte',
-        '@tailwindcss/postcss', '@testing-library/jest-dom', '@testing-library/svelte',
-        '@types/node', '@typescript-eslint/parser', '@vitest/browser-playwright',
-        'autoprefixer', 'esbuild', 'eslint', 'eslint-plugin-svelte', 'jsdom',
-        'pagefind', 'playwright', 'postcss', 'prettier', 'prettier-plugin-svelte',
-        'rimraf', 'svelte', 'svelte-sitemap', 'tailwindcss', 'typescript', 'vite',
-        'vitest', 'vitest-browser-svelte'
-    ]);
-
-    const templatePkg = {};
-
-    // Filter dependencies
-    if (pkg.dependencies) {
-        const deps = {};
-        for (const [name, version] of Object.entries(pkg.dependencies)) {
-            if (!coreDeps.has(name)) deps[name] = version;
-        }
-        if (Object.keys(deps).length > 0) templatePkg.dependencies = deps;
-    }
-
-    // Filter devDependencies
-    if (pkg.devDependencies) {
-        const devDeps = {};
-        for (const [name, version] of Object.entries(pkg.devDependencies)) {
-            if (!coreDevDeps.has(name)) devDeps[name] = version;
-        }
-        if (Object.keys(devDeps).length > 0) templatePkg.devDependencies = devDeps;
-    }
-
-    return Object.keys(templatePkg).length > 0 ? templatePkg : null;
-}
-
-// Helper: Merge template dependencies into target package.json
-function mergeTemplatePackageJson(targetPkgPath, templatePkg) {
-    if (!templatePkg || !fs.existsSync(targetPkgPath)) return false;
-
-    const pkg = JSON.parse(fs.readFileSync(targetPkgPath, 'utf8'));
-    let changed = false;
-
-    if (templatePkg.dependencies) {
-        pkg.dependencies = pkg.dependencies || {};
-        for (const [name, version] of Object.entries(templatePkg.dependencies)) {
-            if (!pkg.dependencies[name]) {
-                pkg.dependencies[name] = version;
-                changed = true;
-            }
-        }
-    }
-
-    if (templatePkg.devDependencies) {
-        pkg.devDependencies = pkg.devDependencies || {};
-        for (const [name, version] of Object.entries(templatePkg.devDependencies)) {
-            if (!pkg.devDependencies[name]) {
-                pkg.devDependencies[name] = version;
-                changed = true;
-            }
-        }
-    }
-
-    if (changed) {
-        fs.writeFileSync(targetPkgPath, JSON.stringify(pkg, null, 2));
-    }
-
-    return changed;
-}
-
 // LOAD: Template -> Workspace
 program
   .command('load <templateName>')
-  .description('Load a template into the workspace (src, static, content, package.json) for development')
+  .description('Load a template into the workspace (src/routes, content) for development')
   .option('-f, --force', 'Force overwrite of current workspace', false)
   .action(async (templateName, options) => {
-    // Determine source template directory
-    let sourceTemplateDir;
-    const isDefault = templateName === 'default';
+    // Special handling for 'default'
+    if (templateName === 'default') {
+        console.log(chalk.yellow('⚠️  The "default" template lives in the project root (src/routes).'));
+        console.log(chalk.yellow('   To restore the default template, please use git:'));
+        console.log(chalk.white('   git checkout src/routes content site.config.js'));
+        return;
+    }
 
-    if (isDefault) {
-        sourceTemplateDir = defaultTemplateDir;
-        if (!fs.existsSync(sourceTemplateDir)) {
-            console.error(chalk.red(`❌ Default template backup not found at ${sourceTemplateDir}`));
-            console.log(chalk.yellow('   Run "npm run template:save default" first to create the backup.'));
-            console.log(chalk.yellow('   Or use git: git checkout src content static site.config.js'));
-            return;
-        }
-    } else {
-        sourceTemplateDir = path.join(templatesDir, templateName);
-        if (!fs.existsSync(sourceTemplateDir)) {
-            console.error(chalk.red(`❌ Template '${templateName}' not found in ${templatesDir}`));
-            return;
-        }
+    const sourceTemplateDir = path.join(templatesDir, templateName);
+    
+    if (!fs.existsSync(sourceTemplateDir)) {
+      console.error(chalk.red(`❌ Template '${templateName}' not found in ${templatesDir}`));
+      return;
     }
 
     console.log(chalk.blue(`📂 Loading template '${templateName}' into workspace...`));
     if (!options.force) {
         console.log(chalk.yellow('⚠️  Warning: This will overwrite:'));
-        console.log(chalk.yellow('   - src/ (entire folder)'));
-        console.log(chalk.yellow('   - static/'));
+        console.log(chalk.yellow('   - src/routes/'));
         console.log(chalk.yellow('   - content/'));
-        console.log(chalk.yellow('   - site.config.js'));
-        console.log(chalk.yellow('   - package.json (template dependencies will be merged)'));
-        console.log(chalk.yellow('   Ensure you have committed your changes.'));
+        console.log(chalk.yellow('   - src/lib/components/ (if template has custom components)'));
+        console.log(chalk.yellow('   - src/lib/themes/ (if template has custom themes)'));
+        console.log(chalk.yellow('   - src/lib/index.ts and src/lib/index.css (if template has them)'));
+        console.log(chalk.yellow('   Ensure you have committed your changes to "default" (or other templates).'));
         console.error(chalk.red('Operation aborted. Use -f or --force to proceed.'));
         return;
     }
 
     // Targets in workspace
-    const targetSrc = path.join(rootDir, 'src');
-    const targetStatic = path.join(rootDir, 'static');
+    const targetRoutes = path.join(rootDir, 'src/routes');
     const targetContent = path.join(rootDir, 'content');
     const targetConfig = path.join(rootDir, 'site.config.js');
-    const targetPackageJson = path.join(rootDir, 'package.json');
+    const targetLibIndexTs = path.join(rootDir, 'src/lib/index.ts');
+    const targetLibIndexCss = path.join(rootDir, 'src/lib/index.css');
+    const targetLibComponents = path.join(rootDir, 'src/lib/components');
+    const targetLibThemes = path.join(rootDir, 'src/lib/themes');
 
+    // 1. Clear current workspace
+    console.log(chalk.gray('Cleaning current workspace...'));
+    fs.emptyDirSync(targetRoutes);
+    fs.emptyDirSync(targetContent);
+
+    // 2. Copy from Template -> Workspace
     try {
-        // 1. Copy src folder (entire folder, preserving lib/components, lib/themes, etc.)
-        if (fs.existsSync(path.join(sourceTemplateDir, 'src'))) {
-            // Keep core lib files that shouldn't be replaced
-            const coreLibFiles = ['cms', 'index.ts', 'index.css'];
-            const srcLib = path.join(targetSrc, 'lib');
-
-            // Backup core lib items
-            const backups = {};
-            for (const item of coreLibFiles) {
-                const itemPath = path.join(srcLib, item);
-                if (fs.existsSync(itemPath)) {
-                    backups[item] = fs.readFileSync !== undefined && fs.statSync(itemPath).isFile()
-                        ? fs.readFileSync(itemPath)
-                        : null;
-                }
-            }
-
-            // Clear and copy src
-            fs.emptyDirSync(path.join(targetSrc, 'routes'));
-            fs.copySync(path.join(sourceTemplateDir, 'src'), targetSrc, { overwrite: true });
-            console.log(chalk.gray('  ✓ Copied src/'));
+        // Routes
+        if (fs.existsSync(path.join(sourceTemplateDir, 'src/routes'))) {
+            fs.copySync(path.join(sourceTemplateDir, 'src/routes'), targetRoutes);
+            console.log(chalk.gray('  ✓ Copied src/routes'));
         }
-
-        // 2. Copy static folder
-        if (fs.existsSync(path.join(sourceTemplateDir, 'static'))) {
-            fs.emptyDirSync(targetStatic);
-            fs.copySync(path.join(sourceTemplateDir, 'static'), targetStatic);
-            console.log(chalk.gray('  ✓ Copied static/'));
-        }
-
-        // 3. Copy content folder
+        // Content
         if (fs.existsSync(path.join(sourceTemplateDir, 'content'))) {
-            fs.emptyDirSync(targetContent);
             fs.copySync(path.join(sourceTemplateDir, 'content'), targetContent);
-            console.log(chalk.gray('  ✓ Copied content/'));
+            console.log(chalk.gray('  ✓ Copied content'));
         }
-
-        // 4. Copy site.config.js
+        // Config
         if (fs.existsSync(path.join(sourceTemplateDir, 'site.config.js'))) {
             fs.copySync(path.join(sourceTemplateDir, 'site.config.js'), targetConfig);
             console.log(chalk.gray('  ✓ Copied site.config.js'));
         }
 
-        // 5. Merge template package.json dependencies
-        const templatePkgPath = path.join(sourceTemplateDir, 'package.json');
-        if (fs.existsSync(templatePkgPath)) {
-            const templatePkg = JSON.parse(fs.readFileSync(templatePkgPath, 'utf8'));
-            if (mergeTemplatePackageJson(targetPackageJson, templatePkg)) {
-                console.log(chalk.gray('  ✓ Merged template dependencies into package.json'));
-                console.log(chalk.blue('   Run "npm install" to install new dependencies.'));
+        // src/lib/index.ts
+        if (fs.existsSync(path.join(sourceTemplateDir, 'src/lib/index.ts'))) {
+            fs.copySync(path.join(sourceTemplateDir, 'src/lib/index.ts'), targetLibIndexTs);
+            console.log(chalk.gray('  ✓ Copied src/lib/index.ts'));
+        }
+
+        // src/lib/index.css
+        if (fs.existsSync(path.join(sourceTemplateDir, 'src/lib/index.css'))) {
+            fs.copySync(path.join(sourceTemplateDir, 'src/lib/index.css'), targetLibIndexCss);
+            console.log(chalk.gray('  ✓ Copied src/lib/index.css'));
+        }
+
+        // src/lib/components
+        if (fs.existsSync(path.join(sourceTemplateDir, 'src/lib/components'))) {
+            // Clear existing custom components
+            if (fs.existsSync(targetLibComponents)) {
+                fs.emptyDirSync(targetLibComponents);
             }
+            fs.copySync(path.join(sourceTemplateDir, 'src/lib/components'), targetLibComponents);
+            console.log(chalk.gray('  ✓ Copied src/lib/components'));
+        }
+
+        // src/lib/themes
+        if (fs.existsSync(path.join(sourceTemplateDir, 'src/lib/themes'))) {
+            // Clear existing custom themes
+            if (fs.existsSync(targetLibThemes)) {
+                fs.emptyDirSync(targetLibThemes);
+            }
+            fs.copySync(path.join(sourceTemplateDir, 'src/lib/themes'), targetLibThemes);
+            console.log(chalk.gray('  ✓ Copied src/lib/themes'));
         }
 
         console.log(chalk.green(`✅ Template '${templateName}' loaded successfully!`));
-        console.log(chalk.yellow('Run "npm install && npm run dev" to test it.'));
+        console.log(chalk.yellow('Run "npm run dev" to test it.'));
     } catch (e) {
         console.error(chalk.red('Error loading template:'), e);
     }
@@ -207,76 +126,85 @@ program
 // SAVE: Workspace -> Template
 program
   .command('save <templateName>')
-  .description('Save current workspace (src, static, content, package.json) into a template folder')
+  .description('Save current workspace (src/routes, content) into a template folder')
   .action(async (templateName) => {
-    // For 'default', save to _default folder as backup
-    const targetTemplateDir = templateName === 'default'
-        ? defaultTemplateDir
-        : path.join(templatesDir, templateName);
+    // Special handling for 'default'
+    if (templateName === 'default') {
+        console.log(chalk.green('✅  The "default" template is already in the project root.'));
+        console.log(chalk.gray('   Just git commit your changes to save them.'));
+        return;
+    }
 
+    const targetTemplateDir = path.join(templatesDir, templateName);
+    
     console.log(chalk.blue(`💾 Saving workspace to template '${templateName}'...`));
 
     // Sources from workspace
-    const sourceSrc = path.join(rootDir, 'src');
-    const sourceStatic = path.join(rootDir, 'static');
+    const sourceRoutes = path.join(rootDir, 'src/routes');
     const sourceContent = path.join(rootDir, 'content');
     const sourceConfig = path.join(rootDir, 'site.config.js');
-    const sourcePackageJson = path.join(rootDir, 'package.json');
+    const sourceLibIndexTs = path.join(rootDir, 'src/lib/index.ts');
+    const sourceLibIndexCss = path.join(rootDir, 'src/lib/index.css');
+    const sourceLibComponents = path.join(rootDir, 'src/lib/components');
+    const sourceLibThemes = path.join(rootDir, 'src/lib/themes');
 
-    // Ensure template dir exists
-    fs.ensureDirSync(targetTemplateDir);
+    // 1. Ensure template dir exists
+    fs.ensureDirSync(path.join(targetTemplateDir, 'src'));
+    fs.ensureDirSync(path.join(targetTemplateDir, 'src/lib'));
 
+    // 2. Copy Workspace -> Template
     try {
-        // 1. Copy entire src folder
-        if (fs.existsSync(sourceSrc)) {
-            const targetSrc = path.join(targetTemplateDir, 'src');
-            if (fs.existsSync(targetSrc)) {
-                fs.emptyDirSync(targetSrc);
-            }
-            fs.copySync(sourceSrc, targetSrc);
-            console.log(chalk.gray('  ✓ Saved src/'));
+        // Routes
+        if (fs.existsSync(sourceRoutes)) {
+            fs.emptyDirSync(path.join(targetTemplateDir, 'src/routes'));
+            fs.copySync(sourceRoutes, path.join(targetTemplateDir, 'src/routes'));
+            console.log(chalk.gray('  ✓ Saved src/routes'));
         }
-
-        // 2. Copy static folder
-        if (fs.existsSync(sourceStatic)) {
-            const targetStatic = path.join(targetTemplateDir, 'static');
-            if (fs.existsSync(targetStatic)) {
-                fs.emptyDirSync(targetStatic);
-            }
-            fs.copySync(sourceStatic, targetStatic);
-            console.log(chalk.gray('  ✓ Saved static/'));
-        }
-
-        // 3. Copy content folder
+        // Content
         if (fs.existsSync(sourceContent)) {
-            const targetContent = path.join(targetTemplateDir, 'content');
-            if (fs.existsSync(targetContent)) {
-                fs.emptyDirSync(targetContent);
-            }
-            fs.copySync(sourceContent, targetContent);
-            console.log(chalk.gray('  ✓ Saved content/'));
+            fs.emptyDirSync(path.join(targetTemplateDir, 'content'));
+            fs.copySync(sourceContent, path.join(targetTemplateDir, 'content'));
+            console.log(chalk.gray('  ✓ Saved content'));
         }
-
-        // 4. Copy site.config.js
+        // Config
         if (fs.existsSync(sourceConfig)) {
             fs.copySync(sourceConfig, path.join(targetTemplateDir, 'site.config.js'));
             console.log(chalk.gray('  ✓ Saved site.config.js'));
         }
 
-        // 5. Save template-specific dependencies from package.json
-        const templatePkg = getTemplatePackageJson(sourcePackageJson);
-        if (templatePkg) {
-            fs.writeFileSync(
-                path.join(targetTemplateDir, 'package.json'),
-                JSON.stringify(templatePkg, null, 2)
-            );
-            console.log(chalk.gray('  ✓ Saved package.json (template dependencies only)'));
+        // src/lib/index.ts
+        if (fs.existsSync(sourceLibIndexTs)) {
+            fs.copySync(sourceLibIndexTs, path.join(targetTemplateDir, 'src/lib/index.ts'));
+            console.log(chalk.gray('  ✓ Saved src/lib/index.ts'));
+        }
+
+        // src/lib/index.css
+        if (fs.existsSync(sourceLibIndexCss)) {
+            fs.copySync(sourceLibIndexCss, path.join(targetTemplateDir, 'src/lib/index.css'));
+            console.log(chalk.gray('  ✓ Saved src/lib/index.css'));
+        }
+
+        // src/lib/components
+        if (fs.existsSync(sourceLibComponents)) {
+            const targetComponents = path.join(targetTemplateDir, 'src/lib/components');
+            if (fs.existsSync(targetComponents)) {
+                fs.emptyDirSync(targetComponents);
+            }
+            fs.copySync(sourceLibComponents, targetComponents);
+            console.log(chalk.gray('  ✓ Saved src/lib/components'));
+        }
+
+        // src/lib/themes
+        if (fs.existsSync(sourceLibThemes)) {
+            const targetThemes = path.join(targetTemplateDir, 'src/lib/themes');
+            if (fs.existsSync(targetThemes)) {
+                fs.emptyDirSync(targetThemes);
+            }
+            fs.copySync(sourceLibThemes, targetThemes);
+            console.log(chalk.gray('  ✓ Saved src/lib/themes'));
         }
 
         console.log(chalk.green(`✅ Workspace saved to template '${templateName}'!`));
-        if (templateName === 'default') {
-            console.log(chalk.gray('   Default template backed up to templates/_default/'));
-        }
     } catch (e) {
         console.error(chalk.red('Error saving template:'), e);
     }
