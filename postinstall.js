@@ -73,11 +73,13 @@ async function setupStatueSSG(options = {}) {
 
         // Helper: transform file imports in a string
         const transformImports = (code) => {
-        // 1) Component default imports from $lib/components/X.svelte -> import { X } from 'statue-ssg'
-        code = code.replace(/import\s+([A-Za-z0-9_]+)\s+from\s+['"]\$lib\/components\/\1\.svelte['"];?/g, (m, name) => `import { ${name} } from 'statue-ssg';`);
+        if (isDefaultTemplate) {
+            // 1) Component default imports from $lib/components/X.svelte -> import { X } from 'statue-ssg'
+            code = code.replace(/import\s+([A-Za-z0-9_]+)\s+from\s+['"]\$lib\/components\/\1\.svelte['"];?/g, (m, name) => `import { ${name} } from 'statue-ssg';`);
 
-        // 2) Bulk replace any remaining $lib/components/<Any>.svelte -> named import
-        code = code.replace(/import\s+([A-Za-z0-9_]+)\s+from\s+['"]\$lib\/components\/([A-Za-z0-9_]+)\.svelte['"];?/g, (m, local, comp) => `import { ${comp} } from 'statue-ssg';`);
+            // 2) Bulk replace any remaining $lib/components/<Any>.svelte -> named import
+            code = code.replace(/import\s+([A-Za-z0-9_]+)\s+from\s+['"]\$lib\/components\/([A-Za-z0-9_]+)\.svelte['"];?/g, (m, local, comp) => `import { ${comp} } from 'statue-ssg';`);
+        }
 
         // 3) Replace stylesheet import - keep as $lib/index.css
         // No replacement needed - it stays as $lib/index.css
@@ -163,6 +165,13 @@ async function setupStatueSSG(options = {}) {
 }`;
       fs.writeFileSync(indexCssPath, appCssContent);
       console.log(chalk.green('✓ src/lib/index.css created'));
+    }
+
+    // 3.1 Overlay src/lib from template (custom components, themes, assets)
+    const templateLib = path.join(templateDir, 'src/lib');
+    if (!isDefaultTemplate && fs.existsSync(templateLib)) {
+      fs.copySync(templateLib, targetLib, { overwrite: true });
+      console.log(chalk.green(`✓ src/lib folder content copied from ${templateName}`));
     }
   } catch (err) {
     console.error(chalk.red('An error occurred while creating app.css:'), err);
@@ -251,6 +260,7 @@ async function setupStatueSSG(options = {}) {
       const scriptsToOverwrite = new Set(['preview', 'postbuild']);
 
       let dependenciesAdded = false;
+      let templateDependenciesAdded = false;
       for (const [dep, version] of Object.entries(dependencies)) {
         if (!packageJson.dependencies || !packageJson.dependencies[dep]) {
           packageJson.dependencies = packageJson.dependencies || {};
@@ -267,6 +277,31 @@ async function setupStatueSSG(options = {}) {
         }
       }
 
+      if (!isDefaultTemplate) {
+        const templatePackageJsonPath = path.join(templateDir, 'package.json');
+        if (fs.existsSync(templatePackageJsonPath)) {
+          const templatePkg = JSON.parse(fs.readFileSync(templatePackageJsonPath, 'utf8'));
+          if (templatePkg.dependencies) {
+            packageJson.dependencies = packageJson.dependencies || {};
+            for (const [dep, version] of Object.entries(templatePkg.dependencies)) {
+              if (!packageJson.dependencies[dep]) {
+                packageJson.dependencies[dep] = version;
+                templateDependenciesAdded = true;
+              }
+            }
+          }
+          if (templatePkg.devDependencies) {
+            packageJson.devDependencies = packageJson.devDependencies || {};
+            for (const [dep, version] of Object.entries(templatePkg.devDependencies)) {
+              if (!packageJson.devDependencies[dep]) {
+                packageJson.devDependencies[dep] = version;
+                templateDependenciesAdded = true;
+              }
+            }
+          }
+        }
+      }
+
       let scriptsAdded = false;
       packageJson.scripts = packageJson.scripts || {};
       for (const [scriptName, scriptCommand] of Object.entries(requiredScripts)) {
@@ -280,10 +315,13 @@ async function setupStatueSSG(options = {}) {
         }
       }
 
-      if (dependenciesAdded || scriptsAdded) {
+      if (dependenciesAdded || templateDependenciesAdded || scriptsAdded) {
         fs.writeFileSync(targetPackageJsonPath, JSON.stringify(packageJson, null, 2));
         if (dependenciesAdded) {
           console.log(chalk.green('✓ package.json updated with required dependencies'));
+        }
+        if (templateDependenciesAdded) {
+          console.log(chalk.green('✓ package.json updated with template dependencies'));
         }
         if (scriptsAdded) {
           console.log(chalk.green('✓ package.json updated with required scripts'));
