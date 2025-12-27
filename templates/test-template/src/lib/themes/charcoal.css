@@ -1,0 +1,28 @@
+/* Charcoal Theme - Warm neutral grays inspired by ChatGPT */
+@theme {
+  /* Core palette - Warm neutral grays */
+  --color-background: #212121; /* Dark charcoal */
+  --color-card: #303030;       /* Lighter charcoal */
+  --color-border: #444444;     /* Warm gray border */
+  --color-foreground: #f5f5f5; /* Soft white */
+  --color-muted: #a0a0a0;      /* Warm medium gray */
+
+  /* Brand colors - Neutral with subtle warmth */
+  --color-primary: #ffffff;    /* White */
+  --color-secondary: #e0e0e0;  /* Light gray */
+  --color-accent: #888888;     /* Medium gray */
+
+  /* Text colors for different surfaces */
+  --color-on-primary: #212121;   /* Text on primary button - dark */
+  --color-on-background: #f5f5f5; /* Contrast text on background */
+
+  /* Hero gradients - Charcoal tones */
+  --color-hero-from: #212121;
+  --color-hero-via: #2a2a2a;
+  --color-hero-to: #212121;
+
+  /* Prose overrides for better visibility */
+  --color-prose-link: #a8c7fa;    /* Soft blue for links */
+  --color-prose-code-bg: #303030; /* Card color for code blocks */
+  --color-prose-pre-bg: #303030;  /* Card color for pre blocks */
+}
