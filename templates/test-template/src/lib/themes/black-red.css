@@ -1,0 +1,28 @@
+/* Black & Red Theme */
+@theme {
+  /* Core palette - Black & Red Theme */
+  --color-background: #000000; /* Black */
+  --color-card: #1a1a1a;       /* Dark gray */
+  --color-border: #333333;     /* Medium dark gray */
+  --color-foreground: #ffffff; /* White */
+  --color-muted: #999999;      /* Medium gray */
+
+  /* Brand colors - Red tones */
+  --color-primary: #dc2626;    /* Red */
+  --color-secondary: #ef4444;  /* Lighter red */
+  --color-accent: #b91c1c;     /* Darker red */
+
+  /* Text colors for different surfaces */
+  --color-on-primary: #ffffff;   /* Text on primary button - white */
+  --color-on-background: #ffffff; /* Contrast text on background - white */
+
+  /* Hero gradients - Black/Red tones */
+  --color-hero-from: #000000;
+  --color-hero-via: #1a0000;
+  --color-hero-to: #000000;
+
+  /* Prose overrides for better visibility */
+  --color-prose-link: #f87171;    /* Light red for links */
+  --color-prose-code-bg: #1f1f1f; /* Dark background for code blocks */
+  --color-prose-pre-bg: #1f1f1f;  /* Dark background for pre blocks */
+}
