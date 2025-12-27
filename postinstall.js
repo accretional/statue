@@ -126,6 +126,7 @@ async function setupStatueSSG(options = {}) {
     const rootContent = path.join(sourceDir, 'content');
     const templateContent = path.join(templateDir, 'content');
 
+    // TODO(issues/105): Use resources/ and symlinks rather than copying
     if (!fs.existsSync(targetContent)) {
         fs.ensureDirSync(targetContent);
 
@@ -176,6 +177,7 @@ async function setupStatueSSG(options = {}) {
       console.log(chalk.green('✓ src/lib/index.css created'));
     }
 
+    // TODO(issues/105): Use resources/ and symlinks rather than copying
     // 3.1 Overlay src/lib from template (custom components, themes, assets)
     const templateLib = path.join(templateDir, 'src/lib');
     if (!isDefaultTemplate && fs.existsSync(templateLib)) {
