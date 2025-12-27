@@ -121,18 +121,27 @@ async function setupStatueSSG(options = {}) {
     console.error(chalk.red('An error occurred while copying routes or transforming imports:'), err);
   }
 
-  // 2. Copy Content from Template
+  // 2. Copy Content - First from default (root), then overlay template content
   try {
-    const sourceContent = path.join(templateDir, 'content');
-    
-    if (fs.existsSync(sourceContent)) {
-        if (!fs.existsSync(targetContent)) {
-            fs.ensureDirSync(targetContent);
-            fs.copySync(sourceContent, targetContent, { overwrite: true, errorOnExist: false });
-            console.log(chalk.green(`✓ content folder copied from ${isDefaultTemplate ? 'default (root)' : templateName}`));
-        } else {
-            console.log(chalk.yellow('! content folder already exists, content not copied'));
+    const rootContent = path.join(sourceDir, 'content');
+    const templateContent = path.join(templateDir, 'content');
+
+    if (!fs.existsSync(targetContent)) {
+        fs.ensureDirSync(targetContent);
+
+        // Step 1: Copy default (root) content first
+        if (fs.existsSync(rootContent)) {
+            fs.copySync(rootContent, targetContent, { overwrite: true, errorOnExist: false });
+            console.log(chalk.green('✓ default content folder copied'));
         }
+
+        // Step 2: Overlay template-specific content (if not default template and has content)
+        if (!isDefaultTemplate && fs.existsSync(templateContent)) {
+            fs.copySync(templateContent, targetContent, { overwrite: true, errorOnExist: false });
+            console.log(chalk.green(`✓ template content overlaid from ${templateName}`));
+        }
+    } else {
+        console.log(chalk.yellow('! content folder already exists, content not copied'));
     }
   } catch (err) {
     console.error(chalk.red('An error occurred while copying content folder:'), err);
