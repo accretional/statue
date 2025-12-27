@@ -5,8 +5,7 @@
 #   ./autopr.sh component <Name> [subdir]   # Submit a Svelte component
 #   ./autopr.sh theme <name>                # Submit a CSS theme
 #   ./autopr.sh template <name>             # Submit a template
-#   ./autopr.sh all <name>                  # Template + components + themes
-#
+#   ./autopr.sh all <name>                  # Tem\\\\\
 
 set -e  # Exit on error
 
@@ -134,15 +133,92 @@ show_usage() {
     echo "  $0 theme sunset-orange"
     echo "  $0 theme sunset-orange.css            # Extension optional"
     echo "  $0 template portfolio"
-    echo "  $0 all portfolio                      # Template + all custom components & themes"
+    echo "  $0 all portfolio                      # Same as template (legacy alias)"
     echo ""
     echo "Notes:"
     echo "  - For components: Looks for ComponentName.svelte (extension optional)"
     echo "    Searches current directory first, then subdirectories"
     echo "  - For themes: Looks for theme-name.css (extension optional)"
     echo "    Searches current directory first, then subdirectories"
-    echo "  - For templates: Copies src/routes/, content/, site.config.js from current directory"
-    echo "  - For all: Template + bundles all custom components and themes into the template"
+    echo "  - For templates: DIFF-BASED - only saves files different from default:"
+    echo "      * src/ (only new/modified files)"
+    echo "      * static/ (only new/modified files)"
+    echo "      * content/ (only new/modified files)"
+    echo "      * site.config.js (only if modified)"
+    echo "      * package.json (template-specific dependencies only)"
+    echo "  - For all: Same as template (legacy command, kept for compatibility)"
+}
+
+# ============================================================
+# DIFF HELPERS - Compare files against default (cloned repo)
+# ============================================================
+
+# Compare two files and return 0 if they are identical
+files_are_equal() {
+    local file1="$1"
+    local file2="$2"
+
+    if [ ! -f "$file1" ] || [ ! -f "$file2" ]; then
+        return 1
+    fi
+
+    # Compare using diff
+    diff -q "$file1" "$file2" > /dev/null 2>&1
+}
+
+# Get files that are different or new compared to default
+# Usage: get_diff_files <source_dir> <default_dir>
+# Outputs: List of relative paths that should be copied
+get_diff_files() {
+    local source_dir="$1"
+    local default_dir="$2"
+
+    if [ ! -d "$source_dir" ]; then
+        return
+    fi
+
+    # Find all files in source
+    while IFS= read -r -d '' file; do
+        local rel_path="${file#$source_dir/}"
+        local default_file="$default_dir/$rel_path"
+
+        if [ ! -f "$default_file" ]; then
+            # New file - not in default
+            echo "$rel_path"
+        elif ! files_are_equal "$file" "$default_file"; then
+            # Modified file - different from default
+            echo "$rel_path"
+        fi
+        # If files are equal, skip (don't output)
+    done < <(find "$source_dir" -type f -print0)
+}
+
+# Copy only diff files from source to destination
+# Usage: copy_diff_files <source_dir> <dest_dir> <default_dir>
+copy_diff_files() {
+    local source_dir="$1"
+    local dest_dir="$2"
+    local default_dir="$3"
+    local count=0
+
+    local diff_files=$(get_diff_files "$source_dir" "$default_dir")
+
+    if [ -z "$diff_files" ]; then
+        return 0
+    fi
+
+    while IFS= read -r rel_path; do
+        if [ -n "$rel_path" ]; then
+            local src_file="$source_dir/$rel_path"
+            local dst_file="$dest_dir/$rel_path"
+
+            mkdir -p "$(dirname "$dst_file")"
+            cp "$src_file" "$dst_file"
+            count=$((count + 1))
+        fi
+    done <<< "$diff_files"
+
+    echo $count
 }
 
 # Parse arguments and set up source/dest pairs
@@ -234,131 +310,172 @@ parse_args() {
             ;;
 
         template)
-            # Template: current dir (src/routes/, content/, site.config.js) -> templates/template-name/
-            if [ ! -d "src/routes" ]; then
-                log_error "src/routes/ directory not found in current directory"
+            # Template: DIFF-BASED - only files different from default
+            if [ ! -d "src" ]; then
+                log_error "src/ directory not found in current directory"
                 log_error "Make sure you're in the root of a Statue site"
                 exit 1
             fi
 
-            # Required files/directories
-            SOURCE_PATHS+=("src/routes")
-            DEST_PATHS+=("templates/$name/src/routes")
+            # Mark this as a diff-based template submission
+            USE_DIFF_MODE="true"
+            TEMPLATE_NAME="$name"
 
-            if [ -d "content" ]; then
-                SOURCE_PATHS+=("content")
-                DEST_PATHS+=("templates/$name/content")
-            else
-                log_warn "content/ directory not found, skipping"
-            fi
+            # Store workspace paths for diff comparison (will be processed in create_pr)
+            WORKSPACE_SRC="$(realpath src)"
+            WORKSPACE_STATIC="$(realpath static 2>/dev/null || echo "")"
+            WORKSPACE_CONTENT="$(realpath content 2>/dev/null || echo "")"
+            WORKSPACE_CONFIG="$(realpath site.config.js 2>/dev/null || echo "")"
 
-            if [ -f "site.config.js" ]; then
-                SOURCE_PATHS+=("site.config.js")
-                DEST_PATHS+=("templates/$name/site.config.js")
-            else
-                log_warn "site.config.js not found, skipping"
-            fi
+            log_info "Template will be saved using DIFF-BASED mode"
+            log_info "Only files different from default will be included"
 
-            # Optional: static directory
-            if [ -d "static" ]; then
-                log_info "Found static/ directory, including in template"
-                SOURCE_PATHS+=("static")
-                DEST_PATHS+=("templates/$name/static")
+            # Optional: package.json (for template-specific dependencies)
+            if [ -f "package.json" ]; then
+                log_info "Processing package.json for template-specific dependencies..."
+
+                TEMP_PKG=$(mktemp)
+                node -e "
+                    const fs = require('fs');
+                    const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+
+                    const coreDeps = new Set(['statue-ssg', 'marked', 'gray-matter', 'chalk', 'commander', 'fs-extra']);
+                    const coreDevDeps = new Set([
+                        '@sveltejs/adapter-static', '@sveltejs/kit', '@sveltejs/vite-plugin-svelte',
+                        '@tailwindcss/postcss', 'autoprefixer', 'postcss', 'tailwindcss',
+                        '@types/node', 'typescript', 'vite', 'svelte', 'pagefind'
+                    ]);
+
+                    const result = {};
+
+                    if (pkg.dependencies) {
+                        const deps = {};
+                        for (const [k, v] of Object.entries(pkg.dependencies)) {
+                            if (!coreDeps.has(k)) deps[k] = v;
+                        }
+                        if (Object.keys(deps).length) result.dependencies = deps;
+                    }
+
+                    if (pkg.devDependencies) {
+                        const deps = {};
+                        for (const [k, v] of Object.entries(pkg.devDependencies)) {
+                            if (!coreDevDeps.has(k)) deps[k] = v;
+                        }
+                        if (Object.keys(deps).length) result.devDependencies = deps;
+                    }
+
+                    if (Object.keys(result).length) {
+                        fs.writeFileSync('$TEMP_PKG', JSON.stringify(result, null, 2));
+                        console.log('HAS_DEPS');
+                    } else {
+                        console.log('NO_DEPS');
+                    }
+                " 2>/dev/null
+
+                if [ -s "$TEMP_PKG" ]; then
+                    TEMPLATE_PKG_PATH="$TEMP_PKG"
+                    log_info "Including template-specific dependencies from package.json"
+                fi
             fi
 
             BRANCH_NAME="$(generate_random_prefix)-template-${name}"
-            COMMIT_MSG="Add $name template"
+            COMMIT_MSG="Add $name template (diff-based)"
             PR_TITLE="Add $name template"
-            PR_BODY="This PR adds the $name template to the library."
+            PR_BODY="This PR adds the $name template to the library.
+
+**DIFF-BASED**: Only includes files that are different from the default template.
+When loaded, this template will be overlaid on top of the default template.
+
+May include:
+- src/ (only new/modified routes, components, themes)
+- content/ (only new/modified content files)
+- static/ (only new/modified assets)
+- site.config.js (only if modified)
+- Template-specific dependencies (if any)"
             ;;
 
         all)
-            # All: Template + custom components + custom themes -> templates/template-name/
-            if [ ! -d "src/routes" ]; then
-                log_error "src/routes/ directory not found in current directory"
+            # All: Same as template (legacy alias) - DIFF-BASED
+            if [ ! -d "src" ]; then
+                log_error "src/ directory not found in current directory"
                 log_error "Make sure you're in the root of a Statue site"
                 exit 1
             fi
 
-            log_info "Bundling complete template with custom components and themes..."
+            # Mark this as a diff-based template submission (same as template)
+            USE_DIFF_MODE="true"
+            TEMPLATE_NAME="$name"
 
-            # Required: routes
-            SOURCE_PATHS+=("src/routes")
-            DEST_PATHS+=("templates/$name/src/routes")
+            WORKSPACE_SRC="$(realpath src)"
+            WORKSPACE_STATIC="$(realpath static 2>/dev/null || echo "")"
+            WORKSPACE_CONTENT="$(realpath content 2>/dev/null || echo "")"
+            WORKSPACE_CONFIG="$(realpath site.config.js 2>/dev/null || echo "")"
 
-            # Optional: content
-            if [ -d "content" ]; then
-                SOURCE_PATHS+=("content")
-                DEST_PATHS+=("templates/$name/content")
-            else
-                log_warn "content/ directory not found, skipping"
-            fi
+            log_info "Template will be saved using DIFF-BASED mode (same as 'template' command)"
+            log_info "Only files different from default will be included"
 
-            # Optional: site.config.js
-            if [ -f "site.config.js" ]; then
-                SOURCE_PATHS+=("site.config.js")
-                DEST_PATHS+=("templates/$name/site.config.js")
-            else
-                log_warn "site.config.js not found, skipping"
-            fi
+            # Optional: package.json
+            if [ -f "package.json" ]; then
+                log_info "Processing package.json for template-specific dependencies..."
 
-            # Optional: static
-            if [ -d "static" ]; then
-                log_info "Found static/ directory, including in template"
-                SOURCE_PATHS+=("static")
-                DEST_PATHS+=("templates/$name/static")
-            fi
+                TEMP_PKG=$(mktemp)
+                node -e "
+                    const fs = require('fs');
+                    const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
 
-            # Optional: src/lib/index.ts (component exports)
-            if [ -f "src/lib/index.ts" ]; then
-                log_info "Found src/lib/index.ts, including in template"
-                SOURCE_PATHS+=("src/lib/index.ts")
-                DEST_PATHS+=("templates/$name/src/lib/index.ts")
-            fi
+                    const coreDeps = new Set(['statue-ssg', 'marked', 'gray-matter', 'chalk', 'commander', 'fs-extra']);
+                    const coreDevDeps = new Set([
+                        '@sveltejs/adapter-static', '@sveltejs/kit', '@sveltejs/vite-plugin-svelte',
+                        '@tailwindcss/postcss', 'autoprefixer', 'postcss', 'tailwindcss',
+                        '@types/node', 'typescript', 'vite', 'svelte', 'pagefind'
+                    ]);
 
-            # Optional: src/lib/index.css (styles and theme imports)
-            if [ -f "src/lib/index.css" ]; then
-                log_info "Found src/lib/index.css, including in template"
-                SOURCE_PATHS+=("src/lib/index.css")
-                DEST_PATHS+=("templates/$name/src/lib/index.css")
-            fi
+                    const result = {};
 
-            # Bundle custom components (if they exist)
-            if [ -d "src/lib/components" ]; then
-                log_info "Found custom components, bundling into template..."
-                local component_count=0
-                while IFS= read -r -d '' component_file; do
-                    # Get relative path from src/lib/components/
-                    local rel_path="${component_file#src/lib/components/}"
-                    SOURCE_PATHS+=("$component_file")
-                    DEST_PATHS+=("templates/$name/src/lib/components/$rel_path")
-                    component_count=$((component_count + 1))
-                done < <(find src/lib/components -type f -name "*.svelte" -print0)
-                log_info "Bundled $component_count custom component(s)"
-            else
-                log_info "No custom components directory found (src/lib/components/)"
-            fi
+                    if (pkg.dependencies) {
+                        const deps = {};
+                        for (const [k, v] of Object.entries(pkg.dependencies)) {
+                            if (!coreDeps.has(k)) deps[k] = v;
+                        }
+                        if (Object.keys(deps).length) result.dependencies = deps;
+                    }
 
-            # Bundle custom themes (if they exist)
-            if [ -d "src/lib/themes" ]; then
-                log_info "Found custom themes, bundling into template..."
-                local theme_count=0
-                while IFS= read -r -d '' theme_file; do
-                    # Get relative path from src/lib/themes/
-                    local rel_path="${theme_file#src/lib/themes/}"
-                    SOURCE_PATHS+=("$theme_file")
-                    DEST_PATHS+=("templates/$name/src/lib/themes/$rel_path")
-                    theme_count=$((theme_count + 1))
-                done < <(find src/lib/themes -type f -name "*.css" -print0)
-                log_info "Bundled $theme_count custom theme(s)"
-            else
-                log_info "No custom themes directory found (src/lib/themes/)"
+                    if (pkg.devDependencies) {
+                        const deps = {};
+                        for (const [k, v] of Object.entries(pkg.devDependencies)) {
+                            if (!coreDevDeps.has(k)) deps[k] = v;
+                        }
+                        if (Object.keys(deps).length) result.devDependencies = deps;
+                    }
+
+                    if (Object.keys(result).length) {
+                        fs.writeFileSync('$TEMP_PKG', JSON.stringify(result, null, 2));
+                        console.log('HAS_DEPS');
+                    } else {
+                        console.log('NO_DEPS');
+                    }
+                " 2>/dev/null
+
+                if [ -s "$TEMP_PKG" ]; then
+                    TEMPLATE_PKG_PATH="$TEMP_PKG"
+                    log_info "Including template-specific dependencies from package.json"
+                fi
             fi
 
             BRANCH_NAME="$(generate_random_prefix)-all-${name}"
-            COMMIT_MSG="Add $name template with custom components and themes"
-            PR_TITLE="Add $name template (complete)"
-            PR_BODY="This PR adds the $name template to the library, including custom components and themes."
+            COMMIT_MSG="Add $name template (diff-based)"
+            PR_TITLE="Add $name template"
+            PR_BODY="This PR adds the $name template to the library.
+
+**DIFF-BASED**: Only includes files that are different from the default template.
+When loaded, this template will be overlaid on top of the default template.
+
+May include:
+- src/ (only new/modified routes, components, themes)
+- content/ (only new/modified content files)
+- static/ (only new/modified assets)
+- site.config.js (only if modified)
+- Template-specific dependencies (if any)"
             ;;
 
         *)
@@ -375,27 +492,29 @@ create_pr() {
     log_info "Creating PR for: $PR_TITLE"
     log_info "Branch name: $BRANCH_NAME"
 
-    # Show what will be copied
-    echo ""
-    log_info "Files to copy:"
-    for i in "${!SOURCE_PATHS[@]}"; do
-        echo "  ${SOURCE_PATHS[$i]} -> ${DEST_PATHS[$i]}"
-    done
-    echo ""
-
     # Check gh CLI
     check_gh_cli
 
-    # Get absolute paths for all sources
-    local abs_sources=()
-    for source in "${SOURCE_PATHS[@]}"; do
-        if [ -e "$source" ]; then
-            abs_sources+=("$(realpath "$source")")
-        else
-            log_error "Source path does not exist: $source"
-            exit 1
-        fi
-    done
+    # For non-diff mode, show what will be copied
+    if [ "$USE_DIFF_MODE" != "true" ]; then
+        echo ""
+        log_info "Files to copy:"
+        for i in "${!SOURCE_PATHS[@]}"; do
+            echo "  ${SOURCE_PATHS[$i]} -> ${DEST_PATHS[$i]}"
+        done
+        echo ""
+
+        # Get absolute paths for all sources
+        local abs_sources=()
+        for source in "${SOURCE_PATHS[@]}"; do
+            if [ -e "$source" ]; then
+                abs_sources+=("$(realpath "$source")")
+            else
+                log_error "Source path does not exist: $source"
+                exit 1
+            fi
+        done
+    fi
 
     # Create temporary directory for git operations
     local temp_dir=$(mktemp -d)
@@ -429,26 +548,115 @@ create_pr() {
     log_info "Creating branch: $BRANCH_NAME"
     git checkout -b "$BRANCH_NAME"
 
-    # Copy all source -> dest pairs
-    for i in "${!abs_sources[@]}"; do
-        local src="${abs_sources[$i]}"
-        local dest="${DEST_PATHS[$i]}"
+    # ================================================================
+    # DIFF MODE: For templates - only copy files different from default
+    # ================================================================
+    if [ "$USE_DIFF_MODE" = "true" ]; then
+        log_info "Using DIFF-BASED mode for template '$TEMPLATE_NAME'"
+        log_info "Comparing workspace files against cloned repo (default)..."
 
-        log_info "Copying: $(basename "$src") -> $dest"
+        local template_dest="templates/$TEMPLATE_NAME"
+        local total_files=0
 
-        # Create destination directory
-        mkdir -p "$(dirname "$dest")"
+        # Default paths in cloned repo
+        local default_src="src"
+        local default_static="static"
+        local default_content="content"
+        local default_config="site.config.js"
 
-        # Copy file or directory
-        if [ -d "$src" ]; then
-            cp -r "$src" "$dest"
-        else
-            cp "$src" "$dest"
+        # 1. Handle src folder (diff-based)
+        if [ -n "$WORKSPACE_SRC" ] && [ -d "$WORKSPACE_SRC" ]; then
+            log_info "Comparing src/ ..."
+            local src_count=$(copy_diff_files "$WORKSPACE_SRC" "$template_dest/src" "$default_src")
+            if [ "$src_count" -gt 0 ] 2>/dev/null; then
+                log_info "  Copied $src_count different/new files from src/"
+                total_files=$((total_files + src_count))
+            else
+                log_info "  No changes in src/ (all files match default)"
+            fi
         fi
 
-        # Git add
-        git add "$dest"
-    done
+        # 2. Handle static folder (diff-based)
+        if [ -n "$WORKSPACE_STATIC" ] && [ -d "$WORKSPACE_STATIC" ]; then
+            log_info "Comparing static/ ..."
+            local static_count=$(copy_diff_files "$WORKSPACE_STATIC" "$template_dest/static" "$default_static")
+            if [ "$static_count" -gt 0 ] 2>/dev/null; then
+                log_info "  Copied $static_count different/new files from static/"
+                total_files=$((total_files + static_count))
+            else
+                log_info "  No changes in static/ (all files match default)"
+            fi
+        fi
+
+        # 3. Handle content folder (diff-based)
+        if [ -n "$WORKSPACE_CONTENT" ] && [ -d "$WORKSPACE_CONTENT" ]; then
+            log_info "Comparing content/ ..."
+            local content_count=$(copy_diff_files "$WORKSPACE_CONTENT" "$template_dest/content" "$default_content")
+            if [ "$content_count" -gt 0 ] 2>/dev/null; then
+                log_info "  Copied $content_count different/new files from content/"
+                total_files=$((total_files + content_count))
+            else
+                log_info "  No changes in content/ (all files match default)"
+            fi
+        fi
+
+        # 4. Handle site.config.js (diff-based)
+        if [ -n "$WORKSPACE_CONFIG" ] && [ -f "$WORKSPACE_CONFIG" ]; then
+            if ! files_are_equal "$WORKSPACE_CONFIG" "$default_config"; then
+                mkdir -p "$template_dest"
+                cp "$WORKSPACE_CONFIG" "$template_dest/site.config.js"
+                log_info "  Copied site.config.js (modified)"
+                total_files=$((total_files + 1))
+            else
+                log_info "  site.config.js unchanged (matches default)"
+            fi
+        fi
+
+        # 5. Handle package.json (template-specific deps)
+        if [ -n "$TEMPLATE_PKG_PATH" ] && [ -f "$TEMPLATE_PKG_PATH" ]; then
+            mkdir -p "$template_dest"
+            cp "$TEMPLATE_PKG_PATH" "$template_dest/package.json"
+            log_info "  Copied package.json (template dependencies)"
+            total_files=$((total_files + 1))
+        fi
+
+        # Check if any files were copied
+        if [ "$total_files" -eq 0 ]; then
+            log_warn "No differences found! Template would be empty."
+            log_warn "Your workspace files are identical to the default template."
+            log_error "Aborting PR creation - nothing to submit."
+            exit 1
+        fi
+
+        log_info "Total: $total_files files will be included in template"
+
+        # Git add all template files
+        git add "$template_dest"
+
+    # ================================================================
+    # NORMAL MODE: For components/themes - copy files directly
+    # ================================================================
+    else
+        for i in "${!abs_sources[@]}"; do
+            local src="${abs_sources[$i]}"
+            local dest="${DEST_PATHS[$i]}"
+
+            log_info "Copying: $(basename "$src") -> $dest"
+
+            # Create destination directory
+            mkdir -p "$(dirname "$dest")"
+
+            # Copy file or directory
+            if [ -d "$src" ]; then
+                cp -r "$src" "$dest"
+            else
+                cp "$src" "$dest"
+            fi
+
+            # Git add
+            git add "$dest"
+        done
+    fi
 
     # Commit
     git commit -m "$COMMIT_MSG"
