@@ -32,6 +32,7 @@ body {
 	margin: 0;
 	padding: 0;
 	background-color: var(--color-background);
+	color: var(--color-foreground);
 	scroll-behavior: smooth;
 	font-family: var(--font-sans);
 }

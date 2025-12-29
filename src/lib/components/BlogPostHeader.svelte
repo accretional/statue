@@ -14,9 +14,6 @@
 			: ''
 	);
 
-	// Check if thumbnail exists
-	let hasThumbnail = $derived(!!thumbnail);
-
 	// Generate matching view transition name from current URL - use slug only
 	let slug = $derived(
 		$page.url.pathname ? $page.url.pathname.split('/').filter(Boolean).pop() : ''
@@ -41,7 +38,7 @@
 		</div>
 	</div>
 
-	{#if hasThumbnail}
+	{#if thumbnail}
 		<div class="thumbnail-container" style="view-transition-name: {transitionName};">
 			<img src={thumbnail} alt={title} class="thumbnail" />
 		</div>
