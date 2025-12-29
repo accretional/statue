@@ -1,17 +1,7 @@
 <script>
 	import { page } from '$app/stores';
-	import AuthorAvatar from './AuthorAvatar.svelte';
 
-	let {
-		title = '',
-		description = '',
-		date = '',
-		author = '',
-		authorAvatar = '',
-		thumbnail = '',
-		backLink = '/blog',
-		backLinkText = 'Blog'
-	} = $props();
+	let { title = '', description = '', date = '', author = '', thumbnail = '' } = $props();
 
 	// Format date using $derived
 	let formattedDate = $derived(
@@ -35,24 +25,6 @@
 </script>
 
 <header class="blog-post-header">
-	<!-- <div class="breadcrumb">
-		<a href={backLink} class="back-link">
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				width="16"
-				height="16"
-				viewBox="0 0 24 24"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="2"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-			>
-				<path d="M19 12H5M12 19l-7-7 7-7" />
-			</svg>
-			<span>{backLinkText}</span>
-		</a>
-	</div> -->
 	<div class="wrapper">
 		<h1 class="title">{title}</h1>
 		{#if description}
@@ -83,19 +55,25 @@
 	.wrapper {
 		margin-top: 36px;
 		margin-bottom: 28px;
+		margin-inline: auto;
 		font-family: var(--font-sans);
+		display: flex;
+		flex-direction: column;
+		max-width: 800px;
 	}
 	.title {
 		font-size: 42px;
-		font-weight: 700;
+		font-weight: 300;
 		font-family: var(--font-serif);
+		line-height: 1.4;
 		color: var(--color-foreground);
 		letter-spacing: -0.02em;
+		text-align: center;
 	}
 	.description {
 		color: var(--color-muted);
 		line-height: 1.5;
-		max-width: 800px;
+		text-align: center;
 	}
 	.thumbnail-container {
 		width: 100%;
@@ -114,7 +92,7 @@
 		align-items: center;
 		justify-content: flex-start;
 		gap: 10px;
-		margin: 28px 0;
+		margin: 28px auto;
 		text-transform: uppercase;
 		font-size: 14px;
 		color: var(--color-muted);
@@ -124,18 +102,12 @@
 		height: 2px;
 		background-color: var(--color-muted);
 	}
-	.author {
-		color: var(--color-muted);
-	}
-	.date {
-		color: var(--color-muted);
-	}
 	@media (max-width: 768px) {
 		.title {
 			font-size: 28px;
 		}
 		.thumbnail-container {
-			border-radius: 8px;
+			border-radius: 12px;
 		}
 	}
 </style>
