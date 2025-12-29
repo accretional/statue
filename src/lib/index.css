@@ -1,5 +1,6 @@
 @import 'tailwindcss';
-@import url('https://fonts.googleapis.com/css2?family=SUSE:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=TASA+Orbiter:wght@400..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&display=swap');
 @import './themes/black-white.css';
 /* Tailwind v4 content config - scans src directory for classes */
 @source "../";
@@ -19,8 +20,8 @@ example: @import "./themes/black-white.css"; to the 2nd line */
 
 :root {
 	color-scheme: dark;
-	--font-sans: 'SUSE', sans-serif;
-	--font-serif: 'SUSE', serif;
+	--font-sans: 'TASA Orbiter', sans-serif;
+	--font-serif: 'Fraunces', serif;
 }
 
 * {
@@ -84,6 +85,6 @@ h6 {
 
 /* Hero thumbnail transition - smooth morph */
 ::view-transition-group(*) {
-	animation-duration: 250ms;
+	animation-duration: 200ms;
 	animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
