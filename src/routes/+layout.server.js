@@ -1,4 +1,4 @@
-import { getContentDirectories, getContentByDirectory } from '$lib/cms/content-processor';
+import { getContentDirectories, getContentByDirectory } from 'statue-ssg/cms/content-processor';
 import siteConfig from '../../site.config.js';
 
 /** @type {import('./$types').LayoutServerLoad} */

@@ -1,4 +1,4 @@
-import { getContentDirectories } from '$lib/cms/content-processor';
+import { getContentDirectories } from 'statue-ssg/cms/content-processor';
 
 // Ensure this page is pre-rendered as a static page
 export const prerender = true;

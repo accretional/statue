@@ -1,11 +1,13 @@
 <script>
 	import { page } from '$app/stores';
-	import Warning from '$lib/components/Warning.svelte';
-	import ContentHeader from '$lib/components/ContentHeader.svelte';
-	import ContentBody from '$lib/components/ContentBody.svelte';
-	import DocsLayout from '$lib/components/DocsLayout.svelte';
-	import DocsContent from '$lib/components/DocsContent.svelte';
-	import BlogPostLayout from '$lib/components/BlogPostLayout.svelte';
+	import {
+		Warning,
+		ContentHeader,
+		ContentBody,
+		DocsLayout,
+		DocsContent,
+		BlogPostLayout
+	} from 'statue-ssg';
 
 	let { data } = $props();
 

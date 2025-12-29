@@ -70,50 +70,6 @@ async function setupStatueSSG(options = {}) {
         // Copy routes
         fs.copySync(sourceRoutes, targetRoutes, { overwrite: true, errorOnExist: false });
         console.log(chalk.green(`✓ routes folder copied from ${isDefaultTemplate ? 'default (root)' : templateName}`));
-
-        // Helper: transform file imports in a string
-        const transformImports = (code) => {
-        if (isDefaultTemplate) {
-            // 1) Component default imports from $lib/components/X.svelte -> import { X } from 'statue-ssg'
-            code = code.replace(/import\s+([A-Za-z0-9_]+)\s+from\s+['"]\$lib\/components\/\1\.svelte['"];?/g, (m, name) => `import { ${name} } from 'statue-ssg';`);
-
-            // 2) Bulk replace any remaining $lib/components/<Any>.svelte -> named import
-            code = code.replace(/import\s+([A-Za-z0-9_]+)\s+from\s+['"]\$lib\/components\/([A-Za-z0-9_]+)\.svelte['"];?/g, (m, local, comp) => `import { ${comp} } from 'statue-ssg';`);
-        }
-
-        // 3) Replace stylesheet import - keep as $lib/index.css
-        // No replacement needed - it stays as $lib/index.css
-
-        // 4) Replace server cms imports
-        code = code.replace(/from\s+['"]\$lib\/cms\/content-processor['"]/g, "from 'statue-ssg/cms/content-processor'");
-
-        return code;
-        };
-
-        // Walk through all files in routes and transform svelte/js/ts files
-        const exts = new Set(['.svelte', '.js', '.ts']);
-        const walk = (dir) => {
-        const entries = fs.readdirSync(dir);
-        for (const entry of entries) {
-            const full = path.join(dir, entry);
-            const stat = fs.statSync(full);
-            if (stat.isDirectory()) {
-            walk(full);
-            } else {
-            const ext = path.extname(full);
-            if (exts.has(ext)) {
-                const orig = fs.readFileSync(full, 'utf8');
-                const next = transformImports(orig);
-                if (orig !== next) {
-                fs.writeFileSync(full, next);
-                }
-            }
-            }
-        }
-        };
-
-        walk(targetRoutes);
-        console.log(chalk.green('✓ route imports transformed to use "statue-ssg"'));
     } else {
         console.warn(chalk.yellow(`! Template '${templateName}' does not have a src/routes directory.`));
     }
@@ -121,31 +77,36 @@ async function setupStatueSSG(options = {}) {
     console.error(chalk.red('An error occurred while copying routes or transforming imports:'), err);
   }
 
-  // 2. Copy Content - First from default (root), then overlay template content
+  // 2. Create content/ folder with symlinks to resources/{template}/content/*
   try {
-    const rootContent = path.join(sourceDir, 'content');
-    const templateContent = path.join(templateDir, 'content');
+    const resourcesDir = path.join(sourceDir, 'resources');
+    const templateResourceContent = path.join(resourcesDir, templateName, 'content');
+    const defaultResourceContent = path.join(resourcesDir, 'default', 'content');
 
-    // TODO(issues/105): Use resources/ and symlinks rather than copying
+    // Use template-specific content if exists, otherwise use default
+    const contentSource = fs.existsSync(templateResourceContent) ? templateResourceContent : defaultResourceContent;
+
+    // Create content folder if it doesn't exist
     if (!fs.existsSync(targetContent)) {
-        fs.ensureDirSync(targetContent);
+      fs.ensureDirSync(targetContent);
+    }
 
-        // Step 1: Copy default (root) content first
-        if (fs.existsSync(rootContent)) {
-            fs.copySync(rootContent, targetContent, { overwrite: true, errorOnExist: false });
-            console.log(chalk.green('✓ default content folder copied'));
-        }
+    // Create symlinks for each subdirectory/file in the content source
+    if (fs.existsSync(contentSource)) {
+      const entries = fs.readdirSync(contentSource);
+      for (const entry of entries) {
+        const sourcePath = path.join(contentSource, entry);
+        const targetPath = path.join(targetContent, entry);
 
-        // Step 2: Overlay template-specific content (if not default template and has content)
-        if (!isDefaultTemplate && fs.existsSync(templateContent)) {
-            fs.copySync(templateContent, targetContent, { overwrite: true, errorOnExist: false });
-            console.log(chalk.green(`✓ template content overlaid from ${templateName}`));
+        // Only create symlink if target doesn't exist (user can override)
+        if (!fs.existsSync(targetPath)) {
+          fs.symlinkSync(sourcePath, targetPath);
+          console.log(chalk.green(`✓ content/${entry} symlink created`));
         }
-    } else {
-        console.log(chalk.yellow('! content folder already exists, content not copied'));
+      }
     }
   } catch (err) {
-    console.error(chalk.red('An error occurred while copying content folder:'), err);
+    console.error(chalk.red('An error occurred while creating content symlinks:'), err);
   }
 
   // 3. Create src/lib/index.css (Core Logic - Standard for all templates)
@@ -177,7 +138,6 @@ async function setupStatueSSG(options = {}) {
       console.log(chalk.green('✓ src/lib/index.css created'));
     }
 
-    // TODO(issues/105): Use resources/ and symlinks rather than copying
     // 3.1 Overlay src/lib from template (custom components, themes, assets)
     const templateLib = path.join(templateDir, 'src/lib');
     if (!isDefaultTemplate && fs.existsSync(templateLib)) {
@@ -367,33 +327,37 @@ async function setupStatueSSG(options = {}) {
     console.error(chalk.red('An error occurred while copying scripts:'), err);
   }
 
-  // 7. Copy Static Assets (entire static folder)
+  // 7. Create static/ folder with symlinks to resources/{template}/static/*
   try {
     const targetStatic = path.join(targetDir, 'static');
-    if (!fs.existsSync(targetStatic)) fs.ensureDirSync(targetStatic);
+    const resourcesDir = path.join(sourceDir, 'resources');
+    const templateResourceStatic = path.join(resourcesDir, templateName, 'static');
+    const defaultResourceStatic = path.join(resourcesDir, 'default', 'static');
 
-    // templateDir could be the same as sourceDir (default template)
-    const templateStaticPath = path.join(templateDir, 'static');
-    const rootStaticPath = path.join(sourceDir, 'static');
+    // Use template-specific static if exists, otherwise use default
+    const staticSource = fs.existsSync(templateResourceStatic) ? templateResourceStatic : defaultResourceStatic;
 
-    let sourcePath = null;
-
-    // 1. Try template specific static folder
-    if (fs.existsSync(templateStaticPath)) {
-      sourcePath = templateStaticPath;
-    }
-    // 2. Fallback to root static folder if not found in template
-    else if (fs.existsSync(rootStaticPath)) {
-      sourcePath = rootStaticPath;
+    // Create static folder if it doesn't exist
+    if (!fs.existsSync(targetStatic)) {
+      fs.ensureDirSync(targetStatic);
     }
 
-    if (sourcePath) {
-      // Copy all static files, preserving structure
-      fs.copySync(sourcePath, targetStatic, { overwrite: true, errorOnExist: false });
-      console.log(chalk.green('✓ static folder copied successfully'));
+    // Create symlinks for each file/folder in the static source
+    if (fs.existsSync(staticSource)) {
+      const entries = fs.readdirSync(staticSource);
+      for (const entry of entries) {
+        const sourcePath = path.join(staticSource, entry);
+        const targetPath = path.join(targetStatic, entry);
+
+        // Only create symlink if target doesn't exist (user can override)
+        if (!fs.existsSync(targetPath)) {
+          fs.symlinkSync(sourcePath, targetPath);
+          console.log(chalk.green(`✓ static/${entry} symlink created`));
+        }
+      }
     }
   } catch (err) {
-    console.error(chalk.red('An error occurred while copying static assets:'), err);
+    console.error(chalk.red('An error occurred while creating static symlinks:'), err);
   }
 
   console.log(chalk.green.bold('✨ Statue SSG setup completed!'));
