@@ -1,32 +1,37 @@
 <script>
-	// BlogPostHeader component - Linear-style blog post header with thumbnail
 	import { page } from '$app/stores';
 	import AuthorAvatar from './AuthorAvatar.svelte';
 
-	export let title = '';
-	export let description = '';
-	export let date = '';
-	export let author = '';
-	export let authorAvatar = '';
-	export let thumbnail = '';
-	export let backLink = '/blog';
-	export let backLinkText = 'Blog';
+	let {
+		title = '',
+		description = '',
+		date = '',
+		author = '',
+		authorAvatar = '',
+		thumbnail = '',
+		backLink = '/blog',
+		backLinkText = 'Blog'
+	} = $props();
 
-	// Format date
-	$: formattedDate = date
-		? new Date(date).toLocaleDateString('en-US', {
-				year: 'numeric',
-				month: 'long',
-				day: '2-digit'
-			})
-		: '';
+	// Format date using $derived
+	let formattedDate = $derived(
+		date
+			? new Date(date).toLocaleDateString('en-US', {
+					year: 'numeric',
+					month: 'long',
+					day: '2-digit'
+				})
+			: ''
+	);
 
 	// Check if thumbnail exists
-	$: hasThumbnail = !!thumbnail;
+	let hasThumbnail = $derived(!!thumbnail);
 
 	// Generate matching view transition name from current URL - use slug only
-	$: slug = $page.url.pathname ? $page.url.pathname.split('/').filter(Boolean).pop() : '';
-	$: transitionName = slug ? `blog-thumb-${slug}` : '';
+	let slug = $derived(
+		$page.url.pathname ? $page.url.pathname.split('/').filter(Boolean).pop() : ''
+	);
+	let transitionName = $derived(slug ? `blog-thumb-${slug}` : '');
 </script>
 
 <header class="blog-post-header">
@@ -48,12 +53,20 @@
 			<span>{backLinkText}</span>
 		</a>
 	</div> -->
-
 	<div class="wrapper">
 		<h1 class="title">{title}</h1>
 		{#if description}
 			<p class="description">{description}</p>
 		{/if}
+
+		<div class="meta">
+			{#if author}
+				<span class="author">{author}</span>
+			{/if}
+			{#if formattedDate}
+				<span class="dot"></span>
+				<span class="date">{formattedDate}</span>{/if}
+		</div>
 	</div>
 
 	{#if hasThumbnail}
@@ -61,94 +74,66 @@
 			<img src={thumbnail} alt={title} class="thumbnail" />
 		</div>
 	{/if}
-
-	<div class="meta">
-		{#if formattedDate}<span class="date">{formattedDate}</span>{/if}
-		{#if author}
-			<span class="dot"></span>
-			<div class="avatar-wrapper">
-				<span class="author">{author}</span>
-			</div>
-		{/if}
-	</div>
 </header>
 
 <style>
 	.blog-post-header {
 		margin-bottom: 48px;
 	}
-
 	.wrapper {
-		margin-top: 48px;
-		margin-bottom: 36px;
+		margin-top: 36px;
+		margin-bottom: 28px;
+		font-family: var(--font-sans);
 	}
-
 	.title {
 		font-size: 42px;
 		font-weight: 700;
+		font-family: var(--font-serif);
 		color: var(--color-foreground);
 		letter-spacing: -0.02em;
-		text-align: center;
 	}
-
 	.description {
-		font-size: 16px;
 		color: var(--color-muted);
 		line-height: 1.5;
 		max-width: 800px;
-		text-align: center;
-		margin: 0 auto 12px auto;
 	}
-
 	.thumbnail-container {
 		width: 100%;
 		margin: 0 auto 40px;
-		border-radius: 12px;
+		border-radius: 18px;
 		overflow: hidden;
 		background-color: var(--color-card);
 	}
-
 	.thumbnail {
 		width: 100%;
 		height: auto;
 		display: block;
 	}
-
 	.meta {
 		display: flex;
 		align-items: center;
-		justify-content: center;
+		justify-content: flex-start;
 		gap: 10px;
-		margin-bottom: 16px;
-		font-size: 16px;
+		margin: 28px 0;
+		text-transform: uppercase;
+		font-size: 14px;
 		color: var(--color-muted);
 	}
-
 	.dot {
 		width: 2px;
 		height: 2px;
 		background-color: var(--color-muted);
 	}
-
-	.avatar-wrapper {
-		display: flex;
-		align-items: center;
-		gap: 4px;
-	}
-
 	.author {
 		color: var(--color-muted);
 	}
-
 	.date {
 		color: var(--color-muted);
 	}
-
 	@media (max-width: 768px) {
 		.title {
 			font-size: 28px;
 		}
-
 		.thumbnail-container {
 			border-radius: 8px;
 		}

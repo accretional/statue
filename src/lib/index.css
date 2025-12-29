@@ -1,5 +1,6 @@
-@import "tailwindcss";
-@import "./themes/black-white.css";
+@import 'tailwindcss';
+@import url('https://fonts.googleapis.com/css2?family=SUSE:ital,wght@0,100..900;1,100..900&display=swap');
+@import './themes/black-white.css';
 /* Tailwind v4 content config - scans src directory for classes */
 @source "../";
 
@@ -16,14 +17,73 @@ example: @import "./themes/black-white.css"; to the 2nd line */
 @import "statue-ssg/src/lib/themes/pink.css";
 */
 
-/* Base element defaults using tokens */
 :root {
-  color-scheme: dark;
+	color-scheme: dark;
+	--font-sans: 'SUSE', sans-serif;
+	--font-serif: 'SUSE', serif;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	background-color: var(--color-background);
+	scroll-behavior: smooth;
+	font-family: var(--font-sans);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: var(--font-serif);
 }
 
 /* Optional utilities for smooth rendering */
 @layer utilities {
-  .bg-surface { background-color: var(--color-card); }
-  .glass-bg { background-color: color-mix(in srgb, var(--color-card) 78%, transparent); }
-  .glass-border { border-color: color-mix(in srgb, var(--color-border) 70%, transparent); }
+	.bg-surface {
+		background-color: var(--color-card);
+	}
+	.glass-bg {
+		background-color: color-mix(in srgb, var(--color-card) 78%, transparent);
+	}
+	.glass-border {
+		border-color: color-mix(in srgb, var(--color-border) 70%, transparent);
+	}
+}
+
+/* View Transitions - Blog pages only */
+::view-transition-old(root),
+::view-transition-new(root) {
+	animation: 200ms ease-out both vt-fade;
+}
+
+::view-transition-old(root) {
+	animation-direction: reverse;
+}
+
+@keyframes vt-fade {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+/* Navbar stays static during transition */
+::view-transition-old(navbar),
+::view-transition-new(navbar) {
+	animation: none;
+}
+
+/* Hero thumbnail transition - smooth morph */
+::view-transition-group(*) {
+	animation-duration: 250ms;
+	animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }

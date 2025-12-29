@@ -37,11 +37,6 @@
 </div>
 
 <style>
-	/* Add smooth scroll behavior */
-	:global(html) {
-		scroll-behavior: smooth;
-	}
-
 	/* Reduce padding of Stats component on this page to sit closer to BuiltBy */
 	.stats-wrapper :global(.container) {
 		padding-top: 1rem !important;
