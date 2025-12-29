@@ -1,0 +1,5 @@
+@import "tailwindcss";
+@import "statue-ssg/themes/black-white.css";
+@source "../";
+@source "../../node_modules/statue-ssg/src/**/*.{svelte,js,ts}";
+:root { color-scheme: dark; }
