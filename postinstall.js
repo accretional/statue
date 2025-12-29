@@ -14,7 +14,7 @@ async function setupStatueSSG(options = {}) {
 
   console.log(chalk.blue(`🗿 Statue SSG - Initializing '${templateName}' template...`));
 
-  // 1. Copy content (common for all templates)
+  // 1. Copy content
   const contentDir = path.join(sourceDir, 'content');
   if (fs.existsSync(contentDir)) {
     fs.copySync(contentDir, path.join(targetDir, 'content'), { overwrite: false });
@@ -30,12 +30,14 @@ async function setupStatueSSG(options = {}) {
     console.log(chalk.green('✓ static copied'));
   }
 
-  // 3. Copy template (src)
+  // 3. Copy template (src + site.config.js)
+  // Always copy base files first (app.html, lib/index.css), then template overrides
+  fs.copySync(path.join(sourceDir, 'src/app.html'), path.join(targetDir, 'src/app.html'), { overwrite: true });
+  fs.ensureDirSync(path.join(targetDir, 'src/lib'));
+  fs.copySync(path.join(sourceDir, 'src/lib/index.css'), path.join(targetDir, 'src/lib/index.css'), { overwrite: true });
+
   const templateDir = templateName === 'default' ? sourceDir : path.join(sourceDir, 'templates', templateName);
-  if (!fs.existsSync(path.join(templateDir, 'src'))) {
-    throw new Error(`Template ${templateName} not found`);
-  }
-  fs.copySync(path.join(templateDir, 'src'), path.join(targetDir, 'src'), { overwrite: true });
+  fs.copySync(path.join(templateDir, 'src/routes'), path.join(targetDir, 'src/routes'), { overwrite: true });
   fs.copySync(path.join(templateDir, 'site.config.js'), path.join(targetDir, 'site.config.js'), { overwrite: true });
   console.log(chalk.green(`✓ ${templateName} template copied`));
 

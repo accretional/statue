@@ -1,16 +1,17 @@
 #!/bin/bash
 
 # Test local statue-ssg package in a fresh project
-# Usage: ./scripts/test-local.sh
+# Usage: ./scripts/test-local.sh [template-name]
 
 set -e
 
+TEMPLATE="${1:-default}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
-TEST_DIR="$PROJECT_ROOT/build/test-preview"
+TEST_DIR="$PROJECT_ROOT/build/test-$TEMPLATE"
 TARBALL_NAME="statue-ssg-local.tgz"
 
-echo "🗿 Testing local statue-ssg package..."
+echo "🗿 Testing local statue-ssg package (template: $TEMPLATE)..."
 
 # 1. Create tarball from current project
 echo "📦 Creating tarball..."
@@ -41,8 +42,8 @@ yes | npx sv create . --template minimal --types ts --no-add-ons --install npm
 echo "📥 Installing local statue-ssg..."
 npm install "./$TARBALL_NAME"
 
-echo "⚙️  Running statue init..."
-npx statue init
+echo "⚙️  Running statue init --template $TEMPLATE..."
+npx statue init --template "$TEMPLATE"
 
 echo "📥 Installing dependencies..."
 npm install
