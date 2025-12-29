@@ -30,13 +30,13 @@ async function setupStatueSSG(options = {}) {
     console.log(chalk.green('✓ static copied'));
   }
 
-  // 3. Copy template (src, site.config.js, etc.) - overrides
-  const templateDir = path.join(sourceDir, 'templates', templateName);
-  if (!fs.existsSync(templateDir)) {
-    console.error(chalk.red(`❌ Template '${templateName}' not found`));
+  // 3. Copy template (src)
+  const templateDir = templateName === 'default' ? sourceDir : path.join(sourceDir, 'templates', templateName);
+  if (!fs.existsSync(path.join(templateDir, 'src'))) {
     throw new Error(`Template ${templateName} not found`);
   }
-  fs.copySync(templateDir, targetDir, { overwrite: true });
+  fs.copySync(path.join(templateDir, 'src'), path.join(targetDir, 'src'), { overwrite: true });
+  fs.copySync(path.join(templateDir, 'site.config.js'), path.join(targetDir, 'site.config.js'), { overwrite: true });
   console.log(chalk.green(`✓ ${templateName} template copied`));
 
   // 4. Copy build configs (svelte, vite, postcss) - always from root
