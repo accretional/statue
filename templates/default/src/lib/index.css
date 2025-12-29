@@ -1,5 +1,15 @@
 @import "tailwindcss";
-@import "statue-ssg/themes/black-white.css";
 @source "../";
 @source "../../node_modules/statue-ssg/src/**/*.{svelte,js,ts}";
+
+/* Theme - change the import below to switch themes
+   Available: black-white, black-red, blue, charcoal, cyan, green, orange, pink, purple, red
+   Example: @import "statue-ssg/themes/purple.css";
+
+   Custom theme: copy node_modules/statue-ssg/src/lib/themes/custom-theme.template.css
+   to this folder, rename it (e.g. my-theme.css), customize colors, then:
+   @import "./my-theme.css";
+*/
+@import "statue-ssg/themes/black-white.css";
+
 :root { color-scheme: dark; }

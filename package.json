@@ -28,6 +28,7 @@
 	},
 	"files": [
 		"src",
+		"content",
 		"resources",
 		"templates",
 		"svelte.config.js",

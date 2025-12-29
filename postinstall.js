@@ -14,14 +14,23 @@ async function setupStatueSSG(options = {}) {
 
   console.log(chalk.blue(`🗿 Statue SSG - Initializing '${templateName}' template...`));
 
-  // 1. Copy resources/default (content, static) - always from default
-  const resourcesDefault = path.join(sourceDir, 'resources/default');
-  if (fs.existsSync(resourcesDefault)) {
-    fs.copySync(resourcesDefault, targetDir, { overwrite: false });
-    console.log(chalk.green('✓ resources copied (content, static)'));
+  // 1. Copy content (common for all templates)
+  const contentDir = path.join(sourceDir, 'content');
+  if (fs.existsSync(contentDir)) {
+    fs.copySync(contentDir, path.join(targetDir, 'content'), { overwrite: false });
+    console.log(chalk.green('✓ content copied'));
   }
 
-  // 2. Copy template (src, site.config.js, etc.) - overrides
+  // 2. Copy static from resources/{template} or resources/default
+  const templateStaticDir = path.join(sourceDir, 'resources', templateName, 'static');
+  const defaultStaticDir = path.join(sourceDir, 'resources/default/static');
+  const staticSource = fs.existsSync(templateStaticDir) ? templateStaticDir : defaultStaticDir;
+  if (fs.existsSync(staticSource)) {
+    fs.copySync(staticSource, path.join(targetDir, 'static'), { overwrite: true });
+    console.log(chalk.green('✓ static copied'));
+  }
+
+  // 3. Copy template (src, site.config.js, etc.) - overrides
   const templateDir = path.join(sourceDir, 'templates', templateName);
   if (!fs.existsSync(templateDir)) {
     console.error(chalk.red(`❌ Template '${templateName}' not found`));
@@ -30,7 +39,7 @@ async function setupStatueSSG(options = {}) {
   fs.copySync(templateDir, targetDir, { overwrite: true });
   console.log(chalk.green(`✓ ${templateName} template copied`));
 
-  // 3. Copy build configs (svelte, vite, postcss) - always from root
+  // 4. Copy build configs (svelte, vite, postcss) - always from root
   for (const config of ['svelte.config.js', 'vite.config.js', 'postcss.config.js']) {
     const src = path.join(sourceDir, config);
     if (fs.existsSync(src)) {
@@ -39,7 +48,7 @@ async function setupStatueSSG(options = {}) {
   }
   console.log(chalk.green('✓ build configs copied'));
 
-  // 4. Copy required scripts
+  // 5. Copy required scripts
   const scriptsDir = path.join(targetDir, 'scripts');
   fs.ensureDirSync(scriptsDir);
   for (const script of ['generate-seo-files.js', 'run-pagefind.js']) {
@@ -47,7 +56,7 @@ async function setupStatueSSG(options = {}) {
   }
   console.log(chalk.green('✓ scripts copied'));
 
-  // 5. Update package.json - merge scripts and devDependencies from statue-ssg
+  // 6. Update package.json - merge scripts and devDependencies from statue-ssg
   const pkgPath = path.join(targetDir, 'package.json');
   const sourcePkgPath = path.join(sourceDir, 'package.json');
   if (fs.existsSync(pkgPath) && fs.existsSync(sourcePkgPath)) {
