@@ -36,18 +36,19 @@ program
     }
 
     if (!options.force) {
-      console.log(chalk.yellow('⚠️  This will overwrite src/routes/ and site.config.js'));
+      console.log(chalk.yellow('⚠️  This will overwrite src/ and site.config.js'));
+      console.log(chalk.yellow('   Note: Core library (components, cms, themes) may be affected.'));
       console.log(chalk.red('Use -f or --force to proceed.'));
       return;
     }
 
     console.log(chalk.blue(`📂 Loading template '${templateName}'...`));
 
-    // Copy routes
-    const sourceRoutes = path.join(templateDir, 'src/routes');
-    if (fs.existsSync(sourceRoutes)) {
-      fs.copySync(sourceRoutes, path.join(rootDir, 'src/routes'), { overwrite: true });
-      console.log(chalk.gray('  ✓ Copied src/routes/'));
+    // Copy src
+    const sourceSrc = path.join(templateDir, 'src');
+    if (fs.existsSync(sourceSrc)) {
+      fs.copySync(sourceSrc, path.join(rootDir, 'src'), { overwrite: true });
+      console.log(chalk.gray('  ✓ Copied src/'));
     }
 
     // Copy site.config.js
@@ -76,12 +77,11 @@ program
 
     console.log(chalk.blue(`💾 Saving template '${templateName}'...`));
 
-    // Save routes
-    const sourceRoutes = path.join(rootDir, 'src/routes');
-    if (fs.existsSync(sourceRoutes)) {
-      fs.ensureDirSync(path.join(templateDir, 'src'));
-      fs.copySync(sourceRoutes, path.join(templateDir, 'src/routes'), { overwrite: true });
-      console.log(chalk.gray('  ✓ Saved src/routes/'));
+    // Save src
+    const sourceSrc = path.join(rootDir, 'src');
+    if (fs.existsSync(sourceSrc)) {
+      fs.copySync(sourceSrc, path.join(templateDir, 'src'), { overwrite: true });
+      console.log(chalk.gray('  ✓ Saved src/'));
     }
 
     // Save site.config.js
