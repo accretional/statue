@@ -44,9 +44,10 @@ program
 
     console.log(chalk.blue(`📂 Loading template '${templateName}'...`));
 
-    // Copy src
+    // Copy src (clear routes first to remove stale files)
     const sourceSrc = path.join(templateDir, 'src');
     if (fs.existsSync(sourceSrc)) {
+      fs.emptyDirSync(path.join(rootDir, 'src/routes'));
       fs.copySync(sourceSrc, path.join(rootDir, 'src'), { overwrite: true });
       console.log(chalk.gray('  ✓ Copied src/'));
     }
