@@ -21,13 +21,21 @@ async function setupStatueSSG(options = {}) {
     console.log(chalk.green('✓ content copied'));
   }
 
-  // 2. Copy static from resources/{template} or resources/default
+  // 2. Copy static assets
+  // First: shared resources (favicon, robots.txt, etc.) - base layer
+  const sharedDir = path.join(sourceDir, 'resources/shared');
+  if (fs.existsSync(sharedDir)) {
+    fs.copySync(sharedDir, path.join(targetDir, 'static'), { overwrite: true });
+    console.log(chalk.green('✓ shared resources copied'));
+  }
+
+  // Second: template-specific static (overrides shared)
   const templateStaticDir = path.join(sourceDir, 'resources', templateName, 'static');
   const defaultStaticDir = path.join(sourceDir, 'resources/default/static');
   const staticSource = fs.existsSync(templateStaticDir) ? templateStaticDir : defaultStaticDir;
   if (fs.existsSync(staticSource)) {
     fs.copySync(staticSource, path.join(targetDir, 'static'), { overwrite: true });
-    console.log(chalk.green('✓ static copied'));
+    console.log(chalk.green('✓ template static copied'));
   }
 
   // 3. Copy template (src + site.config.js)
@@ -37,7 +45,16 @@ async function setupStatueSSG(options = {}) {
   fs.copySync(path.join(sourceDir, 'src/lib/index.css'), path.join(targetDir, 'src/lib/index.css'), { overwrite: true });
 
   const templateDir = templateName === 'default' ? sourceDir : path.join(sourceDir, 'templates', templateName);
+
+  // Copy routes
   fs.copySync(path.join(templateDir, 'src/routes'), path.join(targetDir, 'src/routes'), { overwrite: true });
+
+  // Copy template's src/lib if exists (components, assets, etc.)
+  const templateLibDir = path.join(templateDir, 'src/lib');
+  if (fs.existsSync(templateLibDir)) {
+    fs.copySync(templateLibDir, path.join(targetDir, 'src/lib'), { overwrite: true });
+  }
+
   fs.copySync(path.join(templateDir, 'site.config.js'), path.join(targetDir, 'site.config.js'), { overwrite: true });
   console.log(chalk.green(`✓ ${templateName} template copied`));
 
