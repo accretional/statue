@@ -1,10 +1,5 @@
 <script>
-	import PageHero from '$lib/components/PageHero.svelte';
-	import Mission from '$lib/components/Mission.svelte';
-	import Team from '$lib/components/Team.svelte';
-	import WhyChooseUs from '$lib/components/WhyChooseUs.svelte';
-	import CTA from '$lib/components/CTA.svelte';
-	import PdfViewer from '$lib/components/PdfViewer.svelte';
+	import { PageHero, Mission, Team, WhyChooseUs, CTA, PdfViewer } from 'statue-ssg';
 </script>
 
 <svelte:head>

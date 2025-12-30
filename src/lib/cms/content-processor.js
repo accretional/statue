@@ -8,7 +8,7 @@ import { marked } from 'marked';
 import matter from 'gray-matter';
 
 // Import site configuration
-import siteConfig from '/site.config.js';
+import { siteConfig } from '/site.config.js';
 
 // This error check is to provide an early warning when this module is attempted to be used in the browser
 const isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined';
