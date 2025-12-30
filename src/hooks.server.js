@@ -1,4 +1,5 @@
 import { getAllContent, getContentDirectories } from '$lib/cms/content-processor';
+import { generateThemeScript } from '$lib/themes/generator.js';
 
 /** @type {import('@sveltejs/kit').Handle} */
 export async function handle({ event, resolve }) {
@@ -28,9 +29,18 @@ export async function handle({ event, resolve }) {
       }
     });
   }
-  
-  // Normal route processing
-  return await resolve(event);
+
+  // Normal route processing with theme script injection
+  const response = await resolve(event, {
+    transformPageChunk: ({ html }) => {
+      return html.replace(
+        '%sveltekit.head%',
+        `%sveltekit.head%\n\t\t${generateThemeScript()}`
+      );
+    }
+  });
+
+  return response;
 }
 
 /** @type {import('@sveltejs/kit').HandleServerError} */

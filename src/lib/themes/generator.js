@@ -5,14 +5,8 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-export interface ThemeDefinition {
-	id: string;
-	name: string;
-	colors: Record<string, string>;
-}
-
-function parseCSSTheme(cssContent: string): Record<string, string> {
-	const colors: Record<string, string> = {};
+function parseCSSTheme(cssContent) {
+	const colors = {};
 	const themeBlockMatch = cssContent.match(/@theme\s*{([^}]*)}/s);
 
 	if (themeBlockMatch) {
@@ -30,18 +24,10 @@ function parseCSSTheme(cssContent: string): Record<string, string> {
 	return colors;
 }
 
-function extractThemeName(cssContent: string): string | null {
-	const commentMatch = cssContent.match(/\/\*\s*([^*]+?)\s*(?:Theme)?\s*\*\//);
-	if (commentMatch) {
-		return commentMatch[1].replace(/\s+Theme$/, '').trim();
-	}
-	return null;
-}
-
-function loadThemes(): ThemeDefinition[] {
-	const themesDir = path.join(__dirname);
+function loadThemesForInlineScript() {
+	const themesDir = path.resolve(__dirname, '../src/lib/themes');
 	const files = fs.readdirSync(themesDir);
-	const themes: ThemeDefinition[] = [];
+	const themes = {};
 
 	for (const file of files) {
 		if (file.endsWith('.css') && !file.includes('template')) {
@@ -51,15 +37,28 @@ function loadThemes(): ThemeDefinition[] {
 
 			if (Object.keys(colors).length > 0) {
 				const id = file.replace('.css', '');
-				const name = extractThemeName(cssContent) || id.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-
-				themes.push({ id, name, colors });
+				themes[id] = colors;
 			}
 		}
 	}
 
-	return themes.sort((a, b) => a.name.localeCompare(b.name));
+	return themes;
 }
 
-export const themes = loadThemes();
-export const defaultTheme = 'black-white';
+export function generateThemeScript() {
+	const themes = loadThemesForInlineScript();
+	return `
+		<script>
+			(function() {
+				const themes = ${JSON.stringify(themes)};
+				const saved = localStorage.getItem('statue-theme');
+				if (saved && themes[saved]) {
+					const theme = themes[saved];
+					Object.entries(theme).forEach(([key, value]) => {
+						document.documentElement.style.setProperty('--color-' + key, value);
+					});
+				}
+			})();
+		</script>
+	`.trim();
+}
