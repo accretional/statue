@@ -14,65 +14,59 @@ This folder contains different color themes. Each theme file uses the same CSS v
 | **Purple** | `purple.css` | #a855f7 | Dark purple background, purple accents |
 | **Cyan** | `cyan.css` | #06b6d4 | Dark cyan background, cyan accents |
 | **Pink** | `pink.css` | #ec4899 | Dark pink background, pink accents |
+| **Black & Red** | `black-red.css` | #dc2626 | Black background, red accents |
+| **Charcoal** | `charcoal.css` | #ffffff | Warm neutral grays |
 
 ## 🔧 Theme Usage
 
-### Method 1: Use Built-in Themes (Recommended)
+### Option 1: Static Theme (Default - Backward Compatible)
 
-Import a built-in theme from statue-ssg in your `src/lib/index.css` file:
+Use a single theme defined at build time. No runtime switching.
 
+**In `src/lib/index.css`:**
 ```css
 @import "tailwindcss";
-
-/* Choose from built-in themes */
-@import "statue-ssg/themes/blue.css";
-/* or */
-@import "statue-ssg/themes/red.css";
-/* or any other built-in theme */
-
-@source "../";
-@source "../../node_modules/statue-ssg/src/**/*.{svelte,js,ts}";
+@import "statue-ssg/themes/black-white.css";
 ```
 
-### Method 2: Create Custom Theme
-
-Create your own theme file in your project (e.g., `src/lib/themes/my-theme.css`):
-
-```css
-/* My Custom Theme */
-@theme {
-  --color-background: #1a1600;
-  --color-card: #2a2400;
-  --color-border: #4a4200;
-  --color-foreground: #fffef0;
-  --color-muted: #fde047;
-
-  --color-primary: #facc15;
-  --color-secondary: #fde047;
-  --color-accent: #eab308;
-
-  --color-on-primary: #000000;
-  --color-on-background: #2a2400;
-
-  --color-hero-from: #1a1600;
-  --color-hero-via: #2a2400;
-  --color-hero-to: #1a1600;
+**In `site.config.js`:**
+```js
+theme: {
+  enableSwitcher: false  // Default
 }
 ```
 
-Then import it in `src/lib/index.css`:
+That's it! Your site uses the selected theme.
 
-```css
-@import "tailwindcss";
-@import "./themes/my-theme.css";  /* Your custom theme */
+---
 
-@source "../";
-@source "../../node_modules/statue-ssg/src/**/*.{svelte,js,ts}";
+### Option 2: Runtime Theme Switching (NEW)
+
+Allow users to switch themes dynamically with a dropdown component.
+
+**Step 1:** Enable theme switching in `site.config.js`:
+```js
+theme: {
+  enableSwitcher: true
+}
 ```
 
-### Method 3: Inline Theme Variables
+**Step 2:** Add the ThemeSwitcher component where you want it:
+```svelte
+<script>
+  import { ThemeSwitcher } from 'statue-ssg';
+</script>
 
-Copy the `@theme` block from any theme file and paste it directly into your `src/lib/index.css` file.
+<ThemeSwitcher />
+```
+
+**Features:**
+- Auto-detects all themes in `src/lib/themes/` directory
+- User preference saved to localStorage
+- Zero FOUC (flash of unstyled content)
+- Minimal dropdown UI
+
+---
 
 ## 🎨 Theme Variables
 

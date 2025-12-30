@@ -84,6 +84,13 @@ export const siteConfig = {
     excerptLength: 30
   },
 
+  // Theme configuration
+  theme: {
+    // Enable runtime theme switching
+    // Set to false to use only the theme defined in src/lib/index.css
+    enableSwitcher: false
+  },
+
   // SEO and meta information
   seo: {
     defaultTitle: "Statue SSG - Static Site Generator",

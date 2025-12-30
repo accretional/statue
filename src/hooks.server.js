@@ -1,5 +1,6 @@
 import { getAllContent, getContentDirectories } from '$lib/cms/content-processor';
 import { generateThemeScript } from '$lib/themes/generator.js';
+import { siteConfig } from '../site.config.js';
 
 /** @type {import('@sveltejs/kit').Handle} */
 export async function handle({ event, resolve }) {
@@ -30,13 +31,17 @@ export async function handle({ event, resolve }) {
     });
   }
 
-  // Normal route processing with theme script injection
+  // Normal route processing with conditional theme script injection
   const response = await resolve(event, {
     transformPageChunk: ({ html }) => {
-      return html.replace(
-        '%sveltekit.head%',
-        `%sveltekit.head%\n\t\t${generateThemeScript()}`
-      );
+      // Only inject theme script if theme switching is enabled
+      if (siteConfig.theme?.enableSwitcher) {
+        return html.replace(
+          '%sveltekit.head%',
+          `%sveltekit.head%\n\t\t${generateThemeScript()}`
+        );
+      }
+      return html;
     }
   });
 
