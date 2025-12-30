@@ -1,5 +1,5 @@
-import { getContentDirectories, getContentByDirectory } from '$lib/cms/content-processor';
-import siteConfig from '../../site.config.js';
+import { getContentDirectories, getContentByDirectory } from 'statue-ssg/cms/content-processor';
+import { siteConfig } from '../../site.config.js';
 
 /** @type {import('./$types').LayoutServerLoad} */
 export function load() {
@@ -26,6 +26,6 @@ export function load() {
 
   return {
     globalDirectories: enhancedDirectories,
-    searchConfig: siteConfig.search
+    searchConfig: siteConfig.search || null
   };
 } 

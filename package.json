@@ -19,6 +19,7 @@
 		"./components/*": "./src/lib/components/*",
 		"./themes/*": "./src/lib/themes/*",
 		"./styles.css": "./src/lib/index.css",
+		"./resources/*": "./resources/*",
 		"./package.json": "./package.json"
 	},
 	"bin": {
@@ -28,7 +29,7 @@
 	"files": [
 		"src",
 		"content",
-		"static",
+		"resources",
 		"templates",
 		"svelte.config.js",
 		"vite.config.js",

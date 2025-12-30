@@ -5,9 +5,12 @@
 @import '@fontsource/ibm-plex-sans/300.css';
 @import '@fontsource/ibm-plex-sans/300-italic.css';
 
-@import './themes/black-white.css';
-/* Tailwind v4 content config - scans src directory for classes */
+/* Theme - Available: black-white, black-red, blue, charcoal, cyan, green, orange, pink, purple, red
+   Custom: copy node_modules/statue-ssg/src/lib/themes/custom-theme.template.css here, rename & import */
+@import "statue-ssg/themes/black-white.css";
+
 @source "../";
+@source "../../node_modules/statue-ssg/src/**/*.{svelte,js,ts}";
 
 /* Theme selection - Import your desired theme (development mode uses direct src path)
 example: @import "./themes/black-white.css"; to the 2nd line */
@@ -110,3 +113,4 @@ h6 {
 	animation-duration: 200ms;
 	animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
+:root { color-scheme: dark; }
