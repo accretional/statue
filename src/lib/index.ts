@@ -52,3 +52,7 @@ export { default as PricingSection } from './components/PricingSection.svelte';
 export { default as ScrollingLogos } from './components/ScrollingLogos.svelte';
 export { default as SlidingComparison } from './components/SlidingComparison.svelte';
 export { default as SlidingTestimonial } from './components/SlidingTestimonial.svelte';
+
+// Theme components
+export { default as ThemeSwitcher } from './components/ThemeSwitcher.svelte';
+export { themes, defaultTheme, type ThemeDefinition } from './themes/index.js';
