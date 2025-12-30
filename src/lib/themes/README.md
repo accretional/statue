@@ -1,6 +1,6 @@
 # 🎨 Statue SSG Themes
 
-This folder contains different color themes. Statue is a **static site generator**, so themes are applied at **build time** - not runtime.
+Statue is a **static site generator** with a hybrid theme system: preview themes at runtime in dev, bundle at build time for production.
 
 ## 📦 Available Themes
 
@@ -17,39 +17,110 @@ This folder contains different color themes. Statue is a **static site generator
 | **Black & Red** | `black-red.css` | #dc2626 | Black background, red accents |
 | **Charcoal** | `charcoal.css` | #ffffff | Warm neutral grays |
 
-## 🔧 How to Use
+---
 
-### Simple: Select Theme in Config (Recommended)
+## 🚀 Quick Start
 
-Edit `site.config.js`:
+### Option 1: ThemeSelector Component (Recommended)
+
+Add the dropdown component to preview and select themes:
+
+```svelte
+<!-- src/routes/+layout.svelte -->
+<script>
+  import { ThemeSelector } from 'statue-ssg';
+</script>
+
+<ThemeSelector />
+<slot />
+```
+
+**How it works:**
+1. **Dev mode** (`npm run dev`): Click dropdown → preview themes instantly
+2. **Selection persisted**: Your choice saved to `.statue-theme` file
+3. **Build time** (`npm run build`): Selected theme bundled into static HTML
+4. **Production**: Pure static site, zero JavaScript overhead
+
+---
+
+### Option 2: Config-Based (Simple)
+
+Set theme in `site.config.js`:
 
 ```js
 export const siteConfig = {
-  // ... other config
-
   theme: {
-    selected: 'blue'  // Change to any theme name
+    selected: 'blue'  // Any theme name
   }
 };
 ```
 
-Available theme names: `'black-white'`, `'blue'`, `'red'`, `'green'`, `'orange'`, `'purple'`, `'cyan'`, `'pink'`, `'black-red'`, `'charcoal'`
-
-Then build your site:
+Then build:
 ```bash
 npm run build
 ```
 
-The entire static site will use your selected theme. **Pure SSG - no JavaScript runtime overhead!**
+---
+
+### Option 3: CSS Import (Backward Compatible)
+
+Traditional approach - import theme in `src/lib/index.css`:
+
+```css
+@import "tailwindcss";
+@import "statue-ssg/themes/purple.css";
+```
+
+Works exactly like before - no code changes needed.
 
 ---
 
-### Advanced: Custom Theme
+## 🔄 How The Hybrid System Works
 
-Create a new CSS file in `src/lib/themes/my-theme.css`:
+### Theme Resolution Priority
+
+When building your site, Statue checks in this order:
+
+1. **`site.config.js`** - Explicit config (highest priority)
+   ```js
+   theme: { selected: 'red' }
+   ```
+
+2. **`.statue-theme` file** - From ThemeSelector component
+   ```
+   cyan
+   ```
+
+3. **`src/lib/index.css`** - @import statement (backward compatible)
+   ```css
+   @import "statue-ssg/themes/green.css";
+   ```
+
+4. **Default fallback** - `black-white` theme
+
+### Development Workflow
+
+```bash
+# Start dev server
+npm run dev
+
+# Click ThemeSelector dropdown → preview themes
+# Selection auto-saved to .statue-theme
+
+# Build with selected theme
+npm run build
+
+# Result: Static HTML with theme CSS variables inline
+```
+
+---
+
+## 🎨 Custom Themes
+
+Create a new theme file in `src/lib/themes/my-brand.css`:
 
 ```css
-/* My Theme */
+/* My Brand Theme */
 @theme {
   --color-background: #1a1600;
   --color-card: #2a2400;
@@ -70,48 +141,92 @@ Create a new CSS file in `src/lib/themes/my-theme.css`:
 }
 ```
 
-Then in `site.config.js`:
-```js
-theme: {
-  selected: 'my-theme'
-}
-```
+**Auto-detection**: Custom themes automatically appear in ThemeSelector dropdown!
 
-**That's it!** The theme auto-loads from the themes directory.
+Or select it in config:
+```js
+theme: { selected: 'my-brand' }
+```
 
 ---
 
 ## 🎨 Theme Variables
 
-Each theme defines the following CSS variables:
+Each theme defines 13 CSS custom properties:
 
 ### Base Palette
-- `--color-background` - Main background color
-- `--color-card` - Card/section background color
-- `--color-border` - Border color
-- `--color-foreground` - Main text color
-- `--color-muted` - Secondary/muted text color
+- `--color-background` - Main background
+- `--color-card` - Card/section backgrounds
+- `--color-border` - Borders
+- `--color-foreground` - Main text
+- `--color-muted` - Secondary text
 
 ### Brand Colors
-- `--color-primary` - Primary accent color (buttons, links)
-- `--color-secondary` - Secondary accent color
-- `--color-accent` - Tertiary accent color
+- `--color-primary` - Primary accent (buttons, links)
+- `--color-secondary` - Secondary accent
+- `--color-accent` - Tertiary accent
 
-### Text Colors
-- `--color-on-primary` - Text on primary color
-- `--color-on-background` - Contrast text on background
+### Text on Surfaces
+- `--color-on-primary` - Text on primary buttons
+- `--color-on-background` - High contrast text
 
-### Gradient Colors
-- `--color-hero-from` - Hero gradient start
-- `--color-hero-via` - Hero gradient middle
-- `--color-hero-to` - Hero gradient end
+### Hero Gradients
+- `--color-hero-from` - Gradient start
+- `--color-hero-via` - Gradient middle
+- `--color-hero-to` - Gradient end
 
-## 💡 How It Works (Build-Time)
+---
 
-1. You select a theme in `site.config.js`
-2. During build/dev, Statue reads the theme CSS file
-3. Theme colors are injected as inline styles in the `<html>` tag
-4. All pages use those CSS custom properties
-5. Result: **Pure static HTML with zero JavaScript overhead**
+## 💡 Why This Approach?
 
-This keeps Statue fast and true to static site generator principles!
+### ✅ Best of Both Worlds
+
+**Development:**
+- Live theme preview in browser
+- No build/rebuild cycle
+- Visual theme selection
+
+**Production:**
+- Pure static HTML
+- Zero JavaScript runtime overhead
+- Fast, SEO-friendly
+- True SSG principles
+
+### ✅ Flexibility
+
+- **Designers**: Use ThemeSelector for visual workflow
+- **Developers**: Use config or CSS import
+- **Both**: All methods work, choose what fits your flow
+
+### ✅ Backward Compatible
+
+Existing projects using `@import` in `index.css` continue working without changes.
+
+---
+
+## 📁 Files
+
+```
+.statue-theme              # Git-ignored, stores selection
+site.config.js             # Optional theme.selected config
+src/lib/index.css          # Optional @import (backward compat)
+src/lib/themes/            # All theme CSS files
+  ├── blue.css
+  ├── red.css
+  └── ...
+```
+
+---
+
+## 🔧 Advanced: Programmatic Theme Access
+
+```svelte
+<script>
+  import { themes } from 'statue-ssg';
+
+  console.log(themes);
+  // [{ id: 'blue', name: 'Blue', colors: {...} }, ...]
+</script>
+```
+
+Build your own theme UI if needed!
