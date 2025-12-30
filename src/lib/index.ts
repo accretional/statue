@@ -53,6 +53,5 @@ export { default as ScrollingLogos } from './components/ScrollingLogos.svelte';
 export { default as SlidingComparison } from './components/SlidingComparison.svelte';
 export { default as SlidingTestimonial } from './components/SlidingTestimonial.svelte';
 
-// Theme components
-export { default as ThemeSwitcher } from './components/ThemeSwitcher.svelte';
+// Theme utilities (for advanced users)
 export { themes, defaultTheme, type ThemeDefinition } from './themes/index.js';

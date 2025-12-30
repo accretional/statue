@@ -1,6 +1,6 @@
 # 🎨 Statue SSG Themes
 
-This folder contains different color themes. Each theme file uses the same CSS variables but with different color palettes.
+This folder contains different color themes. Statue is a **static site generator**, so themes are applied at **build time** - not runtime.
 
 ## 📦 Available Themes
 
@@ -17,54 +17,67 @@ This folder contains different color themes. Each theme file uses the same CSS v
 | **Black & Red** | `black-red.css` | #dc2626 | Black background, red accents |
 | **Charcoal** | `charcoal.css` | #ffffff | Warm neutral grays |
 
-## 🔧 Theme Usage
+## 🔧 How to Use
 
-### Option 1: Static Theme (Default - Backward Compatible)
+### Simple: Select Theme in Config (Recommended)
 
-Use a single theme defined at build time. No runtime switching.
+Edit `site.config.js`:
 
-**In `src/lib/index.css`:**
-```css
-@import "tailwindcss";
-@import "statue-ssg/themes/black-white.css";
-```
-
-**In `site.config.js`:**
 ```js
-theme: {
-  enableSwitcher: false  // Default
-}
+export const siteConfig = {
+  // ... other config
+
+  theme: {
+    selected: 'blue'  // Change to any theme name
+  }
+};
 ```
 
-That's it! Your site uses the selected theme.
+Available theme names: `'black-white'`, `'blue'`, `'red'`, `'green'`, `'orange'`, `'purple'`, `'cyan'`, `'pink'`, `'black-red'`, `'charcoal'`
+
+Then build your site:
+```bash
+npm run build
+```
+
+The entire static site will use your selected theme. **Pure SSG - no JavaScript runtime overhead!**
 
 ---
 
-### Option 2: Runtime Theme Switching (NEW)
+### Advanced: Custom Theme
 
-Allow users to switch themes dynamically with a dropdown component.
+Create a new CSS file in `src/lib/themes/my-theme.css`:
 
-**Step 1:** Enable theme switching in `site.config.js`:
-```js
-theme: {
-  enableSwitcher: true
+```css
+/* My Theme */
+@theme {
+  --color-background: #1a1600;
+  --color-card: #2a2400;
+  --color-border: #4a4200;
+  --color-foreground: #fffef0;
+  --color-muted: #fde047;
+
+  --color-primary: #facc15;
+  --color-secondary: #fde047;
+  --color-accent: #eab308;
+
+  --color-on-primary: #000000;
+  --color-on-background: #2a2400;
+
+  --color-hero-from: #1a1600;
+  --color-hero-via: #2a2400;
+  --color-hero-to: #1a1600;
 }
 ```
 
-**Step 2:** Add the ThemeSwitcher component where you want it:
-```svelte
-<script>
-  import { ThemeSwitcher } from 'statue-ssg';
-</script>
-
-<ThemeSwitcher />
+Then in `site.config.js`:
+```js
+theme: {
+  selected: 'my-theme'
+}
 ```
 
-**Features:**
-- Auto-detects all themes in `src/lib/themes/` directory
-- User preference saved to localStorage
-- Zero FOUC (flash of unstyled content)
-- Minimal dropdown UI
+**That's it!** The theme auto-loads from the themes directory.
 
 ---
 
@@ -93,43 +106,12 @@ Each theme defines the following CSS variables:
 - `--color-hero-via` - Hero gradient middle
 - `--color-hero-to` - Hero gradient end
 
-## ✨ Creating a New Theme
+## 💡 How It Works (Build-Time)
 
-To create a new theme:
+1. You select a theme in `site.config.js`
+2. During build/dev, Statue reads the theme CSS file
+3. Theme colors are injected as inline styles in the `<html>` tag
+4. All pages use those CSS custom properties
+5. Result: **Pure static HTML with zero JavaScript overhead**
 
-1. **Use the template**: Copy `custom-theme.template.css` from this folder to your project's `src/lib/themes/` directory
-2. **Rename the file**: Give it a meaningful name (e.g., `my-brand.css`, `yellow.css`)
-3. **Customize the colors**: Update all color values to match your brand
-4. **Import it**: Add `@import "./themes/your-theme.css";` in your `src/lib/index.css`
-
-Quick example:
-
-```css
-/* Yellow Theme */
-@theme {
-  --color-background: #1a1600;
-  --color-card: #2a2400;
-  --color-border: #4a4200;
-  --color-foreground: #fffef0;
-  --color-muted: #fde047;
-
-  --color-primary: #facc15;
-  --color-secondary: #fde047;
-  --color-accent: #eab308;
-
-  --color-on-primary: #000000;
-  --color-on-background: #2a2400;
-
-  --color-hero-from: #1a1600;
-  --color-hero-via: #2a2400;
-  --color-hero-to: #1a1600;
-}
-```
-
-## 💡 Tips
-
-- Use `color-scheme: dark` for dark themes
-- Use RGB values of the primary color for hover effects
-- Test contrast ratio (WCAG AA standard)
-- Maintain consistency across all pages
-
+This keeps Statue fast and true to static site generator principles!

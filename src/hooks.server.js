@@ -1,6 +1,6 @@
 import { getAllContent, getContentDirectories } from '$lib/cms/content-processor';
-import { generateThemeScript } from '$lib/themes/generator.js';
 import { siteConfig } from '../site.config.js';
+import { themes } from '$lib/themes/index.js';
 
 /** @type {import('@sveltejs/kit').Handle} */
 export async function handle({ event, resolve }) {
@@ -31,17 +31,20 @@ export async function handle({ event, resolve }) {
     });
   }
 
-  // Normal route processing with conditional theme script injection
+  // Inject selected theme CSS variables at build time
+  const selectedTheme = themes.find(t => t.id === siteConfig.theme?.selected) || themes[0];
+
   const response = await resolve(event, {
     transformPageChunk: ({ html }) => {
-      // Only inject theme script if theme switching is enabled
-      if (siteConfig.theme?.enableSwitcher) {
-        return html.replace(
-          '%sveltekit.head%',
-          `%sveltekit.head%\n\t\t${generateThemeScript()}`
-        );
-      }
-      return html;
+      // Inject theme CSS variables as inline style in <html> tag
+      const themeStyles = Object.entries(selectedTheme.colors)
+        .map(([key, value]) => `--color-${key}:${value}`)
+        .join(';');
+
+      return html.replace(
+        '<html lang="en">',
+        `<html lang="en" style="${themeStyles}">`
+      );
     }
   });
 

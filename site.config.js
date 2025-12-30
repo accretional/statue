@@ -86,9 +86,9 @@ export const siteConfig = {
 
   // Theme configuration
   theme: {
-    // Enable runtime theme switching
-    // Set to false to use only the theme defined in src/lib/index.css
-    enableSwitcher: false
+    // Select which theme to use for the entire site
+    // Available: 'black-white', 'blue', 'red', 'green', 'orange', 'purple', 'cyan', 'pink', 'black-red', 'charcoal'
+    selected: 'black-white'
   },
 
   // SEO and meta information
