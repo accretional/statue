@@ -92,6 +92,8 @@
 		"vitest-browser-svelte": "^2.0.1"
 	},
 	"dependencies": {
+		"@fontsource/fraunces": "^5.2.9",
+		"@fontsource/ibm-plex-sans": "^5.2.8",
 		"chalk": "^5.4.1",
 		"commander": "^13.1.0",
 		"fs-extra": "^11.3.0",

@@ -1,8 +1,8 @@
 /* Black & White Theme */
 @theme {
 	/* Core palette - Black & White Theme */
-	--color-background: #111113; /* Black */
-	--color-card: #18181b; /* Dark gray */
+	--color-background: #101012; /* Black */
+	--color-card: #1b1b1c; /* Dark gray */
 	--color-border: #28282e; /* Medium dark gray */
 	--color-foreground: #ffffff; /* White */
 	--color-muted: #b3b3b3; /* Medium gray */

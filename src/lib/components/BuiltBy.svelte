@@ -1,112 +1,79 @@
-
 <script lang="ts">
-  import accretionIconSrc from '../assets/accretion.png';
-  import statueIconSrc from '../assets/favicon.png';
+	import accretionIconSrc from '$lib/assets/accretion.png';
 
-  export let builtByText = 'Built by';
-  export let builtByLinkText = 'Accretional.com';
-  export let builtByLinkUrl = 'https://accretional.com';
-  export let builtByIcon = accretionIconSrc;
+	let builtByText = 'Built by';
+	let builtByLinkText = 'Accretional.com';
+	let builtByLinkUrl = 'https://accretional.com';
+	let builtByIcon = accretionIconSrc;
 
-  export let builtInText = 'Built in';
-  export let builtInLinkText = 'Statue.dev';
-  export let builtInLinkUrl = 'https://statue.dev';
-  export let builtInIcon = statueIconSrc;
-
-  export let builtForText = 'Built for';
-  export let communityLinkText = 'Statue Community';
-  export let communityLinkUrl = 'https://discord.gg/accretional';
+	let builtForText = 'Built for';
+	let communityLinkText = 'Statue Community';
+	let communityLinkUrl = 'https://discord.gg/accretional';
 </script>
 
-<div class="built-by-container flex flex-wrap justify-center items-center gap-2">
-  <span class="built-text whitespace-nowrap">{builtByText}</span>
-  <a href={builtByLinkUrl} target="_blank" rel="noopener noreferrer" class="built-link accretional-link inline-flex items-center gap-1">
-    <img src={builtByIcon} alt={builtByLinkText} class="accretion-icon" width="24" height="24" />{builtByLinkText}
-  </a>
-  <span class="built-text whitespace-nowrap">{builtInText}</span>
-  <span class="statue-group inline-flex items-center gap-1">
-    <img src={builtInIcon} alt={builtInLinkText} class="statue-icon" width="24" height="24" />
-    <a href={builtInLinkUrl} target="_blank" rel="noopener noreferrer" class="built-link statue-link">
-      {builtInLinkText}
-    </a>
-  </span>
-  <span class="built-text whitespace-nowrap">{builtForText}</span>
-  <span class="discord-link inline-flex items-center gap-1">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3847-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286z"></path></svg>
-    <a href={communityLinkUrl} target="_blank" class="discord-link-text underline">{communityLinkText}</a>
-  </span>
-</div>
+<footer class="container mx-auto my-8">
+	<div class="flex flex-col gap-2 text-center">
+		<p class="flex items-center justify-center gap-2 text-lg text-muted">
+			<span>{builtByText}</span>
+			<a
+				href={builtByLinkUrl}
+				target="_blank"
+				rel="noopener noreferrer"
+				class="accretional-link inline-flex items-center gap-1"
+			>
+				<img src={builtByIcon} alt={builtByLinkText} class="w-5 h-5" />
+				<span>{builtByLinkText}</span>
+			</a>
+		</p>
+
+		<p class="flex items-center justify-center gap-2 text-lg text-muted">
+			<span>{builtForText}</span>
+			<a
+				href={communityLinkUrl}
+				target="_blank"
+				rel="noopener noreferrer"
+				class="discord-link text-[#4f7dd0] hover:text-[#4f7dd0]/90 inline-flex items-center gap-1"
+			>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					class="w-5 h-5"
+					fill="currentColor"
+					viewBox="0 0 24 24"
+				>
+					<path
+						d="M19.27 5.33C17.94 4.71 16.5 4.26 15 4a.1.1 0 0 0-.07.03c-.18.33-.39.76-.53 1.09a16.1 16.1 0 0 0-4.8 0c-.14-.34-.35-.76-.54-1.09c-.01-.02-.04-.03-.07-.03c-1.5.26-2.93.71-4.27 1.33c-.01 0-.02.01-.03.02c-2.72 4.07-3.47 8.03-3.1 11.95c0 .02.01.04.03.05c1.8 1.32 3.53 2.12 5.24 2.65c.03.01.06 0 .07-.02c.4-.55.76-1.13 1.07-1.74c.02-.04 0-.08-.04-.09c-.57-.22-1.11-.48-1.64-.78c-.04-.02-.04-.08-.01-.11c.11-.08.22-.17.33-.25c.02-.02.05-.02.07-.01c3.44 1.57 7.15 1.57 10.55 0c.02-.01.05-.01.07.01c.11.09.22.17.33.26c.04.03.04.09-.01.11c-.52.31-1.07.56-1.64.78c-.04.01-.05.06-.04.09c.32.61.68 1.19 1.07 1.74c.03.01.06.02.09.01c1.72-.53 3.45-1.33 5.25-2.65c.02-.01.03-.03.03-.05c.44-4.53-.73-8.46-3.1-11.95c-.01-.01-.02-.02-.04-.02M8.52 14.91c-1.03 0-1.89-.95-1.89-2.12s.84-2.12 1.89-2.12c1.06 0 1.9.96 1.89 2.12c0 1.17-.84 2.12-1.89 2.12m6.97 0c-1.03 0-1.89-.95-1.89-2.12s.84-2.12 1.89-2.12c1.06 0 1.9.96 1.89 2.12c0 1.17-.83 2.12-1.89 2.12"
+					/>
+				</svg>
+				<span>{communityLinkText}</span>
+			</a>
+		</p>
+	</div>
+</footer>
 
 <style>
-  .discord-link {
-    color: rgba(114, 137, 218, 0.95);
-  }
-  
-  /* Remove display: inline-flex from built-by-container since we use Tailwind flex classes */
-  .built-by-container {
-    font-size: clamp(1rem, 2vw, 1.2rem);
-    font-weight: 400;
-    line-height: 1.6;
-  }
-  
-  .built-text {
-    color: rgba(255, 255, 255, 0.8);
-  }
-  
-  .built-link {
-    text-decoration: underline;
-    transition: all 0.3s ease;
-  }
-  
-  .accretional-link {
-    color: #FF4500;
-    text-shadow: 0 0 30px rgba(255, 69, 0, 0.5);
-    animation: glow 2s ease-in-out infinite;
-    position: relative;
-  }
-  
-  .accretional-link:hover {
-    color: #FF6347;
-    text-shadow: 0 0 20px rgba(255, 99, 71, 0.8), 0 0 30px rgba(255, 69, 0, 0.6);
-    animation: pulse 1s ease-in-out infinite;
-  }
-  
-  @keyframes glow {
-    0%, 100% {
-      text-shadow: 0 0 10px rgba(255, 69, 0, 0.5), 0 0 20px rgba(255, 69, 0, 0.3);
-    }
-    50% {
-      text-shadow: 0 0 20px rgba(255, 69, 0, 0.8), 0 0 30px rgba(255, 69, 0, 0.5), 0 0 40px rgba(255, 69, 0, 0.3);
-    }
-  }
-  
-  @keyframes pulse {
-    0%, 100% {
-      transform: scale(1);
-      text-shadow: 0 0 20px rgba(255, 99, 71, 0.8), 0 0 30px rgba(255, 69, 0, 0.6);
-    }
-    50% {
-      transform: scale(1.05);
-      text-shadow: 0 0 30px rgba(255, 99, 71, 1), 0 0 40px rgba(255, 69, 0, 0.8), 0 0 50px rgba(255, 69, 0, 0.6);
-    }
-  }
-  
-  .statue-link {
-    color: #9CA3AF;
-  }
-  
-  .statue-link:hover {
-    color: #D1D5DB;
-  }
-  
-  .accretion-icon, .statue-icon {
-    /* Keep sizing for compatibility but rely on attributes/Tailwind mostly */
-    width: 1.2em;
-    height: 1.2em;
-    display: inline-block;
-    vertical-align: middle;
-  }
-  
-  /* .statue-group removed display styles as they are now in HTML classes */
-</style>
+	.accretional-link {
+		color: #ff4500;
+		text-shadow: 0 0 30px rgba(255, 69, 0, 0.5);
+		text-decoration: none;
+		animation: glow 4s linear infinite;
+	}
 
+	.accretional-link:hover {
+		color: #ff6347;
+		animation: pulse 1s linear infinite;
+	}
+
+	@keyframes glow {
+		0%,
+		100% {
+			text-shadow:
+				0 0 10px rgba(255, 69, 0, 0.5),
+				0 0 20px rgba(255, 69, 0, 0.3);
+		}
+		50% {
+			text-shadow:
+				0 0 20px rgba(255, 69, 0, 0.8),
+				0 0 30px rgba(255, 69, 0, 0.5);
+		}
+	}
+</style>

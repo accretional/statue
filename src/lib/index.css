@@ -1,6 +1,10 @@
 @import 'tailwindcss';
-@import url('https://fonts.googleapis.com/css2?family=TASA+Orbiter:wght@400..800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&display=swap');
+
+@import '@fontsource/fraunces/200.css';
+@import '@fontsource/fraunces/200-italic.css';
+@import '@fontsource/ibm-plex-sans/300.css';
+@import '@fontsource/ibm-plex-sans/300-italic.css';
+
 @import './themes/black-white.css';
 /* Tailwind v4 content config - scans src directory for classes */
 @source "../";
@@ -20,7 +24,7 @@ example: @import "./themes/black-white.css"; to the 2nd line */
 
 :root {
 	color-scheme: dark;
-	--font-sans: 'TASA Orbiter', sans-serif;
+	--font-sans: 'IBM Plex Sans', sans-serif;
 	--font-serif: 'Fraunces', serif;
 }
 
@@ -46,7 +50,24 @@ h6 {
 	font-family: var(--font-serif);
 }
 
-/* Optional utilities for smooth rendering */
+@layer base {
+	h1 {
+		@apply font-serif text-3xl font-semibold lg:text-4xl;
+	}
+
+	h2 {
+		@apply text-3xl tracking-tighter lg:text-4xl;
+	}
+
+	h3,
+	h4,
+	h5,
+	h6 {
+		@apply text-xl tracking-tighter lg:text-2xl;
+	}
+}
+
+/* Optional utilities */
 @layer utilities {
 	.bg-surface {
 		background-color: var(--color-card);
