@@ -121,6 +121,29 @@ REPOS_PATH="$ROOT_DIR/static/repositories.json"
 echo "$REPOS_JSON" | jq '.' > "$REPOS_PATH"
 echo -e "  ${GREEN}✓${NC} Saved to static/repositories.json"
 
+# Fetch contribution data
+echo -e "${YELLOW}Fetching contribution graph...${NC}"
+CONTRIB_RAW=$(curl -s "https://github-contributions-api.jogruber.de/v4/$USERNAME?y=last")
+
+# Check if contribution API returned valid data
+if echo "$CONTRIB_RAW" | jq -e '.contributions' > /dev/null 2>&1; then
+    # Transform to our format: get last year's total and all contribution days
+    CURRENT_YEAR=$(date +%Y)
+    CONTRIB_JSON=$(echo "$CONTRIB_RAW" | jq --arg year "$CURRENT_YEAR" '{
+        year: ($year | tonumber),
+        total: (.total | to_entries | map(.value) | add),
+        days: [.contributions[] | {date: .date, count: .count, level: .level}]
+    }')
+
+    CONTRIB_TOTAL=$(echo "$CONTRIB_JSON" | jq '.total')
+    CONTRIB_PATH="$ROOT_DIR/static/contributions.json"
+    echo "$CONTRIB_JSON" | jq '.' > "$CONTRIB_PATH"
+    echo -e "  ${GREEN}✓${NC} Found $CONTRIB_TOTAL contributions"
+    echo -e "  ${GREEN}✓${NC} Saved to static/contributions.json"
+else
+    echo -e "  ${YELLOW}⚠${NC} Could not fetch contribution data (API may be unavailable)"
+fi
+
 # Update site.config.js
 echo -e "${YELLOW}Updating site.config.js...${NC}"
 CONFIG_PATH="$ROOT_DIR/site.config.js"
@@ -221,9 +244,11 @@ echo -e "  ${BLUE}Bio:${NC} $BIO"
 echo -e "  ${BLUE}Location:${NC} ${LOCATION:-Not set}"
 echo -e "  ${BLUE}Followers:${NC} $FOLLOWERS | ${BLUE}Following:${NC} $FOLLOWING"
 echo -e "  ${BLUE}Repos:${NC} $REPO_COUNT (top 20 by stars saved)"
+echo -e "  ${BLUE}Contributions:${NC} ${CONTRIB_TOTAL:-N/A}"
 echo ""
 echo -e "  ${YELLOW}Files updated:${NC}"
 echo -e "    - site.config.js"
 echo -e "    - static/repositories.json"
+echo -e "    - static/contributions.json"
 echo -e "    - static/avatar.jpg"
 echo ""

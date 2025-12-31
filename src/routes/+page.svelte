@@ -58,6 +58,7 @@
 		profile: UserProfile;
 		features: Features;
 		repositories: Repository[];
+		contributions: YearContribution | null;
 	};
 
 	// Reactive declarations from data with defaults
@@ -140,7 +141,8 @@
 		};
 	}
 
-	const CONTRIBUTION_DATA = generateContributions();
+	// Use contributions from server if available, otherwise generate random data
+	$: CONTRIBUTION_DATA = data?.contributions ?? generateContributions();
 </script>
 
 <svelte:head>

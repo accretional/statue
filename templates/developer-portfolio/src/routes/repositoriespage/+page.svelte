@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
+	import { invalidate } from '$app/navigation';
 	import RepoCard from '$lib/components/RepoCard.svelte';
 
 	// --- TYPES ---
@@ -179,6 +180,9 @@
 	}
 
 	onMount(() => {
+		// Invalidate cache to get fresh data on navigation
+		invalidate('data:repositories');
+
 		updateViewport();
         animateAscii();
 		window.addEventListener('resize', updateViewport);

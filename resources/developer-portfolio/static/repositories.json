@@ -1,82 +1,32 @@
 [
   {
-    "name": "sveltekit",
-    "description": "App framework for building fast, modern Svelte apps.",
-    "language": "TypeScript",
-    "languageColor": "#3178c6",
-    "stars": 20000,
-    "forks": 2000,
+    "name": "statue-demo",
+    "description": "demo",
+    "language": "HTML",
+    "languageColor": "#e34c26",
+    "stars": 0,
+    "forks": 0,
     "isPublic": true,
-    "link": "https://github.com/sveltejs/kit"
+    "link": "https://github.com/fredxfred/statue-demo"
   },
   {
-    "name": "react",
-    "description": "A declarative, efficient, and flexible JavaScript library for UIs.",
-    "language": "JavaScript",
-    "languageColor": "#f1e05a",
-    "stars": 225000,
-    "forks": 46000,
+    "name": "dog-api-grpc",
+    "description": "do the dog thing",
+    "language": "Shell",
+    "languageColor": "#89e051",
+    "stars": 0,
+    "forks": 0,
     "isPublic": true,
-    "link": "https://github.com/facebook/react"
+    "link": "https://github.com/fredxfred/dog-api-grpc"
   },
   {
-    "name": "next.js",
-    "description": "The React framework for production.",
-    "language": "TypeScript",
-    "languageColor": "#3178c6",
-    "stars": 125000,
-    "forks": 27000,
+    "name": "interviewapi",
+    "description": "No description",
+    "language": "Unknown",
+    "languageColor": "#6e7681",
+    "stars": 0,
+    "forks": 0,
     "isPublic": true,
-    "link": "https://github.com/vercel/next.js"
-  },
-  {
-    "name": "vite",
-    "description": "Next generation frontend tooling.",
-    "language": "TypeScript",
-    "languageColor": "#3178c6",
-    "stars": 68000,
-    "forks": 6000,
-    "isPublic": true,
-    "link": "https://github.com/vitejs/vite"
-  },
-  {
-    "name": "tailwindcss",
-    "description": "A utility-first CSS framework for rapid UI development.",
-    "language": "CSS",
-    "languageColor": "#563d7c",
-    "stars": 82000,
-    "forks": 4200,
-    "isPublic": true,
-    "link": "https://github.com/tailwindlabs/tailwindcss"
-  },
-  {
-    "name": "three.js",
-    "description": "JavaScript 3D library.",
-    "language": "JavaScript",
-    "languageColor": "#f1e05a",
-    "stars": 100000,
-    "forks": 35000,
-    "isPublic": true,
-    "link": "https://github.com/mrdoob/three.js"
-  },
-  {
-    "name": "deno",
-    "description": "A modern runtime for JavaScript and TypeScript.",
-    "language": "Rust",
-    "languageColor": "#dea584",
-    "stars": 96000,
-    "forks": 5200,
-    "isPublic": true,
-    "link": "https://github.com/denoland/deno"
-  },
-  {
-    "name": "go",
-    "description": "The Go programming language.",
-    "language": "Go",
-    "languageColor": "#00ADD8",
-    "stars": 124000,
-    "forks": 17000,
-    "isPublic": true,
-    "link": "https://github.com/golang/go"
+    "link": "https://github.com/fredxfred/interviewapi"
   }
 ]

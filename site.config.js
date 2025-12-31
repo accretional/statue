@@ -5,16 +5,16 @@
 export const siteConfig = {
   // Developer profile (main identity for portfolio)
   profile: {
-    name: 'The Octocat',
-    username: 'octocat',
+    name: 'Semih',
+    username: 'semihpolat',
     avatarUrl: "/avatar.jpg",
-    bio: 'Software Developer',
-    followers: 21349,
-    following: 9,
+    bio: '10 years of coding, 2 YC MVPs  I build software that launches dreams (and maybe a few bugs).',
+    followers: 11,
+    following: 8,
     location: 'San Francisco',
-    website: 'https://github.blog',
+    website: 'semihpolat.xyz',
     linkedin: "in/myname",
-    company: '@github',
+    company: '',
     email: '',
     status: {
       emoji: "🚀",
@@ -30,7 +30,7 @@ export const siteConfig = {
 
   // Site general information
   site: {
-    name: 'The Octocat',
+    name: 'Semih',
     description: "Developer portfolio",
     url: "https://example.com",
     author: "My Name"

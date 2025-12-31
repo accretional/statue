@@ -1,10 +1,12 @@
 @import "tailwindcss";
 @import "./theme-light.css";
+@import "statue-ssg/themes/green.css";
+
 /* GitHub Dark Theme (default) */
 
 /* ========================================
 @import "./theme.css";
-
+@import "./theme-light.css";
  * STATUE SSG THEME (Optional Override)
  * Uncomment to switch themes!
  * Options: black-white, black-red, charcoal, blue, green, purple, etc.

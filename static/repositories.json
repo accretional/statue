@@ -1,62 +1,202 @@
 [
   {
-    "name": "Spoon-Knife",
-    "description": "This repo is for demonstration purposes only.",
+    "name": "littleagents",
+    "description": "300 Free (maybe not) AI Tools",
+    "language": "Unknown",
+    "languageColor": "#6e7681",
+    "stars": 2,
+    "forks": 0,
+    "isPublic": true,
+    "link": "https://github.com/semihpolat/littleagents"
+  },
+  {
+    "name": "flutter_the_eye",
+    "description": "Eye Drawing with CustomPaint Library",
+    "language": "Dart",
+    "languageColor": "#00B4AB",
+    "stars": 2,
+    "forks": 0,
+    "isPublic": true,
+    "link": "https://github.com/semihpolat/flutter_the_eye"
+  },
+  {
+    "name": "vscode-multi-ai",
+    "description": "No description",
+    "language": "TypeScript",
+    "languageColor": "#3178c6",
+    "stars": 1,
+    "forks": 1,
+    "isPublic": true,
+    "link": "https://github.com/semihpolat/vscode-multi-ai"
+  },
+  {
+    "name": "stories_w_supabase",
+    "description": "Create  and commit to the Stories together!",
+    "language": "Dart",
+    "languageColor": "#00B4AB",
+    "stars": 1,
+    "forks": 0,
+    "isPublic": true,
+    "link": "https://github.com/semihpolat/stories_w_supabase"
+  },
+  {
+    "name": "statue_studio",
+    "description": "No description",
+    "language": "JavaScript",
+    "languageColor": "#f1e05a",
+    "stars": 0,
+    "forks": 0,
+    "isPublic": true,
+    "link": "https://github.com/semihpolat/statue_studio"
+  },
+  {
+    "name": "farabi",
+    "description": "No description",
+    "language": "TypeScript",
+    "languageColor": "#3178c6",
+    "stars": 0,
+    "forks": 0,
+    "isPublic": true,
+    "link": "https://github.com/semihpolat/farabi"
+  },
+  {
+    "name": "YC-game",
+    "description": "No description",
+    "language": "Svelte",
+    "languageColor": "#ff3e00",
+    "stars": 0,
+    "forks": 0,
+    "isPublic": true,
+    "link": "https://github.com/semihpolat/YC-game"
+  },
+  {
+    "name": "project-9",
+    "description": "No description",
+    "language": "TypeScript",
+    "languageColor": "#3178c6",
+    "stars": 0,
+    "forks": 0,
+    "isPublic": true,
+    "link": "https://github.com/semihpolat/project-9"
+  },
+  {
+    "name": "qvicuna-flash",
+    "description": "No description",
+    "language": "Shell",
+    "languageColor": "#89e051",
+    "stars": 0,
+    "forks": 0,
+    "isPublic": true,
+    "link": "https://github.com/semihpolat/qvicuna-flash"
+  },
+  {
+    "name": "axle-ai",
+    "description": "No description",
+    "language": "Unknown",
+    "languageColor": "#6e7681",
+    "stars": 0,
+    "forks": 0,
+    "isPublic": true,
+    "link": "https://github.com/semihpolat/axle-ai"
+  },
+  {
+    "name": "statue-test",
+    "description": "No description",
+    "language": "Unknown",
+    "languageColor": "#6e7681",
+    "stars": 0,
+    "forks": 0,
+    "isPublic": true,
+    "link": "https://github.com/semihpolat/statue-test"
+  },
+  {
+    "name": "blindy75",
+    "description": "No description",
     "language": "HTML",
     "languageColor": "#e34c26",
-    "stars": 13503,
-    "forks": 155317,
+    "stars": 0,
+    "forks": 0,
     "isPublic": true,
-    "link": "https://github.com/octocat/Spoon-Knife"
+    "link": "https://github.com/semihpolat/blindy75"
   },
   {
-    "name": "Hello-World",
-    "description": "My first repository on GitHub!",
-    "language": "Unknown",
-    "languageColor": "#6e7681",
-    "stars": 3401,
-    "forks": 6730,
-    "isPublic": true,
-    "link": "https://github.com/octocat/Hello-World"
-  },
-  {
-    "name": "octocat.github.io",
+    "name": "react-color-swatches",
     "description": "No description",
-    "language": "CSS",
-    "languageColor": "#563d7c",
-    "stars": 1009,
-    "forks": 482,
+    "language": "JavaScript",
+    "languageColor": "#f1e05a",
+    "stars": 0,
+    "forks": 0,
     "isPublic": true,
-    "link": "https://github.com/octocat/octocat.github.io"
+    "link": "https://github.com/semihpolat/react-color-swatches"
   },
   {
-    "name": "hello-worId",
-    "description": "My first repository on GitHub.",
-    "language": "Unknown",
-    "languageColor": "#6e7681",
-    "stars": 690,
-    "forks": 271,
-    "isPublic": true,
-    "link": "https://github.com/octocat/hello-worId"
-  },
-  {
-    "name": "git-consortium",
-    "description": "This repo is for demonstration purposes only.",
-    "language": "Unknown",
-    "languageColor": "#6e7681",
-    "stars": 531,
-    "forks": 150,
-    "isPublic": true,
-    "link": "https://github.com/octocat/git-consortium"
-  },
-  {
-    "name": "test-repo1",
+    "name": "upcoming_movies",
     "description": "No description",
-    "language": "Unknown",
-    "languageColor": "#6e7681",
-    "stars": 407,
-    "forks": 32,
+    "language": "Dart",
+    "languageColor": "#00B4AB",
+    "stars": 0,
+    "forks": 0,
     "isPublic": true,
-    "link": "https://github.com/octocat/test-repo1"
+    "link": "https://github.com/semihpolat/upcoming_movies"
+  },
+  {
+    "name": "reddit_posts",
+    "description": "No description",
+    "language": "Dart",
+    "languageColor": "#00B4AB",
+    "stars": 0,
+    "forks": 0,
+    "isPublic": true,
+    "link": "https://github.com/semihpolat/reddit_posts"
+  },
+  {
+    "name": "bluetooth_scanner",
+    "description": "No description",
+    "language": "Dart",
+    "languageColor": "#00B4AB",
+    "stars": 0,
+    "forks": 0,
+    "isPublic": true,
+    "link": "https://github.com/semihpolat/bluetooth_scanner"
+  },
+  {
+    "name": "flutter_parse_backend",
+    "description": "Flutter - Parse Server - Query - Live Query - Query Parsing - Relational Query ◆  FLUTTER PARSE SERVER PROJECT",
+    "language": "Dart",
+    "languageColor": "#00B4AB",
+    "stars": 0,
+    "forks": 0,
+    "isPublic": true,
+    "link": "https://github.com/semihpolat/flutter_parse_backend"
+  },
+  {
+    "name": "nodejs_rest_api",
+    "description": "Node.js - Rest API - Authantication - Token - JSON parse - JSON design - GET - POST - Express.js - Sequelize - Socket ◆ REST API SERVICE(NODE JS)",
+    "language": "JavaScript",
+    "languageColor": "#f1e05a",
+    "stars": 0,
+    "forks": 0,
+    "isPublic": true,
+    "link": "https://github.com/semihpolat/nodejs_rest_api"
+  },
+  {
+    "name": "laravel_rest_api",
+    "description": "Laravel - Rest API - Authantication - Passport - Middleware - Token - JSON parse - JSON design - GET - POST - Complex SQL query - Chat ◆ REST API SERVICE(LARAVEL)",
+    "language": "PHP",
+    "languageColor": "#4F5D95",
+    "stars": 0,
+    "forks": 0,
+    "isPublic": true,
+    "link": "https://github.com/semihpolat/laravel_rest_api"
+  },
+  {
+    "name": "codeigniter_rest_api",
+    "description": "Codeigniter - Rest API - Authantication - Token - JSON parse - JSON design - GET - POST - Complex SQL query ◆ REST API SERVICE(CODEIGNITER)",
+    "language": "HTML",
+    "languageColor": "#e34c26",
+    "stars": 0,
+    "forks": 0,
+    "isPublic": true,
+    "link": "https://github.com/semihpolat/codeigniter_rest_api"
   }
 ]

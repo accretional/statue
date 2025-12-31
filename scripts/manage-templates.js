@@ -73,13 +73,64 @@ program
 
     console.log(chalk.blue(`📂 Loading template '${templateName}'...`));
 
-    // Copy src (clear routes first to remove stale files)
-    const sourceSrc = path.join(templateDir, 'src');
-    if (fs.existsSync(sourceSrc)) {
-      fs.emptyDirSync(path.join(rootDir, 'src/routes'));
-      fs.copySync(sourceSrc, path.join(rootDir, 'src'), { overwrite: true });
-      console.log(chalk.gray('  ✓ Copied src/'));
+    // Core files that should NEVER be overwritten (only index.ts for exports)
+    const coreFiles = [
+      'src/lib/index.ts'
+    ];
+
+    // Backup core files before copying
+    const coreBackups = new Map();
+    for (const coreFile of coreFiles) {
+      const fullPath = path.join(rootDir, coreFile);
+      if (fs.existsSync(fullPath)) {
+        const stat = fs.statSync(fullPath);
+        if (stat.isDirectory()) {
+          coreBackups.set(coreFile, { isDir: true, content: fs.readdirSync(fullPath) });
+        } else {
+          coreBackups.set(coreFile, { isDir: false, content: fs.readFileSync(fullPath) });
+        }
+      }
     }
+
+    // Copy src/routes (clear and replace)
+    const sourceRoutes = path.join(templateDir, 'src', 'routes');
+    if (fs.existsSync(sourceRoutes)) {
+      fs.emptyDirSync(path.join(rootDir, 'src/routes'));
+      fs.copySync(sourceRoutes, path.join(rootDir, 'src/routes'), { overwrite: true });
+      console.log(chalk.gray('  ✓ Copied src/routes/'));
+    }
+
+    // Copy src/lib/components (merge - add template components)
+    const sourceComponents = path.join(templateDir, 'src', 'lib', 'components');
+    if (fs.existsSync(sourceComponents)) {
+      fs.copySync(sourceComponents, path.join(rootDir, 'src/lib/components'), { overwrite: true });
+      console.log(chalk.gray('  ✓ Merged src/lib/components/'));
+    }
+
+    // Copy src/lib/*.css and other template-specific lib files (except index.ts)
+    const sourceLib = path.join(templateDir, 'src', 'lib');
+    if (fs.existsSync(sourceLib)) {
+      const libFiles = fs.readdirSync(sourceLib);
+      for (const file of libFiles) {
+        const srcPath = path.join(sourceLib, file);
+        const stat = fs.statSync(srcPath);
+        // Copy files (not directories, except components which we already handled)
+        // Skip index.ts as it will be restored
+        if (!stat.isDirectory() && file !== 'index.ts') {
+          fs.copySync(srcPath, path.join(rootDir, 'src/lib', file), { overwrite: true });
+          console.log(chalk.gray(`  ✓ Copied src/lib/${file}`));
+        }
+      }
+    }
+
+    // Restore core files that might have been overwritten
+    for (const [coreFile, backup] of coreBackups) {
+      const fullPath = path.join(rootDir, coreFile);
+      if (!backup.isDir) {
+        fs.writeFileSync(fullPath, backup.content);
+      }
+    }
+    console.log(chalk.gray('  ✓ Preserved core library files'));
 
     // Copy site.config.js
     const sourceConfig = path.join(templateDir, 'site.config.js');
@@ -117,12 +168,44 @@ program
 
     console.log(chalk.blue(`💾 Saving template '${templateName}'...`));
 
-    // Save src
-    const sourceSrc = path.join(rootDir, 'src');
-    if (fs.existsSync(sourceSrc)) {
-      fs.copySync(sourceSrc, path.join(templateDir, 'src'), { overwrite: true });
-      console.log(chalk.gray('  ✓ Saved src/'));
+    // Save src/routes
+    const sourceRoutes = path.join(rootDir, 'src/routes');
+    if (fs.existsSync(sourceRoutes)) {
+      fs.ensureDirSync(path.join(templateDir, 'src'));
+      fs.emptyDirSync(path.join(templateDir, 'src/routes'));
+      fs.copySync(sourceRoutes, path.join(templateDir, 'src/routes'), { overwrite: true });
+      console.log(chalk.gray('  ✓ Saved src/routes/'));
     }
+
+    // Save src/lib/components (template-specific components)
+    const sourceComponents = path.join(rootDir, 'src/lib/components');
+    if (fs.existsSync(sourceComponents)) {
+      fs.ensureDirSync(path.join(templateDir, 'src/lib'));
+      fs.copySync(sourceComponents, path.join(templateDir, 'src/lib/components'), { overwrite: true });
+      console.log(chalk.gray('  ✓ Saved src/lib/components/'));
+    }
+
+    // Save src/lib files (css, etc.) but NOT index.ts (that's core)
+    const sourceLib = path.join(rootDir, 'src/lib');
+    if (fs.existsSync(sourceLib)) {
+      const libFiles = fs.readdirSync(sourceLib);
+      for (const file of libFiles) {
+        const srcPath = path.join(sourceLib, file);
+        const stat = fs.statSync(srcPath);
+        // Copy files (not directories like components, cms, themes)
+        // Skip index.ts as it's core
+        if (!stat.isDirectory() && file !== 'index.ts') {
+          fs.copySync(srcPath, path.join(templateDir, 'src/lib', file), { overwrite: true });
+          console.log(chalk.gray(`  ✓ Saved src/lib/${file}`));
+        }
+      }
+    }
+
+    // Create minimal src/lib/index.ts placeholder (so template structure is valid)
+    const placeholderIndex = '// place files you want to import through the `$lib` alias in this folder.\n';
+    fs.ensureDirSync(path.join(templateDir, 'src/lib'));
+    fs.writeFileSync(path.join(templateDir, 'src/lib/index.ts'), placeholderIndex);
+    console.log(chalk.gray('  ✓ Created src/lib/index.ts placeholder'));
 
     // Save site.config.js
     const sourceConfig = path.join(rootDir, 'site.config.js');
