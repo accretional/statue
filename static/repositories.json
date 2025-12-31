@@ -1,82 +1,62 @@
 [
   {
-    "name": "sveltekit",
-    "description": "App framework for building fast, modern Svelte apps.",
-    "language": "TypeScript",
-    "languageColor": "#3178c6",
-    "stars": 20000,
-    "forks": 2000,
+    "name": "Spoon-Knife",
+    "description": "This repo is for demonstration purposes only.",
+    "language": "HTML",
+    "languageColor": "#e34c26",
+    "stars": 13503,
+    "forks": 155317,
     "isPublic": true,
-    "link": "https://github.com/sveltejs/kit"
+    "link": "https://github.com/octocat/Spoon-Knife"
   },
   {
-    "name": "react",
-    "description": "A declarative, efficient, and flexible JavaScript library for UIs.",
-    "language": "JavaScript",
-    "languageColor": "#f1e05a",
-    "stars": 225000,
-    "forks": 46000,
+    "name": "Hello-World",
+    "description": "My first repository on GitHub!",
+    "language": "Unknown",
+    "languageColor": "#6e7681",
+    "stars": 3401,
+    "forks": 6730,
     "isPublic": true,
-    "link": "https://github.com/facebook/react"
+    "link": "https://github.com/octocat/Hello-World"
   },
   {
-    "name": "next.js",
-    "description": "The React framework for production.",
-    "language": "TypeScript",
-    "languageColor": "#3178c6",
-    "stars": 125000,
-    "forks": 27000,
-    "isPublic": true,
-    "link": "https://github.com/vercel/next.js"
-  },
-  {
-    "name": "vite",
-    "description": "Next generation frontend tooling.",
-    "language": "TypeScript",
-    "languageColor": "#3178c6",
-    "stars": 68000,
-    "forks": 6000,
-    "isPublic": true,
-    "link": "https://github.com/vitejs/vite"
-  },
-  {
-    "name": "tailwindcss",
-    "description": "A utility-first CSS framework for rapid UI development.",
+    "name": "octocat.github.io",
+    "description": "No description",
     "language": "CSS",
     "languageColor": "#563d7c",
-    "stars": 82000,
-    "forks": 4200,
+    "stars": 1009,
+    "forks": 482,
     "isPublic": true,
-    "link": "https://github.com/tailwindlabs/tailwindcss"
+    "link": "https://github.com/octocat/octocat.github.io"
   },
   {
-    "name": "three.js",
-    "description": "JavaScript 3D library.",
-    "language": "JavaScript",
-    "languageColor": "#f1e05a",
-    "stars": 100000,
-    "forks": 35000,
+    "name": "hello-worId",
+    "description": "My first repository on GitHub.",
+    "language": "Unknown",
+    "languageColor": "#6e7681",
+    "stars": 690,
+    "forks": 271,
     "isPublic": true,
-    "link": "https://github.com/mrdoob/three.js"
+    "link": "https://github.com/octocat/hello-worId"
   },
   {
-    "name": "deno",
-    "description": "A modern runtime for JavaScript and TypeScript.",
-    "language": "Rust",
-    "languageColor": "#dea584",
-    "stars": 96000,
-    "forks": 5200,
+    "name": "git-consortium",
+    "description": "This repo is for demonstration purposes only.",
+    "language": "Unknown",
+    "languageColor": "#6e7681",
+    "stars": 531,
+    "forks": 150,
     "isPublic": true,
-    "link": "https://github.com/denoland/deno"
+    "link": "https://github.com/octocat/git-consortium"
   },
   {
-    "name": "go",
-    "description": "The Go programming language.",
-    "language": "Go",
-    "languageColor": "#00ADD8",
-    "stars": 124000,
-    "forks": 17000,
+    "name": "test-repo1",
+    "description": "No description",
+    "language": "Unknown",
+    "languageColor": "#6e7681",
+    "stars": 407,
+    "forks": 32,
     "isPublic": true,
-    "link": "https://github.com/golang/go"
+    "link": "https://github.com/octocat/test-repo1"
   }
 ]

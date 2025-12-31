@@ -5,17 +5,17 @@
 export const siteConfig = {
   // Developer profile (main identity for portfolio)
   profile: {
-    name: "My Name",
-    username: "myusername",
+    name: 'The Octocat',
+    username: 'octocat',
     avatarUrl: "/avatar.jpg",
-    bio: "Creative developer building thoughtful digital products.",
-    followers: 128,
-    following: 64,
-    location: "Your City",
-    website: "https://example.com",
+    bio: 'Software Developer',
+    followers: 21349,
+    following: 9,
+    location: 'San Francisco',
+    website: 'https://github.blog',
     linkedin: "in/myname",
-    company: "",
-    email: "",
+    company: '@github',
+    email: '',
     status: {
       emoji: "🚀",
       message: "Building something new"
@@ -30,7 +30,7 @@ export const siteConfig = {
 
   // Site general information
   site: {
-    name: "My Name",
+    name: 'The Octocat',
     description: "Developer portfolio",
     url: "https://example.com",
     author: "My Name"
@@ -39,7 +39,7 @@ export const siteConfig = {
   // Contact information
   contact: {
     // Main contact email
-    email: "your-email@example.com",
+    email: '',
     
     // Privacy policy related email
     privacyEmail: "your-privacy@example.com",
@@ -62,7 +62,7 @@ export const siteConfig = {
 
   // Social media links
   social: {
-    twitter: "https://twitter.com/statuessg",
+    twitter: '',
     github: "https://github.com/accretional/statue",
     linkedin: "https://linkedin.com/company/statuessg",
     facebook: "https://facebook.com/statuessg",
