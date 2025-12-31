@@ -18,7 +18,7 @@
 				<div class=" relative bg-card rounded-xl p-8 transition-all duration-300">
 					<a
 						href={directory.url}
-						class="inline-flex items-center text-muted font-medium transition-all"
+						class="inline-flex items-center text-foreground font-medium transition-all"
 					>
 						<div class="relative">
 							<div class="size-6 rounded-lg flex items-center justify-center mb-4">

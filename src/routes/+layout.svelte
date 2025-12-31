@@ -6,8 +6,6 @@
 
 	let { data, children } = $props();
 
-	let globalDirectories = $derived(data.globalDirectories);
-	let searchConfig = $derived(data.searchConfig);
 	let currentPath = $derived($page.url.pathname);
 
 	// Enable View Transitions API only for blog pages
