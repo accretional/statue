@@ -3,7 +3,6 @@
 	import RepoCard from '$lib/components/RepoCard.svelte';
 	import TimelineWidget from '$lib/components/TimelineWidget.svelte';
 	import { onMount } from 'svelte';
-	import { invalidate } from '$app/navigation';
 	import lottie from 'lottie-web';
 
 	// --- TYPES ---
@@ -82,10 +81,6 @@
 	let macBtn: HTMLAnchorElement;
 
 	onMount(() => {
-		// Invalidate cache to get fresh data on navigation
-		invalidate('data:repositories');
-		invalidate('data:contributions');
-
 		if (lottieContainer) {
 			lottie.loadAnimation({
 				container: lottieContainer,

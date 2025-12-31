@@ -6,7 +6,12 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ROOT_DIR="$SCRIPT_DIR"
+# Detect if script is in scripts/ folder or project root
+if [[ "$(basename "$SCRIPT_DIR")" == "scripts" ]]; then
+    ROOT_DIR="$(dirname "$SCRIPT_DIR")"
+else
+    ROOT_DIR="$SCRIPT_DIR"
+fi
 
 # Colors for output
 RED='\033[0;31m'
