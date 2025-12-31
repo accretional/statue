@@ -233,6 +233,43 @@ NODESCRIPT
 
 echo -e "  ${GREEN}✓${NC} Updated site.config.js"
 
+# ========================================
+# RANDOM THEME SELECTOR
+# Updates the theme in src/lib/index.css
+# ========================================
+echo -e "${YELLOW}Selecting random theme...${NC}"
+INDEX_CSS_PATH="$ROOT_DIR/src/lib/index.css"
+
+# Available themes (from statue-ssg/themes/)
+THEMES=(
+    "black-red.css"
+    "black-white.css"
+    "blue.css"
+    "charcoal.css"
+    "cyan.css"
+    "green.css"
+    "orange.css"
+    "pink.css"
+    "purple.css"
+    "red.css"
+)
+
+# Pick a random theme
+RANDOM_INDEX=$((RANDOM % ${#THEMES[@]}))
+SELECTED_THEME="${THEMES[$RANDOM_INDEX]}"
+
+# Update line 3 of index.css (the theme import line)
+if [ -f "$INDEX_CSS_PATH" ]; then
+    # Use sed to replace the theme import on line 3
+    sed -i '' "3s|@import \"statue-ssg/themes/.*\";|@import \"statue-ssg/themes/${SELECTED_THEME}\";|" "$INDEX_CSS_PATH"
+    echo -e "  ${GREEN}✓${NC} Theme set to: ${BLUE}${SELECTED_THEME%.css}${NC}"
+else
+    echo -e "  ${YELLOW}⚠${NC} Could not find index.css at $INDEX_CSS_PATH"
+fi
+# ========================================
+# END RANDOM THEME SELECTOR
+# ========================================
+
 # Summary
 echo ""
 echo -e "${GREEN}========================================${NC}"
@@ -245,10 +282,52 @@ echo -e "  ${BLUE}Location:${NC} ${LOCATION:-Not set}"
 echo -e "  ${BLUE}Followers:${NC} $FOLLOWERS | ${BLUE}Following:${NC} $FOLLOWING"
 echo -e "  ${BLUE}Repos:${NC} $REPO_COUNT (top 20 by stars saved)"
 echo -e "  ${BLUE}Contributions:${NC} ${CONTRIB_TOTAL:-N/A}"
+echo -e "  ${BLUE}Theme:${NC} ${SELECTED_THEME%.css}"
 echo ""
 echo -e "  ${YELLOW}Files updated:${NC}"
 echo -e "    - site.config.js"
 echo -e "    - static/repositories.json"
 echo -e "    - static/contributions.json"
 echo -e "    - static/avatar.jpg"
+echo -e "    - src/lib/index.css (theme)"
 echo ""
+
+# ========================================
+# AUTO REFRESH BROWSER
+# Refreshes localhost in Chrome/Safari
+# ========================================
+echo -e "${YELLOW}Refreshing browser...${NC}"
+
+# Try Chrome first, then Safari
+if osascript -e 'tell application "Google Chrome"
+    set found to false
+    repeat with w in windows
+        repeat with t in tabs of w
+            if URL of t contains "localhost" then
+                tell t to reload
+                set found to true
+            end if
+        end repeat
+    end repeat
+    return found
+end tell' 2>/dev/null | grep -q "true"; then
+    echo -e "  ${GREEN}✓${NC} Refreshed Chrome"
+elif osascript -e 'tell application "Safari"
+    set found to false
+    repeat with w in windows
+        repeat with t in tabs of w
+            if URL of t contains "localhost" then
+                tell t to do JavaScript "location.reload()"
+                set found to true
+            end if
+        end repeat
+    end repeat
+    return found
+end tell' 2>/dev/null | grep -q "true"; then
+    echo -e "  ${GREEN}✓${NC} Refreshed Safari"
+else
+    echo -e "  ${YELLOW}⚠${NC} No localhost tab found in Chrome/Safari"
+fi
+# ========================================
+# END AUTO REFRESH BROWSER
+# ========================================
