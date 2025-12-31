@@ -61,7 +61,6 @@
 		"docker:test": "npm run docker:build && ./test/hermetic/docker_test.sh",
 		"template:load": "node scripts/manage-templates.js load",
 		"template:save": "node scripts/manage-templates.js save",
-		"template:restore": "node scripts/manage-templates.js restore",
 		"template:list": "node scripts/manage-templates.js list",
 		"test:unit": "vitest"
 	},
