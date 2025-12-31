@@ -34,6 +34,20 @@ fi
 
 echo -e "${BLUE}Syncing GitHub data for: ${GREEN}$USERNAME${NC}"
 
+# GitHub API helper function (uses token if available)
+github_api() {
+    local url="$1"
+    if [ -n "$GITHUB_TOKEN" ]; then
+        curl -s -H "Authorization: token $GITHUB_TOKEN" "$url"
+    else
+        curl -s "$url"
+    fi
+}
+
+if [ -n "$GITHUB_TOKEN" ]; then
+    echo -e "${GREEN}Using GitHub token for higher rate limits${NC}"
+fi
+
 # Check if jq is installed
 if ! command -v jq &> /dev/null; then
     echo -e "${RED}Error: jq is required but not installed.${NC}"
@@ -43,7 +57,16 @@ fi
 
 # Fetch user data from GitHub API
 echo -e "${YELLOW}Fetching user profile...${NC}"
-USER_DATA=$(curl -s "https://api.github.com/users/$USERNAME")
+USER_DATA=$(github_api "https://api.github.com/users/$USERNAME")
+
+# Check for API rate limit
+if echo "$USER_DATA" | jq -e '.message | test("rate limit")' > /dev/null 2>&1; then
+    echo -e "${RED}Error: GitHub API rate limit exceeded.${NC}"
+    echo -e "${YELLOW}Tip: Wait an hour or use a GitHub token:${NC}"
+    echo -e "  export GITHUB_TOKEN=your_token"
+    echo -e "  $0 $USERNAME"
+    exit 1
+fi
 
 # Check if user exists
 if echo "$USER_DATA" | jq -e '.message == "Not Found"' > /dev/null 2>&1; then
@@ -74,11 +97,11 @@ echo -e "  ${GREEN}✓${NC} Avatar saved to static/avatar.jpg"
 
 # Fetch repositories
 echo -e "${YELLOW}Fetching repositories...${NC}"
-REPOS_DATA=$(curl -s "https://api.github.com/users/$USERNAME/repos?sort=updated&per_page=100")
+REPOS_DATA=$(github_api "https://api.github.com/users/$USERNAME/repos?sort=updated&per_page=100")
 
 # Process repositories and create JSON
 REPOS_JSON=$(echo "$REPOS_DATA" | jq '[
-  .[] | select(.fork == false) | {
+  .[] | {
     name: .name,
     description: (.description // "No description"),
     language: (.language // "Unknown"),

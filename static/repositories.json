@@ -50,6 +50,16 @@
     "link": "https://github.com/semihpolat/statue_studio"
   },
   {
+    "name": "statue",
+    "description": "Statue: Svelte Static Site Generator with CMS features, launch a website for your SaaS/blog/portfolio/company/idea in seconds, with one-line setup",
+    "language": "Unknown",
+    "languageColor": "#6e7681",
+    "stars": 0,
+    "forks": 0,
+    "isPublic": true,
+    "link": "https://github.com/semihpolat/statue"
+  },
+  {
     "name": "farabi",
     "description": "No description",
     "language": "TypeScript",
@@ -78,6 +88,16 @@
     "forks": 0,
     "isPublic": true,
     "link": "https://github.com/semihpolat/project-9"
+  },
+  {
+    "name": "mistral.rs",
+    "description": "Blazingly fast LLM inference.",
+    "language": "Rust",
+    "languageColor": "#dea584",
+    "stars": 0,
+    "forks": 0,
+    "isPublic": true,
+    "link": "https://github.com/semihpolat/mistral.rs"
   },
   {
     "name": "qvicuna-flash",
@@ -130,6 +150,16 @@
     "link": "https://github.com/semihpolat/react-color-swatches"
   },
   {
+    "name": "flutter_supabase_chat",
+    "description": "flutter_supabase_chat",
+    "language": "Unknown",
+    "languageColor": "#6e7681",
+    "stars": 0,
+    "forks": 0,
+    "isPublic": true,
+    "link": "https://github.com/semihpolat/flutter_supabase_chat"
+  },
+  {
     "name": "upcoming_movies",
     "description": "No description",
     "language": "Dart",
@@ -168,35 +198,5 @@
     "forks": 0,
     "isPublic": true,
     "link": "https://github.com/semihpolat/flutter_parse_backend"
-  },
-  {
-    "name": "nodejs_rest_api",
-    "description": "Node.js - Rest API - Authantication - Token - JSON parse - JSON design - GET - POST - Express.js - Sequelize - Socket ◆ REST API SERVICE(NODE JS)",
-    "language": "JavaScript",
-    "languageColor": "#f1e05a",
-    "stars": 0,
-    "forks": 0,
-    "isPublic": true,
-    "link": "https://github.com/semihpolat/nodejs_rest_api"
-  },
-  {
-    "name": "laravel_rest_api",
-    "description": "Laravel - Rest API - Authantication - Passport - Middleware - Token - JSON parse - JSON design - GET - POST - Complex SQL query - Chat ◆ REST API SERVICE(LARAVEL)",
-    "language": "PHP",
-    "languageColor": "#4F5D95",
-    "stars": 0,
-    "forks": 0,
-    "isPublic": true,
-    "link": "https://github.com/semihpolat/laravel_rest_api"
-  },
-  {
-    "name": "codeigniter_rest_api",
-    "description": "Codeigniter - Rest API - Authantication - Token - JSON parse - JSON design - GET - POST - Complex SQL query ◆ REST API SERVICE(CODEIGNITER)",
-    "language": "HTML",
-    "languageColor": "#e34c26",
-    "stars": 0,
-    "forks": 0,
-    "isPublic": true,
-    "link": "https://github.com/semihpolat/codeigniter_rest_api"
   }
 ]
