@@ -3,43 +3,18 @@
 // You can manage email addresses, social media links, and other contact information from here
 
 export const siteConfig = {
-  // Developer profile (main identity for portfolio)
-  profile: {
-    name: 'Semih',
-    username: 'semihpolat',
-    avatarUrl: "/avatar.jpg",
-    bio: '10 years of coding, 2 YC MVPs  I build software that launches dreams (and maybe a few bugs).',
-    followers: 11,
-    following: 8,
-    location: 'San Francisco',
-    website: 'semihpolat.xyz',
-    linkedin: "in/myname",
-    company: '',
-    email: '',
-    status: {
-      emoji: "🚀",
-      message: "Building something new"
-    }
-  },
-
-  // Portfolio features toggle
-  features: {
-    showExperience: false,
-    showMacScreen: false
-  },
-
   // Site general information
   site: {
-    name: 'Semih',
-    description: "Developer portfolio",
-    url: "https://example.com",
-    author: "My Name"
+    name: "Statue SSG",
+    description: "A simple static site generator for markdown content with SvelteKit",
+    url: "https://statuessg.com",
+    author: "Statue Team"
   },
 
   // Contact information
   contact: {
     // Main contact email
-    email: '',
+    email: "your-email@example.com",
     
     // Privacy policy related email
     privacyEmail: "your-privacy@example.com",
@@ -62,7 +37,7 @@ export const siteConfig = {
 
   // Social media links
   social: {
-    twitter: '',
+    twitter: "https://twitter.com/statuessg",
     github: "https://github.com/accretional/statue",
     linkedin: "https://linkedin.com/company/statuessg",
     facebook: "https://facebook.com/statuessg",
