@@ -20,6 +20,8 @@
 
 	// Group days into weeks for column layout (7 days per column)
 	$: weeks = (() => {
+		if (!data.days || data.days.length === 0) return [];
+
 		const result: Array<Array<typeof data.days[0] | null>> = [];
 		let currentWeek: Array<typeof data.days[0] | null> = [];
 
