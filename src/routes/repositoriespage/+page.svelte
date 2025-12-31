@@ -26,6 +26,12 @@
 	};
 	let repositories: Repository[] = [];
 
+	// DEBUG: Log data changes
+	$: {
+		console.log('[repositoriespage] data received:', data);
+		console.log('[repositoriespage] data.repositories:', data?.repositories);
+	}
+
 	$: repositories = data.repositories ?? [];
 	$: profile = data.profile;
 

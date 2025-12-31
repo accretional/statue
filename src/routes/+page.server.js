@@ -2,8 +2,8 @@ import { siteConfig } from '../../site.config.js';
 import fs from 'fs';
 import path from 'path';
 
-// Prerender for production builds
-export const prerender = true;
+// Prerender disabled for development (enable for production builds)
+// export const prerender = true;
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ depends, fetch }) {
