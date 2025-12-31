@@ -23,6 +23,7 @@ program
   .command('load <templateName>')
   .description('Load a template into the workspace')
   .option('-f, --force', 'Force overwrite', false)
+  .option('--no-backup', 'Skip backup of current workspace')
   .action(async (templateName, options) => {
     if (templateName === 'default') {
       console.log(chalk.yellow('Default template is already at root. Use git checkout to restore.'));
@@ -40,6 +41,27 @@ program
       console.log(chalk.yellow('   Note: Core library (components, cms, themes) may be affected.'));
       console.log(chalk.red('Use -f or --force to proceed.'));
       return;
+    }
+
+    // Backup current workspace before loading
+    const backupDir = path.join(rootDir, '_backup');
+    if (options.backup) {
+      console.log(chalk.blue('📦 Backing up current workspace...'));
+      fs.emptyDirSync(backupDir);
+
+      // Backup src/
+      if (fs.existsSync(path.join(rootDir, 'src'))) {
+        fs.copySync(path.join(rootDir, 'src'), path.join(backupDir, 'src'));
+        console.log(chalk.gray('  ✓ Backed up src/'));
+      }
+
+      // Backup site.config.js
+      if (fs.existsSync(path.join(rootDir, 'site.config.js'))) {
+        fs.copySync(path.join(rootDir, 'site.config.js'), path.join(backupDir, 'site.config.js'));
+        console.log(chalk.gray('  ✓ Backed up site.config.js'));
+      }
+
+      console.log(chalk.green(`  → Backup saved to _backup/`));
     }
 
     console.log(chalk.blue(`📂 Loading template '${templateName}'...`));
@@ -61,6 +83,9 @@ program
 
     console.log(chalk.green(`✅ Template '${templateName}' loaded!`));
     console.log(chalk.yellow('Run "npm run dev" to test.'));
+    if (options.backup) {
+      console.log(chalk.gray('💡 Restore backup with: npm run template:restore'));
+    }
   });
 
 // SAVE: Workspace -> Template
@@ -93,6 +118,38 @@ program
     }
 
     console.log(chalk.green(`✅ Template '${templateName}' saved!`));
+  });
+
+// RESTORE: _backup -> Workspace
+program
+  .command('restore')
+  .description('Restore workspace from _backup')
+  .action(async () => {
+    const backupDir = path.join(rootDir, '_backup');
+
+    if (!fs.existsSync(backupDir)) {
+      console.error(chalk.red('❌ No backup found. Run template:load first.'));
+      return;
+    }
+
+    console.log(chalk.blue('🔄 Restoring from backup...'));
+
+    // Restore src/
+    const backupSrc = path.join(backupDir, 'src');
+    if (fs.existsSync(backupSrc)) {
+      fs.emptyDirSync(path.join(rootDir, 'src/routes'));
+      fs.copySync(backupSrc, path.join(rootDir, 'src'), { overwrite: true });
+      console.log(chalk.gray('  ✓ Restored src/'));
+    }
+
+    // Restore site.config.js
+    const backupConfig = path.join(backupDir, 'site.config.js');
+    if (fs.existsSync(backupConfig)) {
+      fs.copySync(backupConfig, path.join(rootDir, 'site.config.js'), { overwrite: true });
+      console.log(chalk.gray('  ✓ Restored site.config.js'));
+    }
+
+    console.log(chalk.green('✅ Workspace restored from backup!'));
   });
 
 // LIST
