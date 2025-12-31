@@ -1,32 +1,32 @@
 [
   {
-    "name": "statue-demo",
-    "description": "demo",
-    "language": "HTML",
-    "languageColor": "#e34c26",
+    "name": "my-awesome-project",
+    "description": "A sample project to showcase your work",
+    "language": "TypeScript",
+    "languageColor": "#3178c6",
     "stars": 0,
     "forks": 0,
     "isPublic": true,
-    "link": "https://github.com/fredxfred/statue-demo"
+    "link": "https://github.com/your-username/my-awesome-project"
   },
   {
-    "name": "dog-api-grpc",
-    "description": "do the dog thing",
-    "language": "Shell",
-    "languageColor": "#89e051",
+    "name": "portfolio-website",
+    "description": "My personal portfolio website",
+    "language": "Svelte",
+    "languageColor": "#ff3e00",
     "stars": 0,
     "forks": 0,
     "isPublic": true,
-    "link": "https://github.com/fredxfred/dog-api-grpc"
+    "link": "https://github.com/your-username/portfolio-website"
   },
   {
-    "name": "interviewapi",
-    "description": "No description",
-    "language": "Unknown",
-    "languageColor": "#6e7681",
+    "name": "api-service",
+    "description": "Backend API service",
+    "language": "Python",
+    "languageColor": "#3572A5",
     "stars": 0,
     "forks": 0,
     "isPublic": true,
-    "link": "https://github.com/fredxfred/interviewapi"
+    "link": "https://github.com/your-username/api-service"
   }
 ]
