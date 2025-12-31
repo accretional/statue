@@ -3,12 +3,37 @@
 // You can manage email addresses, social media links, and other contact information from here
 
 export const siteConfig = {
+  // Developer profile (main identity for portfolio)
+  profile: {
+    name: "My Name",
+    username: "myusername",
+    avatarUrl: "/avatar.jpg",
+    bio: "Creative developer building thoughtful digital products.",
+    followers: 128,
+    following: 64,
+    location: "Your City",
+    website: "https://example.com",
+    linkedin: "in/myname",
+    company: "",
+    email: "",
+    status: {
+      emoji: "🚀",
+      message: "Building something new"
+    }
+  },
+
+  // Portfolio features toggle
+  features: {
+    showExperience: false,
+    showMacScreen: false
+  },
+
   // Site general information
   site: {
-    name: "Statue SSG",
-    description: "A simple static site generator for markdown content with SvelteKit",
-    url: "https://statuessg.com",
-    author: "Statue Team"
+    name: "My Name",
+    description: "Developer portfolio",
+    url: "https://example.com",
+    author: "My Name"
   },
 
   // Contact information

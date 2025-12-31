@@ -3,6 +3,11 @@
   import { page } from '$app/stores';
   import '$lib/index.css';
 
+  export let data;
+
+  // Get profile from layout data
+  $: profile = data?.profile ?? { name: 'Portfolio' };
+
   // Navbar items
   const navbarItems = [
     { title: 'Blog', url: '/blog' },
@@ -36,7 +41,7 @@
 <nav class="navbar" class:scrolled={scrollY > 10}>
   <div class="nav-container">
     <a href="/" class="logo">
-      <span class="logo-text">My Name</span>
+      <span class="logo-text">{profile.name}</span>
     </a>
 
     <div class="nav-links">

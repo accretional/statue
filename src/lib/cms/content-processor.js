@@ -8,7 +8,7 @@ import { marked } from 'marked';
 import matter from 'gray-matter';
 
 // Import site configuration
-import { siteConfig } from '/site.config.js';
+import siteConfig from '/site.config.js';
 
 // This error check is to provide an early warning when this module is attempted to be used in the browser
 const isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined';
@@ -22,55 +22,6 @@ const removeFirstH1 = (html) => {
   // Find the first heading and remove it
   // This regex matches the first <h1> tag and its content up to the closing </h1>
   return html.replace(/<h1[^>]*>(.*?)<\/h1>/, '');
-};
-
-/**
- * Creates a custom marked renderer that transforms internal markdown links
- * to proper URLs based on the current file's location in the content tree
- *
- * @param {string} currentDirectory - The directory of the current content file (e.g., 'docs', 'blog')
- * @returns {marked.Renderer} - A configured marked renderer
- */
-const createLinkTransformer = (currentDirectory) => {
-  const renderer = new marked.Renderer();
-  const originalLinkRenderer = renderer.link.bind(renderer);
-
-  renderer.link = function(token) {
-    // In marked v15+, the link renderer receives a token object
-    let href = token.href || '';
-    const title = token.title || null;
-    const text = token.text || '';
-
-    // Check if link has a protocol (mailto:, tel:, http:, https:, ftp:, etc.)
-    const hasProtocol = href && typeof href === 'string' && /^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(href);
-
-    // Only transform relative links that point to .md files or local paths
-    // Do not transform links with protocols or anchor links (#)
-    if (href && typeof href === 'string' && !hasProtocol && !href.startsWith('#')) {
-      // Handle .md file links - remove the extension
-      if (href.endsWith('.md')) {
-        href = href.slice(0, -3);
-      }
-
-      // Handle relative paths (./file, ../dir/file)
-      if (href.startsWith('./') || href.startsWith('../')) {
-        // Resolve the path relative to the current directory
-        const resolvedPath = path.join('/', currentDirectory, href);
-        // Normalize path separators and remove any trailing slashes
-        href = resolvedPath.replace(/\\/g, '/').replace(/\/$/, '');
-      } else if (!href.startsWith('/')) {
-        // If it's not absolute and not explicitly relative, treat as relative to current dir
-        // This handles cases like [link](other-file.md) without ./ prefix
-        href = path.join('/', currentDirectory, href).replace(/\\/g, '/');
-      }
-    }
-
-    // Create modified token with transformed href
-    const modifiedToken = { ...token, href };
-    return originalLinkRenderer(modifiedToken);
-  };
-
-  return renderer;
 };
 
 // Scans all markdown files and folders in the content directory
@@ -126,15 +77,12 @@ const scanContentDirectory = () => {
           author: processedMetadata.author || null,
           ...processedMetadata
         };
-
+        
+        // Parse markdown to HTML and then remove the first h1 heading
+        const html = removeFirstH1(marked.parse(processedMarkdownContent));
+        
         // Fix directory - use full path
         let directory = relativePath.replace(/\\/g, '/');
-
-        // Create custom renderer for link transformation based on the file's directory
-        const renderer = createLinkTransformer(directory);
-
-        // Parse markdown to HTML with link transformation, then remove the first h1 heading
-        const html = removeFirstH1(marked.parse(processedMarkdownContent, { renderer }));
         
         // Add main directory information to create content tree
         // Example: blog/categories/js -> blog
@@ -331,8 +279,6 @@ const processTemplateVariables = (content) => {
     'social.facebook': siteConfig.social.facebook,
     'social.instagram': siteConfig.social.instagram,
     'social.youtube': siteConfig.social.youtube,
-    'social.discord': siteConfig.social.discord,
-    'social.reddit': siteConfig.social.reddit,
     
     // Legal information
     'legal.privacyPolicyLastUpdated': siteConfig.legal.privacyPolicyLastUpdated,
@@ -353,7 +299,7 @@ const processTemplateVariables = (content) => {
   // Process {{variable}} format variables
   processedContent = processedContent.replace(/\{\{([^}]+)\}\}/g, (match, variableName) => {
     const trimmedName = variableName.trim();
-    if (Object.hasOwn(variables, trimmedName)) {
+    if (variables.hasOwnProperty(trimmedName)) {
       return variables[trimmedName];
     }
     console.warn(`Template variable not found: ${trimmedName}`);
@@ -415,30 +361,11 @@ const getSidebarTree = (directory) => {
   }
 
   // Add grouped items
-  Object.entries(groups).forEach(([key, group]) => {
+  Object.entries(groups).forEach(([, group]) => {
     result.push({
       title: group.title,
       children: group.items
     });
-  });
-
-  return result;
-};
-
-// Function to get all directories as sidebar navigation
-const getAllDirectoriesSidebar = () => {
-  const directories = getContentDirectories();
-  const result = [];
-
-  directories.forEach(dir => {
-    const dirContent = getSidebarTree(dir.name);
-    if (dirContent.length > 0) {
-      result.push({
-        title: dir.title,
-        url: dir.url,
-        children: dirContent
-      });
-    }
   });
 
   return result;
@@ -456,6 +383,5 @@ export {
   clearContentCache,
   getSubDirectories,
   processTemplateVariables,
-  getSidebarTree,
-  getAllDirectoriesSidebar
+  getSidebarTree
 }; 

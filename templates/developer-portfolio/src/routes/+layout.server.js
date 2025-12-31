@@ -26,6 +26,8 @@ export function load() {
 
   return {
     globalDirectories: enhancedDirectories,
-    searchConfig: siteConfig.search
+    searchConfig: siteConfig.search,
+    profile: siteConfig.profile,
+    contact: siteConfig.contact
   };
 } 

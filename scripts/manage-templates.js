@@ -10,6 +10,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 const templatesDir = path.join(rootDir, 'templates');
+const resourcesDir = path.join(rootDir, 'resources');
 
 const program = new Command();
 
@@ -61,6 +62,12 @@ program
         console.log(chalk.gray('  ✓ Backed up site.config.js'));
       }
 
+      // Backup static/
+      if (fs.existsSync(path.join(rootDir, 'static'))) {
+        fs.copySync(path.join(rootDir, 'static'), path.join(backupDir, 'static'));
+        console.log(chalk.gray('  ✓ Backed up static/'));
+      }
+
       console.log(chalk.green(`  → Backup saved to _backup/`));
     }
 
@@ -79,6 +86,13 @@ program
     if (fs.existsSync(sourceConfig)) {
       fs.copySync(sourceConfig, path.join(rootDir, 'site.config.js'), { overwrite: true });
       console.log(chalk.gray('  ✓ Copied site.config.js'));
+    }
+
+    // Copy static/ from resources/<template>/static/
+    const sourceStatic = path.join(resourcesDir, templateName, 'static');
+    if (fs.existsSync(sourceStatic)) {
+      fs.copySync(sourceStatic, path.join(rootDir, 'static'), { overwrite: true });
+      console.log(chalk.gray('  ✓ Copied static/ from resources/'));
     }
 
     console.log(chalk.green(`✅ Template '${templateName}' loaded!`));
@@ -117,6 +131,15 @@ program
       console.log(chalk.gray('  ✓ Saved site.config.js'));
     }
 
+    // Save static/ to resources/<template>/static/
+    const sourceStatic = path.join(rootDir, 'static');
+    const targetStatic = path.join(resourcesDir, templateName, 'static');
+    if (fs.existsSync(sourceStatic)) {
+      fs.ensureDirSync(path.join(resourcesDir, templateName));
+      fs.copySync(sourceStatic, targetStatic, { overwrite: true });
+      console.log(chalk.gray('  ✓ Saved static/ to resources/'));
+    }
+
     console.log(chalk.green(`✅ Template '${templateName}' saved!`));
   });
 
@@ -147,6 +170,13 @@ program
     if (fs.existsSync(backupConfig)) {
       fs.copySync(backupConfig, path.join(rootDir, 'site.config.js'), { overwrite: true });
       console.log(chalk.gray('  ✓ Restored site.config.js'));
+    }
+
+    // Restore static/
+    const backupStatic = path.join(backupDir, 'static');
+    if (fs.existsSync(backupStatic)) {
+      fs.copySync(backupStatic, path.join(rootDir, 'static'), { overwrite: true });
+      console.log(chalk.gray('  ✓ Restored static/'));
     }
 
     console.log(chalk.green('✅ Workspace restored from backup!'));

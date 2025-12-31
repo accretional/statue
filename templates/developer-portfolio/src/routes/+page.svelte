@@ -1,36 +1,9 @@
 <script lang="ts">
-
-
 	import Sidebar from '$lib/components/Sidebar.svelte';
 	import RepoCard from '$lib/components/RepoCard.svelte';
 	import TimelineWidget from '$lib/components/TimelineWidget.svelte';
 	import { onMount } from 'svelte';
 	import lottie from 'lottie-web';
-
-	export let hideExperience = true;
-	export let hideMacScreen = true;
-
-	let lottieContainer: HTMLDivElement;
-	let macBtn: HTMLAnchorElement;
-
-	onMount(() => {
-		if (lottieContainer) {
-			lottie.loadAnimation({
-				container: lottieContainer,
-				renderer: 'svg',
-				loop: true,
-				autoplay: true,
-				path: '/macbook.json'
-			});
-		}
-	});
-
-	function handleMacClick() {
-		// Enable view-transition-name only when clicking mac button
-		if (macBtn) {
-			macBtn.style.viewTransitionName = 'mac-hero';
-		}
-	}
 
 	// --- TYPES ---
 	interface Repository {
@@ -63,6 +36,11 @@
 		};
 	}
 
+	interface Features {
+		showExperience: boolean;
+		showMacScreen: boolean;
+	}
+
 	interface ContributionDay {
 		date: string;
 		count: number;
@@ -75,35 +53,49 @@
 		days: ContributionDay[];
 	}
 
-	export let data: { repositories: Repository[] };
-	let repositories: Repository[] = [];
-	let leftRepos: Repository[] = [];
-	let rightRepos: Repository[] = [];
-
-	$: repositories = data.repositories ?? [];
-
-	// --- CONSTANTS ---
-	const USER_PROFILE: UserProfile = {
-		name: "My Name",
-		username: "myusername",
-		avatarUrl: "/avatar.jpg",
-		bio: "Creative developer building thoughtful digital products.",
-		followers: 128,
-		following: 64,
-		location: "Your City",
-		website: "https://example.com",
-		linkedin: "in/myname",
-		company: undefined,
-		email: undefined,
-		status: {
-			emoji: "🚀",
-			message: "Building something new"
-		}
+	// Data from server (site.config.js)
+	export let data: {
+		profile: UserProfile;
+		features: Features;
+		repositories: Repository[];
 	};
 
-	// Split repos: first 2 on left, last 2 on right
+	// Reactive declarations from data with defaults
+	$: profile = data?.profile ?? {
+		name: '',
+		username: '',
+		avatarUrl: '/avatar.jpg',
+		bio: '',
+		followers: 0,
+		following: 0,
+		location: '',
+		website: ''
+	};
+	$: features = data?.features ?? { showExperience: false, showMacScreen: false };
+	$: repositories = data?.repositories ?? [];
 	$: leftRepos = repositories.slice(0, 2);
 	$: rightRepos = repositories.slice(2, 4);
+
+	let lottieContainer: HTMLDivElement;
+	let macBtn: HTMLAnchorElement;
+
+	onMount(() => {
+		if (lottieContainer) {
+			lottie.loadAnimation({
+				container: lottieContainer,
+				renderer: 'svg',
+				loop: true,
+				autoplay: true,
+				path: '/macbook.json'
+			});
+		}
+	});
+
+	function handleMacClick() {
+		if (macBtn) {
+			macBtn.style.viewTransitionName = 'mac-hero';
+		}
+	}
 
 	// Generate contribution data
 	function generateContributions(): YearContribution {
@@ -152,8 +144,8 @@
 </script>
 
 <svelte:head>
-	<title>{USER_PROFILE.name} - GitHub Portfolio</title>
-	<meta name="description" content={USER_PROFILE.bio} />
+	<title>{profile.name} - Portfolio</title>
+	<meta name="description" content={profile.bio} />
 </svelte:head>
 
 <div class="page-container">
@@ -167,7 +159,7 @@
 
 		<!-- Center: Profile Sidebar -->
 		<div class="sidebar-container">
-			<Sidebar profile={USER_PROFILE} contributionData={CONTRIBUTION_DATA} />
+			<Sidebar {profile} contributionData={CONTRIBUTION_DATA} />
 		</div>
 
 		<!-- Right repos -->
@@ -178,7 +170,7 @@
 			<a href="/repositoriespage" class="view-all-repos">view all repos</a>
 
 			<!-- Timeline Widget -->
-			{#if !hideExperience}
+			{#if features.showExperience}
 				<div class="timeline-widget-container">
 					<TimelineWidget />
 				</div>
@@ -193,7 +185,7 @@
 		{/each}
 
 		<!-- Mobile Timeline Widget -->
-		{#if !hideExperience}
+		{#if features.showExperience}
 			<div class="mobile-timeline-widget">
 				<TimelineWidget />
 			</div>
@@ -201,7 +193,7 @@
 	</div>
 
 	<!-- Mac Desktop Button -->
-	{#if !hideMacScreen}
+	{#if features.showMacScreen}
 		<a
 			href="/macdesktop"
 			class="mac-desktop-btn"
