@@ -7,14 +7,7 @@
   /* ========================================
    * CORE PALETTE (GitHub Light)
    * ======================================== */
-  --color-background: #ffffff; /* User requested off-white, but GitHub base is white, let's use a very slight off-white or just white. GitHub uses #ffffff for canvas-default. I will use #ffffff and let card be off-white */
-  /* Actually, user said "arkaplan kirik beyaz" (off-white). Let's try #f6f8fa which is GitHub's subtle bg, or #fffbf0 for a warmer off-white? 
-     GitHub light theme:
-     bg: #ffffff
-     subtle: #f6f8fa
-     
-     Let's stick to GitHub Light standard to match the "inverse" request properly.
-  */
+  --color-background: #ffffff; 
   --color-background: #f6f8fa;
   --color-foreground: #1f2328;
   --color-primary: #0969da;
@@ -22,7 +15,7 @@
   --color-accent: #0969da;
   --color-muted: #656d76;
   --color-border: #d0d7de;
-  --color-card: #ffffff; /* "Kirik beyaz" feel for cards/subtle areas */
+  --color-card: #ffffff; 
 
   /* Text colors for different surfaces */
   --color-on-primary: #ffffff;
