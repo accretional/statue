@@ -21,7 +21,7 @@ async function setupStatueSSG(options = {}) {
     console.log(chalk.green('✓ content copied'));
   }
 
-  // 2. Copy static assets
+  // 2. Copy resources (static, scripts, etc.)
   // First: shared resources (favicon, robots.txt, etc.) - base layer
   const sharedDir = path.join(sourceDir, 'resources/shared');
   if (fs.existsSync(sharedDir)) {
@@ -29,13 +29,13 @@ async function setupStatueSSG(options = {}) {
     console.log(chalk.green('✓ shared resources copied'));
   }
 
-  // Second: template-specific static (overrides shared)
-  const templateStaticDir = path.join(sourceDir, 'resources', templateName, 'static');
-  const defaultStaticDir = path.join(sourceDir, 'resources/default/static');
-  const staticSource = fs.existsSync(templateStaticDir) ? templateStaticDir : defaultStaticDir;
-  if (fs.existsSync(staticSource)) {
-    fs.copySync(staticSource, path.join(targetDir, 'static'), { overwrite: true });
-    console.log(chalk.green('✓ template static copied'));
+  // Second: template-specific resources (full overlay - static/, scripts/, etc.)
+  const templateResourceDir = path.join(sourceDir, 'resources', templateName);
+  const defaultResourceDir = path.join(sourceDir, 'resources/default');
+  const resourceSource = fs.existsSync(templateResourceDir) ? templateResourceDir : defaultResourceDir;
+  if (fs.existsSync(resourceSource)) {
+    fs.copySync(resourceSource, targetDir, { overwrite: true });
+    console.log(chalk.green('✓ template resources copied'));
   }
 
   // 3. Copy template (src + site.config.js)
