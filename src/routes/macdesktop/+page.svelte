@@ -258,6 +258,13 @@
 	onMount(() => {
 		document.body.classList.add('mac-desktop-page');
 
+		// Apply scroll lock styles for this page only
+		document.body.style.overflow = 'hidden';
+		document.body.style.height = '100vh';
+		document.body.style.width = '100vw';
+		document.body.style.margin = '0';
+		document.body.style.padding = '0';
+
         // Load positions
         if (typeof localStorage !== 'undefined') {
             const saved = localStorage.getItem('desktop-icon-positions');
@@ -279,6 +286,11 @@
 		return () => {
 			document.body.classList.remove('mac-desktop-page');
             if (longPressTimer) clearTimeout(longPressTimer);
+
+			// Remove scroll lock styles when leaving this page
+			document.body.style.overflow = '';
+			document.body.style.height = '';
+			document.body.style.width = '';
 		};
 	});
 
@@ -357,14 +369,6 @@
 </div>
 
 <style>
-	:global(body) {
-		margin: 0;
-		padding: 0;
-		overflow: hidden; /* Prevent body scroll */
-        height: 100vh;
-        width: 100vw;
-	}
-
     /* Full screen overrides for Mac Desktop Page */
 	:global(body.mac-desktop-page nav) {
 		display: none !important;
