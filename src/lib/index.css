@@ -1,7 +1,7 @@
 @import "tailwindcss";
 /* Theme - Available: black-white, black-red, blue, charcoal, cyan, green, orange, pink, purple, red
    Custom: copy node_modules/statue-ssg/src/lib/themes/custom-theme.template.css here, rename & import */
-@import "statue-ssg/themes/black-white.css";
+@import "statue-ssg/themes/black-red.css";
 
 @source "../";
 @source "../../node_modules/statue-ssg/src/**/*.{svelte,js,ts}";
