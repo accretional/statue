@@ -180,6 +180,9 @@
 	}
 
 	onMount(() => {
+		// Add page-specific class to body
+		document.body.classList.add('repositories-page');
+
 		// Invalidate cache to get fresh data on navigation
 		invalidate('data:repositories');
 
@@ -190,6 +193,10 @@
 		// Start with cards centered
 		targetScrollY = -viewportHeight * 0.1;
 		scrollY = targetScrollY;
+
+		return () => {
+			document.body.classList.remove('repositories-page');
+		};
 	});
 
 	onDestroy(() => {
@@ -277,8 +284,7 @@
 </div>
 
 <style>
-	:global(html),
-	:global(body) {
+	:global(body.repositories-page) {
 		margin: 0;
 		padding: 0;
 		overflow: hidden;
