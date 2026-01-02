@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { createRequire } from 'module';
+import { pathToFileURL } from 'url';
 
 /**
  * Statue Themes Vite Plugin
@@ -14,11 +15,10 @@ import { createRequire } from 'module';
  * In vite.config.js:
  * ```js
  * import { statueThemesPlugin } from 'statue-ssg/vite-plugin';
- * import { siteConfig } from './site.config.js';
  * 
  * export default defineConfig({
  *   plugins: [
- *     statueThemesPlugin(siteConfig.theme || {}),
+ *     statueThemesPlugin(),  // Auto-detects site.config.js
  *     sveltekit()
  *   ]
  * });
@@ -39,9 +39,9 @@ import { createRequire } from 'module';
  * };
  * ```
  * 
- * @param {Object} options - Plugin options (read from site.config.js)
- * @param {string} options.default - Default theme name (required if multiple themes)
- * @param {Array<{name: string, path: string}>} options.themes - Array of theme definitions
+ * @param {Object} [options] - Optional plugin options (auto-detected from site.config.js if not provided)
+ * @param {string} [options.default] - Default theme name (required if multiple themes)
+ * @param {Array<{name: string, path: string}>} [options.themes] - Array of theme definitions
  */
 export function statueThemesPlugin(options = {}) {
 	const virtualModuleId = 'virtual:statue-themes';
@@ -54,15 +54,36 @@ export function statueThemesPlugin(options = {}) {
 	let defaultTheme = '';
 	let generatedCSS = '';
 	let projectRoot = '';
+	let configOptions = options;
 
 	return {
 		name: 'statue-themes',
 
-		configResolved(config) {
+		async configResolved(config) {
 			projectRoot = config.root;
 
+			// Auto-detect site.config.js if no options provided
+			if (!configOptions.themes || configOptions.themes.length === 0) {
+				const siteConfigPath = path.resolve(projectRoot, 'site.config.js');
+				
+				if (fs.existsSync(siteConfigPath)) {
+					try {
+						// Dynamic import of site.config.js
+						const siteConfigUrl = pathToFileURL(siteConfigPath).href;
+						const { siteConfig } = await import(siteConfigUrl);
+						
+						if (siteConfig?.theme) {
+							configOptions = siteConfig.theme;
+							console.log('[statue-themes] Auto-detected theme config from site.config.js');
+						}
+					} catch (error) {
+						console.warn('[statue-themes] Failed to auto-detect site.config.js:', error.message);
+					}
+				}
+			}
+
 			// Validate configuration
-			const themes = options.themes || [];
+			const themes = configOptions.themes || [];
 
 			if (themes.length === 0) {
 				// No themes configured - use a sensible default
@@ -70,16 +91,16 @@ export function statueThemesPlugin(options = {}) {
 				themes.push({ name: 'black-white', path: 'statue-ssg/themes/black-white.css' });
 			}
 
-			// Validate default theme requirement
-			if (themes.length > 1 && !options.default) {
-				throw new Error(
-					'[statue-themes] Multiple themes configured but no default specified. ' +
-						'Please set theme.default in site.config.js'
-				);
-			}
+		// Validate default theme requirement
+		if (themes.length > 1 && !configOptions.default) {
+			throw new Error(
+				'[statue-themes] Multiple themes configured but no default specified. ' +
+					'Please set theme.default in site.config.js'
+			);
+		}
 
-			// Set default theme
-			defaultTheme = options.default || themes[0].name;
+		// Set default theme
+		defaultTheme = configOptions.default || themes[0].name;
 
 			// Validate default theme exists in themes array
 			const defaultExists = themes.some((t) => toKebabCase(t.name) === toKebabCase(defaultTheme));

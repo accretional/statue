@@ -5,14 +5,13 @@ import path from 'path';
 // For library development, import from local vite-plugin
 // For consumers: import { statueThemesPlugin } from 'statue-ssg/vite-plugin';
 import { statueThemesPlugin } from './vite-plugin/index.js';
-import { siteConfig } from './site.config.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default defineConfig({
 	plugins: [
-		statueThemesPlugin(siteConfig.theme || {}),
+		statueThemesPlugin(), // Auto-detects site.config.js
 		sveltekit()
 	],
 
