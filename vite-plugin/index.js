@@ -193,12 +193,9 @@ function resolveThemePath(themePath, projectRoot) {
 	if (!themePath.startsWith('.') && !themePath.startsWith('/')) {
 		try {
 			const require = createRequire(projectRoot + '/package.json');
-			// Try to resolve from node_modules
-			const packageName = themePath.split('/')[0];
-			const packagePath = require.resolve(packageName + '/package.json');
-			const packageDir = path.dirname(packagePath);
-			const relativePath = themePath.substring(packageName.length + 1);
-			return path.join(packageDir, relativePath);
+			// Resolve the full import path (honors package.json exports)
+			const resolvedPath = require.resolve(themePath);
+			return resolvedPath;
 		} catch (e) {
 			// If package resolution fails, try as relative path
 			return path.resolve(projectRoot, themePath);
