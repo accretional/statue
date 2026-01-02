@@ -1,65 +1,15 @@
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+/**
+ * Theme exports - Re-exported from virtual module
+ * 
+ * The actual theme data is parsed at build time by the statue-themes Vite plugin
+ * from the configuration in site.config.js. This module provides a clean
+ * re-export interface that works in both browser and server contexts.
+ * 
+ * No filesystem operations at runtime!
+ */
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// Re-export everything from the virtual module
+export { themes, defaultTheme, showSelector } from 'virtual:statue-themes';
 
-export interface ThemeDefinition {
-	id: string;
-	name: string;
-	colors: Record<string, string>;
-}
-
-function parseCSSTheme(cssContent: string): Record<string, string> {
-	const colors: Record<string, string> = {};
-	const themeBlockMatch = cssContent.match(/@theme\s*{([^}]*)}/s);
-
-	if (themeBlockMatch) {
-		const themeContent = themeBlockMatch[1];
-		const colorRegex = /--color-([a-z-]+):\s*([^;]+);/g;
-		let match;
-
-		while ((match = colorRegex.exec(themeContent)) !== null) {
-			const key = match[1];
-			const value = match[2].trim();
-			colors[key] = value;
-		}
-	}
-
-	return colors;
-}
-
-function extractThemeName(cssContent: string): string | null {
-	const commentMatch = cssContent.match(/\/\*\s*([^*]+?)\s*(?:Theme)?\s*\*\//);
-	if (commentMatch) {
-		return commentMatch[1].replace(/\s+Theme$/, '').trim();
-	}
-	return null;
-}
-
-function loadThemes(): ThemeDefinition[] {
-	const themesDir = path.join(__dirname);
-	const files = fs.readdirSync(themesDir);
-	const themes: ThemeDefinition[] = [];
-
-	for (const file of files) {
-		if (file.endsWith('.css') && !file.includes('template')) {
-			const filePath = path.join(themesDir, file);
-			const cssContent = fs.readFileSync(filePath, 'utf-8');
-			const colors = parseCSSTheme(cssContent);
-
-			if (Object.keys(colors).length > 0) {
-				const id = file.replace('.css', '');
-				const name = extractThemeName(cssContent) || id.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-
-				themes.push({ id, name, colors });
-			}
-		}
-	}
-
-	return themes.sort((a, b) => a.name.localeCompare(b.name));
-}
-
-export const themes = loadThemes();
-export const defaultTheme = 'black-white';
+// Re-export the type
+export type { ThemeDefinition } from 'virtual:statue-themes';

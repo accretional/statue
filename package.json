@@ -18,6 +18,7 @@
 		},
 		"./components/*": "./src/lib/components/*",
 		"./themes/*": "./src/lib/themes/*",
+		"./vite-plugin": "./src/vite-plugin/statue-themes.js",
 		"./styles.css": "./src/lib/index.css",
 		"./resources/*": "./resources/*",
 		"./package.json": "./package.json"
