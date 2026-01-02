@@ -5,9 +5,39 @@ import { createRequire } from 'module';
 /**
  * Statue Themes Vite Plugin
  * 
- * Parses theme CSS files at build time and provides:
- * 1. A virtual module 'virtual:statue-themes' with theme data
+ * Automatically parses theme CSS files at build time and provides:
+ * 1. A virtual module 'virtual:statue-themes' with theme data (for ThemeSelector component)
  * 2. A virtual CSS module 'virtual:statue-themes.css' with combined theme CSS
+ * 
+ * USAGE (for statue-ssg consumers):
+ * 
+ * In vite.config.js:
+ * ```js
+ * import { statueThemesPlugin } from 'statue-ssg/vite-plugin';
+ * import { siteConfig } from './site.config.js';
+ * 
+ * export default defineConfig({
+ *   plugins: [
+ *     statueThemesPlugin(siteConfig.theme || {}),
+ *     sveltekit()
+ *   ]
+ * });
+ * ```
+ * 
+ * In site.config.js:
+ * ```js
+ * export const siteConfig = {
+ *   theme: {
+ *     default: 'Blue',  // Required if multiple themes
+ *     themes: [
+ *       { name: 'Blue', path: 'statue-ssg/themes/blue.css' },
+ *       { name: 'Red', path: 'statue-ssg/themes/red.css' },
+ *       // Or use custom themes:
+ *       { name: 'Custom', path: './src/lib/themes/custom.css' }
+ *     ]
+ *   }
+ * };
+ * ```
  * 
  * @param {Object} options - Plugin options (read from site.config.js)
  * @param {string} options.default - Default theme name (required if multiple themes)
