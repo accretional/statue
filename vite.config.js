@@ -2,9 +2,7 @@ import { defineConfig } from 'vite';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { fileURLToPath } from 'url';
 import path from 'path';
-// For library development, import from local vite-plugin
-// For consumers: import { statueThemesPlugin } from 'statue-ssg/vite-plugin';
-import { statueThemesPlugin } from './vite-plugin/index.js';
+import { statueThemesPlugin } from 'statue-ssg/vite-plugin';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
