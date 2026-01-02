@@ -21,24 +21,14 @@ async function setupStatueSSG(options = {}) {
     console.log(chalk.green('✓ content copied'));
   }
 
-  // 2. Copy resources (static, scripts, etc.)
-  // First: shared resources (favicon, robots.txt, etc.) - base layer
-  const sharedDir = path.join(sourceDir, 'resources/shared');
+  // 2. Copy shared resources (favicon, robots.txt, etc.) - base layer
+  const sharedDir = path.join(sourceDir, 'resources');
   if (fs.existsSync(sharedDir)) {
     fs.copySync(sharedDir, path.join(targetDir, 'static'), { overwrite: true });
     console.log(chalk.green('✓ shared resources copied'));
   }
 
-  // Second: template-specific resources (full overlay - static/, scripts/, etc.)
-  const templateResourceDir = path.join(sourceDir, 'resources', templateName);
-  const defaultResourceDir = path.join(sourceDir, 'resources/default');
-  const resourceSource = fs.existsSync(templateResourceDir) ? templateResourceDir : defaultResourceDir;
-  if (fs.existsSync(resourceSource)) {
-    fs.copySync(resourceSource, targetDir, { overwrite: true });
-    console.log(chalk.green('✓ template resources copied'));
-  }
-
-  // 3. Copy template (src + site.config.js)
+  // 3. Copy template (src + site.config.js + static + scripts)
   // Always copy base files first (app.html, lib/index.css), then template overrides
   fs.copySync(path.join(sourceDir, 'src/app.html'), path.join(targetDir, 'src/app.html'), { overwrite: true });
   fs.ensureDirSync(path.join(targetDir, 'src/lib'));
@@ -56,6 +46,19 @@ async function setupStatueSSG(options = {}) {
   }
 
   fs.copySync(path.join(templateDir, 'site.config.js'), path.join(targetDir, 'site.config.js'), { overwrite: true });
+
+  // Copy template's static if exists (overlay on shared resources)
+  const templateStaticDir = path.join(templateDir, 'static');
+  if (fs.existsSync(templateStaticDir)) {
+    fs.copySync(templateStaticDir, path.join(targetDir, 'static'), { overwrite: true });
+  }
+
+  // Copy template's scripts if exists
+  const templateScriptsDir = path.join(templateDir, 'scripts');
+  if (fs.existsSync(templateScriptsDir)) {
+    fs.copySync(templateScriptsDir, path.join(targetDir, 'scripts'), { overwrite: true });
+  }
+
   console.log(chalk.green(`✓ ${templateName} template copied`));
 
   // 4. Copy build configs (svelte, vite, postcss) - always from root 
