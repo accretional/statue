@@ -55,8 +55,3 @@ export { default as SlidingTestimonial } from './components/SlidingTestimonial.s
 
 // Theme components
 export { default as ThemeSelector } from './components/ThemeSelector.svelte';
-
-// Theme utilities (for advanced users)
-// These are re-exported from the virtual module provided by the Vite plugin
-export { themes, defaultTheme, showSelector } from './themes/index.js';
-export type { ThemeDefinition } from './themes/index.js';
