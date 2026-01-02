@@ -288,8 +288,12 @@ SELECTED_THEME="${THEMES[$RANDOM_INDEX]}"
 
 # Update line 3 of index.css (the theme import line)
 if [ -f "$INDEX_CSS_PATH" ]; then
-    # Use sed to replace the theme import on line 3
-    sed -i '' "3s|@import \"statue-ssg/themes/.*\";|@import \"statue-ssg/themes/${SELECTED_THEME}\";|" "$INDEX_CSS_PATH"
+    # Cross-platform sed: macOS uses -i '', Linux uses -i
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        sed -i '' "3s|@import \"statue-ssg/themes/.*\";|@import \"statue-ssg/themes/${SELECTED_THEME}\";|" "$INDEX_CSS_PATH"
+    else
+        sed -i "3s|@import \"statue-ssg/themes/.*\";|@import \"statue-ssg/themes/${SELECTED_THEME}\";|" "$INDEX_CSS_PATH"
+    fi
     echo -e "  ${GREEN}✓${NC} Theme set to: ${BLUE}${SELECTED_THEME%.css}${NC}"
 else
     echo -e "  ${YELLOW}⚠${NC} Could not find index.css at $INDEX_CSS_PATH"
@@ -321,40 +325,41 @@ echo -e "    - src/lib/index.css (theme)"
 echo ""
 
 # ========================================
-# AUTO REFRESH BROWSER
+# AUTO REFRESH BROWSER (macOS only)
 # Refreshes localhost in Chrome/Safari
 # ========================================
-echo -e "${YELLOW}Refreshing browser...${NC}"
-
-# Try Chrome first, then Safari
-if osascript -e 'tell application "Google Chrome"
-    set found to false
-    repeat with w in windows
-        repeat with t in tabs of w
-            if URL of t contains "localhost" then
-                tell t to reload
-                set found to true
-            end if
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    echo -e "${YELLOW}Refreshing browser...${NC}"
+    # Try Chrome first, then Safari
+    if osascript -e 'tell application "Google Chrome"
+        set found to false
+        repeat with w in windows
+            repeat with t in tabs of w
+                if URL of t contains "localhost" then
+                    tell t to reload
+                    set found to true
+                end if
+            end repeat
         end repeat
-    end repeat
-    return found
-end tell' 2>/dev/null | grep -q "true"; then
-    echo -e "  ${GREEN}✓${NC} Refreshed Chrome"
-elif osascript -e 'tell application "Safari"
-    set found to false
-    repeat with w in windows
-        repeat with t in tabs of w
-            if URL of t contains "localhost" then
-                tell t to do JavaScript "location.reload()"
-                set found to true
-            end if
+        return found
+    end tell' 2>/dev/null | grep -q "true"; then
+        echo -e "  ${GREEN}✓${NC} Refreshed Chrome"
+    elif osascript -e 'tell application "Safari"
+        set found to false
+        repeat with w in windows
+            repeat with t in tabs of w
+                if URL of t contains "localhost" then
+                    tell t to do JavaScript "location.reload()"
+                    set found to true
+                end if
+            end repeat
         end repeat
-    end repeat
-    return found
-end tell' 2>/dev/null | grep -q "true"; then
-    echo -e "  ${GREEN}✓${NC} Refreshed Safari"
-else
-    echo -e "  ${YELLOW}⚠${NC} No localhost tab found in Chrome/Safari"
+        return found
+    end tell' 2>/dev/null | grep -q "true"; then
+        echo -e "  ${GREEN}✓${NC} Refreshed Safari"
+    else
+        echo -e "  ${YELLOW}⚠${NC} No localhost tab found in Chrome/Safari"
+    fi
 fi
 # ========================================
 # END AUTO REFRESH BROWSER
