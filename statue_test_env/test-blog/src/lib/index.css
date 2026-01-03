@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+/* Theme selection - Default for new projects */
+@import "statue-ssg/themes/black-white.css";
+
+/* Tailwind v4 content config */
+@source "../";
+@source "../../node_modules/statue-ssg/src/**/*.{svelte,js,ts}";
+
+:root {
+  color-scheme: dark;
+}
+
+@layer utilities {
+  .bg-surface { background-color: var(--color-card); }
+  .glass-bg { background-color: color-mix(in srgb, var(--color-card) 78%, transparent); }
+  .glass-border { border-color: color-mix(in srgb, var(--color-border) 70%, transparent); }
+}

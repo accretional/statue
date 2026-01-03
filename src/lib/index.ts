@@ -52,3 +52,4 @@ export { default as SlidingComparison } from './components/SlidingComparison.sve
 export { default as SlidingTestimonial } from './components/SlidingTestimonial.svelte';
 
 export { default as Table } from './components/Table.svelte';
+export { default as SQLite } from './components/SQLite.svelte';
