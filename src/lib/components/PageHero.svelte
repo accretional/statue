@@ -10,7 +10,7 @@
       {title}
     </h1>
     {#if description}
-      <p class="text-xl text-gray-300 mb-8">
+      <p class="text-xl text-[var(--color-muted)] mb-8">
         {description}
       </p>
     {/if}

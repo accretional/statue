@@ -113,7 +113,7 @@
   }
 
   .open-source-section {
-    background: rgba(31, 41, 55, 0.5);
+    background: var(--color-card);
     border: 2px solid var(--color-primary, #FFFFFF);
     border-radius: 1.5rem;
     padding: 4rem 3rem;
@@ -199,14 +199,14 @@
   }
 
   .contribution-item {
-    background: rgba(31, 41, 55, 0.3);
+    background: var(--color-background);
     border-radius: 0.75rem;
     padding: 2rem;
     transition: all 0.3s ease;
   }
 
   .contribution-item:hover {
-    background: rgba(31, 41, 55, 0.5);
+    background: var(--color-card);
     transform: translateY(-2px);
   }
 
@@ -262,7 +262,7 @@
   }
 
   .cta-button-secondary:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--color-card);
     transform: translateY(-2px);
   }
 
