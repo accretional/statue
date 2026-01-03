@@ -7,14 +7,14 @@
   function getWarningClass(type) {
     switch (type) {
       case 'error':
-        return 'bg-red-900/20 border-red-500 text-red-200';
+        return 'warning-error';
       case 'warning':
-        return 'bg-yellow-900/20 border-yellow-500 text-yellow-200';
+        return 'warning-warning';
       case 'success':
-        return 'bg-green-900/20 border-green-500 text-green-200';
+        return 'warning-success';
       case 'info':
       default:
-        return 'bg-blue-900/20 border-blue-500 text-blue-200';
+        return 'warning-info';
     }
   }
   
@@ -56,3 +56,29 @@
     </div>
   </div>
 {/if} 
+<style>
+  /* Warning component styles using theme variables */
+  .warning-error {
+    background: color-mix(in srgb, var(--color-accent) 20%, transparent);
+    border-color: var(--color-accent);
+    color: var(--color-foreground);
+  }
+
+  .warning-warning {
+    background: color-mix(in srgb, #eab308 20%, transparent);
+    border-color: #eab308;
+    color: var(--color-foreground);
+  }
+
+  .warning-success {
+    background: color-mix(in srgb, #10b981 20%, transparent);
+    border-color: #10b981;
+    color: var(--color-foreground);
+  }
+
+  .warning-info {
+    background: color-mix(in srgb, var(--color-primary) 20%, transparent);
+    border-color: var(--color-primary);
+    color: var(--color-foreground);
+  }
+</style>
