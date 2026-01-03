@@ -1,15 +1,8 @@
-<script lang="ts">
+<script>
 	import { goto } from '$app/navigation';
 
-	interface TimelineItem {
-		type: 'work' | 'education' | 'award' | 'project';
-		title: string;
-		role?: string;
-		date: string;
-		color: string;
-	}
-
-	const PREVIEW_DATA: TimelineItem[] = [
+	// Items to display
+	export let items = [
 		{
 			type: 'work',
 			title: 'Tech Innovations Inc.',
@@ -37,7 +30,7 @@
 	</div>
 
 	<div class="experience-list">
-		{#each PREVIEW_DATA as item}
+		{#each items as item}
 			<div class="exp-item">
 				<div class="exp-icon" style="background: {item.color}">
 					{#if item.type === 'work'}

@@ -3,21 +3,8 @@
 	import * as THREE from 'three';
 	import { browser } from '$app/environment';
 
-	// --- TYPES ---
-	interface TimelineItem {
-		type: 'work' | 'education' | 'award' | 'project';
-		title: string;
-		role?: string;
-		date: string;
-		year: number; // Added specific year for the counter
-		hash: string;
-		description: string;
-		color: string;
-        colorVar?: string;
-	}
-
-	// --- DATA ---
-	const DATA: TimelineItem[] = [
+	// Timeline data
+	export let timelineItems = [
 		{
 			type: 'education',
 			title: 'University of Technology',
@@ -89,7 +76,7 @@
 	// Constants
 	const SECTION_HEIGHT = 1500; // Pixels per section
 	const CURVE_POINTS = 50;
-    const START_YEAR = DATA[0].year;
+    const START_YEAR = timelineItems[0].year;
     const END_YEAR = new Date().getFullYear();
 
     function getThemeColor(variable: string, fallback: string): string {
@@ -136,7 +123,7 @@
 		// 4. Path (The Git Branch)
 		// Create a wavy path
 		const points = [];
-		for (let i = 0; i <= DATA.length; i++) {
+		for (let i = 0; i <= timelineItems.length; i++) {
 			points.push(new THREE.Vector3(
 				Math.sin(i * 1.5) * 5, // X weave
 				-i * 10,             // Y down
@@ -163,12 +150,12 @@
         scene.add(core);
 
 		// 5. Nodes (Commits)
-		DATA.forEach((item, index) => {
+		timelineItems.forEach((item, index) => {
 			const group = new THREE.Group();
 			
             // Position along curve
             // We want nodes at 0.1, 0.3, 0.5 etc. relative to path length
-            const t = (index + 0.5) / DATA.length;
+            const t = (index + 0.5) / timelineItems.length;
 			const pos = curve.getPoint(t);
             const tangent = curve.getTangent(t);
             
@@ -255,7 +242,7 @@
         currentScroll += (targetScroll - currentScroll) * 0.05;
 
         // Calculate progress (0 to 1)
-        const totalHeight = DATA.length * SECTION_HEIGHT;
+        const totalHeight = timelineItems.length * SECTION_HEIGHT;
         let progress = currentScroll / totalHeight;
         
         // Clamp progress
@@ -301,8 +288,8 @@
         });
 
         // Determine Active Chapter
-        const nodeIndex = Math.floor((progress * DATA.length));
-        if (nodeIndex >= 0 && nodeIndex < DATA.length) {
+        const nodeIndex = Math.floor((progress * timelineItems.length));
+        if (nodeIndex >= 0 && nodeIndex < timelineItems.length) {
              activeIndex = nodeIndex;
         } else {
             activeIndex = -1;
@@ -317,7 +304,7 @@
 </svelte:head>
 
 <!-- Spacer for scrolling -->
-<div class="scroll-spacer" style="height: {(DATA.length + 0.5) * SECTION_HEIGHT}px;"></div>
+<div class="scroll-spacer" style="height: {(timelineItems.length + 0.5) * SECTION_HEIGHT}px;"></div>
 
 <!-- 3D Canvas Container -->
 <div class="canvas-container" bind:this={container}></div>
@@ -337,7 +324,7 @@
     </div>
     
     <div class="hud-center">
-        {#each DATA as item, i}
+        {#each timelineItems as item, i}
             <div class="experience-card {activeIndex === i ? 'active' : ''}" style="--acc: {item.colorVar ? `var(${item.colorVar}, ${item.color})` : item.color}">
                 <div class="exp-icon" style="background: {item.colorVar ? `var(${item.colorVar}, ${item.color})` : item.color}">
                     {#if item.type === 'work'}
