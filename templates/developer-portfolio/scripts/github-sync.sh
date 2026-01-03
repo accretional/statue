@@ -31,10 +31,16 @@ else
     fi
 fi
 
+# If still no username, prompt the user
 if [ -z "$USERNAME" ]; then
-    echo -e "${RED}Error: Could not detect GitHub username.${NC}"
-    echo "Usage: $0 [github-username]"
-    exit 1
+    echo -e "${YELLOW}Could not detect GitHub username automatically.${NC}"
+    echo -n -e "${BLUE}Please enter your GitHub username: ${NC}"
+    read USERNAME < /dev/tty
+
+    if [ -z "$USERNAME" ]; then
+        echo -e "${RED}Error: GitHub username is required.${NC}"
+        exit 1
+    fi
 fi
 
 echo -e "${BLUE}Syncing GitHub data for: ${GREEN}$USERNAME${NC}"
