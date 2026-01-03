@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url';
 import path from 'path';
 import fs from 'fs';
 import sirv from 'sirv';
+import { statueThemesPlugin } from 'statue-ssg/vite-plugin';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -20,7 +21,11 @@ const serveResources = () => ({
 });
 
 export default defineConfig({
-	plugins: [sveltekit(), serveResources()],
+	plugins: [
+		statueThemesPlugin(), // Auto-detects site.config.js
+		sveltekit(),
+		serveResources()
+	],
 
 	resolve: {
 		alias: {

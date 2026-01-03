@@ -1,8 +1,9 @@
 <script>
-	import { NavigationBar, Footer } from 'statue-ssg';
+	import { NavigationBar, Footer, ThemeSelector } from 'statue-ssg';
 	import { page } from '$app/stores';
 	import { onNavigate } from '$app/navigation';
 	import '$lib/index.css';
+	import 'virtual:statue-themes.css';
 
 	let { data, children } = $props();
 

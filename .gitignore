@@ -27,3 +27,6 @@ statue_test_env/
 
 # Default template backup (local only)
 templates/_default/
+
+# Theme selection (local dev preference)
+.statue-theme

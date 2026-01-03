@@ -6,38 +6,130 @@ icon: palette
 
 # Themes
 
+Statue's theme system allows you to configure multiple themes and switch between them at runtime. Themes are defined using CSS custom properties (`--color-*` variables) and loaded at build time through a Vite plugin.
+
 > **Created a custom theme?** Share it with the Statue community! Contributing themes takes just one command. **[Contribute a theme →](https://github.com/accretional/statue/blob/main/ADDING_THEMES.md)**
 
-## Change Your Theme
+## Quick Start
 
-**Edit `src/lib/index.css` and change one line:**
+### 1. Configure the Vite Plugin
 
-```css
-@import "tailwindcss";
-@import "statue-ssg/themes/blue.css";  /* Change this line */
+**Add to `vite.config.js`:**
 
-@source "../";
-@source "../../node_modules/statue-ssg/src/**/*.{svelte,js,ts}";
+```js
+import { defineConfig } from 'vite';
+import { sveltekit } from '@sveltejs/kit/vite';
+import { statueThemesPlugin } from 'statue-ssg/vite-plugin';
+
+export default defineConfig({
+  plugins: [
+    statueThemesPlugin(), // Auto-detects site.config.js
+    sveltekit()
+  ]
+});
 ```
 
-Your entire site now uses the new theme.
+### 2. Configure Your Themes
+
+**Add to `site.config.js`:**
+
+```js
+export const siteConfig = {
+  // ... other config
+  
+  theme: {
+    default: 'Blue',
+    themes: [
+      { name: 'Blue', path: 'statue-ssg/themes/blue.css' },
+      { name: 'Red', path: 'statue-ssg/themes/red.css' },
+      { name: 'Green', path: 'statue-ssg/themes/green.css' },
+      // Add more themes...
+    ]
+  }
+};
+```
+
+### 3. Import Theme CSS
+
+**Add to `src/routes/+layout.svelte`:**
+
+```svelte
+<script>
+  import { NavigationBar, Footer } from 'statue-ssg';
+  import 'virtual:statue-themes.css';
+  
+  export let data;
+</script>
+
+<NavigationBar />
+<slot />
+<Footer />
+```
+
+### 4. Add Theme Selector (Optional)
+
+**Add the ThemeSelector component to allow users to switch themes:**
+
+```svelte
+<script>
+  import { NavigationBar, Footer, ThemeSelector } from 'statue-ssg';
+  import 'virtual:statue-themes.css';
+  
+  export let data;
+</script>
+
+<NavigationBar />
+<ThemeSelector />
+
+<slot />
+
+<Footer />
+```
+
+That's it! Your site now supports multiple themes with runtime switching.
 
 ---
 
 ## Built-in Themes
 
-Pick one:
+Statue comes with 9 built-in themes:
 
-```css
-@import "statue-ssg/themes/blue.css";        /* Navy + blue (default) */
-@import "statue-ssg/themes/red.css";         /* Dark red + red */
-@import "statue-ssg/themes/orange.css";      /* Brown + orange */
-@import "statue-ssg/themes/green.css";       /* Dark green + emerald */
-@import "statue-ssg/themes/purple.css";      /* Dark purple + purple */
-@import "statue-ssg/themes/cyan.css";        /* Dark cyan + cyan */
-@import "statue-ssg/themes/pink.css";        /* Dark pink + pink */
-@import "statue-ssg/themes/black-white.css"; /* Monochrome */
+```js
+{ name: 'Black & White', path: 'statue-ssg/themes/black-white.css' }  // Monochrome
+{ name: 'Blue', path: 'statue-ssg/themes/blue.css' }                  // Navy + blue
+{ name: 'Red', path: 'statue-ssg/themes/red.css' }                    // Dark red + red
+{ name: 'Green', path: 'statue-ssg/themes/green.css' }                // Dark green + emerald
+{ name: 'Purple', path: 'statue-ssg/themes/purple.css' }              // Dark purple + purple
+{ name: 'Cyan', path: 'statue-ssg/themes/cyan.css' }                  // Dark cyan + cyan
+{ name: 'Orange', path: 'statue-ssg/themes/orange.css' }              // Brown + orange
+{ name: 'Pink', path: 'statue-ssg/themes/pink.css' }                  // Dark pink + pink
+{ name: 'Charcoal', path: 'statue-ssg/themes/charcoal.css' }          // Warm neutral grays
 ```
+
+---
+
+## How It Works
+
+### Build Time
+
+The Vite plugin:
+1. Reads `site.config.js` and finds your theme configuration
+2. Parses each theme CSS file
+3. Extracts `--color-*` variables from `@theme {}` or `:root {}` blocks
+4. Generates combined CSS with:
+   - `:root { ... }` - Default theme variables (fallback)
+   - `html[data-theme="blue"] { ... }` - Blue theme variables
+   - `html[data-theme="red"] { ... }` - Red theme variables
+   - etc.
+
+### Runtime
+
+When a user selects a theme:
+1. The `ThemeSelector` component sets `data-theme` attribute on `<html>`
+2. CSS automatically cascades and applies the selected theme's variables
+3. Selection is saved to `localStorage` for persistence
+
+No page reload needed - theme switching is instant!
 
 ---
 
@@ -72,16 +164,21 @@ Pick one:
 }
 ```
 
-### 2. Import It
+### 2. Add to Config
 
-**Update `src/lib/index.css`:**
+**Update `site.config.js`:**
 
-```css
-@import "tailwindcss";
-@import "./themes/my-theme.css";  /* Your custom theme */
-
-@source "../";
-@source "../../node_modules/statue-ssg/src/**/*.{svelte,js,ts}";
+```js
+export const siteConfig = {
+  theme: {
+    default: 'My Theme',
+    themes: [
+      { name: 'My Theme', path: './src/lib/themes/my-theme.css' },
+      { name: 'Blue', path: 'statue-ssg/themes/blue.css' },
+      // ... other themes
+    ]
+  }
+};
 ```
 
 ### 3. Test It
@@ -90,7 +187,7 @@ Pick one:
 npm run dev
 ```
 
-Visit your pages to check the colors.
+Visit http://localhost:3000 and use the ThemeSelector to preview your theme!
 
 ---
 
@@ -115,6 +212,11 @@ Visit your pages to check the colors.
 | `--color-hero-to` | Hero gradient end |
 
 **Why:** Statue components use these variables for styling. Missing variables = broken styling.
+
+**Optional variables** (some themes define these):
+- `--color-prose-link` - Link color in markdown content
+- `--color-prose-code-bg` - Inline code background
+- `--color-prose-pre-bg` - Code block background
 
 ---
 
@@ -155,6 +257,56 @@ Use theme variables in Tailwind's arbitrary values:
 
 ---
 
+## Single Theme Setup
+
+If you only want one theme (no switching), you can simplify:
+
+**In `site.config.js`:**
+
+```js
+theme: {
+  themes: [
+    { name: 'Blue', path: 'statue-ssg/themes/blue.css' }
+  ]
+  // No 'default' needed for single theme
+}
+```
+
+The `ThemeSelector` component will automatically hide when only one theme is configured.
+
+---
+
+## Advanced: Programmatic Theme Access
+
+Build custom theme UI using the virtual module:
+
+```svelte
+<script>
+  import { themes, defaultTheme, showSelector } from 'virtual:statue-themes';
+  
+  function changeTheme(themeId) {
+    document.documentElement.dataset.theme = themeId;
+    localStorage.setItem('statue-theme', themeId);
+  }
+</script>
+
+{#if showSelector}
+  <div>
+    <h3>Choose a theme:</h3>
+    {#each themes as theme}
+      <button 
+        onclick={() => changeTheme(theme.id)}
+        class:active={theme.id === defaultTheme}
+      >
+        {theme.name}
+      </button>
+    {/each}
+  </div>
+{/if}
+```
+
+---
+
 ## Adding Custom Utilities
 
 **Add reusable styles to `src/lib/index.css`:**
@@ -180,20 +332,71 @@ Use theme variables in Tailwind's arbitrary values:
 
 ### Theme not applying
 
-1. Check the import path is correct
-2. Restart dev server: `npm run dev`
-3. Clear cache: `rm -rf .svelte-kit build && npm run dev`
+1. Check the Vite plugin is added to `vite.config.js`
+2. Verify theme config in `site.config.js` is correct
+3. Ensure you imported `virtual:statue-themes.css` in your layout
+4. Restart dev server: `npm run dev`
+5. Clear cache: `rm -rf .svelte-kit build && npm run dev`
+
+### Multiple themes configured but no default specified
+
+**Error:** `Multiple themes configured but no default specified`
+
+**Fix:** Add `default` to your theme config:
+
+```js
+theme: {
+  default: 'Blue',  // Add this
+  themes: [ /* ... */ ]
+}
+```
 
 ### Theme works in dev but not build
 
 Run `npm run build` to test. If it fails, check:
-- Theme file syntax is valid
+- Theme file syntax is valid (valid `@theme {}` or `:root {}` block)
 - Import path is correct
+- All required CSS variables are defined
 - No console errors
 
-### Want dark/light mode toggle?
+### Virtual module not found
 
-This requires custom JavaScript. See [Tailwind dark mode docs](https://tailwindcss.com/docs/dark-mode) for patterns you can adapt.
+**Error:** `Cannot find module 'virtual:statue-themes.css'`
+
+**Fix:** Make sure `statueThemesPlugin()` is added to `vite.config.js` **before** `sveltekit()`:
+
+```js
+plugins: [
+  statueThemesPlugin(), // Must come first
+  sveltekit()
+]
+```
+
+---
+
+## Migration from Old CSS Import Approach
+
+If you're upgrading from the old `@import` approach in `src/lib/index.css`:
+
+### Before (old approach):
+```css
+@import "tailwindcss";
+@import "statue-ssg/themes/blue.css";
+```
+
+### After (new approach):
+
+1. **Remove the theme import from `src/lib/index.css`:**
+```css
+@import "tailwindcss";
+/* Remove: @import "statue-ssg/themes/blue.css"; */
+```
+
+2. **Add plugin to `vite.config.js`** (see Quick Start above)
+
+3. **Configure themes in `site.config.js`** (see Quick Start above)
+
+4. **Import virtual CSS in layout** (see Quick Start above)
 
 ---
 
