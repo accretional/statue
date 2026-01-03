@@ -22,6 +22,7 @@ export { default as Warning } from './components/Warning.svelte';
 export { default as Signup } from './components/Signup.svelte';
 export { default as BuiltBy } from './components/BuiltBy.svelte';
 export { default as Search } from './components/Search.svelte';
+export { default as PdfViewer } from './components/PdfViewer.svelte';
 
 export { default as CollapsibleTree } from './components/CollapsibleTree.svelte';
 

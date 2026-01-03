@@ -1,4 +1,4 @@
-export default {
+export const siteConfig = {
   site: {
     name: 'My Personal Blog',
     description: 'Thoughts on code and life.',
