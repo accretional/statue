@@ -2,15 +2,29 @@ import { defineConfig } from 'vite';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { fileURLToPath } from 'url';
 import path from 'path';
+import fs from 'fs';
+import sirv from 'sirv';
 import { statueThemesPlugin } from 'statue-ssg/vite-plugin';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Serve resources/ as additional public directory for shared assets
+const serveResources = () => ({
+	name: 'serve-resources',
+	configureServer(server) {
+		const resourcesDir = path.resolve(__dirname, 'resources');
+		if (fs.existsSync(resourcesDir)) {
+			server.middlewares.use(sirv(resourcesDir, { dev: true }));
+		}
+	}
+});
+
 export default defineConfig({
 	plugins: [
 		statueThemesPlugin(), // Auto-detects site.config.js
-		sveltekit()
+		sveltekit(),
+		serveResources()
 	],
 
 	resolve: {

@@ -55,8 +55,29 @@ program
         await postinstall({ template: templateName });
       } else {
         console.error(chalk.red('❌ Internal Error: postinstall script is not exporting a function.'));
+        process.exit(1);
       }
-      
+
+      // Run template's post-setup script if exists (doesn't get copied to user project)
+      if (templateName !== 'default') {
+        const postSetupPath = path.join(packageDir, 'templates', templateName, 'post-setup.sh');
+        if (fs.existsSync(postSetupPath)) {
+          console.log(chalk.blue('\n📦 Running template setup wizard...'));
+
+          const { execSync } = await import('child_process');
+          try {
+            execSync(`bash "${postSetupPath}"`, {
+              cwd: process.cwd(),
+              stdio: 'inherit',
+              env: { ...process.env, PROJECT_DIR: process.cwd() }
+            });
+          } catch (setupError) {
+            console.log(chalk.yellow('⚠ Post-setup script failed, but installation completed.'));
+            console.log(chalk.gray('  You can run it manually later.'));
+          }
+        }
+      }
+
     } catch (error) {
       console.error(chalk.red('❌ Error initializing Statue SSG:'), error);
       process.exit(1);
