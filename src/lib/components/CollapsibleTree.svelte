@@ -78,10 +78,10 @@
   
   function getBadgeClass(badge) {
     const classes = {
-      completed: 'bg-[color:var(--color-accent)]/15 text-[color:var(--color-accent)]',
+      completed: 'bg-green-500/15 text-green-200',
       running: 'bg-[color:var(--color-primary)]/15 text-[color:var(--color-foreground)]',
       pending: 'bg-[color:var(--color-muted)]/20 text-[color:var(--color-muted)]',
-      error: 'bg-[color:var(--color-accent)]/15 text-[color:var(--color-accent)]'
+      error: 'bg-red-500/15 text-red-200'
     };
     return classes[badge] || classes.pending;
   }
