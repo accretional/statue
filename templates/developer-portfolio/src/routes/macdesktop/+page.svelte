@@ -41,14 +41,6 @@
 			defaultPosition: { x: 50, y: 50 },
 			iconComponent: Monitor,
 			color: '#2563eb'
-		},
-		{
-			id: 'youtube',
-			name: 'YouTube Video',
-			url: 'https://www.youtube.com/watch?v=LKFKy9_FyYo',
-			defaultPosition: { x: 650, y: 150 },
-			iconComponent: Youtube,
-			color: '#ff0000'
 		}
 	];
 
