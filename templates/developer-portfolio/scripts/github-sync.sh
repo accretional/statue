@@ -34,7 +34,7 @@ fi
 # If still no username, prompt the user
 if [ -z "$USERNAME" ]; then
     echo -e "${YELLOW}Could not detect GitHub username automatically.${NC}"
-    echo -n -e "${BLUE}Please enter your GitHub username: ${NC}"
+    echo -n -e "${YELLOW}Please enter your GitHub username: ${NC}"
     read USERNAME < /dev/tty
 
     if [ -z "$USERNAME" ]; then
@@ -322,51 +322,10 @@ echo -e "  ${BLUE}Repos:${NC} $REPO_COUNT (top 20 by stars saved)"
 echo -e "  ${BLUE}Contributions:${NC} ${CONTRIB_TOTAL:-N/A}"
 echo -e "  ${BLUE}Theme:${NC} ${SELECTED_THEME%.css}"
 echo ""
-echo -e "  ${YELLOW}Files updated:${NC}"
+echo -e "  ${YELLOW}Files synced:${NC}"
 echo -e "    - site.config.js"
 echo -e "    - static/repositories.json"
 echo -e "    - static/contributions.json"
 echo -e "    - static/avatar.jpg"
 echo -e "    - src/lib/index.css (theme)"
 echo ""
-
-# ========================================
-# AUTO REFRESH BROWSER (macOS only)
-# Refreshes localhost in Chrome/Safari
-# ========================================
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    echo -e "${YELLOW}Refreshing browser...${NC}"
-    # Try Chrome first, then Safari
-    if osascript -e 'tell application "Google Chrome"
-        set found to false
-        repeat with w in windows
-            repeat with t in tabs of w
-                if URL of t contains "localhost" then
-                    tell t to reload
-                    set found to true
-                end if
-            end repeat
-        end repeat
-        return found
-    end tell' 2>/dev/null | grep -q "true"; then
-        echo -e "  ${GREEN}✓${NC} Refreshed Chrome"
-    elif osascript -e 'tell application "Safari"
-        set found to false
-        repeat with w in windows
-            repeat with t in tabs of w
-                if URL of t contains "localhost" then
-                    tell t to do JavaScript "location.reload()"
-                    set found to true
-                end if
-            end repeat
-        end repeat
-        return found
-    end tell' 2>/dev/null | grep -q "true"; then
-        echo -e "  ${GREEN}✓${NC} Refreshed Safari"
-    else
-        echo -e "  ${YELLOW}⚠${NC} No localhost tab found in Chrome/Safari"
-    fi
-fi
-# ========================================
-# END AUTO REFRESH BROWSER
-# ========================================
