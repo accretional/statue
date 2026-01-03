@@ -1,0 +1,51 @@
+{
+	"name": "create-statue",
+	"version": "0.1.0",
+	"description": "Create statue-ssg projects with one command",
+	"type": "module",
+	"bin": {
+		"create-statue": "index.js"
+	},
+	"files": [
+		"index.js",
+		"dist",
+		"templates"
+	],
+	"scripts": {
+		"dev": "tsup --watch",
+		"build": "tsup",
+		"prepublishOnly": "npm run build",
+		"test": "node dist/index.js --help"
+	},
+	"keywords": [
+		"statue",
+		"ssg",
+		"sveltekit",
+		"create",
+		"cli",
+		"static-site"
+	],
+	"author": "Accretional",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/accretional/statue.git",
+		"directory": "packages/create-statue"
+	},
+	"engines": {
+		"node": ">=18.0.0"
+	},
+	"dependencies": {
+		"@clack/prompts": "^0.11.0",
+		"cross-spawn": "^7.0.6",
+		"fs-extra": "^11.3.0",
+		"picocolors": "^1.1.1"
+	},
+	"devDependencies": {
+		"@types/cross-spawn": "^6.0.6",
+		"@types/fs-extra": "^11.0.4",
+		"@types/node": "^20.0.0",
+		"tsup": "^8.0.0",
+		"typescript": "^5.0.0"
+	}
+}
