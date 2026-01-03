@@ -11,6 +11,28 @@ export const siteConfig = {
     author: "Statue Team"
   },
 
+  // Navigation bar configuration
+  navbar: {
+    // Site title displayed in the navbar (null to hide)
+    siteTitle: "Statue SSG",
+
+    // Logo image URL (null for default SVG icon)
+    logo: null,
+
+    // Default navigation items
+    defaultNavItems: [
+      { title: 'Home', url: '/' },
+      { title: 'About', url: '/about' }
+    ],
+
+    // CTA (Call to Action) button configuration
+    ctaButton: {
+      show: true,
+      text: 'Documentation',
+      url: '/docs'
+    }
+  },
+
   // Contact information
   contact: {
     // Main contact email

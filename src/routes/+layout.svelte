@@ -8,6 +8,7 @@
 
 	let globalDirectories = $derived(data.globalDirectories);
 	let searchConfig = $derived(data.searchConfig);
+	let navbarConfig = $derived(data.navbarConfig);
 	let currentPath = $derived($page.url.pathname);
 
 	// Enable View Transitions API only for blog pages
@@ -34,6 +35,10 @@
 	navbarItems={data.globalDirectories}
 	showSearch={data.searchConfig?.enabled ?? false}
 	searchPlaceholder={data.searchConfig?.placeholder ?? 'Search...'}
+	siteTitle={navbarConfig?.siteTitle ?? null}
+	logo={navbarConfig?.logo ?? null}
+	defaultNavItems={navbarConfig?.defaultNavItems ?? [{ title: 'Home', url: '/' }, { title: 'About', url: '/about' }]}
+	ctaButton={navbarConfig?.ctaButton ?? { show: true, text: 'Documentation', url: '/docs' }}
 />
 
 <main>
