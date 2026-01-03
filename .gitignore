@@ -25,3 +25,5 @@ vite.config.ts.timestamp-*statue_test_env/
 #db
 *.db
 static/*.db
+statue_test_env/
+*.tgz
