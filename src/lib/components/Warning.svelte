@@ -65,14 +65,14 @@
   }
 
   .warning-warning {
-    background: color-mix(in srgb, #eab308 20%, transparent);
-    border-color: #eab308;
+    background: color-mix(in srgb, var(--color-primary) 20%, transparent);
+    border-color: var(--color-primary);
     color: var(--color-foreground);
   }
 
   .warning-success {
-    background: color-mix(in srgb, #10b981 20%, transparent);
-    border-color: #10b981;
+    background: color-mix(in srgb, var(--color-accent) 20%, transparent);
+    border-color: var(--color-accent);
     color: var(--color-foreground);
   }
 
