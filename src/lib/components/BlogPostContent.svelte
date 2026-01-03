@@ -137,6 +137,19 @@
 				color: var(--color-foreground);
 			}
 
+			table {
+				th {
+					text-align: left;
+				}
+				th,
+				td {
+					padding: 0.5rem;
+				}
+				thead {
+					border-bottom: 1px solid var(--color-border);
+				}
+			}
+
 			/* Blockquote */
 			blockquote {
 				border-left: 3px solid var(--color-border);

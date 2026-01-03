@@ -52,7 +52,7 @@
 </script>
 
 <footer class="bg-card text-muted py-10 border-t border-border">
-	<div class="container mx-auto px-4">
+	<div class="container mx-auto px-6">
 		<div class="sitemap mt-6 pt-4 mb-8">
 			<div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
 				<div class="mb-4">
