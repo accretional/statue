@@ -31,6 +31,9 @@ declare module 'virtual:statue-themes' {
   
   /** Whether to show the theme selector (true if multiple themes configured) */
   export const showSelector: boolean;
+
+  /** localStorage key used for theme persistence */
+  export const THEME_STORAGE_KEY: string;
 }
 
 /**

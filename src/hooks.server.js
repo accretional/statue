@@ -1,4 +1,31 @@
 import { getAllContent, getContentDirectories } from '$lib/cms/content-processor';
+import { siteConfig } from '../site.config.js';
+
+/**
+ * Convert theme name to kebab-case ID (must match vite-plugin logic)
+ */
+function toKebabCase(str) {
+  return str
+    .toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9-]/g, '')
+    .replace(/-+/g, '-')        // Collapse multiple dashes
+    .replace(/^-|-$/g, '');     // Trim leading/trailing dashes
+}
+
+/**
+ * Get the default theme ID from site config
+ */
+function getDefaultThemeId() {
+  const themeConfig = siteConfig?.theme;
+  if (!themeConfig?.themes?.length) return 'default';
+
+  const defaultName = themeConfig.default || themeConfig.themes[0]?.name || 'default';
+  return toKebabCase(defaultName);
+}
+
+const DEFAULT_THEME_ID = getDefaultThemeId();
+const THEME_STORAGE_KEY = 'statue-theme';
 
 /** @type {import('@sveltejs/kit').Handle} */
 export async function handle({ event, resolve }) {
@@ -29,8 +56,18 @@ export async function handle({ event, resolve }) {
     });
   }
   
-  // Normal route processing
-  return await resolve(event);
+  // Normal route processing - inject theme script to prevent FOUC
+  return await resolve(event, {
+    transformPageChunk: ({ html }) => {
+      // Inject inline script that sets data-theme before any rendering
+      // This runs synchronously before CSS loads, preventing flash of wrong theme
+      // We also sanitize the stored value to match our kebab-case logic (collapsing dashes)
+      const themeScript = `<script>(function(){try{var t=localStorage.getItem('${THEME_STORAGE_KEY}');if(t){t=t.toLowerCase().replace(/\\s+/g,'-').replace(/[^a-z0-9-]/g,'').replace(/-+/g,'-').replace(/^-|-$/g,'');}document.documentElement.dataset.theme=t||'${DEFAULT_THEME_ID}';}catch(e){document.documentElement.dataset.theme='${DEFAULT_THEME_ID}';}})()</script>`;
+
+      // Insert right after <head> opening tag for earliest possible execution
+      return html.replace('<head>', '<head>' + themeScript);
+    }
+  });
 }
 
 /** @type {import('@sveltejs/kit').HandleServerError} */

@@ -8,7 +8,7 @@
   export let activePath = '';
   export let showSearch = false;
   export let searchPlaceholder = "Search...";
-  export let showThemeSelector = true; // Show by default
+  export let showThemeSelector = false; // Opt-in to avoid surprising existing users
 
   let isMenuOpen = false;
   let isHidden = false;

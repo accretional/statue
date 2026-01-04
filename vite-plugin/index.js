@@ -4,6 +4,12 @@ import { createRequire } from 'module';
 import { pathToFileURL } from 'url';
 
 /**
+ * localStorage key used for theme persistence
+ * Exported for use by ThemeSelector and other components
+ */
+export const THEME_STORAGE_KEY = 'statue-theme';
+
+/**
  * Statue Themes Vite Plugin
  * 
  * Automatically parses theme CSS files at build time and provides:
@@ -165,6 +171,7 @@ export function statueThemesPlugin(options = {}) {
 export const themes = ${JSON.stringify(themesForExport, null, 2)};
 export const defaultTheme = ${JSON.stringify(toKebabCase(defaultTheme))};
 export const showSelector = ${parsedThemes.length > 1};
+export const THEME_STORAGE_KEY = ${JSON.stringify(THEME_STORAGE_KEY)};
 `;
 			}
 
@@ -182,7 +189,9 @@ function toKebabCase(str) {
 	return str
 		.toLowerCase()
 		.replace(/\s+/g, '-')
-		.replace(/[^a-z0-9-]/g, '');
+		.replace(/[^a-z0-9-]/g, '')
+		.replace(/-+/g, '-')        // Collapse multiple dashes
+		.replace(/^-|-$/g, '');     // Trim leading/trailing dashes
 }
 
 /**

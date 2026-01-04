@@ -35,6 +35,7 @@
 	navbarItems={data.globalDirectories}
 	showSearch={data.searchConfig?.enabled ?? false}
 	searchPlaceholder={data.searchConfig?.placeholder ?? 'Search...'}
+	showThemeSelector={true}
 />
 
 <main>

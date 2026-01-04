@@ -1,11 +1,13 @@
 <script lang="ts">
-	import { themes, defaultTheme, showSelector } from 'virtual:statue-themes';
+	import { themes, defaultTheme, showSelector, THEME_STORAGE_KEY } from 'virtual:statue-themes';
 	import type { ThemeDefinition } from 'virtual:statue-themes';
 	import { browser } from '$app/environment';
 	import { onMount } from 'svelte';
 
 	let currentTheme = $state(defaultTheme);
 	let isOpen = $state(false);
+	let focusedIndex = $state(-1);
+	let dropdownRef: HTMLDivElement | null = $state(null);
 
 	/**
 	 * Apply theme by setting data-theme attribute on html element
@@ -26,16 +28,17 @@
 		currentTheme = themeId;
 		applyTheme(themeId);
 		isOpen = false;
+		focusedIndex = -1;
 
 		// Save to localStorage for persistence across page loads
-		localStorage.setItem('statue-theme', themeId);
+		localStorage.setItem(THEME_STORAGE_KEY, themeId);
 	}
 
 	onMount(() => {
 		if (!browser) return;
 
 		// Load saved theme from localStorage
-		const saved = localStorage.getItem('statue-theme');
+		const saved = localStorage.getItem(THEME_STORAGE_KEY);
 		if (saved && themes.find((t: ThemeDefinition) => t.id === saved)) {
 			currentTheme = saved;
 			applyTheme(saved);
@@ -47,17 +50,69 @@
 
 	function toggleDropdown() {
 		isOpen = !isOpen;
+		if (isOpen) {
+			// Set focus to current theme when opening
+			focusedIndex = themes.findIndex((t: ThemeDefinition) => t.id === currentTheme);
+		} else {
+			focusedIndex = -1;
+		}
 	}
 
 	function closeDropdown() {
 		isOpen = false;
+		focusedIndex = -1;
+	}
+
+	function handleKeydown(event: KeyboardEvent) {
+		if (!isOpen) {
+			// Open dropdown on Enter, Space, ArrowDown, or ArrowUp when closed
+			if (['Enter', ' ', 'ArrowDown', 'ArrowUp'].includes(event.key)) {
+				event.preventDefault();
+				toggleDropdown();
+			}
+			return;
+		}
+
+		switch (event.key) {
+			case 'Escape':
+				event.preventDefault();
+				closeDropdown();
+				break;
+			case 'ArrowDown':
+				event.preventDefault();
+				focusedIndex = (focusedIndex + 1) % themes.length;
+				break;
+			case 'ArrowUp':
+				event.preventDefault();
+				focusedIndex = focusedIndex <= 0 ? themes.length - 1 : focusedIndex - 1;
+				break;
+			case 'Enter':
+			case ' ':
+				event.preventDefault();
+				if (focusedIndex >= 0 && focusedIndex < themes.length) {
+					selectTheme(themes[focusedIndex].id);
+				}
+				break;
+			case 'Tab':
+				// Close dropdown on tab out
+				closeDropdown();
+				break;
+			case 'Home':
+				event.preventDefault();
+				focusedIndex = 0;
+				break;
+			case 'End':
+				event.preventDefault();
+				focusedIndex = themes.length - 1;
+				break;
+		}
 	}
 
 	// Get current theme object for display
 	let currentThemeObj = $derived(themes.find((t: ThemeDefinition) => t.id === currentTheme) || themes[0]);
 </script>
 
-<svelte:window onclick={closeDropdown} />
+<svelte:window onclick={closeDropdown} onkeydown={(e) => { if (e.key === 'Escape' && isOpen) closeDropdown(); }} />
 
 {#if showSelector && themes.length > 1}
 	<div class="relative">
@@ -66,6 +121,7 @@
 				e.stopPropagation();
 				toggleDropdown();
 			}}
+			onkeydown={handleKeydown}
 			class="flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--color-card)] border border-[var(--color-border)] text-[var(--color-foreground)] hover:bg-[var(--color-primary)] hover:text-[var(--color-on-primary)] transition-colors"
 			aria-label="Switch theme"
 			aria-expanded={isOpen}
@@ -106,19 +162,26 @@
 
 		{#if isOpen}
 			<div
+				bind:this={dropdownRef}
 				class="absolute right-0 mt-2 w-48 rounded-lg bg-[var(--color-card)] border border-[var(--color-border)] shadow-lg z-50"
 				role="listbox"
+				tabindex="-1"
 				aria-label="Theme options"
+				aria-activedescendant={focusedIndex >= 0 ? `theme-option-${themes[focusedIndex].id}` : undefined}
 				onclick={(e) => e.stopPropagation()}
+				onkeydown={(e) => e.stopPropagation()}
 			>
 				<div class="py-1">
-					{#each themes as theme (theme.id)}
+					{#each themes as theme, index (theme.id)}
 						<button
+							id="theme-option-{theme.id}"
 							onclick={() => selectTheme(theme.id)}
 							class="w-full flex items-center gap-3 px-4 py-2 text-left text-sm hover:bg-[var(--color-primary)] hover:text-[var(--color-on-primary)] transition-colors {currentTheme ===
 							theme.id
 								? 'bg-[var(--color-primary)] text-[var(--color-on-primary)]'
-								: 'text-[var(--color-foreground)]'}"
+								: 'text-[var(--color-foreground)]'} {focusedIndex === index && currentTheme !== theme.id
+								? 'outline outline-2 outline-[var(--color-primary)]'
+								: ''}"
 							role="option"
 							aria-selected={currentTheme === theme.id}
 						>
