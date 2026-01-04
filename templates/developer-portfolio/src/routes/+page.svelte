@@ -153,11 +153,17 @@
 
 <div class="page-container">
 	<main class="main-content">
-		<!-- Left repos -->
+		<!-- Left repos / Experience -->
 		<div class="repo-column left">
-			{#each leftRepos as repo}
-				<RepoCard {repo} />
-			{/each}
+			{#if features.showExperience}
+				<div class="timeline-widget-container left-timeline">
+					<TimelineWidget />
+				</div>
+			{:else}
+				{#each leftRepos as repo}
+					<RepoCard {repo} />
+				{/each}
+			{/if}
 		</div>
 
 		<!-- Center: Profile Sidebar -->
@@ -171,13 +177,6 @@
 				<RepoCard {repo} />
 			{/each}
 			<a href="/repositoriespage" class="view-all-repos">view all repos</a>
-
-			<!-- Timeline Widget -->
-			{#if features.showExperience}
-				<div class="timeline-widget-container">
-					<TimelineWidget />
-				</div>
-			{/if}
 		</div>
 	</main>
 
@@ -188,16 +187,15 @@
 
 	<!-- Mobile: All Repos below profile -->
 	<div class="mobile-repos">
-		{#each repositories as repo}
-			<RepoCard {repo} />
-		{/each}
-
-		<!-- Mobile Timeline Widget -->
 		{#if features.showExperience}
 			<div class="mobile-timeline-widget">
 				<TimelineWidget />
 			</div>
 		{/if}
+
+		{#each repositories as repo}
+			<RepoCard {repo} />
+		{/each}
 	</div>
 
 	<!-- Mac Desktop Button -->
