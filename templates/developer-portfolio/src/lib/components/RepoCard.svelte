@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Star, GitFork, Code } from 'lucide-svelte';
+	import { Star, GitFork } from 'lucide-svelte';
 
 	export let repo: {
 		name: string;
@@ -31,10 +31,10 @@
 			</div>
 			<a
 				href="/github1s/{repoPath}"
-				class="p-1.5 rounded-md text-fg-muted hover:text-accent-fg hover:bg-canvas-subtle transition-colors"
+				class="view-code-link"
 				title="Open in VS Code"
 			>
-				<Code size={14} />
+				&lt;View Code&gt;
 			</a>
 		</div>
 		<p class="text-xs text-fg-muted mb-4 line-clamp-2">
@@ -63,3 +63,20 @@
 		{/if}
 	</div>
 </div>
+
+<style>
+	.view-code-link {
+		font-size: 0.75rem;
+		color: var(--fg-muted, #8b949e);
+		text-decoration: none;
+		padding: 0.25rem 0.5rem;
+		border-radius: 4px;
+		transition: all 0.2s ease;
+		white-space: nowrap;
+	}
+
+	.view-code-link:hover {
+		color: var(--accent-fg, #58a6ff);
+		background: var(--canvas-subtle, #161b22);
+	}
+</style>

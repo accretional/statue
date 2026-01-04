@@ -2,6 +2,7 @@
 	import Sidebar from '$lib/components/Sidebar.svelte';
 	import RepoCard from '$lib/components/RepoCard.svelte';
 	import TimelineWidget from '$lib/components/TimelineWidget.svelte';
+	import ContributionGraph from '$lib/components/ContributionGraph.svelte';
 	import { onMount } from 'svelte';
 	import lottie from 'lottie-web';
 
@@ -161,7 +162,7 @@
 
 		<!-- Center: Profile Sidebar -->
 		<div class="sidebar-container">
-			<Sidebar {profile} contributionData={CONTRIBUTION_DATA} />
+			<Sidebar {profile} />
 		</div>
 
 		<!-- Right repos -->
@@ -179,6 +180,11 @@
 			{/if}
 		</div>
 	</main>
+
+	<!-- Contribution Graph - Full Width Section -->
+	<div class="contribution-section">
+		<ContributionGraph data={CONTRIBUTION_DATA} username={profile.username} />
+	</div>
 
 	<!-- Mobile: All Repos below profile -->
 	<div class="mobile-repos">
@@ -243,9 +249,19 @@
 	.sidebar-container {
 		display: flex;
 		flex-direction: column;
+		align-items: center;
 		gap: 1.5rem;
-		max-width: 400px;
 		width: 100%;
+		max-width: 400px;
+	}
+
+	.contribution-section {
+		max-width: 900px;
+		margin: 2rem auto 0;
+		padding: 1.5rem;
+		background: var(--canvas-default, #0d1117);
+		border: 1px solid var(--border-default, #30363d);
+		border-radius: 12px;
 	}
 
 	.mobile-repos {

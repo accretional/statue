@@ -1,4 +1,5 @@
 import { getContentByUrl, getContentDirectories, getSidebarTree } from 'statue-ssg/cms/content-processor';
+import { siteConfig } from '../../../site.config.js';
 
 // Make this page pre-rendered as a static page
 export const prerender = true;
@@ -41,10 +42,17 @@ export function load({ params }) {
     return { notFound: true, directories, sidebarItems };
   }
 
+  // Set default author avatar for blog posts if not specified
+  const isBlogContent = content?.directory === 'blog' || content?.directory?.startsWith('blog/');
+  if (isBlogContent && content?.metadata && !content.metadata.authorAvatar) {
+    content.metadata.authorAvatar = siteConfig.blog?.defaultAuthorAvatar || '/avatar.jpg';
+  }
+
   // Return content
   return {
     content,
     directories,
-    sidebarItems
+    sidebarItems,
+    defaultAuthorAvatar: siteConfig.blog?.defaultAuthorAvatar || '/avatar.jpg'
   };
 }
