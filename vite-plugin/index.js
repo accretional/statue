@@ -285,8 +285,34 @@ function generateCombinedCSS(themes, defaultThemeId) {
 		Object.entries(theme.colors).forEach(([key, value]) => {
 			css += `  --color-${key}: ${value};\n`;
 		});
+
+		// Add theme-specific visibility variables
+		themes.forEach(t => {
+			const isCurrent = t.id === theme.id;
+			css += `  --theme-display-${t.id}: ${isCurrent ? 'block' : 'none'};\n`;
+		});
+
 		css += '}\n\n';
 	});
+
+	// Add default theme visibility variables to :root
+	if (defaultTheme) {
+		themes.forEach(t => {
+			const isDefault = t.id === defaultTheme.id;
+			// Only add if not already defined (though :root usually comes first)
+			if (!css.includes(`--theme-display-${t.id}`)) {
+				// We need to inject these into the :root block created earlier
+				// This is a bit hacky, but we'll append a new :root block for these variables
+			}
+		});
+
+		css += ':root {\n';
+		themes.forEach(t => {
+			const isDefault = t.id === defaultTheme.id;
+			css += `  --theme-display-${t.id}: ${isDefault ? 'block' : 'none'};\n`;
+		});
+		css += '}\n\n';
+	}
 
 	return css;
 }

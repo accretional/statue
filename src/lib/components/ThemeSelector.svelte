@@ -9,6 +9,14 @@
 	let focusedIndex = $state(-1);
 	let dropdownRef: HTMLDivElement | null = $state(null);
 
+	// Initialize theme from DOM or localStorage immediately if in browser
+	if (browser) {
+		const saved = localStorage.getItem(THEME_STORAGE_KEY);
+		if (saved && themes.find((t: ThemeDefinition) => t.id === saved)) {
+			currentTheme = saved;
+		}
+	}
+
 	/**
 	 * Apply theme by setting data-theme attribute on html element
 	 * CSS handles the rest via [data-theme="..."] selectors
@@ -109,7 +117,6 @@
 	}
 
 	// Get current theme object for display
-	let currentThemeObj = $derived(themes.find((t: ThemeDefinition) => t.id === currentTheme) || themes[0]);
 </script>
 
 <svelte:window onclick={closeDropdown} onkeydown={(e) => { if (e.key === 'Escape' && isOpen) closeDropdown(); }} />
@@ -142,7 +149,16 @@
 			>
 				<path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
 			</svg>
-			<span class="text-sm">{currentThemeObj?.name || 'Theme'}</span>
+			<!-- Render all theme names, visibility controlled by CSS variables to prevent hydration mismatch/FOUC -->
+			{#each themes as theme}
+				<span
+					class="text-sm"
+					style="display: var(--theme-display-{theme.id}, none)"
+					aria-hidden={currentTheme !== theme.id}
+				>
+					{theme.name}
+				</span>
+			{/each}
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				width="12"
