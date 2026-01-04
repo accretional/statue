@@ -42,10 +42,15 @@ export function load({ params }) {
     return { notFound: true, directories, sidebarItems };
   }
 
-  // Set default author avatar for blog posts if not specified
-  const isBlogContent = content?.directory === 'blog' || content?.directory?.startsWith('blog/');
-  if (isBlogContent && content?.metadata && !content.metadata.authorAvatar) {
-    content.metadata.authorAvatar = siteConfig.blog?.defaultAuthorAvatar || '/avatar.jpg';
+  // Set default author and avatar from site config
+  if (content?.metadata) {
+    if (siteConfig.profile?.name || siteConfig.site?.author) {
+      content.metadata.author = siteConfig.profile?.name || siteConfig.site?.author;
+    }
+    
+    if (siteConfig.profile?.avatarUrl || siteConfig.blog?.defaultAuthorAvatar) {
+      content.metadata.authorAvatar = siteConfig.profile?.avatarUrl || siteConfig.blog?.defaultAuthorAvatar || '/avatar.jpg';
+    }
   }
 
   // Return content
@@ -53,6 +58,6 @@ export function load({ params }) {
     content,
     directories,
     sidebarItems,
-    defaultAuthorAvatar: siteConfig.blog?.defaultAuthorAvatar || '/avatar.jpg'
+    defaultAuthorAvatar: siteConfig.profile?.avatarUrl || siteConfig.blog?.defaultAuthorAvatar || '/avatar.jpg'
   };
 }

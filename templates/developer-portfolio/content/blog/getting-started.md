@@ -3,6 +3,7 @@ title: Getting Started with Your Portfolio
 description: A quick guide to customizing your developer portfolio
 date: 2025-01-01
 author: Portfolio Template
+thumbnail: /dev-blog.jpg
 ---
 
 Welcome to your new developer portfolio! Here's how to make it yours.
@@ -31,11 +32,7 @@ Edit `site.config.js` to fine-tune your profile:
 profile: {
   name: 'Your Name',
   username: 'your-github-username',
-  bio: 'Your custom bio',
-  status: {
-    emoji: "🚀",
-    message: "Building something new"
-  }
+  bio: 'Your custom bio'
 }
 ```
 
