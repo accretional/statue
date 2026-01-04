@@ -290,7 +290,7 @@
 	}
 
 	.timeline-widget-container {
-		margin-top: 1.5rem;
+		margin-top: 0rem;
 	}
 
 	.mobile-timeline-widget {
