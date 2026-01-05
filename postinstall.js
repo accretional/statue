@@ -59,12 +59,6 @@ async function setupStatueSSG(options = {}) {
     fs.copySync(templateScriptsDir, path.join(targetDir, 'scripts'), { overwrite: true });
   }
 
-  // Copy template's content if exists
-  const templateContentDir = path.join(templateDir, 'content');
-  if (fs.existsSync(templateContentDir)) {
-    fs.copySync(templateContentDir, path.join(targetDir, 'content'), { overwrite: true });
-  }
-
   console.log(chalk.green(`✓ ${templateName} template copied`));
 
   // 4. Copy build configs (svelte, vite, postcss) - always from root 
