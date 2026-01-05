@@ -1,29 +1,90 @@
 import * as p from '@clack/prompts';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
 import fs from 'fs-extra';
 import spawn from 'cross-spawn';
 import pc from 'picocolors';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const require = createRequire(import.meta.url);
 
-const TEMPLATES = [
-	{ value: 'default', label: 'Default (recommended)' },
-	{ value: 'blog', label: 'Blog' }
-];
+function getStatueSsgPath() {
+	// Use require.resolve to find statue-ssg regardless of where npx runs from
+	try {
+		const pkgPath = require.resolve('statue-ssg/package.json');
+		return path.dirname(pkgPath);
+	} catch {
+		return null;
+	}
+}
 
-const THEMES = [
-	{ value: 'black-white', label: 'Black & White (recommended)' },
-	{ value: 'black-red', label: 'Black & Red' },
-	{ value: 'blue', label: 'Blue' },
-	{ value: 'charcoal', label: 'Charcoal' },
-	{ value: 'cyan', label: 'Cyan' },
-	{ value: 'green', label: 'Green' },
-	{ value: 'orange', label: 'Orange' },
-	{ value: 'pink', label: 'Pink' },
-	{ value: 'purple', label: 'Purple' },
-	{ value: 'red', label: 'Red' }
-];
+function getAvailableTemplates() {
+	const statuePath = getStatueSsgPath();
+	const templates = [{ value: 'default', label: 'Default (recommended)' }];
+
+	if (statuePath) {
+		const templatesDir = path.join(statuePath, 'templates');
+		if (fs.existsSync(templatesDir)) {
+			const dirs = fs.readdirSync(templatesDir).filter((f) =>
+				fs.statSync(path.join(templatesDir, f)).isDirectory()
+			);
+			for (const dir of dirs) {
+				const label = dir
+					.split('-')
+					.map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+					.join(' ');
+				templates.push({ value: dir, label });
+			}
+		}
+	}
+
+	return templates;
+}
+
+function getAvailableThemes() {
+	const statuePath = getStatueSsgPath();
+
+	// Fallback themes if statue-ssg not found
+	const fallbackThemes = [
+		{ value: 'black-white', label: 'Black White (recommended)' },
+		{ value: 'black-red', label: 'Black Red' },
+		{ value: 'blue', label: 'Blue' },
+		{ value: 'charcoal', label: 'Charcoal' },
+		{ value: 'cyan', label: 'Cyan' },
+		{ value: 'green', label: 'Green' },
+		{ value: 'orange', label: 'Orange' },
+		{ value: 'pink', label: 'Pink' },
+		{ value: 'purple', label: 'Purple' },
+		{ value: 'red', label: 'Red' }
+	];
+
+	if (!statuePath) {
+		return fallbackThemes;
+	}
+
+	const themesDir = path.join(statuePath, 'src', 'lib', 'themes');
+	const themes: { value: string; label: string }[] = [];
+
+	if (fs.existsSync(themesDir)) {
+		const files = fs.readdirSync(themesDir).filter(
+			(f) => f.endsWith('.css') && !f.includes('template')
+		);
+		for (const file of files) {
+			const name = file.replace('.css', '');
+			const label = name
+				.split('-')
+				.map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+				.join(' ');
+			// Put black-white first as recommended
+			if (name === 'black-white') {
+				themes.unshift({ value: name, label: `${label} (recommended)` });
+			} else {
+				themes.push({ value: name, label });
+			}
+		}
+	}
+
+	return themes.length > 0 ? themes : fallbackThemes;
+}
 
 async function main() {
 	const args = process.argv.slice(2);
@@ -72,24 +133,13 @@ async function main() {
 		fs.emptyDirSync(targetDir);
 	}
 
-	// 2. TypeScript
-	const useTypeScript = useDefaults
-		? true
-		: await p.confirm({
-				message: 'Would you like to use TypeScript?',
-				initialValue: true
-			});
-	if (p.isCancel(useTypeScript)) {
-		p.cancel('Operation cancelled.');
-		return process.exit(0);
-	}
-
-	// 3. Template
+	// 2. Template
+	const templates = getAvailableTemplates();
 	const template = useDefaults
 		? 'default'
 		: await p.select({
 				message: 'Which template would you like to use?',
-				options: TEMPLATES,
+				options: templates,
 				initialValue: 'default'
 			});
 	if (p.isCancel(template)) {
@@ -97,12 +147,13 @@ async function main() {
 		return process.exit(0);
 	}
 
-	// 4. Theme
+	// 3. Theme
+	const themes = getAvailableThemes();
 	const theme = useDefaults
 		? 'black-white'
 		: await p.select({
 				message: 'Which theme would you like to use?',
-				options: THEMES,
+				options: themes,
 				initialValue: 'black-white'
 			});
 	if (p.isCancel(theme)) {
@@ -110,22 +161,42 @@ async function main() {
 		return process.exit(0);
 	}
 
-	// 5. Create project
+	// 4. Create project
 	console.log();
 	console.log(`Creating a new Statue project in ${pc.cyan(targetDir)}...`);
 	console.log();
 
-	await scaffoldProject(targetDir, { useTypeScript: useTypeScript as boolean });
+	// Create directory if it doesn't exist
+	fs.ensureDirSync(targetDir);
 
+	// Create SvelteKit project using sv create
+	console.log('Creating SvelteKit project...');
+	runCommand(
+		'npx',
+		['sv', 'create', '.', '--template', 'minimal', '--types', 'ts', '--no-add-ons', '--no-install'],
+		targetDir,
+		true // pipe stdin for 'yes'
+	);
+
+	// Install dependencies + statue-ssg
 	console.log('Installing dependencies...');
-	runCommand('npm', ['install'], targetDir);
+	runCommand('npm', ['install', 'statue-ssg'], targetDir);
 
+	// Initialize statue-ssg
 	console.log('Initializing statue-ssg...');
-	runCommand('npx', ['statue', 'init', '--template', template as string], targetDir);
+	const initArgs = template === 'default'
+		? ['statue', 'init']
+		: ['statue', 'init', '--template', template as string];
+	runCommand('npx', initArgs, targetDir);
 
+	// Apply theme
 	applyTheme(targetDir, theme as string);
 
-	// 6. Success
+	// Final install for any new dependencies
+	console.log('Installing remaining dependencies...');
+	runCommand('npm', ['install'], targetDir);
+
+	// 5. Success
 	console.log();
 	console.log(
 		pc.green(`Success!`) + ` Created ${pc.cyan(projectName as string)} at ${pc.cyan(targetDir)}`
@@ -161,35 +232,15 @@ Examples:
 `);
 }
 
-function runCommand(cmd: string, args: string[], cwd: string) {
+function runCommand(cmd: string, args: string[], cwd: string, pipeYes = false) {
 	const result = spawn.sync(cmd, args, {
 		cwd,
-		stdio: 'inherit',
+		stdio: pipeYes ? ['pipe', 'inherit', 'inherit'] : 'inherit',
+		input: pipeYes ? 'y\n' : undefined,
 		shell: process.platform === 'win32'
 	});
 	if (result.status !== 0) {
 		process.exit(result.status ?? 1);
-	}
-}
-
-async function scaffoldProject(targetDir: string, options: { useTypeScript: boolean }) {
-	const templateDir = path.join(__dirname, '..', 'templates', 'base');
-	fs.copySync(templateDir, targetDir);
-
-	// Rename _gitignore to .gitignore
-	const gitignoreSrc = path.join(targetDir, '_gitignore');
-	if (fs.existsSync(gitignoreSrc)) {
-		fs.renameSync(gitignoreSrc, path.join(targetDir, '.gitignore'));
-	}
-
-	// Update package name
-	const pkgPath = path.join(targetDir, 'package.json');
-	const pkg = fs.readJsonSync(pkgPath);
-	pkg.name = path.basename(targetDir);
-	fs.writeJsonSync(pkgPath, pkg, { spaces: 2 });
-
-	if (!options.useTypeScript) {
-		fs.removeSync(path.join(targetDir, 'tsconfig.json'));
 	}
 }
 

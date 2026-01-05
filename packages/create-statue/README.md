@@ -20,57 +20,23 @@ That's it! Your statue-ssg project is ready.
 
 A fully configured statue-ssg project with:
 
-- ✅ **SvelteKit** - Modern web framework
-- ✅ **Tailwind CSS v4** - Utility-first styling
-- ✅ **TypeScript** - Type safety (optional)
-- ✅ **Markdown support** - Write content in `.md` files
-- ✅ **10 beautiful themes** - Choose your favorite
-- ✅ **Templates** - Default or Blog starter
-- ✅ **Static output** - Deploy anywhere
+- **SvelteKit** - Modern web framework
+- **Tailwind CSS v4** - Utility-first styling
+- **TypeScript** - Type safety built-in
+- **Markdown support** - Write content in `.md` files
+- **Themes** - Beautiful color schemes
+- **Templates** - Multiple starter options
+- **Static output** - Deploy anywhere
 
 ## Interactive Setup
 
 When you run `npm create statue@latest`, you'll be asked:
 
 1. **Project name** - Name of your project directory
-2. **TypeScript?** - Yes (recommended) or No
-3. **Template** - Default (minimal) or Blog (content-driven)
-4. **Theme** - Choose from 10 built-in themes
+2. **Template** - Choose from available templates
+3. **Theme** - Choose from available themes
 
-## Available Templates
-
-### Default (recommended)
-
-Minimal starting point with basic pages. Perfect for:
-
-- Marketing sites
-- Portfolios
-- Landing pages
-- Custom projects
-
-### Blog
-
-Content-driven template with blog structure. Perfect for:
-
-- Personal blogs
-- Company blogs
-- News sites
-- Content publications
-
-## Available Themes
-
-- **Black & White** (recommended) - Clean monochrome
-- **Black & Red** - Bold red accents
-- **Blue** - Navy blue tones
-- **Charcoal** - Warm neutral grays
-- **Cyan** - Bright cyan highlights
-- **Green** - Emerald green
-- **Orange** - Vibrant orange
-- **Pink** - Bright pink accents
-- **Purple** - Rich purple
-- **Red** - Bold red theme
-
-Themes can be changed later by editing `src/lib/index.css`.
+Templates and themes are loaded dynamically from the `statue-ssg` package.
 
 ## Next Steps
 
@@ -100,15 +66,14 @@ npm run preview # Preview production build
 
 ## How It Works
 
-`create-statue` sets up a minimal SvelteKit project, then uses `statue-ssg` to add:
+`create-statue` runs the following steps:
 
-1. **Routes** - Page structure and navigation
-2. **Content** - Markdown processing
-3. **Components** - Pre-built UI components
-4. **Themes** - Beautiful color schemes
-5. **Scripts** - Build and SEO tools
+1. Creates a minimal SvelteKit project using `sv create`
+2. Installs `statue-ssg` as a dependency
+3. Runs `npx statue init` to set up routes, content, and configuration
+4. Applies your selected theme
 
-Templates come from the `statue-ssg` package, not bundled in `create-statue`.
+Templates and themes come from the `statue-ssg` package and are detected automatically.
 
 ## Non-Interactive Mode
 
@@ -120,7 +85,6 @@ npm create statue@latest my-site -- --yes
 
 This creates a project with:
 
-- TypeScript enabled
 - Default template
 - Black & White theme
 
@@ -142,18 +106,14 @@ npm create statue@latest -- --help
 - **Node.js** 18.0.0 or higher
 - **npm** (comes with Node.js)
 
-Also works with pnpm, yarn, and bun (detected automatically).
+## Adding New Templates or Themes
 
-## Adding New Templates
+Templates and themes are managed in the `statue-ssg` package:
 
-Want to add a custom template?
+- **Templates**: Add to `statue-ssg/templates/<name>/`
+- **Themes**: Add to `statue-ssg/src/lib/themes/<name>.css`
 
-1. Create `templates/<name>/` in the **statue-ssg** package
-2. Add routes, content, and configuration
-3. Update the `TEMPLATES` array in `create-statue/src/index.ts`
-4. Rebuild and publish
-
-Templates live in the main `statue-ssg` package for easier maintenance.
+They will be automatically detected by `create-statue`.
 
 ## Troubleshooting
 
@@ -167,16 +127,12 @@ node --version
 
 ### Permission errors
 
-On Linux/Mac, you may need to use `sudo` or fix npm permissions:
+On Linux/Mac, you may need to fix npm permissions:
 
 ```bash
 npm config set prefix ~/.npm-global
 export PATH=~/.npm-global/bin:$PATH
 ```
-
-### Windows issues
-
-Ensure you're using PowerShell or cmd (not Git Bash) and have the latest Node.js installed.
 
 ## Documentation
 
@@ -184,19 +140,15 @@ Ensure you're using PowerShell or cmd (not Git Bash) and have the latest Node.js
 - [Getting Started Guide](https://github.com/accretional/statue/blob/main/content/docs/get-started.md)
 - [Site Configuration](https://github.com/accretional/statue/blob/main/content/docs/site-config.md)
 - [Themes Guide](https://github.com/accretional/statue/blob/main/content/docs/themes.md)
-- [Components Reference](https://github.com/accretional/statue/blob/main/content/docs/components.md)
 
 ## Contributing
 
 Found a bug or have a feature request?
 
 - [Open an issue](https://github.com/accretional/statue/issues)
-- [Join Discord](https://discord.gg/accretional)
 - [Read contributing guide](https://github.com/accretional/statue/blob/main/CONTRIBUTING.md)
 
 ## Development
-
-Want to contribute to `create-statue`?
 
 ```bash
 git clone https://github.com/accretional/statue.git
@@ -205,13 +157,10 @@ npm install
 npm run build
 
 # Test locally
-node index.js test-site
+npm pack
+npx ./create-statue-*.tgz my-test-site
 ```
 
 ## License
 
-MIT © Accretional
-
----
-
-**Made with 🗿 by the Statue team**
+MIT
