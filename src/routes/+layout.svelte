@@ -6,10 +6,15 @@
 
 	let { data, children } = $props();
 
-	let globalDirectories = $derived(data.globalDirectories);
 	let searchConfig = $derived(data.searchConfig);
 	let navbarConfig = $derived(data.navbarConfig);
 	let currentPath = $derived($page.url.pathname);
+
+	// Filter out hidden directories from navbar
+	let hiddenFromNav = $derived(navbarConfig?.hiddenFromNav ?? []);
+	let filteredDirectories = $derived(
+		data.globalDirectories?.filter(dir => !hiddenFromNav.includes(dir.name)) ?? []
+	);
 
 	// Enable View Transitions API only for blog pages
 	onNavigate((navigation) => {
@@ -32,13 +37,12 @@
 </script>
 
 <NavigationBar
-	navbarItems={data.globalDirectories}
+	navbarItems={filteredDirectories}
 	showSearch={data.searchConfig?.enabled ?? false}
 	searchPlaceholder={data.searchConfig?.placeholder ?? 'Search...'}
 	siteTitle={navbarConfig?.siteTitle ?? null}
 	logo={navbarConfig?.logo ?? null}
-	defaultNavItems={navbarConfig?.defaultNavItems ?? [{ title: 'Home', url: '/' }, { title: 'About', url: '/about' }]}
-	ctaButton={navbarConfig?.ctaButton ?? { show: true, text: 'Documentation', url: '/docs' }}
+	{...(navbarConfig?.defaultNavItems && { defaultNavItems: navbarConfig.defaultNavItems })}
 />
 
 <main>

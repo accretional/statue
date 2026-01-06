@@ -19,18 +19,14 @@ export const siteConfig = {
     // Logo image URL (null for default SVG icon)
     logo: null,
 
-    // Default navigation items
+    // Default navigation items (add cta: true for CTA button style)
     defaultNavItems: [
       { title: 'Home', url: '/' },
       { title: 'About', url: '/about' }
     ],
 
-    // CTA (Call to Action) button configuration
-    ctaButton: {
-      show: true,
-      text: 'Documentation',
-      url: '/docs'
-    }
+    // Hide these directories from navbar (by folder name content/foldername)
+    hiddenFromNav: ['legal']
   },
 
   // Contact information

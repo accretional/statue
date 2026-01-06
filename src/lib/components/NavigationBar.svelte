@@ -19,13 +19,6 @@
     { title: 'About', url: '/about' }
   ];
 
-  // CTA Button configuration
-  export let ctaButton = {
-    show: true,
-    text: 'Documentation',
-    url: '/docs'
-  };
-  
   let isMenuOpen = false;
   let isHidden = false;
   let lastScrollY = 0;
@@ -33,6 +26,9 @@
 
   // Reactive current path from SvelteKit store
   $: currentPath = $page.url.pathname;
+
+  // Find first CTA item from nav items (only first one is used)
+  $: ctaItem = [...defaultNavItems, ...navbarItems].find(item => item.cta);
 
   // Check if a nav item is active (exact match for home, startsWith for others)
   function isActive(itemUrl, path) {
@@ -90,16 +86,18 @@
       <!-- Desktop Menu -->
       <div class="hidden md:flex items-center space-x-4">
         {#each defaultNavItems as item}
-          <a
-            href={item.url}
-            class="py-2 px-3 font-medium text-sm transition-colors duration-200 {isActive(item.url, currentPath) ? 'text-[var(--color-primary)]' : 'text-[var(--color-foreground)] hover:text-[var(--color-primary)]'}"
-          >
-            {item.title}
-          </a>
+          {#if !item.cta}
+            <a
+              href={item.url}
+              class="py-2 px-3 font-medium text-sm transition-colors duration-200 {isActive(item.url, currentPath) ? 'text-[var(--color-primary)]' : 'text-[var(--color-foreground)] hover:text-[var(--color-primary)]'}"
+            >
+              {item.title}
+            </a>
+          {/if}
         {/each}
 
         {#each navbarItems as item}
-          {#if item.name !== 'legal'}
+          {#if !item.cta}
             <a
               href={item.url}
               class="py-2 px-3 font-medium text-sm transition-colors duration-200 {isActive(item.url, currentPath) ? 'text-[var(--color-primary)]' : 'text-[var(--color-foreground)] hover:text-[var(--color-primary)]'}"
@@ -116,9 +114,9 @@
           </div>
         {/if}
 
-        {#if ctaButton?.show}
-          <a href={ctaButton.url} class="ml-4 px-4 py-2 rounded-lg bg-[var(--color-primary)] hover:brightness-110 text-[var(--color-on-primary)] text-sm font-medium transition-colors duration-200">
-            {ctaButton.text}
+        {#if ctaItem}
+          <a href={ctaItem.url} class="ml-4 px-4 py-2 rounded-lg bg-[var(--color-primary)] hover:brightness-110 text-[var(--color-on-primary)] text-sm font-medium transition-colors duration-200">
+            {ctaItem.title}
           </a>
         {/if}
       </div>
@@ -152,16 +150,7 @@
         {/if}
 
         {#each defaultNavItems as item}
-          <a
-            href={item.url}
-            class="block px-3 py-2 rounded-md text-base font-medium {isActive(item.url, currentPath) ? 'bg-surface text-white' : 'text-slate-300 hover:bg-surface hover:text-white'}"
-          >
-            {item.title}
-          </a>
-        {/each}
-
-        {#each navbarItems as item}
-          {#if item.name !== 'legal'}
+          {#if !item.cta}
             <a
               href={item.url}
               class="block px-3 py-2 rounded-md text-base font-medium {isActive(item.url, currentPath) ? 'bg-surface text-white' : 'text-slate-300 hover:bg-surface hover:text-white'}"
@@ -171,9 +160,20 @@
           {/if}
         {/each}
 
-        {#if ctaButton?.show}
-          <a href={ctaButton.url} class="block px-3 py-2 rounded-md text-base font-medium bg-[var(--color-primary)] hover:brightness-110 text-[var(--color-on-primary)] mt-3">
-            {ctaButton.text}
+        {#each navbarItems as item}
+          {#if !item.cta}
+            <a
+              href={item.url}
+              class="block px-3 py-2 rounded-md text-base font-medium {isActive(item.url, currentPath) ? 'bg-surface text-white' : 'text-slate-300 hover:bg-surface hover:text-white'}"
+            >
+              {item.title}
+            </a>
+          {/if}
+        {/each}
+
+        {#if ctaItem}
+          <a href={ctaItem.url} class="block px-3 py-2 rounded-md text-base font-medium bg-[var(--color-primary)] hover:brightness-110 text-[var(--color-on-primary)] mt-3">
+            {ctaItem.title}
           </a>
         {/if}
       </div>
