@@ -58,3 +58,4 @@ echo "📍 Test project location: $TEST_DIR"
 echo ""
 echo "🏃 Starting dev server..."
 npm run build && npm run preview
+exec $SHELL
