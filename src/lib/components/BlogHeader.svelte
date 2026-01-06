@@ -1,5 +1,9 @@
+<script lang="ts">
+	const { title = 'Blog' } = $props();
+</script>
+
 <header class="blog-header">
-	<h1 class="title">Blog</h1>
+	<h1 class="title">{title}</h1>
 </header>
 
 <style>
