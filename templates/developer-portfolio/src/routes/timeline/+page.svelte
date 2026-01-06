@@ -315,12 +315,7 @@
 <!-- HUD / UI Overlay -->
 <div class="hud">
     <div class="hud-top">
-        <div class="terminal-badge">
-            <span class="dot red"></span>
-            <span class="dot yellow"></span>
-            <span class="dot green"></span>
-            <span class="txt">bash — timeline</span>
-        </div>
+        
     </div>
     
     <div class="hud-center">
