@@ -16,7 +16,7 @@ export const siteConfig = {
     // Site title displayed in the navbar (null to hide)
     siteTitle: "Statue SSG",
 
-    // Logo image URL (null for default SVG icon)
+    // Logo image URL (null or false for no logo)
     logo: null,
 
     // Default navigation items (add cta: true for CTA button style)
