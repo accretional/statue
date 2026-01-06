@@ -250,6 +250,9 @@ function updateNumericField(content, field, value) {
 // Update profile fields
 content = updateField(content, 'name', data.name);
 content = updateField(content, 'username', data.username);
+
+// Update navbar siteTitle to match profile name
+content = updateField(content, 'siteTitle', data.name);
 content = updateField(content, 'bio', data.bio);
 content = updateField(content, 'location', data.location);
 content = updateField(content, 'website', data.website);

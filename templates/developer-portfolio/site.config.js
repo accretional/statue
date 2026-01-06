@@ -15,11 +15,14 @@ export const siteConfig = {
     website: '',
     linkedin: "",
     company: '',
-    email: '',
-    status: {
-      emoji: "🚀",
-      message: "Building something new"
-    }
+    email: ''
+  },
+
+  // Default avatar for blog posts (uses GitHub avatar by default)
+  // This path is also used when authorAvatar is not specified in blog post frontmatter
+  // Note: Avatar file is located at static/avatar.jpg (synced from GitHub by github-sync.sh)
+  blog: {
+    defaultAuthorAvatar: "/avatar.jpg"
   },
 
   // Portfolio features toggle
@@ -34,6 +37,24 @@ export const siteConfig = {
     description: "Developer portfolio",
     url: "https://example.com",
     author: "Your Name"
+  },
+
+  // Navigation bar configuration
+  navbar: {
+    // Site title displayed in the navbar (null to hide)
+    siteTitle: "My Portfolio",
+
+    // Logo image URL (null for default SVG icon)
+    logo: null,
+
+    // Default navigation items (add cta: true for CTA button style)
+    defaultNavItems: [
+      { title: 'Home', url: '/' },
+      { title: 'About', url: '/about' }
+    ],
+
+    // Hide these directories from navbar (by folder name)
+    hiddenFromNav: ['legal','docs']
   },
 
   // Contact information
@@ -67,7 +88,10 @@ export const siteConfig = {
     linkedin: "",
     facebook: "",
     instagram: "",
-    youtube: ""
+    youtube: "",
+    // Social links imported from GitHub profile (populated by github-sync.sh)
+    // Each item has: { provider: "linkedin" | "generic" | etc., url: "https://..." }
+    socialLinks: []
   },
 
   // Legal pages specific settings
