@@ -19,6 +19,12 @@
     { title: 'About', url: '/about' }
   ];
 
+  // Hide specific directories from navbar (by folder name)
+  export let hiddenFromNav = [];
+
+  // Filter navbarItems based on hiddenFromNav
+  $: filteredNavbarItems = navbarItems.filter(item => !hiddenFromNav.includes(item.name));
+
   let isMenuOpen = false;
   let isHidden = false;
   let lastScrollY = 0;
@@ -28,7 +34,7 @@
   $: currentPath = $page.url.pathname;
 
   // Find first CTA item from nav items (only first one is used)
-  $: ctaItem = [...defaultNavItems, ...navbarItems].find(item => item.cta);
+  $: ctaItem = [...defaultNavItems, ...filteredNavbarItems].find(item => item.cta);
 
   // Check if a nav item is active (exact match for home, startsWith for others)
   function isActive(itemUrl, path) {
@@ -63,10 +69,8 @@
     <div class="flex items-center justify-between h-16">
       <div class="flex items-center">
         <a href="/" class="flex items-center space-x-2">
-          <!-- Logo - either custom image or default SVG -->
-          {#if logo}
-            <img src={logo} alt={siteTitle || 'Logo'} class="w-8 h-8 object-contain" />
-          {:else}
+          <!-- Logo: true = default SVG, string = custom image, false/null = no logo -->
+          {#if logo === true}
             <div class="text-[var(--color-primary)] w-8 h-8">
               <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
@@ -74,6 +78,8 @@
                 <path d="M12 8L12 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
               </svg>
             </div>
+          {:else if logo}
+            <img src={logo} alt={siteTitle || 'Logo'} class="w-8 h-8 object-contain" />
           {/if}
           {#if siteTitle}
             <span class="font-bold text-xl text-[var(--color-foreground)]">
@@ -96,7 +102,7 @@
           {/if}
         {/each}
 
-        {#each navbarItems as item}
+        {#each filteredNavbarItems as item}
           {#if !item.cta}
             <a
               href={item.url}
@@ -160,7 +166,7 @@
           {/if}
         {/each}
 
-        {#each navbarItems as item}
+        {#each filteredNavbarItems as item}
           {#if !item.cta}
             <a
               href={item.url}

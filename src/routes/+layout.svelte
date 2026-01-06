@@ -10,12 +10,6 @@
 	let navbarConfig = $derived(data.navbarConfig);
 	let currentPath = $derived($page.url.pathname);
 
-	// Filter out hidden directories from navbar
-	let hiddenFromNav = $derived(navbarConfig?.hiddenFromNav ?? []);
-	let filteredDirectories = $derived(
-		data.globalDirectories?.filter(dir => !hiddenFromNav.includes(dir.name)) ?? []
-	);
-
 	// Enable View Transitions API only for blog pages
 	onNavigate((navigation) => {
 		if (!document.startViewTransition) return;
@@ -37,11 +31,12 @@
 </script>
 
 <NavigationBar
-	navbarItems={filteredDirectories}
+	navbarItems={data.globalDirectories}
 	showSearch={data.searchConfig?.enabled ?? false}
 	searchPlaceholder={data.searchConfig?.placeholder ?? 'Search...'}
 	siteTitle={navbarConfig?.siteTitle ?? null}
 	logo={navbarConfig?.logo ?? null}
+	hiddenFromNav={navbarConfig?.hiddenFromNav ?? []}
 	{...(navbarConfig?.defaultNavItems && { defaultNavItems: navbarConfig.defaultNavItems })}
 />
 
