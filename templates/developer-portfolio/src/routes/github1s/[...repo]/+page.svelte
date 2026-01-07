@@ -27,7 +27,7 @@
 	<!-- Back button notch -->
 	<a href="/" class="back-notch">
 		<ArrowLeft size={16} />
-		<span>Back</span>
+		<span>Back to Home Page</span>
 	</a>
 
 	<!-- iframe -->
