@@ -44,11 +44,11 @@
 >
     <!-- PDF Content -->
     <div class="pdf-embed-wrapper">
-      <embed
+      <iframe
         src={pdfSrc}
-        type="application/pdf"
+        title="PDF Viewer"
         class="pdf-embed"
-      />
+      ></iframe>
     </div>
 
     <!-- Floating Toolbar - overlaid on PDF -->

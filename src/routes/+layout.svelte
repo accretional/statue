@@ -6,8 +6,8 @@
 
 	let { data, children } = $props();
 
-	let globalDirectories = $derived(data.globalDirectories);
 	let searchConfig = $derived(data.searchConfig);
+	let navbarConfig = $derived(data.navbarConfig);
 	let currentPath = $derived($page.url.pathname);
 
 	// Enable View Transitions API only for blog pages
@@ -34,6 +34,10 @@
 	navbarItems={data.globalDirectories}
 	showSearch={data.searchConfig?.enabled ?? false}
 	searchPlaceholder={data.searchConfig?.placeholder ?? 'Search...'}
+	siteTitle={navbarConfig?.siteTitle ?? null}
+	logo={navbarConfig?.logo ?? null}
+	hiddenFromNav={navbarConfig?.hiddenFromNav ?? []}
+	{...(navbarConfig?.defaultNavItems && { defaultNavItems: navbarConfig.defaultNavItems })}
 />
 
 <main>
