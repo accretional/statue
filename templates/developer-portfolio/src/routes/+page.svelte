@@ -2,6 +2,7 @@
 	import Sidebar from '$lib/components/Sidebar.svelte';
 	import RepoCard from '$lib/components/RepoCard.svelte';
 	import TimelineWidget from '$lib/components/TimelineWidget.svelte';
+	import ContributionGraph from '$lib/components/ContributionGraph.svelte';
 	import { onMount } from 'svelte';
 	import lottie from 'lottie-web';
 
@@ -152,16 +153,22 @@
 
 <div class="page-container">
 	<main class="main-content">
-		<!-- Left repos -->
+		<!-- Left repos / Experience -->
 		<div class="repo-column left">
-			{#each leftRepos as repo}
-				<RepoCard {repo} />
-			{/each}
+			{#if features.showExperience}
+				<div class="timeline-widget-container left-timeline">
+					<TimelineWidget />
+				</div>
+			{:else}
+				{#each leftRepos as repo}
+					<RepoCard {repo} />
+				{/each}
+			{/if}
 		</div>
 
 		<!-- Center: Profile Sidebar -->
 		<div class="sidebar-container">
-			<Sidebar {profile} contributionData={CONTRIBUTION_DATA} />
+			<Sidebar {profile} />
 		</div>
 
 		<!-- Right repos -->
@@ -170,28 +177,25 @@
 				<RepoCard {repo} />
 			{/each}
 			<a href="/repositoriespage" class="view-all-repos">view all repos</a>
-
-			<!-- Timeline Widget -->
-			{#if features.showExperience}
-				<div class="timeline-widget-container">
-					<TimelineWidget />
-				</div>
-			{/if}
 		</div>
 	</main>
 
+	<!-- Contribution Graph - Full Width Section -->
+	<div class="contribution-section">
+		<ContributionGraph data={CONTRIBUTION_DATA} username={profile.username} />
+	</div>
+
 	<!-- Mobile: All Repos below profile -->
 	<div class="mobile-repos">
-		{#each repositories as repo}
-			<RepoCard {repo} />
-		{/each}
-
-		<!-- Mobile Timeline Widget -->
 		{#if features.showExperience}
 			<div class="mobile-timeline-widget">
 				<TimelineWidget />
 			</div>
 		{/if}
+
+		{#each repositories as repo}
+			<RepoCard {repo} />
+		{/each}
 	</div>
 
 	<!-- Mac Desktop Button -->
@@ -243,9 +247,19 @@
 	.sidebar-container {
 		display: flex;
 		flex-direction: column;
+		align-items: center;
 		gap: 1.5rem;
-		max-width: 400px;
 		width: 100%;
+		max-width: 400px;
+	}
+
+	.contribution-section {
+		max-width: 900px;
+		margin: 2rem auto 0;
+		padding: 1.5rem;
+		background: var(--canvas-default, #0d1117);
+		border: 1px solid var(--border-default, #30363d);
+		border-radius: 12px;
 	}
 
 	.mobile-repos {
@@ -276,7 +290,7 @@
 	}
 
 	.timeline-widget-container {
-		margin-top: 1.5rem;
+		margin-top: 0rem;
 	}
 
 	.mobile-timeline-widget {

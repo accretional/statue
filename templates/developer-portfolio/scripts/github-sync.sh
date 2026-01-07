@@ -100,6 +100,31 @@ TWITTER=$(echo "$USER_DATA" | jq -r '.twitter_username // ""')
 
 echo -e "  ${GREEN}✓${NC} Found: $NAME (@$LOGIN)"
 
+# Fetch social accounts (separate API endpoint)
+echo -e "${YELLOW}Fetching social accounts...${NC}"
+SOCIAL_DATA=$(github_api "https://api.github.com/users/$USERNAME/social_accounts")
+
+# Extract social links by provider
+LINKEDIN_URL=""
+SOCIAL_LINKS=""
+
+if echo "$SOCIAL_DATA" | jq -e 'type == "array"' > /dev/null 2>&1; then
+    LINKEDIN_URL=$(echo "$SOCIAL_DATA" | jq -r '[.[] | select(.provider == "linkedin")] | .[0].url // ""')
+
+    # Get all social links as JSON array for site.config.js
+    SOCIAL_LINKS=$(echo "$SOCIAL_DATA" | jq -c '[.[] | {provider: .provider, url: .url}]')
+
+    SOCIAL_COUNT=$(echo "$SOCIAL_DATA" | jq 'length')
+    if [ "$SOCIAL_COUNT" -gt 0 ]; then
+        echo -e "  ${GREEN}✓${NC} Found $SOCIAL_COUNT social links"
+    else
+        echo -e "  ${YELLOW}⚠${NC} No social links found"
+    fi
+else
+    echo -e "  ${YELLOW}⚠${NC} Could not fetch social accounts"
+    SOCIAL_LINKS="[]"
+fi
+
 # Download avatar
 echo -e "${YELLOW}Downloading avatar...${NC}"
 AVATAR_PATH="$ROOT_DIR/static/avatar.jpg"
@@ -160,12 +185,14 @@ echo -e "${YELLOW}Fetching contribution graph...${NC}"
 CONTRIB_RAW=$(curl -s "https://github-contributions-api.jogruber.de/v4/$USERNAME?y=last")
 
 # Check if contribution API returned valid data
+SYNC_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 if echo "$CONTRIB_RAW" | jq -e '.contributions' > /dev/null 2>&1; then
     # Transform to our format: get last year's total and all contribution days
     CURRENT_YEAR=$(date +%Y)
-    CONTRIB_JSON=$(echo "$CONTRIB_RAW" | jq --arg year "$CURRENT_YEAR" '{
+    CONTRIB_JSON=$(echo "$CONTRIB_RAW" | jq --arg year "$CURRENT_YEAR" --arg syncDate "$SYNC_DATE" '{
         year: ($year | tonumber),
         total: (.total | to_entries | map(.value) | add),
+        lastSynced: $syncDate,
         days: [.contributions[] | {date: .date, count: .count, level: .level}]
     }')
 
@@ -199,6 +226,8 @@ export GH_EMAIL="$EMAIL"
 export GH_TWITTER="$TWITTER"
 export GH_FOLLOWERS="$FOLLOWERS"
 export GH_FOLLOWING="$FOLLOWING"
+export GH_LINKEDIN="$LINKEDIN_URL"
+export GH_SOCIAL_LINKS="$SOCIAL_LINKS"
 
 # Use node to update the config (more reliable than sed for JS files)
 node << 'NODESCRIPT'
@@ -215,8 +244,10 @@ const data = {
     company: process.env.GH_COMPANY || '',
     email: process.env.GH_EMAIL || '',
     twitter: process.env.GH_TWITTER || '',
+    linkedin: process.env.GH_LINKEDIN || '',
     followers: parseInt(process.env.GH_FOLLOWERS) || 0,
-    following: parseInt(process.env.GH_FOLLOWING) || 0
+    following: parseInt(process.env.GH_FOLLOWING) || 0,
+    socialLinks: process.env.GH_SOCIAL_LINKS ? JSON.parse(process.env.GH_SOCIAL_LINKS) : []
 };
 
 let content = fs.readFileSync(configPath, 'utf8');
@@ -247,6 +278,16 @@ function updateNumericField(content, field, value) {
     return content;
 }
 
+// Helper to update or add an array field
+function updateArrayField(content, field, value) {
+    const arrayStr = JSON.stringify(value, null, 4).replace(/\n/g, '\n    ');
+    const regex = new RegExp(`(\\s*${field}:\\s*)\\[[^\\]]*\\]`, 's');
+    if (content.match(regex)) {
+        return content.replace(regex, `$1${arrayStr}`);
+    }
+    return content;
+}
+
 // Update profile fields
 content = updateField(content, 'name', data.name);
 content = updateField(content, 'username', data.username);
@@ -259,10 +300,16 @@ content = updateField(content, 'website', data.website);
 content = updateField(content, 'company', data.company);
 content = updateField(content, 'email', data.email);
 content = updateField(content, 'twitter', data.twitter);
+content = updateField(content, 'linkedin', data.linkedin);
 
 // Update numeric fields
 content = updateNumericField(content, 'followers', data.followers);
 content = updateNumericField(content, 'following', data.following);
+
+// Update social links array in the social section
+if (data.socialLinks && data.socialLinks.length > 0) {
+    content = updateArrayField(content, 'socialLinks', data.socialLinks);
+}
 
 fs.writeFileSync(configPath, content);
 console.log('Config updated successfully');

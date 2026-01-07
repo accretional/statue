@@ -41,6 +41,13 @@
   <slot />
 </main>
 
+<!-- Footer -->
+<footer class="site-footer">
+  <a href="https://statue.dev" target="_blank" rel="noopener noreferrer" class="footer-link">
+    Created with statue.dev
+  </a>
+</footer>
+
 <style>
   :global(body) {
     background-color: var(--color-background);
@@ -98,6 +105,31 @@
   @keyframes hero-fly-in {
     0% { opacity: 0; transform: scale(0.5); }
     100% { opacity: 1; transform: scale(1); }
+  }
+
+  /* Footer */
+  .site-footer {
+    padding: 2rem 1rem;
+    text-align: center;
+    border-top: 1px solid var(--color-border);
+    margin-top: 3rem;
+  }
+
+  .footer-link {
+    color: var(--color-muted);
+    text-decoration: none;
+    font-size: 0.875rem;
+    transition: color 0.2s ease;
+  }
+
+  .footer-link:hover {
+    color: var(--color-primary);
+  }
+
+  /* Hide footer on github1s and repositoriespage */
+  :global(body.github1s-page) .site-footer,
+  :global(body.repositories-page) .site-footer {
+    display: none;
   }
 
   /* Mac Desktop Hero Transition */
