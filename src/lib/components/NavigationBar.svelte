@@ -15,8 +15,7 @@
   // Default navigation items (Home, About, etc.)
   // Set to empty array to hide all default links
   export let defaultNavItems = [
-    { title: 'Home', url: '/' },
-    { title: 'About', url: '/about' }
+    { title: 'Home', url: '/' }
   ];
 
   // Hide specific directories from navbar (by folder name)
