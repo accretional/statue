@@ -49,8 +49,7 @@ export const siteConfig = {
 
     // Default navigation items (add cta: true for CTA button style)
     defaultNavItems: [
-      { title: 'Home', url: '/' },
-      { title: 'About', url: '/about' }
+      { title: 'Home', url: '/' }
     ]
   },
 
@@ -112,7 +111,7 @@ export const siteConfig = {
   // Search configuration
   search: {
     // Enable/disable search functionality
-    enabled: true,
+    enabled: false,
 
     // UI options
     placeholder: 'Search...',
