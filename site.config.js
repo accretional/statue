@@ -84,6 +84,31 @@ export const siteConfig = {
     excerptLength: 30
   },
 
+  // Theme configuration
+  // Configure which themes are available and the default theme
+  // Each theme needs a name (displayed in ThemeSelector) and path to CSS file
+  // Path can be: 
+  //   - Built-in (for consumers): 'statue-ssg/themes/blue.css'
+  //   - Local (for development): './src/lib/themes/blue.css'
+  theme: {
+    // Default theme (required if multiple themes)
+    default: 'Black & White',
+    
+    // Array of available themes
+    // Using local paths since this is the library itself
+    themes: [
+      { name: 'Black & White', path: './src/lib/themes/black-white.css' },
+      { name: 'Blue', path: './src/lib/themes/blue.css' },
+      { name: 'Red', path: './src/lib/themes/red.css' },
+      { name: 'Green', path: './src/lib/themes/green.css' },
+      { name: 'Purple', path: './src/lib/themes/purple.css' },
+      { name: 'Cyan', path: './src/lib/themes/cyan.css' },
+      { name: 'Orange', path: './src/lib/themes/orange.css' },
+      { name: 'Pink', path: './src/lib/themes/pink.css' },
+      { name: 'Charcoal', path: './src/lib/themes/charcoal.css' }
+    ]
+  },
+
   // SEO and meta information
   seo: {
     defaultTitle: "Statue SSG - Static Site Generator",

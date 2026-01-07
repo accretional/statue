@@ -1,141 +1,148 @@
-# 🎨 Statue SSG Themes
+# Statue Themes
 
-This folder contains different color themes. Each theme file uses the same CSS variables but with different color palettes.
+Statue themes are plain CSS files that define the site's design tokens using CSS custom properties (e.g. `--color-background`, `--color-primary`). Statue's theme system works by loading all configured theme variables at build time and switching between them at runtime by setting `data-theme` on the `<html>` element.
 
-## 📦 Available Themes
+## Built-in Themes
+
+These are shipped with the package under `statue-ssg/themes/*`:
 
 | Theme | File | Primary Color | Description |
-|------|-------|----------|----------|
+|-------|------|---------------|-------------|
 | **Black & White** | `black-white.css` | Monochrome | Minimalist black and white theme |
 | **Blue** | `blue.css` | #3b82f6 | Navy background, blue accents |
 | **Red** | `red.css` | #ef4444 | Dark red background, red accents |
-| **Orange** | `orange.css` | #f97316 | Brown background, orange accents |
 | **Green** | `green.css` | #10b981 | Dark green background, emerald accents |
 | **Purple** | `purple.css` | #a855f7 | Dark purple background, purple accents |
 | **Cyan** | `cyan.css` | #06b6d4 | Dark cyan background, cyan accents |
+| **Orange** | `orange.css` | #f97316 | Brown background, orange accents |
 | **Pink** | `pink.css` | #ec4899 | Dark pink background, pink accents |
+| **Charcoal** | `charcoal.css` | #ffffff | Warm neutral grays |
 
-## 🔧 Theme Usage
+Use them in your theme config as:
 
-### Method 1: Use Built-in Themes (Recommended)
-
-Import a built-in theme from statue-ssg in your `src/lib/index.css` file:
-
-```css
-@import "tailwindcss";
-
-/* Choose from built-in themes */
-@import "statue-ssg/themes/blue.css";
-/* or */
-@import "statue-ssg/themes/red.css";
-/* or any other built-in theme */
-
-@source "../";
-@source "../../node_modules/statue-ssg/src/**/*.{svelte,js,ts}";
+```js
+{ name: 'Blue', path: 'statue-ssg/themes/blue.css' }
 ```
 
-### Method 2: Create Custom Theme
+## How Theme Switching Works
 
-Create your own theme file in your project (e.g., `src/lib/themes/my-theme.css`):
+At build time, the Vite plugin generates CSS like:
+
+- `:root { ... }` using the configured default theme (fallback)
+- `html[data-theme="blue"] { ... }` per theme
+- `html[data-theme="red"] { ... }` per theme
+- etc.
+
+At runtime, switching theme is just:
+
+```js
+document.documentElement.dataset.theme = 'blue';
+```
+
+The `ThemeSelector` component does this automatically and persists the selection in `localStorage`.
+
+## Configuring Themes
+
+Themes are configured in `site.config.js`:
+
+```js
+export const siteConfig = {
+  theme: {
+    default: 'Black & White',
+    themes: [
+      { name: 'Black & White', path: 'statue-ssg/themes/black-white.css' },
+      { name: 'Blue', path: 'statue-ssg/themes/blue.css' },
+      { name: 'Charcoal', path: 'statue-ssg/themes/charcoal.css' },
+
+      // Custom theme from your repo:
+      { name: 'My Brand', path: './src/lib/themes/my-brand.css' }
+    ]
+  }
+};
+```
+
+Notes:
+- If you configure more than one theme, `theme.default` is required.
+- Theme `name` is user-facing; internally it's converted to an id (kebab-case) for `data-theme`.
+
+## Using the ThemeSelector Component
+
+Add the `ThemeSelector` component to your layout to allow users to switch themes:
+
+```svelte
+<!-- src/routes/+layout.svelte -->
+<script>
+  import { ThemeSelector } from 'statue-ssg';
+  import 'virtual:statue-themes.css';
+</script>
+
+<ThemeSelector />
+<slot />
+```
+
+The component will:
+- Display a dropdown with all configured themes
+- Apply the selected theme instantly by changing `data-theme` attribute
+- Persist the selection in `localStorage`
+- Auto-hide if only one theme is configured
+
+## Creating a Custom Theme
+
+Create a CSS file that defines `--color-*` variables in either an `@theme {}` block (Tailwind v4 style) or a `:root {}` block:
 
 ```css
-/* My Custom Theme */
 @theme {
-  --color-background: #1a1600;
-  --color-card: #2a2400;
-  --color-border: #4a4200;
-  --color-foreground: #fffef0;
-  --color-muted: #fde047;
+  --color-background: #0b1020;
+  --color-card: #121a33;
+  --color-border: #223057;
 
-  --color-primary: #facc15;
-  --color-secondary: #fde047;
-  --color-accent: #eab308;
+  --color-foreground: #eaeefc;
+  --color-muted: #aab4d6;
 
-  --color-on-primary: #000000;
-  --color-on-background: #2a2400;
+  --color-primary: #7aa2ff;
+  --color-secondary: #9db7ff;
+  --color-accent: #4e7dff;
 
-  --color-hero-from: #1a1600;
-  --color-hero-via: #2a2400;
-  --color-hero-to: #1a1600;
+  --color-on-primary: #0b1020;
+  --color-on-background: #eaeefc;
+
+  --color-hero-from: #0b1020;
+  --color-hero-via: #121a33;
+  --color-hero-to: #0b1020;
 }
 ```
 
-Then import it in `src/lib/index.css`:
+Then add it to `site.config.js` as shown above.
 
-```css
-@import "tailwindcss";
-@import "./themes/my-theme.css";  /* Your custom theme */
+## Required Variables
 
-@source "../";
-@source "../../node_modules/statue-ssg/src/**/*.{svelte,js,ts}";
+A theme is expected to provide the set of `--color-*` tokens used by the built-in components. At minimum, you should define:
+
+- `--color-background`, `--color-card`, `--color-border`
+- `--color-foreground`, `--color-muted`
+- `--color-primary`, `--color-secondary`, `--color-accent`
+- `--color-on-primary`, `--color-on-background`
+- `--color-hero-from`, `--color-hero-via`, `--color-hero-to`
+
+Some themes also define:
+- `--color-prose-link`, `--color-prose-code-bg`, `--color-prose-pre-bg`
+
+If you omit tokens used by a component, that component may render with unexpected colors.
+
+## Advanced: Programmatic Theme Access
+
+You can import theme metadata for building custom UI:
+
+```svelte
+<script>
+  import { themes, defaultTheme, showSelector } from 'virtual:statue-themes';
+
+  console.log(themes);
+  // [{ id: 'blue', name: 'Blue', colors: {...} }, ...]
+  
+  console.log(defaultTheme); // 'black-white'
+  console.log(showSelector); // true if multiple themes configured
+</script>
 ```
 
-### Method 3: Inline Theme Variables
-
-Copy the `@theme` block from any theme file and paste it directly into your `src/lib/index.css` file.
-
-## 🎨 Theme Variables
-
-Each theme defines the following CSS variables:
-
-### Base Palette
-- `--color-background` - Main background color
-- `--color-card` - Card/section background color
-- `--color-border` - Border color
-- `--color-foreground` - Main text color
-- `--color-muted` - Secondary/muted text color
-
-### Brand Colors
-- `--color-primary` - Primary accent color (buttons, links)
-- `--color-secondary` - Secondary accent color
-- `--color-accent` - Tertiary accent color
-
-### Text Colors
-- `--color-on-primary` - Text on primary color
-- `--color-on-background` - Contrast text on background
-
-### Gradient Colors
-- `--color-hero-from` - Hero gradient start
-- `--color-hero-via` - Hero gradient middle
-- `--color-hero-to` - Hero gradient end
-
-## ✨ Creating a New Theme
-
-To create a new theme:
-
-1. **Use the template**: Copy `custom-theme.template.css` from this folder to your project's `src/lib/themes/` directory
-2. **Rename the file**: Give it a meaningful name (e.g., `my-brand.css`, `yellow.css`)
-3. **Customize the colors**: Update all color values to match your brand
-4. **Import it**: Add `@import "./themes/your-theme.css";` in your `src/lib/index.css`
-
-Quick example:
-
-```css
-/* Yellow Theme */
-@theme {
-  --color-background: #1a1600;
-  --color-card: #2a2400;
-  --color-border: #4a4200;
-  --color-foreground: #fffef0;
-  --color-muted: #fde047;
-
-  --color-primary: #facc15;
-  --color-secondary: #fde047;
-  --color-accent: #eab308;
-
-  --color-on-primary: #000000;
-  --color-on-background: #2a2400;
-
-  --color-hero-from: #1a1600;
-  --color-hero-via: #2a2400;
-  --color-hero-to: #1a1600;
-}
-```
-
-## 💡 Tips
-
-- Use `color-scheme: dark` for dark themes
-- Use RGB values of the primary color for hover effects
-- Test contrast ratio (WCAG AA standard)
-- Maintain consistency across all pages
-
+This allows you to build your own theme selector UI if needed.

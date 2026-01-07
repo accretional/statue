@@ -18,6 +18,7 @@
 		},
 		"./components/*": "./src/lib/components/*",
 		"./themes/*": "./src/lib/themes/*",
+		"./vite-plugin": "./vite-plugin/index.js",
 		"./styles.css": "./src/lib/index.css",
 		"./resources/*": "./resources/*",
 		"./package.json": "./package.json"
@@ -31,6 +32,7 @@
 		"content",
 		"resources",
 		"templates",
+		"vite-plugin",
 		"static",
 		"svelte.config.js",
 		"vite.config.js",

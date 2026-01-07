@@ -11,10 +11,13 @@
   <div class="max-w-6xl mx-auto">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       {#each stats as stat}
-        <div class="group relative bg-[var(--color-card)]/50 backdrop-blur-sm border border-[var(--color-border)] rounded-2xl p-8 hover:border-[var(--color-{stat.color})]/50 transition-all duration-300">
-          <div class="absolute inset-0 bg-gradient-to-br from-[var(--color-{stat.color})]/5 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        <div
+          class="group relative bg-[var(--color-card)]/50 backdrop-blur-sm border border-[var(--color-border)] rounded-2xl p-8 hover:border-[var(--stat-color)]/50 transition-all duration-300"
+          style="--stat-color: var(--color-{stat.color})"
+        >
+          <div class="absolute inset-0 bg-gradient-to-br from-[var(--stat-color)]/5 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
           <div class="relative">
-            <div class="text-6xl font-bold mb-4 text-[var(--color-{stat.color})]">
+            <div class="text-6xl font-bold mb-4 text-[var(--stat-color)]">
               {stat.title}
             </div>
             <p class="text-[var(--color-muted)] leading-relaxed">{stat.description}</p>

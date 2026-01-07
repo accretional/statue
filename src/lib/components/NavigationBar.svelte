@@ -2,12 +2,14 @@
 
   import { page } from '$app/stores';
   import Search from './Search.svelte';
+  import ThemeSelector from './ThemeSelector.svelte';
 
   export let navbarItems = [];
   export let activePath = '';
   export let showSearch = false;
   export let searchPlaceholder = "Search...";
-  
+  export let showThemeSelector = false; // Opt-in to avoid surprising existing users
+
   let isMenuOpen = false;
   let isHidden = false;
   let lastScrollY = 0;
@@ -94,6 +96,13 @@
         {#if showSearch}
           <div class="ml-2 w-56">
             <Search placeholder={searchPlaceholder} />
+          </div>
+        {/if}
+
+        <!-- Theme Selector -->
+        {#if showThemeSelector}
+          <div class="ml-2">
+            <ThemeSelector />
           </div>
         {/if}
         
