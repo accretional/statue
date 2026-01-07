@@ -12,11 +12,7 @@ export const siteConfig = {
       { title: 'Home', url: '/' },
       { title: 'About', url: '/about' }
     ],
-    ctaButton: {
-      show: false,
-      text: '',
-      url: ''
-    }
+    hiddenFromNav: ['legal']
   },
   contact: { address: {} },
   social: {},
