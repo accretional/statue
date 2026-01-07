@@ -51,10 +51,7 @@ export const siteConfig = {
     defaultNavItems: [
       { title: 'Home', url: '/' },
       { title: 'About', url: '/about' }
-    ],
-
-    // Hide these directories from navbar (by folder name)
-    hiddenFromNav: ['legal','docs']
+    ]
   },
 
   // Contact information
