@@ -39,6 +39,20 @@ export const siteConfig = {
     author: "Your Name"
   },
 
+  // Navigation bar configuration
+  navbar: {
+    // Site title displayed in the navbar (null to hide)
+    siteTitle: "My Portfolio",
+
+    // Logo image URL (null for default SVG icon)
+    logo: null,
+
+    // Default navigation items (add cta: true for CTA button style)
+    defaultNavItems: [
+      { title: 'Home', url: '/' }
+    ]
+  },
+
   // Contact information
   contact: {
     // Main contact email
@@ -97,7 +111,7 @@ export const siteConfig = {
   // Search configuration
   search: {
     // Enable/disable search functionality
-    enabled: true,
+    enabled: false,
 
     // UI options
     placeholder: 'Search...',

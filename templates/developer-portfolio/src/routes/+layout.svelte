@@ -1,21 +1,13 @@
 <script>
+  import { NavigationBar } from 'statue-ssg';
   import { onNavigate } from '$app/navigation';
   import { page } from '$app/stores';
   import '$lib/index.css';
 
   export let data;
 
-  // Get profile from layout data
-  $: profile = data?.profile ?? { name: 'Portfolio' };
-
-  // Navbar items
-  const navbarItems = [
-    { title: 'Blog', url: '/blog' },
-  ];
-
-  let scrollY = 0;
-
-  $: currentPath = $page.url.pathname;
+  $: navbarConfig = data?.navbarConfig;
+  $: searchConfig = data?.searchConfig;
 
   // Enable View Transitions API for Hero-like animations
   onNavigate((navigation) => {
@@ -35,23 +27,15 @@
   });
 </script>
 
-<svelte:window bind:scrollY />
-
-<!-- Custom Navbar -->
-<nav class="navbar" class:scrolled={scrollY > 10}>
-  <div class="nav-container">
-    <a href="/" class="logo">
-      <span class="logo-text">{profile.name}</span>
-    </a>
-
-    <div class="nav-links">
-      <a href="/" class="nav-link" class:active={currentPath === '/'}>Home</a>
-      {#each navbarItems as item}
-        <a href={item.url} class="nav-link" class:active={currentPath.startsWith(item.url)}>{item.title}</a>
-      {/each}
-    </div>
-  </div>
-</nav>
+<NavigationBar
+  navbarItems={data?.globalDirectories ?? []}
+  showSearch={searchConfig?.enabled ?? false}
+  searchPlaceholder={searchConfig?.placeholder ?? 'Search...'}
+  siteTitle={navbarConfig?.siteTitle ?? null}
+  logo={navbarConfig?.logo ?? null}
+  hiddenFromNav={navbarConfig?.hiddenFromNav ?? []}
+  defaultNavItems={navbarConfig?.defaultNavItems}
+/>
 
 <main class="pt-16">
   <slot />
@@ -79,72 +63,6 @@
 
   :global(html) {
     scroll-behavior: smooth;
-  }
-
-  /* Custom Navbar Styles */
-  .navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 64px;
-    z-index: 50;
-    background: transparent;
-    transition: background 0.3s ease, backdrop-filter 0.3s ease;
-  }
-
-  .navbar.scrolled {
-    background: var(--glass-bg, rgba(0, 0, 0, 0.8));
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--color-border);
-  }
-
-  .nav-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1.5rem;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .logo {
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-  }
-
-  .logo-text {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--color-primary);
-    letter-spacing: -0.02em;
-  }
-
-  .nav-links {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .nav-link {
-    padding: 0.5rem 1rem;
-    color: var(--color-foreground);
-    text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: 500;
-    border-radius: 6px;
-    transition: color 0.2s ease, background 0.2s ease;
-  }
-
-  .nav-link:hover {
-    color: var(--color-primary);
-    background: color-mix(in srgb, var(--color-primary) 15%, transparent);
-  }
-
-  .nav-link.active {
-    color: var(--color-primary);
   }
 
   /* View Transitions - Hero animation */
@@ -251,5 +169,4 @@
       clip-path: circle(150% at calc(100% - 4rem) calc(100% - 4rem));
     }
   }
-
 </style>
