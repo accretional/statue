@@ -15,10 +15,19 @@ async function setupStatueSSG(options = {}) {
   console.log(chalk.blue(`🗿 Statue SSG - Initializing '${templateName}' template...`));
 
   // 1. Copy content
-  const contentDir = path.join(sourceDir, 'content');
-  if (fs.existsSync(contentDir)) {
-    fs.copySync(contentDir, path.join(targetDir, 'content'), { overwrite: false });
-    console.log(chalk.green('✓ content copied'));
+  // If template has its own content folder, skip default content 
+  // Otherwise, copy default content as fallback
+  const templateContentDir = path.join(sourceDir, 'templates', templateName, 'content');
+  const hasTemplateContent = fs.existsSync(templateContentDir);
+
+  if (!hasTemplateContent) {
+    const contentDir = path.join(sourceDir, 'content');
+    if (fs.existsSync(contentDir)) {
+      fs.copySync(contentDir, path.join(targetDir, 'content'), { overwrite: false });
+      console.log(chalk.green('✓ content copied'));
+    }
+  } else {
+    console.log(chalk.gray('⊘ using template content folder'));
   }
 
   // 2. Copy shared resources (favicon, robots.txt, etc.) - base layer
@@ -62,8 +71,7 @@ async function setupStatueSSG(options = {}) {
   console.log(chalk.green(`✓ ${templateName} template copied`));
 
   // Copy template's content if exists
-  const templateContentDir = path.join(templateDir, 'content');
-  if (fs.existsSync(templateContentDir)) {
+  if (hasTemplateContent) {
     fs.copySync(templateContentDir, path.join(targetDir, 'content'), { overwrite: true });
   }
 
