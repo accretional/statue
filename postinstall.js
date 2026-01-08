@@ -29,12 +29,13 @@ async function setupStatueSSG(options = {}) {
   }
 
   // 3. Copy template (src + site.config.js + static + scripts)
-  // Always copy base files first (app.html, lib/index.css), then template overrides
-  fs.copySync(path.join(sourceDir, 'src/app.html'), path.join(targetDir, 'src/app.html'), { overwrite: true });
-  fs.ensureDirSync(path.join(targetDir, 'src/lib'));
-  fs.copySync(path.join(sourceDir, 'src/lib/index.css'), path.join(targetDir, 'src/lib/index.css'), { overwrite: true });
+  const templateDir = path.join(sourceDir, 'templates', templateName);
 
-  const templateDir = templateName === 'default' ? sourceDir : path.join(sourceDir, 'templates', templateName);
+  // Copy template's hooks.server.js if exists
+  const templateHooks = path.join(templateDir, 'src/hooks.server.js');
+  if (fs.existsSync(templateHooks)) {
+    fs.copySync(templateHooks, path.join(targetDir, 'src/hooks.server.js'), { overwrite: true });
+  }
 
   // Copy routes
   fs.copySync(path.join(templateDir, 'src/routes'), path.join(targetDir, 'src/routes'), { overwrite: true });
@@ -67,7 +68,7 @@ async function setupStatueSSG(options = {}) {
     fs.copySync(templateContentDir, path.join(targetDir, 'content'), { overwrite: true });
   }
 
-  // 4. Copy build configs (svelte, vite, postcss) - always from root 
+  // 4. Copy build configs (svelte, vite, postcss) - always from root
   for (const config of ['svelte.config.js', 'vite.config.js', 'postcss.config.js']) {
     const src = path.join(sourceDir, config);
     if (fs.existsSync(src)) {
