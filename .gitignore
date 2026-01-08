@@ -27,3 +27,8 @@ statue_test_env/
 
 # Default template backup (local only)
 templates/_default/
+
+# Development symlinks (created by symlink-template.sh)
+/src/routes
+/site.config.js
+/content
