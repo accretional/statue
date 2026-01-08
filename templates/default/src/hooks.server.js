@@ -1,4 +1,4 @@
-import { getAllContent, getContentDirectories } from '$lib/cms/content-processor';
+import { getAllContent, getContentDirectories } from 'statue-ssg/cms/content-processor';
 
 /** @type {import('@sveltejs/kit').Handle} */
 export async function handle({ event, resolve }) {
