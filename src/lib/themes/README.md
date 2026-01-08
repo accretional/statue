@@ -14,6 +14,7 @@ This folder contains different color themes. Each theme file uses the same CSS v
 | **Purple** | `purple.css` | #a855f7 | Dark purple background, purple accents |
 | **Cyan** | `cyan.css` | #06b6d4 | Dark cyan background, cyan accents |
 | **Pink** | `pink.css` | #ec4899 | Dark pink background, pink accents |
+| **Claude Theme** | `claude-theme.css` | #d97757 | Warm dark background, coral accents |
 
 ## 🔧 Theme Usage
 
