@@ -32,14 +32,6 @@ program
 
       if (!fs.existsSync(templatePath)) {
         console.error(chalk.red(`❌ Template '${templateName}' does not exist.`));
-        console.log(chalk.yellow('Available templates:'));
-        try {
-          const templates = fs.readdirSync(path.join(packageDir, 'templates'))
-            .filter(t => fs.statSync(path.join(packageDir, 'templates', t)).isDirectory());
-          templates.forEach(t => console.log(`  - ${t}`));
-        } catch (e) {
-           // Ignore
-        }
         process.exit(1);
       }
 
