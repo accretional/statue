@@ -31,12 +31,6 @@ async function setupStatueSSG(options = {}) {
   // 3. Copy template (src + site.config.js + static + scripts)
   const templateDir = path.join(sourceDir, 'templates', templateName);
 
-  // Copy template's hooks.server.js if exists
-  const templateHooks = path.join(templateDir, 'src/hooks.server.js');
-  if (fs.existsSync(templateHooks)) {
-    fs.copySync(templateHooks, path.join(targetDir, 'src/hooks.server.js'), { overwrite: true });
-  }
-
   // Copy routes
   fs.copySync(path.join(templateDir, 'src/routes'), path.join(targetDir, 'src/routes'), { overwrite: true });
 
