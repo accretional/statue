@@ -14,14 +14,7 @@ async function setupStatueSSG(options = {}) {
 
   console.log(chalk.blue(`🗿 Statue SSG - Initializing '${templateName}' template...`));
 
-  // 1. Copy content
-  const contentDir = path.join(sourceDir, 'content');
-  if (fs.existsSync(contentDir)) {
-    fs.copySync(contentDir, path.join(targetDir, 'content'), { overwrite: false });
-    console.log(chalk.green('✓ content copied'));
-  }
-
-  // 2. Copy shared resources (favicon, robots.txt, etc.) - base layer
+  // 1. Copy shared resources (favicon, robots.txt, etc.) - base layer
   const sharedDir = path.join(sourceDir, 'resources');
   if (fs.existsSync(sharedDir)) {
     fs.copySync(sharedDir, path.join(targetDir, 'static'), { overwrite: true });
