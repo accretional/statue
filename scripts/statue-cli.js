@@ -28,22 +28,19 @@ program
     
     try {
       // Check if template exists before proceeding
-      // 'default' always exists (it's the package root)
-      if (templateName !== 'default') {
-        const templatePath = path.join(packageDir, 'templates', templateName);
-        if (!fs.existsSync(templatePath)) {
-          console.error(chalk.red(`❌ Template '${templateName}' does not exist.`));
-          console.log(chalk.yellow('Available templates:'));
-          console.log('  - default');
-          try {
-            const templates = fs.readdirSync(path.join(packageDir, 'templates'))
-              .filter(t => fs.statSync(path.join(packageDir, 'templates', t)).isDirectory());
-            templates.forEach(t => console.log(`  - ${t}`));
-          } catch (e) {
-             // Ignore
-          }
-          process.exit(1);
+      const templatePath = path.join(packageDir, 'templates', templateName);
+
+      if (!fs.existsSync(templatePath)) {
+        console.error(chalk.red(`❌ Template '${templateName}' does not exist.`));
+        console.log(chalk.yellow('Available templates:'));
+        try {
+          const templates = fs.readdirSync(path.join(packageDir, 'templates'))
+            .filter(t => fs.statSync(path.join(packageDir, 'templates', t)).isDirectory());
+          templates.forEach(t => console.log(`  - ${t}`));
+        } catch (e) {
+           // Ignore
         }
+        process.exit(1);
       }
 
       // Run the postinstall script with options

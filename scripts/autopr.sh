@@ -259,6 +259,13 @@ parse_args() {
                 log_warn "site.config.js not found, skipping"
             fi
 
+            # Optional: src/app.html
+            if [ -f "src/app.html" ]; then
+                log_info "Found src/app.html, including in template"
+                SOURCE_PATHS+=("src/app.html")
+                DEST_PATHS+=("templates/$name/src/app.html")
+            fi
+
             # Optional: static directory
             if [ -d "static" ]; then
                 log_info "Found static/ directory, including in template"
@@ -300,6 +307,13 @@ parse_args() {
                 DEST_PATHS+=("templates/$name/site.config.js")
             else
                 log_warn "site.config.js not found, skipping"
+            fi
+
+            # Optional: src/app.html
+            if [ -f "src/app.html" ]; then
+                log_info "Found src/app.html, including in template"
+                SOURCE_PATHS+=("src/app.html")
+                DEST_PATHS+=("templates/$name/src/app.html")
             fi
 
             # Optional: static
