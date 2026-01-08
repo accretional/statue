@@ -62,7 +62,7 @@ async function setupStatueSSG(options = {}) {
     fs.copySync(templateContentDir, path.join(targetDir, 'content'), { overwrite: true });
   }
 
-  // 4. Copy build configs (svelte, vite, postcss) - always from root
+  // 4. Copy build configs (svelte, vite, postcss) - always from root 
   for (const config of ['svelte.config.js', 'vite.config.js', 'postcss.config.js']) {
     const src = path.join(sourceDir, config);
     if (fs.existsSync(src)) {
