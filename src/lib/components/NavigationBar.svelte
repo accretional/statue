@@ -158,7 +158,7 @@
           {#if !item.cta}
             <a
               href={item.url}
-              class="block px-3 py-2 rounded-md text-base font-medium {isActive(item.url, currentPath) ? 'bg-surface text-white' : 'text-slate-300 hover:bg-surface hover:text-white'}"
+              class="block px-3 py-2 rounded-md text-base font-medium {isActive(item.url, currentPath) ? 'bg-surface text-white' : 'text-[var(--color-muted)] hover:bg-surface hover:text-white'}"
             >
               {item.title}
             </a>
