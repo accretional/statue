@@ -14,14 +14,7 @@ async function setupStatueSSG(options = {}) {
 
   console.log(chalk.blue(`🗿 Statue SSG - Initializing '${templateName}' template...`));
 
-  // 1. Copy content
-  const contentDir = path.join(sourceDir, 'content');
-  if (fs.existsSync(contentDir)) {
-    fs.copySync(contentDir, path.join(targetDir, 'content'), { overwrite: false });
-    console.log(chalk.green('✓ content copied'));
-  }
-
-  // 2. Copy shared resources (favicon, robots.txt, etc.) - base layer
+  // 1. Copy shared resources (favicon, robots.txt, etc.) - base layer
   const sharedDir = path.join(sourceDir, 'resources');
   if (fs.existsSync(sharedDir)) {
     fs.copySync(sharedDir, path.join(targetDir, 'static'), { overwrite: true });
@@ -29,12 +22,7 @@ async function setupStatueSSG(options = {}) {
   }
 
   // 3. Copy template (src + site.config.js + static + scripts)
-  // Always copy base files first (app.html, lib/index.css), then template overrides
-  fs.copySync(path.join(sourceDir, 'src/app.html'), path.join(targetDir, 'src/app.html'), { overwrite: true });
-  fs.ensureDirSync(path.join(targetDir, 'src/lib'));
-  fs.copySync(path.join(sourceDir, 'src/lib/index.css'), path.join(targetDir, 'src/lib/index.css'), { overwrite: true });
-
-  const templateDir = templateName === 'default' ? sourceDir : path.join(sourceDir, 'templates', templateName);
+  const templateDir = path.join(sourceDir, 'templates', templateName);
 
   // Copy routes
   fs.copySync(path.join(templateDir, 'src/routes'), path.join(targetDir, 'src/routes'), { overwrite: true });
@@ -61,10 +49,15 @@ async function setupStatueSSG(options = {}) {
 
   console.log(chalk.green(`✓ ${templateName} template copied`));
 
-  // Copy template's content if exists
+  // Copy template's content if exists, otherwise use default content as fallback
   const templateContentDir = path.join(templateDir, 'content');
-  if (fs.existsSync(templateContentDir)) {
-    fs.copySync(templateContentDir, path.join(targetDir, 'content'), { overwrite: true });
+  const contentSource = fs.existsSync(templateContentDir)
+    ? templateContentDir
+    : path.join(sourceDir, 'templates', 'default', 'content');
+
+  if (fs.existsSync(contentSource)) {
+    fs.copySync(contentSource, path.join(targetDir, 'content'), { overwrite: true });
+    console.log(chalk.green(`✓ content copied (${fs.existsSync(templateContentDir) ? templateName : 'default'})`));
   }
 
   // 4. Copy build configs (svelte, vite, postcss) - always from root 
