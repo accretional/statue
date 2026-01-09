@@ -1,3 +1,8 @@
+<svelte:head>
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+</svelte:head>
+
 <script>
   import { NavigationBar } from 'statue-ssg';
   import { onNavigate } from '$app/navigation';
