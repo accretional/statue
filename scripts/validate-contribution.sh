@@ -238,21 +238,8 @@ validate_template() {
         log_error "Missing required route: [directory]/+page.svelte and +page.server.js"
     fi
 
-    # Check for $lib imports (not statue-ssg)
-    log_info "Checking imports in route files..."
-    local bad_imports=0
-    while IFS= read -r -d '' file; do
-        if grep -q "from 'statue-ssg'" "$file" || grep -q 'from "statue-ssg"' "$file"; then
-            log_error "File uses 'statue-ssg' import instead of '\$lib': $(basename "$file")"
-            log_error "  Change: import { Component } from 'statue-ssg'"
-            log_error "  To:     import { Component } from '\$lib'"
-            bad_imports=$((bad_imports + 1))
-        fi
-    done < <(find "$routes_dir" \( -name "*.svelte" -o -name "*.js" \) -print0 2>/dev/null)
-
-    if [[ $bad_imports -eq 0 ]]; then
-        log_success "All route files use '\$lib' imports"
-    fi
+    # Note: statue-ssg imports are allowed in templates (user projects use them)
+    # Templates may contain either $lib or statue-ssg imports depending on context
 
     # Check for content directory
     if [[ -d "$template_dir/content" ]]; then
