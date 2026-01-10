@@ -160,6 +160,7 @@ parse_args() {
     # Initialize arrays
     SOURCE_PATHS=()
     DEST_PATHS=()
+    TEMP_DIRS_TO_CLEAN=()
 
     case "$contrib_type" in
         component)
@@ -234,17 +235,18 @@ parse_args() {
             ;;
 
         template)
-            # Template: current dir (src/routes/, content/, site.config.js) -> templates/template-name/
+            # Template: current dir (src/, filtered static/, content/, site.config.js) -> templates/template-name/
             if [ ! -d "src/routes" ]; then
                 log_error "src/routes/ directory not found in current directory"
                 log_error "Make sure you're in the root of a Statue site"
                 exit 1
             fi
 
-            # Required files/directories
-            SOURCE_PATHS+=("src/routes")
-            DEST_PATHS+=("templates/$name/src/routes")
+            # Required: entire src directory (routes, lib, etc.)
+            SOURCE_PATHS+=("src")
+            DEST_PATHS+=("templates/$name/src")
 
+            # Optional: content directory (no filtering - user may have modified it)
             if [ -d "content" ]; then
                 SOURCE_PATHS+=("content")
                 DEST_PATHS+=("templates/$name/content")
@@ -252,6 +254,7 @@ parse_args() {
                 log_warn "content/ directory not found, skipping"
             fi
 
+            # Optional: site.config.js
             if [ -f "site.config.js" ]; then
                 SOURCE_PATHS+=("site.config.js")
                 DEST_PATHS+=("templates/$name/site.config.js")
@@ -259,11 +262,66 @@ parse_args() {
                 log_warn "site.config.js not found, skipping"
             fi
 
-            # Optional: static directory
+            # Optional: static directory (filtered - exclude files from node_modules/statue-ssg/resources)
             if [ -d "static" ]; then
-                log_info "Found static/ directory, including in template"
-                SOURCE_PATHS+=("static")
-                DEST_PATHS+=("templates/$name/static")
+                log_info "Found static/ directory, filtering out default resources..."
+                # Get the resources path from node_modules
+                local resources_dir="node_modules/statue-ssg/resources"
+                if [ -d "$resources_dir" ]; then
+                    # Find files in static that are NOT in resources (or are different)
+                    local temp_static_list=$(mktemp)
+                    local temp_found_any=0
+
+                    # Find all files in static directory
+                    while IFS= read -r -d '' static_file; do
+                        # Get relative path from static/
+                        local rel_path="${static_file#static/}"
+
+                        # Check if same file exists in resources
+                        local resources_file="$resources_dir/$rel_path"
+                        if [ -f "$resources_file" ]; then
+                            # Files exist in both - compare checksums
+                            if ! cmp -s "$static_file" "$resources_file"; then
+                                # Files are different, include this file
+                                echo "$static_file" >> "$temp_static_list"
+                                temp_found_any=1
+                            fi
+                        else
+                            # File doesn't exist in resources, include it
+                            echo "$static_file" >> "$temp_static_list"
+                            temp_found_any=1
+                        fi
+                    done < <(find static -type f -print0)
+
+                    if [ "$temp_found_any" -eq 1 ]; then
+                        log_info "Found custom static files to include..."
+                        # Create a temporary directory to hold filtered static files
+                        local temp_static_dir=$(mktemp -d)
+                        mkdir -p "$temp_static_dir/static"
+
+                        # Copy each unique/different file to temp directory
+                        while IFS= read -r static_file; do
+                            local rel_path="${static_file#static/}"
+                            local dest_dir="$temp_static_dir/static/$(dirname "$rel_path")"
+                            mkdir -p "$dest_dir"
+                            cp "$static_file" "$dest_dir/"
+                        done < "$temp_static_list"
+
+                        SOURCE_PATHS+=("$temp_static_dir/static")
+                        DEST_PATHS+=("templates/$name/static")
+                        # Clean up temp file
+                        rm -f "$temp_static_list"
+                        # Track temp directory for cleanup
+                        TEMP_DIRS_TO_CLEAN+=("$temp_static_dir")
+                    else
+                        log_info "No custom static files found (all files match default resources)"
+                        rm -f "$temp_static_list"
+                    fi
+                else
+                    log_warn "node_modules/statue-ssg/resources not found, including entire static/ directory"
+                    SOURCE_PATHS+=("static")
+                    DEST_PATHS+=("templates/$name/static")
+                fi
             fi
 
             BRANCH_NAME="$(generate_random_prefix)-template-${name}"
@@ -273,7 +331,7 @@ parse_args() {
             ;;
 
         all)
-            # All: Template + custom components + custom themes -> templates/template-name/
+            # All: Template (entire src, filtered static, content) -> templates/template-name/
             if [ ! -d "src/routes" ]; then
                 log_error "src/routes/ directory not found in current directory"
                 log_error "Make sure you're in the root of a Statue site"
@@ -282,9 +340,9 @@ parse_args() {
 
             log_info "Bundling complete template with custom components and themes..."
 
-            # Required: routes
-            SOURCE_PATHS+=("src/routes")
-            DEST_PATHS+=("templates/$name/src/routes")
+            # Required: entire src directory 
+            SOURCE_PATHS+=("src")
+            DEST_PATHS+=("templates/$name/src")
 
             # Optional: content
             if [ -d "content" ]; then
@@ -302,57 +360,66 @@ parse_args() {
                 log_warn "site.config.js not found, skipping"
             fi
 
-            # Optional: static
+            # Optional: static directory (filtered - exclude files from node_modules/statue-ssg/resources)
             if [ -d "static" ]; then
-                log_info "Found static/ directory, including in template"
-                SOURCE_PATHS+=("static")
-                DEST_PATHS+=("templates/$name/static")
-            fi
+                log_info "Found static/ directory, filtering out default resources..."
+                # Get the resources path from node_modules
+                local resources_dir="node_modules/statue-ssg/resources"
+                if [ -d "$resources_dir" ]; then
+                    # Find files in static that are NOT in resources (or are different)
+                    local temp_static_list=$(mktemp)
+                    local temp_found_any=0
 
-            # Optional: src/lib/index.ts (component exports)
-            if [ -f "src/lib/index.ts" ]; then
-                log_info "Found src/lib/index.ts, including in template"
-                SOURCE_PATHS+=("src/lib/index.ts")
-                DEST_PATHS+=("templates/$name/src/lib/index.ts")
-            fi
+                    # Find all files in static directory
+                    while IFS= read -r -d '' static_file; do
+                        # Get relative path from static/
+                        local rel_path="${static_file#static/}"
 
-            # Optional: src/lib/index.css (styles and theme imports)
-            if [ -f "src/lib/index.css" ]; then
-                log_info "Found src/lib/index.css, including in template"
-                SOURCE_PATHS+=("src/lib/index.css")
-                DEST_PATHS+=("templates/$name/src/lib/index.css")
-            fi
+                        # Check if same file exists in resources
+                        local resources_file="$resources_dir/$rel_path"
+                        if [ -f "$resources_file" ]; then
+                            # Files exist in both - compare checksums
+                            if ! cmp -s "$static_file" "$resources_file"; then
+                                # Files are different, include this file
+                                echo "$static_file" >> "$temp_static_list"
+                                temp_found_any=1
+                            fi
+                        else
+                            # File doesn't exist in resources, include it
+                            echo "$static_file" >> "$temp_static_list"
+                            temp_found_any=1
+                        fi
+                    done < <(find static -type f -print0)
 
-            # Bundle custom components (if they exist)
-            if [ -d "src/lib/components" ]; then
-                log_info "Found custom components, bundling into template..."
-                local component_count=0
-                while IFS= read -r -d '' component_file; do
-                    # Get relative path from src/lib/components/
-                    local rel_path="${component_file#src/lib/components/}"
-                    SOURCE_PATHS+=("$component_file")
-                    DEST_PATHS+=("templates/$name/src/lib/components/$rel_path")
-                    component_count=$((component_count + 1))
-                done < <(find src/lib/components -type f -name "*.svelte" -print0)
-                log_info "Bundled $component_count custom component(s)"
-            else
-                log_info "No custom components directory found (src/lib/components/)"
-            fi
+                    if [ "$temp_found_any" -eq 1 ]; then
+                        log_info "Found custom static files to include..."
+                        # Create a temporary directory to hold filtered static files
+                        local temp_static_dir=$(mktemp -d)
+                        mkdir -p "$temp_static_dir/static"
 
-            # Bundle custom themes (if they exist)
-            if [ -d "src/lib/themes" ]; then
-                log_info "Found custom themes, bundling into template..."
-                local theme_count=0
-                while IFS= read -r -d '' theme_file; do
-                    # Get relative path from src/lib/themes/
-                    local rel_path="${theme_file#src/lib/themes/}"
-                    SOURCE_PATHS+=("$theme_file")
-                    DEST_PATHS+=("templates/$name/src/lib/themes/$rel_path")
-                    theme_count=$((theme_count + 1))
-                done < <(find src/lib/themes -type f -name "*.css" -print0)
-                log_info "Bundled $theme_count custom theme(s)"
-            else
-                log_info "No custom themes directory found (src/lib/themes/)"
+                        # Copy each unique/different file to temp directory
+                        while IFS= read -r static_file; do
+                            local rel_path="${static_file#static/}"
+                            local dest_dir="$temp_static_dir/static/$(dirname "$rel_path")"
+                            mkdir -p "$dest_dir"
+                            cp "$static_file" "$dest_dir/"
+                        done < "$temp_static_list"
+
+                        SOURCE_PATHS+=("$temp_static_dir/static")
+                        DEST_PATHS+=("templates/$name/static")
+                        # Clean up temp file
+                        rm -f "$temp_static_list"
+                        # Track temp directory for cleanup
+                        TEMP_DIRS_TO_CLEAN+=("$temp_static_dir")
+                    else
+                        log_info "No custom static files found (all files match default resources)"
+                        rm -f "$temp_static_list"
+                    fi
+                else
+                    log_warn "node_modules/statue-ssg/resources not found, including entire static/ directory"
+                    SOURCE_PATHS+=("static")
+                    DEST_PATHS+=("templates/$name/static")
+                fi
             fi
 
             BRANCH_NAME="$(generate_random_prefix)-all-${name}"
@@ -403,8 +470,12 @@ create_pr() {
 
     # Cleanup function
     cleanup() {
-        log_info "Cleaning up temporary directory..."
+        log_info "Cleaning up temporary directories..."
         rm -rf "$temp_dir"
+        # Clean up any additional temp directories created during filtering
+        for dir in "${TEMP_DIRS_TO_CLEAN[@]}"; do
+            rm -rf "$dir" 2>/dev/null || true
+        done
     }
     trap cleanup EXIT
 
