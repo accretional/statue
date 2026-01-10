@@ -1,0 +1,202 @@
+[
+  {
+    "name": "littleagents",
+    "description": "300 Free (maybe not) AI Tools",
+    "language": "Unknown",
+    "languageColor": "#6e7681",
+    "stars": 2,
+    "forks": 0,
+    "isPublic": true,
+    "link": "https://github.com/semihpolat/littleagents"
+  },
+  {
+    "name": "flutter_the_eye",
+    "description": "Eye Drawing with CustomPaint Library",
+    "language": "Dart",
+    "languageColor": "#00B4AB",
+    "stars": 2,
+    "forks": 0,
+    "isPublic": true,
+    "link": "https://github.com/semihpolat/flutter_the_eye"
+  },
+  {
+    "name": "vscode-multi-ai",
+    "description": "No description",
+    "language": "TypeScript",
+    "languageColor": "#3178c6",
+    "stars": 1,
+    "forks": 1,
+    "isPublic": true,
+    "link": "https://github.com/semihpolat/vscode-multi-ai"
+  },
+  {
+    "name": "stories_w_supabase",
+    "description": "Create  and commit to the Stories together!",
+    "language": "Dart",
+    "languageColor": "#00B4AB",
+    "stars": 1,
+    "forks": 0,
+    "isPublic": true,
+    "link": "https://github.com/semihpolat/stories_w_supabase"
+  },
+  {
+    "name": "statue",
+    "description": "Statue: Svelte Static Site Generator with CMS features, launch a website for your SaaS/blog/portfolio/company/idea in seconds, with one-line setup",
+    "language": "Svelte",
+    "languageColor": "#ff3e00",
+    "stars": 0,
+    "forks": 0,
+    "isPublic": true,
+    "link": "https://github.com/semihpolat/statue"
+  },
+  {
+    "name": "test-portfolio-deploy",
+    "description": "My portfolio site built with Statue SSG",
+    "language": "HTML",
+    "languageColor": "#e34c26",
+    "stars": 0,
+    "forks": 0,
+    "isPublic": true,
+    "link": "https://github.com/semihpolat/test-portfolio-deploy"
+  },
+  {
+    "name": "statue_studio",
+    "description": "No description",
+    "language": "JavaScript",
+    "languageColor": "#f1e05a",
+    "stars": 0,
+    "forks": 0,
+    "isPublic": true,
+    "link": "https://github.com/semihpolat/statue_studio"
+  },
+  {
+    "name": "farabi",
+    "description": "No description",
+    "language": "TypeScript",
+    "languageColor": "#3178c6",
+    "stars": 0,
+    "forks": 0,
+    "isPublic": true,
+    "link": "https://github.com/semihpolat/farabi"
+  },
+  {
+    "name": "YC-game",
+    "description": "No description",
+    "language": "Svelte",
+    "languageColor": "#ff3e00",
+    "stars": 0,
+    "forks": 0,
+    "isPublic": true,
+    "link": "https://github.com/semihpolat/YC-game"
+  },
+  {
+    "name": "project-9",
+    "description": "No description",
+    "language": "TypeScript",
+    "languageColor": "#3178c6",
+    "stars": 0,
+    "forks": 0,
+    "isPublic": true,
+    "link": "https://github.com/semihpolat/project-9"
+  },
+  {
+    "name": "mistral.rs",
+    "description": "Blazingly fast LLM inference.",
+    "language": "Rust",
+    "languageColor": "#dea584",
+    "stars": 0,
+    "forks": 0,
+    "isPublic": true,
+    "link": "https://github.com/semihpolat/mistral.rs"
+  },
+  {
+    "name": "qvicuna-flash",
+    "description": "No description",
+    "language": "Shell",
+    "languageColor": "#89e051",
+    "stars": 0,
+    "forks": 0,
+    "isPublic": true,
+    "link": "https://github.com/semihpolat/qvicuna-flash"
+  },
+  {
+    "name": "axle-ai",
+    "description": "No description",
+    "language": "Unknown",
+    "languageColor": "#6e7681",
+    "stars": 0,
+    "forks": 0,
+    "isPublic": true,
+    "link": "https://github.com/semihpolat/axle-ai"
+  },
+  {
+    "name": "statue-test",
+    "description": "No description",
+    "language": "Unknown",
+    "languageColor": "#6e7681",
+    "stars": 0,
+    "forks": 0,
+    "isPublic": true,
+    "link": "https://github.com/semihpolat/statue-test"
+  },
+  {
+    "name": "blindy75",
+    "description": "No description",
+    "language": "HTML",
+    "languageColor": "#e34c26",
+    "stars": 0,
+    "forks": 0,
+    "isPublic": true,
+    "link": "https://github.com/semihpolat/blindy75"
+  },
+  {
+    "name": "react-color-swatches",
+    "description": "No description",
+    "language": "JavaScript",
+    "languageColor": "#f1e05a",
+    "stars": 0,
+    "forks": 0,
+    "isPublic": true,
+    "link": "https://github.com/semihpolat/react-color-swatches"
+  },
+  {
+    "name": "flutter_supabase_chat",
+    "description": "flutter_supabase_chat",
+    "language": "Unknown",
+    "languageColor": "#6e7681",
+    "stars": 0,
+    "forks": 0,
+    "isPublic": true,
+    "link": "https://github.com/semihpolat/flutter_supabase_chat"
+  },
+  {
+    "name": "upcoming_movies",
+    "description": "No description",
+    "language": "Dart",
+    "languageColor": "#00B4AB",
+    "stars": 0,
+    "forks": 0,
+    "isPublic": true,
+    "link": "https://github.com/semihpolat/upcoming_movies"
+  },
+  {
+    "name": "reddit_posts",
+    "description": "No description",
+    "language": "Dart",
+    "languageColor": "#00B4AB",
+    "stars": 0,
+    "forks": 0,
+    "isPublic": true,
+    "link": "https://github.com/semihpolat/reddit_posts"
+  },
+  {
+    "name": "bluetooth_scanner",
+    "description": "No description",
+    "language": "Dart",
+    "languageColor": "#00B4AB",
+    "stars": 0,
+    "forks": 0,
+    "isPublic": true,
+    "link": "https://github.com/semihpolat/bluetooth_scanner"
+  }
+]

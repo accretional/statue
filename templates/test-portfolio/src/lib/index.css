@@ -1,0 +1,29 @@
+@import "tailwindcss";
+@import "./theme-light.css";
+@import "statue-ssg/themes/black-red.css";
+
+/* GitHub Dark Theme (default) */
+
+/* ========================================
+@import "./theme.css";
+@import "./theme-light.css";
+ * STATUE SSG THEME (Optional Override)
+ * Uncomment to switch themes!
+ * Options: black-white, black-red, charcoal, blue, green, purple, etc.
+ * ======================================== */
+/* @import "statue-ssg/themes/charcoal.css"; */
+
+/* Tailwind v4 content config */
+@source "../";
+@source "../../node_modules/statue-ssg/src/**/*.{svelte,js,ts}";
+
+@layer utilities {
+  /* Dynamic utilities that respond to the current theme */
+  .bg-canvas-default { background-color: var(--color-background); }
+  .bg-canvas-subtle { background-color: var(--color-card); }
+  .text-fg-default { color: var(--color-foreground); }
+  .text-fg-muted { color: var(--color-muted); }
+  .border-border-default { border-color: var(--color-border); }
+  .text-accent-fg { color: var(--color-primary); }
+  .bg-accent-fg { background-color: var(--color-primary); }
+}
