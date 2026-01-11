@@ -104,6 +104,7 @@
 		"lottie-web": "^5.13.0",
 		"lucide-svelte": "^0.561.0",
 		"marked": "^15.0.7",
+		"sirv": "^3.0.0",
 		"three": "^0.182.0"
 	},
 	"keywords": [
