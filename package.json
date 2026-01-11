@@ -11,6 +11,7 @@
 			"svelte": "./src/lib/index.ts",
 			"default": "./src/index.js"
 		},
+		"./cms/content-processor": "./src/lib/cms/content-processor.js",
 		"./cms/*": "./src/lib/cms/*",
 		"./components": {
 			"types": "./src/lib/index.ts",
