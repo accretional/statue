@@ -1,5 +1,4 @@
 {
-	"extends": "./.svelte-kit/tsconfig.json",
 	"compilerOptions": {
 		"allowJs": true,
 		"checkJs": false,
@@ -9,9 +8,16 @@
 		"skipLibCheck": true,
 		"sourceMap": true,
 		"strict": false,
-		"moduleResolution": "node",
-		"target": "ES2020"
+		"moduleResolution": "bundler",
+		"target": "ES2020",
+		"module": "ESNext",
+		"lib": ["ES2020", "DOM", "DOM.Iterable"],
+		"types": ["vite/client"],
+		"paths": {
+			"$lib": ["./src/lib"],
+			"$lib/*": ["./src/lib/*"]
+		}
 	},
-	"include": ["src/**/*.ts", "src/**/*.js"],
-	"exclude": ["node_modules", "build", "src/**/*.mjs"]
+	"include": ["src/**/*.ts", "src/**/*.js", "src/**/*.svelte"],
+	"exclude": ["node_modules", "build", "src/**/*.mjs", ".svelte-kit"]
 }
