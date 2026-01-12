@@ -5,7 +5,7 @@ import { siteConfig } from '../../../site.config.js';
 export const prerender = true;
 
 /** @type {import('./$types').PageServerLoad} */
-export function load({ params }) {
+export async function load({ params }) {
   // Add slash to the beginning of the URL
   const url = `/${params.slug}`;
 
@@ -18,8 +18,8 @@ export function load({ params }) {
     throw new Error('This route cannot be used');
   }
 
-  // Find content
-  const content = getContentByUrl(url);
+  // Find content (using mdsvex processor)
+  const content = await getContentByUrl(url);
 
   // DEBUG: Log found content to console
   console.log('Found content:', content ? 'YES' : 'NO');
@@ -33,7 +33,7 @@ export function load({ params }) {
 
   // Get sidebar items for docs content
   const isDocsContent = content?.directory?.startsWith('docs') || url.startsWith('/docs');
-  const sidebarItems = isDocsContent ? getSidebarTree('docs') : [];
+  const sidebarItems = isDocsContent ? await getSidebarTree('docs') : [];
 
   // If content is not found
   if (!content) {
@@ -47,7 +47,7 @@ export function load({ params }) {
     if (siteConfig.profile?.name || siteConfig.site?.author) {
       content.metadata.author = siteConfig.profile?.name || siteConfig.site?.author;
     }
-    
+
     if (siteConfig.profile?.avatarUrl || siteConfig.blog?.defaultAuthorAvatar) {
       content.metadata.authorAvatar = siteConfig.profile?.avatarUrl || siteConfig.blog?.defaultAuthorAvatar || '/avatar.jpg';
     }
