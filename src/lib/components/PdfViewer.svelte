@@ -115,7 +115,7 @@
     width: 100%;
     height: 100%;
     border: none;
-    background-color: #525659;
+    background-color: var(--color-card);
   }
 
   /* Floating actions badge - top right */
@@ -142,10 +142,10 @@
     width: 2.25rem;
     height: 2.25rem;
     border-radius: 0.375rem;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: var(--color-background);
     backdrop-filter: blur(8px);
     border: none;
-    color: #ffffff;
+    color: var(--color-foreground);
     cursor: pointer;
     transition: opacity 0.2s ease;
   }
