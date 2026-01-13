@@ -1,5 +1,5 @@
 <script>
-	import { NavigationBar, Footer } from '$lib';
+	import { NavigationBar, Footer } from 'statue-ssg';
 	import { page } from '$app/state';
 	import { onNavigate } from '$app/navigation';
 	import '$lib/index.css';

@@ -28,22 +28,11 @@ program
     
     try {
       // Check if template exists before proceeding
-      // 'default' always exists (it's the package root)
-      if (templateName !== 'default') {
-        const templatePath = path.join(packageDir, 'templates', templateName);
-        if (!fs.existsSync(templatePath)) {
-          console.error(chalk.red(`❌ Template '${templateName}' does not exist.`));
-          console.log(chalk.yellow('Available templates:'));
-          console.log('  - default');
-          try {
-            const templates = fs.readdirSync(path.join(packageDir, 'templates'))
-              .filter(t => fs.statSync(path.join(packageDir, 'templates', t)).isDirectory());
-            templates.forEach(t => console.log(`  - ${t}`));
-          } catch (e) {
-             // Ignore
-          }
-          process.exit(1);
-        }
+      const templatePath = path.join(packageDir, 'templates', templateName);
+
+      if (!fs.existsSync(templatePath)) {
+        console.error(chalk.red(`❌ Template '${templateName}' does not exist.`));
+        process.exit(1);
       }
 
       // Run the postinstall script with options
@@ -55,8 +44,29 @@ program
         await postinstall({ template: templateName });
       } else {
         console.error(chalk.red('❌ Internal Error: postinstall script is not exporting a function.'));
+        process.exit(1);
       }
-      
+
+      // Run template's post-setup script if exists (doesn't get copied to user project)
+      if (templateName !== 'default') {
+        const postSetupPath = path.join(packageDir, 'templates', templateName, 'post-setup.sh');
+        if (fs.existsSync(postSetupPath)) {
+          console.log(chalk.blue('\n📦 Running template setup wizard...'));
+
+          const { execSync } = await import('child_process');
+          try {
+            execSync(`bash "${postSetupPath}"`, {
+              cwd: process.cwd(),
+              stdio: 'inherit',
+              env: { ...process.env, PROJECT_DIR: process.cwd() }
+            });
+          } catch (setupError) {
+            console.log(chalk.yellow('⚠ Post-setup script failed, but installation completed.'));
+            console.log(chalk.gray('  You can run it manually later.'));
+          }
+        }
+      }
+
     } catch (error) {
       console.error(chalk.red('❌ Error initializing Statue SSG:'), error);
       process.exit(1);

@@ -296,7 +296,9 @@ npx statue init --template your-template
 
 ---
 
-### 8. Create a README (Optional)
+### 8. Create Additional Files (Optional)
+
+#### README.md
 
 **Create `templates/your-template/README.md`:**
 
@@ -319,6 +321,94 @@ Brief notes on how users might customize this template.
 
 List any example sites using this template (if available).
 ```
+
+---
+
+#### post-setup.sh (Template-Specific Setup)
+
+Some templates need additional setup steps after initialization. For example:
+- Fetching data from external APIs (GitHub profile, RSS feeds)
+- Running database migrations or seed scripts
+- Generating initial configuration from user input
+- Setting up third-party integrations
+
+**How it works:**
+
+When a user runs `npx statue init --template your-template`, the CLI automatically:
+1. Copies template files to the user's project
+2. Looks for `templates/your-template/post-setup.sh`
+3. If found, executes it with `PROJECT_DIR` environment variable set to user's project directory
+4. The script does NOT get copied to the user's project—it runs once during initialization
+
+**Create `templates/your-template/post-setup.sh`:**
+
+```bash
+#!/bin/bash
+
+# Post-setup script for your-template
+# This runs after 'npx statue init --template your-template'
+# It does NOT get copied to the user's project
+
+# Colors for output
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m'
+
+echo ""
+echo -e "${BLUE}========================================${NC}"
+echo -e "${BLUE}  Your Template Setup${NC}"
+echo -e "${BLUE}========================================${NC}"
+echo ""
+
+# $PROJECT_DIR contains the path to user's newly created project
+cd "$PROJECT_DIR"
+
+# Example: Run a setup script that exists in the user's project
+if [ -f "$PROJECT_DIR/scripts/setup.sh" ]; then
+    echo -e "${YELLOW}Running initial setup...${NC}"
+    bash "$PROJECT_DIR/scripts/setup.sh" || echo -e "${YELLOW}⚠ Setup failed. Run manually later.${NC}"
+fi
+
+# Example: Fetch data from an API
+# curl -s "https://api.example.com/data" > "$PROJECT_DIR/content/data.json"
+
+echo ""
+echo -e "${GREEN}✨ Setup complete! Run 'npm run dev' to start.${NC}"
+echo ""
+```
+
+**Environment Variables Available:**
+
+| Variable | Description |
+|----------|-------------|
+| `PROJECT_DIR` | Absolute path to the user's newly created project |
+
+**Real-world example: developer-portfolio template**
+
+The developer-portfolio template uses `post-setup.sh` to automatically fetch the user's GitHub profile data:
+
+```bash
+#!/bin/bash
+# Automatically runs github-sync.sh after template initialization
+GITHUB_SYNC="$PROJECT_DIR/scripts/github-sync.sh"
+
+if [ -f "$GITHUB_SYNC" ]; then
+    echo "Syncing your GitHub profile data..."
+    cd "$PROJECT_DIR"
+    bash "$GITHUB_SYNC"
+fi
+```
+
+This way, users just run `npx statue init --template developer-portfolio` and their GitHub data is fetched automatically—no need to manually run `github-sync.sh`.
+
+**Best practices for post-setup.sh:**
+
+1. **Keep it optional** - The script should enhance setup, not break it if it fails
+2. **Handle errors gracefully** - Use `|| echo "warning message"` for non-critical commands
+3. **Provide clear output** - Tell users what's happening
+4. **Don't require user input** - Keep it non-interactive (no `read` prompts)
+5. **Document manual fallback** - If the script fetches external data, include the manual command in your template's README
 
 ---
 
