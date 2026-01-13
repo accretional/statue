@@ -9,7 +9,8 @@ export default defineConfig({
       client: 'fetch',
       mode: 'tags-split',
       clean: true,
-      prettier: true
+      prettier: true,
+      baseUrl: 'https://petstore.swagger.io/v2'
     }
   }
 });
