@@ -4,7 +4,6 @@ import path from 'path';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-  // Using vitePreprocess for preprocessor
   preprocess: vitePreprocess(),
 
   kit: {
