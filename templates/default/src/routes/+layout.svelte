@@ -1,6 +1,6 @@
 <script>
 	import { NavigationBar, Footer } from 'statue-ssg';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { onNavigate } from '$app/navigation';
 	import '$lib/index.css';
 
@@ -8,7 +8,8 @@
 
 	let searchConfig = $derived(data.searchConfig);
 	let navbarConfig = $derived(data.navbarConfig);
-	let currentPath = $derived($page.url.pathname);
+	let currentPath = $derived(page.url.pathname);
+
 
 	// Enable View Transitions API only for blog pages
 	onNavigate((navigation) => {
@@ -32,12 +33,12 @@
 
 <NavigationBar
 	navbarItems={data.globalDirectories}
-	showSearch={data.searchConfig?.enabled ?? false}
-	searchPlaceholder={data.searchConfig?.placeholder ?? 'Search...'}
+	showSearch={searchConfig?.enabled ?? false}
+	searchPlaceholder={searchConfig?.placeholder ?? 'Search...'}
 	siteTitle={navbarConfig?.siteTitle ?? null}
 	logo={navbarConfig?.logo ?? null}
 	hiddenFromNav={navbarConfig?.hiddenFromNav ?? []}
-	{...(navbarConfig?.defaultNavItems && { defaultNavItems: navbarConfig.defaultNavItems })}
+	{...navbarConfig?.defaultNavItems && { defaultNavItems: navbarConfig.defaultNavItems }}
 />
 
 <main>
@@ -45,49 +46,3 @@
 </main>
 
 <Footer directories={data.globalDirectories} {currentPath} />
-
-<style>
-	:global(body) {
-		background-color: var(--color-background);
-		font-family:
-			-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
-			'Helvetica Neue', sans-serif;
-		margin: 0;
-		padding: 0;
-	}
-
-	:global(*) {
-		box-sizing: border-box;
-	}
-
-	/* View Transitions - Blog pages only */
-	:global(::view-transition-old(root)),
-	:global(::view-transition-new(root)) {
-		animation: 200ms ease-out both vt-fade;
-	}
-
-	:global(::view-transition-old(root)) {
-		animation-direction: reverse;
-	}
-
-	@keyframes vt-fade {
-		from {
-			opacity: 0;
-		}
-		to {
-			opacity: 1;
-		}
-	}
-
-	/* Navbar stays static during transition */
-	:global(::view-transition-old(navbar)),
-	:global(::view-transition-new(navbar)) {
-		animation: none;
-	}
-
-	/* Hero thumbnail transition - smooth morph */
-	:global(::view-transition-group(*)) {
-		animation-duration: 250ms;
-		animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-	}
-</style>
