@@ -72,7 +72,8 @@
 		"template:load": "node scripts/manage-templates.js load",
 		"template:save": "node scripts/manage-templates.js save",
 		"template:list": "node scripts/manage-templates.js list",
-		"test:unit": "vitest"
+		"test:unit": "vitest",
+		"generate-api": "orval"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^7.0.0",
@@ -92,6 +93,7 @@
 		"eslint": "^8.56.0",
 		"eslint-plugin-svelte": "^2.35.1",
 		"jsdom": "^23.2.0",
+		"orval": "^7.13.2",
 		"pagefind": "^1.1.1",
 		"playwright": "^1.57.0",
 		"postcss": "^8.5.3",
