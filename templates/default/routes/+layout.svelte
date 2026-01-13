@@ -8,9 +8,7 @@
 
 	let searchConfig = $derived(data.searchConfig);
 	let navbarConfig = $derived(data.navbarConfig);
-	let currentPath = $derived(page.url.pathname);
-
-	console.log({ navbarConfig });
+	let currentPath = $derived($page.url.pathname);
 
 	// Enable View Transitions API only for blog pages
 	onNavigate((navigation) => {
