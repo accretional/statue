@@ -140,13 +140,21 @@
 
 	/* Map SVAR File Manager colors to Statue theme variables - use !important to override in dev mode */
 	:global(.wx-willow-dark-theme) {
-		/* Background colors */
+		/* Main backgrounds - use theme colors */
+		--wx-background: var(--color-card, #1a1a1a) !important;
+		--wx-background-alt: var(--color-background, #000000) !important;
+		--wx-background-hover: var(--color-background, #000000) !important;
+
+		/* File manager specific backgrounds */
 		--wx-fm-background: var(--color-background, #000000) !important;
 		--wx-fm-box-shadow: none !important;
 
 		/* Border colors - set to transparent/none */
 		--wx-fm-grid-border: none !important;
 		--wx-grid-border: none !important;
+		--wx-border: 1px solid var(--color-border, #333333) !important;
+		--wx-border-light: 1px solid var(--color-border, #333333) !important;
+		--wx-border-medium: 1px solid var(--color-border, #333333) !important;
 
 		/* Header/toolbar colors */
 		--wx-fm-grid-header-color: var(--color-card, #1a1a1a) !important;
@@ -156,24 +164,41 @@
 		--wx-text-color: var(--color-foreground, #ffffff) !important;
 		--wx-text-color-muted: var(--color-muted, #999999) !important;
 
+		/* Font colors from theme */
+		--wx-color-font: var(--color-foreground, #ffffff) !important;
+		--wx-color-font-alt: var(--color-muted, #999999) !important;
+		--wx-color-font-disabled: var(--color-muted, #999999) !important;
+
 		/* Primary/brand color - used for selections, active states, etc. */
 		--wx-color-primary: var(--color-primary, #dc2626) !important;
+		--wx-color-primary-selected: color-mix(in srgb, var(--color-primary, #dc2626) 30%, transparent) !important;
 		--wx-color-primary-light: var(--color-secondary, #ef4444) !important;
 		--wx-color-primary-dark: var(--color-accent, #b91c1c) !important;
+		--wx-color-primary-font: var(--color-on-primary, #ffffff) !important;
+
+		/* Secondary color - lighter version of primary (70% transparent) */
+		--wx-color-secondary: color-mix(in srgb, var(--color-primary, #dc2626) 70%, transparent) !important;
+		--wx-color-secondary-hover: color-mix(in srgb, var(--color-primary, #dc2626) 85%, transparent) !important;
+		--wx-color-secondary-font: var(--color-foreground, #ffffff) !important;
+		--wx-color-secondary-font-hover: var(--color-foreground, #ffffff) !important;
+		--wx-color-secondary-border: var(--color-primary, #dc2626) !important;
+
+		/* Disabled color */
+		--wx-color-disabled: color-mix(in srgb, var(--color-foreground, #ffffff) 30%, transparent) !important;
 
 		/* Button colors - fix text visibility */
 		--wx-button-background: var(--color-primary, #dc2626) !important;
 		--wx-button-font-color: var(--color-on-primary, #ffffff) !important;
 		--wx-button-border: none !important;
+		--wx-button-border-radius: 4px !important;
 
-		/* Window/panel switch button - use secondary for contrast */
-		--wx-color-secondary: var(--color-secondary, #ef4444) !important;
-		--wx-color-secondary-font: var(--color-on-primary, #ffffff) !important;
-
-		/* Selection colors */
-		--wx-fm-select-color: var(--color-primary, #dc2626) !important;
-		--wx-table-select-background: color-mix(in srgb, var(--color-primary, #dc2626) 15%, transparent) !important;
-		--wx-table-select-focus-background: color-mix(in srgb, var(--color-primary, #dc2626) 25%, transparent) !important;
+		/* Input backgrounds */
+		--wx-input-background: var(--color-background, #000000) !important;
+		--wx-input-background-disabled: var(--color-card, #1a1a1a) !important;
+		--wx-input-placeholder-color: var(--color-muted, #999999) !important;
+		--wx-input-border: 1px solid var(--color-border, #333333) !important;
+		--wx-input-border-focus: 1px solid var(--color-primary, #dc2626) !important;
+		--wx-input-border-disabled: 1px solid var(--color-border, #333333) !important;
 
 		/* Card/surface colors */
 		--wx-card-background: var(--color-card, #1a1a1a) !important;
@@ -187,6 +212,13 @@
 		--wx-focus-border: var(--color-primary, #dc2626) !important;
 		--wx-hover-background: var(--color-card, #1a1a1a) !important;
 
+		/* Selection colors */
+		--wx-fm-select-color: var(--color-primary, #dc2626) !important;
+		--wx-fm-select-background: var(--color-card, #1a1a1a) !important;
+		--wx-table-select-background: color-mix(in srgb, var(--color-primary, #dc2626) 15%, transparent) !important;
+		--wx-table-select-focus-background: color-mix(in srgb, var(--color-primary, #dc2626) 25%, transparent) !important;
+
+		/* Other overrides */
 		--wx-fm-toolbar-height: 56px !important;
 		color-scheme: dark !important;
 	}
