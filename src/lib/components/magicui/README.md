@@ -1,0 +1,1 @@
+This is a colloection of Svelte components and animations from [svelte-animations](https://github.com/SikandarJODD/svelte-animations?tab=readme-ov-file#simple-components).
