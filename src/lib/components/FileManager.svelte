@@ -113,9 +113,24 @@
 <style>
 	.filemanager-wrapper {
 		width: 100%;
-		border-radius: 8px;
+		border-radius: 0 !important;
 		overflow: hidden;
-		border: 1px solid var(--color-border, #384047);
+		border: none !important;
+		box-shadow: none !important;
+	}
+
+	/* Remove outer borders and border-radius from file manager container */
+	.filemanager-wrapper :global(.wx-filemanager) {
+		border-radius: 0 !important;
+		border: none !important;
+		box-shadow: none !important;
+	}
+
+	/* Remove borders from theme container */
+	.filemanager-wrapper :global(.wx-willow-dark-theme) {
+		border-radius: 0 !important;
+		border: none !important;
+		box-shadow: none !important;
 	}
 
 	/* Custom scrollbar for dark theme */
@@ -123,14 +138,56 @@
 		font-family: system-ui, -apple-system, sans-serif;
 	}
 
-	/* Dark mode overrides */
+	/* Map SVAR File Manager colors to Statue theme variables - use !important to override in dev mode */
 	:global(.wx-willow-dark-theme) {
-		--wx-fm-background: #1a1f2e;
-		--wx-fm-box-shadow: none;
-		--wx-fm-grid-border: 1px solid #2d3540;
-		--wx-fm-grid-header-color: #1a1f2e;
-		--wx-fm-button-font-color: #9fa1ae;
-		--wx-fm-toolbar-height: 56px;
-		color-scheme: dark;
+		/* Background colors */
+		--wx-fm-background: var(--color-background, #000000) !important;
+		--wx-fm-box-shadow: none !important;
+
+		/* Border colors - set to transparent/none */
+		--wx-fm-grid-border: none !important;
+		--wx-grid-border: none !important;
+
+		/* Header/toolbar colors */
+		--wx-fm-grid-header-color: var(--color-card, #1a1a1a) !important;
+
+		/* Text colors */
+		--wx-fm-button-font-color: var(--color-foreground, #ffffff) !important;
+		--wx-text-color: var(--color-foreground, #ffffff) !important;
+		--wx-text-color-muted: var(--color-muted, #999999) !important;
+
+		/* Primary/brand color - used for selections, active states, etc. */
+		--wx-color-primary: var(--color-primary, #dc2626) !important;
+		--wx-color-primary-light: var(--color-secondary, #ef4444) !important;
+		--wx-color-primary-dark: var(--color-accent, #b91c1c) !important;
+
+		/* Button colors - fix text visibility */
+		--wx-button-background: var(--color-primary, #dc2626) !important;
+		--wx-button-font-color: var(--color-on-primary, #ffffff) !important;
+		--wx-button-border: none !important;
+
+		/* Window/panel switch button - use secondary for contrast */
+		--wx-color-secondary: var(--color-secondary, #ef4444) !important;
+		--wx-color-secondary-font: var(--color-on-primary, #ffffff) !important;
+
+		/* Selection colors */
+		--wx-fm-select-color: var(--color-primary, #dc2626) !important;
+		--wx-table-select-background: color-mix(in srgb, var(--color-primary, #dc2626) 15%, transparent) !important;
+		--wx-table-select-focus-background: color-mix(in srgb, var(--color-primary, #dc2626) 25%, transparent) !important;
+
+		/* Card/surface colors */
+		--wx-card-background: var(--color-card, #1a1a1a) !important;
+		--wx-card-border: none !important;
+
+		/* Icon colors */
+		--wx-icon-color: var(--color-muted, #999999) !important;
+		--wx-icon-color-hover: var(--color-foreground, #ffffff) !important;
+
+		/* Focus/hover states */
+		--wx-focus-border: var(--color-primary, #dc2626) !important;
+		--wx-hover-background: var(--color-card, #1a1a1a) !important;
+
+		--wx-fm-toolbar-height: 56px !important;
+		color-scheme: dark !important;
 	}
 </style>
