@@ -52,3 +52,6 @@ export { default as PricingSection } from './components/PricingSection.svelte';
 export { default as ScrollingLogos } from './components/ScrollingLogos.svelte';
 export { default as SlidingComparison } from './components/SlidingComparison.svelte';
 export { default as SlidingTestimonial } from './components/SlidingTestimonial.svelte';
+
+// File Manager
+export { default as FileManager } from './components/FileManager.svelte';
