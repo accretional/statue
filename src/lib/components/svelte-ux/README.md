@@ -1,0 +1,1 @@
+This is a colloection of Svelte components and animations from [svelte-ux](https://github.com/techniq/svelte-ux).
