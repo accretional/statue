@@ -51,7 +51,7 @@
 		"prepack": "npm run generate:exports",
 		"dev": "npm run generate:exports && vite dev",
 		"predev": "npm run generate:exports",
-		"prebuild": "npm run generate:exports",
+		"prebuild": "npm run generate:exports && node scripts/run-orval.js",
 		"build": "vite build",
 		"postbuild": "node scripts/generate-seo-files.js && node scripts/run-pagefind.js",
 		"generate:exports": "node scripts/generate-exports.js",
