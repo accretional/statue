@@ -1,6 +1,6 @@
 <script>
 	import { resolve } from '$app/paths';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 
 	let { title = '', description = '', date = '', author = '', thumbnail = '' } = $props();
 
@@ -16,9 +16,7 @@
 	);
 
 	// Generate matching view transition name from current URL - use slug only
-	let slug = $derived(
-		$page.url.pathname ? $page.url.pathname.split('/').filter(Boolean).pop() : ''
-	);
+	let slug = $derived(page.url.pathname ? page.url.pathname.split('/').filter(Boolean).pop() : '');
 	let transitionName = $derived(slug ? `blog-thumb-${slug}` : '');
 </script>
 
