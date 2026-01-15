@@ -47,6 +47,15 @@ async function setupStatueSSG(options = {}) {
     fs.copySync(templateScriptsDir, path.join(targetDir, 'scripts'), { overwrite: true });
   }
 
+  // Copy template's config files if exists (orval.config.ts, etc.)
+  for (const config of ['orval.config.ts', 'orval.config.js']) {
+    const src = path.join(templateDir, config);
+    if (fs.existsSync(src)) {
+      fs.copySync(src, path.join(targetDir, config), { overwrite: true });
+      console.log(chalk.green(`✓ ${config} copied`));
+    }
+  }
+
   console.log(chalk.green(`✓ ${templateName} template copied`));
 
   // Copy template's content if exists, otherwise use default content as fallback
@@ -72,7 +81,7 @@ async function setupStatueSSG(options = {}) {
   // 5. Copy required scripts
   const scriptsDir = path.join(targetDir, 'scripts');
   fs.ensureDirSync(scriptsDir);
-  for (const script of ['generate-seo-files.js', 'run-pagefind.js']) {
+  for (const script of ['generate-seo-files.js', 'run-pagefind.js', 'run-orval.js']) {
     fs.copySync(path.join(sourceDir, 'scripts', script), path.join(scriptsDir, script), { overwrite: true });
   }
   console.log(chalk.green('✓ scripts copied'));

@@ -81,6 +81,12 @@ export const siteConfig = {
     }
   },
 
+  // Orval API client generation
+  orval: {
+    // Run orval before build to generate API client
+    runPreBuild: true
+  },
+
   // Search configuration
   search: {
     // Enable/disable search functionality
