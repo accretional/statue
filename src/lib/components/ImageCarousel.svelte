@@ -170,7 +170,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.2), transparent);
+    background: linear-gradient(to top, var(--color-background), transparent);
   }
 
   .slide-content {

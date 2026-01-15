@@ -50,7 +50,8 @@
   }
   
   .built-text {
-    color: rgba(255, 255, 255, 0.8);
+    color: var(--color-foreground);
+    opacity: 0.8;
   }
   
   .built-link {
@@ -92,11 +93,11 @@
   }
   
   .statue-link {
-    color: #9CA3AF;
+    color: var(--color-muted);
   }
   
   .statue-link:hover {
-    color: #D1D5DB;
+    color: var(--color-foreground);
   }
   
   .accretion-icon, .statue-icon {

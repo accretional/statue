@@ -25,7 +25,7 @@
           <li>
             <a 
               href="/" 
-              class="{currentPath === '/' ? 'text-amber-400' : 'text-gray-400'} hover:text-amber-400 text-sm"
+              class="{currentPath === '/' ? 'text-[var(--color-primary)]' : 'text-[var(--color-muted)]'} hover:text-amber-400 text-sm"
             >
               Home
             </a>
@@ -33,7 +33,7 @@
           <li>
             <a 
               href="/pricing" 
-              class="{currentPath === '/pricing' ? 'text-amber-400' : 'text-gray-400'} hover:text-amber-400 text-sm"
+              class="{currentPath === '/pricing' ? 'text-[var(--color-primary)]' : 'text-[var(--color-muted)]'} hover:text-amber-400 text-sm"
             >
               Pricing
             </a>
@@ -41,7 +41,7 @@
           <li>
             <a 
               href="/privacy-policy" 
-              class="{currentPath === '/privacy-policy' ? 'text-amber-400' : 'text-gray-400'} hover:text-amber-400 text-sm"
+              class="{currentPath === '/privacy-policy' ? 'text-[var(--color-primary)]' : 'text-[var(--color-muted)]'} hover:text-amber-400 text-sm"
             >
               Privacy Policy
             </a>
@@ -49,7 +49,7 @@
           <li>
             <a 
               href="/do-not-sell" 
-              class="{currentPath === '/do-not-sell' ? 'text-amber-400' : 'text-gray-400'} hover:text-amber-400 text-sm"
+              class="{currentPath === '/do-not-sell' ? 'text-[var(--color-primary)]' : 'text-[var(--color-muted)]'} hover:text-amber-400 text-sm"
             >
               Do Not Sell My Information
             </a>
@@ -57,7 +57,7 @@
           <li>
             <a 
               href="/terms" 
-              class="{currentPath === '/terms' ? 'text-amber-400' : 'text-gray-400'} hover:text-amber-400 text-sm"
+              class="{currentPath === '/terms' ? 'text-[var(--color-primary)]' : 'text-[var(--color-muted)]'} hover:text-amber-400 text-sm"
             >
               Terms of Use
             </a>
@@ -71,7 +71,7 @@
             <h4 class="text-lg font-medium mb-2">
               <a 
                 href={directory.url} 
-                class="{currentPath.startsWith(directory.url) ? 'text-amber-400' : 'text-gray-300'} hover:text-amber-400"
+                class="{currentPath.startsWith(directory.url) ? 'text-[var(--color-primary)]' : 'text-[var(--color-foreground)]'} hover:text-amber-400"
               >
                 {directory.title}
               </a>
@@ -83,7 +83,7 @@
                   <li>
                     <a 
                       href={subpage.url} 
-                      class="{currentPath === subpage.url ? 'text-amber-400' : 'text-gray-400'} hover:text-amber-400 text-sm"
+                      class="{currentPath === subpage.url ? 'text-[var(--color-primary)]' : 'text-[var(--color-muted)]'} hover:text-amber-400 text-sm"
                     >
                       {subpage.title}
                     </a>

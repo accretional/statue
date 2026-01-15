@@ -19,14 +19,9 @@
     if (!document.startViewTransition) return;
 
     return new Promise((resolve) => {
-      const transition = document.startViewTransition(async () => {
+      document.startViewTransition(async () => {
         resolve();
         await navigation.complete;
-      });
-
-      // Reset scroll position after transition completes
-      transition.finished.then(() => {
-        window.scrollTo(0, 0);
       });
     });
   });

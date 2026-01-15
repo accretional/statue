@@ -110,8 +110,8 @@
     align-items: center;
     gap: 0.75rem;
     padding: 1rem 1.5rem 1rem 1.5rem;
-    background: var(--copy-bg, rgba(31, 41, 55, 0.5));
-    border: 1px solid var(--copy-border, #374151);
+    background: var(--copy-bg, var(--color-card));
+    border: 1px solid var(--copy-border, var(--color-border));
     border-radius: 0.5rem;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -121,12 +121,12 @@
   }
 
   .copy-command:hover {
-    border-color: var(--copy-border-hover, rgba(255, 255, 255, 0.8));
+    border-color: var(--copy-border-hover, var(--color-primary));
     background: var(--copy-bg-hover, rgba(31, 41, 55, 0.7));
   }
 
   .copy-command:focus {
-    outline: 2px solid var(--copy-outline, rgba(255, 255, 255, 0.8));
+    outline: 2px solid var(--copy-outline, var(--color-primary));
     outline-offset: 2px;
   }
 
@@ -136,41 +136,41 @@
   }
 
   .copy-command::-webkit-scrollbar-track {
-    background: var(--copy-scrollbar-track, rgba(31, 41, 55, 0.3));
+    background: var(--copy-scrollbar-track, var(--color-card));
     border-radius: 4px;
   }
 
   .copy-command::-webkit-scrollbar-thumb {
-    background: var(--copy-scrollbar-thumb, rgba(255, 255, 255, 0.6));
+    background: var(--copy-scrollbar-thumb, var(--color-muted));
     border-radius: 4px;
   }
 
   .copy-command::-webkit-scrollbar-thumb:hover {
-    background: var(--copy-scrollbar-thumb-hover, rgba(255, 255, 255, 0.8));
+    background: var(--copy-scrollbar-thumb-hover, var(--color-foreground));
   }
 
   /* Firefox scrollbar */
   .copy-command {
     scrollbar-width: thin;
-    scrollbar-color: var(--copy-scrollbar-thumb, rgba(255, 255, 255, 0.6)) var(--copy-scrollbar-track, rgba(31, 41, 55, 0.3));
+    scrollbar-color: var(--copy-scrollbar-thumb, var(--color-muted)) var(--copy-scrollbar-track, var(--color-card));
   }
 
   .copy-icon {
     flex-shrink: 0;
     width: 20px;
     height: 20px;
-    color: var(--copy-icon-color, rgba(255, 255, 255, 0.6));
+    color: var(--copy-icon-color, var(--color-muted));
     transition: color 0.2s ease;
   }
 
   .copy-command:hover .copy-icon {
-    color: var(--copy-icon-hover-color, rgba(255, 255, 255, 0.9));
+    color: var(--copy-icon-hover-color, var(--color-foreground));
   }
 
   .command-text {
     font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Courier New', monospace;
     font-size: 0.875rem;
-    color: var(--copy-text-color, rgba(255, 255, 255, 0.8));
+    color: var(--copy-text-color, var(--color-foreground));
     white-space: nowrap;
     flex: 1;
     min-width: 0;
@@ -183,7 +183,7 @@
     bottom: 0.5rem;
     left: 1.5rem;
     padding: 0.5rem 1rem;
-    background: var(--copied-bg, rgba(255, 255, 255, 0.9));
+    background: var(--copied-bg, var(--color-on-primary));
     color: var(--copied-text-color, black);
     font-weight: 600;
     font-size: 0.875rem;

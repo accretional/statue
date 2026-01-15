@@ -276,7 +276,7 @@
         font-size: 0.875rem;
         font-weight: 500;
         margin-left: 0.5rem;
-        background: #10b981;
+        background: var(--color-accent);
         color: var(--color-on-primary);
         padding: 0.25rem 0.75rem;
         border-radius: 9999px;
@@ -409,7 +409,7 @@
         font-size: 0.875rem;
         font-weight: 500;
         margin: 0;
-        color: #10b981;
+        color: var(--color-accent);
     }
 
     .features-list {
@@ -432,7 +432,7 @@
         height: 1.25rem;
         flex-shrink: 0;
         margin-top: 0.125rem;
-        color: #10b981;
+        color: var(--color-accent);
     }
 
     .feature-content {
