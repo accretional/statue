@@ -30,6 +30,9 @@ export default defineConfig({
 		}
 	},
 
+	// Allow importing .md files as components
+	assetsInclude: [],
+
 	server: {
 		port: 3000,
 		open: true
