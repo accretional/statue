@@ -1,40 +1,61 @@
 <script>
-  // LatestContent component - Latest content section
-  export let rootContent = [];
-  export let title = 'Latest Content';
-  export let readMoreText = 'Read more';
+	const { rootContent } = $props();
+	const title = 'Latest Content';
+	const readMoreText = 'Read more';
 </script>
 
 {#if rootContent && rootContent.length > 0}
-  <div class="max-w-6xl mx-auto">
-    <div class="text-center mb-16">
-      <h2 class="text-4xl md:text-5xl font-bold mb-4 text-[var(--color-primary)]">
-        {title}
-      </h2>
-      <div class="w-20 h-1 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] mx-auto rounded-full"></div>
-    </div>
-    
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {#each rootContent as page}
-        <a href={page.url} class="group relative bg-[var(--color-card)]/50 backdrop-blur-sm border border-[var(--color-border)] rounded-2xl p-8 hover:border-[var(--color-primary)]/50 transition-all duration-300 hover:scale-[1.02]">
-          <div class="absolute inset-0 bg-gradient-to-br from-[var(--color-primary)]/10 to-[var(--color-secondary)]/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-          <div class="relative">
-            <h3 class="font-bold text-2xl text-white mb-3 group-hover:text-[var(--color-primary)] transition-colors">
-              {page.metadata.title}
-            </h3>
-            {#if page.metadata.description}
-              <p class="text-[var(--color-muted)] leading-relaxed mb-4">{page.metadata.description}</p>
-            {/if}
-            <div class="flex items-center gap-2 text-[var(--color-primary)] font-medium group-hover:gap-3 transition-all">
-              <span>{readMoreText}</span>
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
-            </div>
-          </div>
-        </a>
-      {/each}
-    </div>
-  </div>
+	<div class="max-w-6xl mx-auto my-18">
+		<div class="text-center mb-10">
+			<h2 class="mb-4">
+				{title}
+			</h2>
+		</div>
+		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+			{#each rootContent as page}
+				<div class="relative bg-card rounded-xl p-8 transition-all duration-300">
+					<a
+						href={page.url}
+						class="inline-flex items-center text-foreground font-medium transition-all"
+					>
+						<div class="relative">
+							<div class="size-6 rounded-lg flex items-center justify-center mb-4">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									class="size-6 text-muted"
+									viewBox="0 0 24 24"
+								>
+									<path
+										fill="currentColor"
+										d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"
+									/>
+								</svg>
+							</div>
+							<h3 class="mb-4">{page.metadata.title}</h3>
+							{#if page.metadata.description}
+								<p class="text-muted mb-4">{page.metadata.description}</p>
+							{/if}
+							<div class="flex items-center group">
+								<p class="text-muted hover:text-foreground">
+									{readMoreText}
+								</p>
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									class="size-5 relative translate-y-0.5 transition-transform"
+									viewBox="0 0 24 24"
+								>
+									<path class="opacity-50" fill="currentColor" d="M10 17V7l5 5z" />
+									<path
+										class="absolute group-hover:translate-x-2 transition-transform"
+										fill="currentColor"
+										d="M10 17V7l5 5z"
+									/>
+								</svg>
+							</div>
+						</div>
+					</a>
+				</div>
+			{/each}
+		</div>
+	</div>
 {/if}
-

@@ -4,7 +4,7 @@ import { getContentByUrl, getContentDirectories, getSidebarTree } from 'statue-s
 export const prerender = true;
 
 /** @type {import('./$types').PageServerLoad} */
-export async function load({ params }) {
+export function load({ params }) {
   // Add slash to the beginning of the URL
   const url = `/${params.slug}`;
 
@@ -17,8 +17,8 @@ export async function load({ params }) {
     throw new Error('This route cannot be used');
   }
 
-  // Find content (using mdsvex processor)
-  const content = await getContentByUrl(url);
+  // Find content
+  const content = getContentByUrl(url);
 
   // DEBUG: Log found content to console
   console.log('Found content:', content ? 'YES' : 'NO');
@@ -32,7 +32,7 @@ export async function load({ params }) {
 
   // Get sidebar items for docs content
   const isDocsContent = content?.directory?.startsWith('docs') || url.startsWith('/docs');
-  const sidebarItems = isDocsContent ? await getSidebarTree('docs') : [];
+  const sidebarItems = isDocsContent ? getSidebarTree('docs') : [];
 
   // If content is not found
   if (!content) {
