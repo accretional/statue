@@ -2,7 +2,7 @@
   import { cubicOut } from "svelte/easing";
   import { onMount } from "svelte";
   import { spring, tweened } from "svelte/motion";
-  import { cn } from "$lib/utils";
+  import { cn } from "$lib/components/magicui/utils/cn";
   export let value = 100;
   export let initial = 0;
   export let duration = 6000;

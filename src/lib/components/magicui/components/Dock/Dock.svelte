@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { cn } from "$lib/utils";
+  import { cn } from "$lib/components/magicui/utils/cn";
   import { setContext } from "svelte";
   import { Motion, useMotionValue } from "svelte-motion";
   let DEFAULT_MAGNIFICATION = 60;
@@ -9,7 +9,7 @@
   export let magnification: number = DEFAULT_MAGNIFICATION;
 
   let dockVariants = cn(
-    "mx-auto w-max mt-8 h-[58px] p-2 flex gap-2 rounded-2xl border supports-backdrop-blur:bg-white/10 supports-backdrop-blur:dark:bg-black/10 backdrop-blur-md"
+    "mx-auto w-max mt-8 h-[80px] p-3 flex gap-2 rounded-2xl border supports-backdrop-blur:bg-white/10 supports-backdrop-blur:dark:bg-black/10 backdrop-blur-md"
   );
   let mouseX = useMotionValue(Infinity);
   setContext("mouseX", mouseX);

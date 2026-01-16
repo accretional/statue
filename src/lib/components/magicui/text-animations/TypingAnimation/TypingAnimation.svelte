@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { cn } from "$lib/utils";
+  import { cn } from "$lib/components/magicui/utils/cn";
   import { onMount } from "svelte";
 
   export let text: string = "Typing Animation";

@@ -13,6 +13,7 @@
     content: string;
     image?: string;
     video?: string;
+    poster?: string;
     icon?: any;
   }> = [];
 
@@ -146,6 +147,7 @@
             <video
               preload="auto"
               src={data[$currentIndex].video}
+              poster={data[$currentIndex]?.poster}
               class="aspect-auto size-full rounded-lg object-cover shadow-lg"
               autoplay
               loop

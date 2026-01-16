@@ -1,10 +1,25 @@
-<script>
+<script lang="ts">
   import { inview } from "svelte-inview";
   import { Motion, useAnimation } from "svelte-motion";
+  import { onMount } from "svelte";
 
   export let width = "fit-content";
-  export let boxColor = "#5046e6";
+  export let boxColor: string | undefined = undefined;
   export let duration = 0.5;
+
+  let themeColor = "";
+
+  // Get color from CSS variable if boxColor is not provided
+  onMount(() => {
+    if (!boxColor && typeof document !== "undefined") {
+      const primaryColor = getComputedStyle(document.documentElement)
+        .getPropertyValue("--color-primary")
+        .trim();
+      themeColor = primaryColor || "#5046e6";
+    }
+  });
+
+  $: effectiveBoxColor = boxColor || themeColor || "#5046e6";
 
   //   Animation Controls
   let mainControls = useAnimation();
@@ -54,7 +69,7 @@
     let:motion
   >
     <div
-      style="background:{boxColor}"
+      style="background:{effectiveBoxColor}"
       class="absolute top-[4px] bottom-[4px] left-0 right-0 z-40"
       use:motion
     ></div>

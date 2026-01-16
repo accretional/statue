@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { cn } from "$lib/utils";
+  import { cn } from "$lib/components/magicui/utils/cn";
   import { AnimatePresence, Motion } from "svelte-motion";
 
   let className: any = "";

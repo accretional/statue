@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import createGlobe from 'cobe';
 	import { spring } from 'svelte/motion';
-	import { cn } from '$lib/utils';
+	import { cn } from '$lib/components/magicui/utils/cn';
 
 	let x = spring(0, {
 		stiffness: 0.04,
@@ -12,6 +12,12 @@
 
 	let className = '';
 	export { className as class };
+
+	// Optional color overrides - if not provided, will use CSS theme variables
+	export let baseColorOverride: string | undefined = undefined;
+	export let markerColorOverride: string | undefined = undefined;
+	export let glowColorOverride: string | undefined = undefined;
+
 	let pointerInteracting: any = null;
 	let pointerInteractionMovement = 0;
 	let canvas: HTMLCanvasElement;
@@ -32,10 +38,44 @@
 		state.height = width * 2;
 	};
 
+	// Convert hex color to RGB array (0-1 range) for cobe
+	function hexToRgbArray(hex: string): [number, number, number] {
+		const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+		return result
+			? [
+				parseInt(result[1], 16) / 255,
+				parseInt(result[2], 16) / 255,
+				parseInt(result[3], 16) / 255
+			]
+			: [0, 0, 0];
+	}
+
+	// Get CSS variable color and convert to RGB array
+	function getCssColorAsRgb(variableName: string, fallback: string = '#000000'): [number, number, number] {
+		if (typeof document === 'undefined') return hexToRgbArray(fallback);
+
+		const value = getComputedStyle(document.documentElement)
+			.getPropertyValue(variableName)
+			.trim();
+
+		return hexToRgbArray(value || fallback);
+	}
+
 	onMount(() => {
 		// Adds the resize event listener when the component is mounted
 		window.addEventListener('resize', onResize);
 		onResize();
+
+		// Get colors from CSS theme variables or use overrides
+		const baseColor = baseColorOverride
+			? hexToRgbArray(baseColorOverride)
+			: getCssColorAsRgb('--color-card', '#2d0a0a');
+		const markerColor = markerColorOverride
+			? hexToRgbArray(markerColorOverride)
+			: getCssColorAsRgb('--color-primary', '#ef4444');
+		const glowColor = glowColorOverride
+			? hexToRgbArray(glowColorOverride)
+			: getCssColorAsRgb('--color-accent', '#dc2626');
 
 		// Initializes the globe with specific options
 		const globe = createGlobe(canvas, {
@@ -48,9 +88,9 @@
       diffuse: 0.4, // 1.2
       mapSamples: 16000,
       mapBrightness: 1.2, // 6
-      baseColor: [0.3, 0.3, 0.3],
-      markerColor: [251 / 255, 100 / 255, 21 / 255],
-      glowColor: [1, 1, 1],
+      baseColor: baseColor,
+      markerColor: markerColor,
+      glowColor: glowColor,
 			markers: [
 				{ location: [14.5995, 120.9842], size: 0.03 },
 				{ location: [19.076, 72.8777], size: 0.03 },
@@ -63,16 +103,6 @@
 				{ location: [34.6937, 135.5022], size: 0.05 },
 				{ location: [41.0082, 28.9784], size: 0.06 },
 			],
-       // onRender: (state) => {
-      //   if (!pointerInteracting) {
-      //     // Called on every animation frame.
-      //     // `state` will be an empty object, return updated params.
-      //     phi += 0.009;
-      //   }
-      //   state.phi = phi + $x;
-
-      //   // phi += 0.01;
-      // },
 			onRender: onRender
 		});
 

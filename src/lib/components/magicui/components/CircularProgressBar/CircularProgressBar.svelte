@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { cn } from "$lib/utils";
+    import { cn } from "$lib/components/magicui/utils/cn";
   
     export let max: number = 100;
     export let value: number = 0;
@@ -9,10 +9,10 @@
   
     let className: string = "";
     export { className as class };
-  
+
     let circumference = 2 * Math.PI * 45;
     let percentPx = circumference / 100;
-    let currentPercent = ((value - min) / (max - min)) * 100;
+    $: currentPercent = ((value - min) / (max - min)) * 100;
   </script>
   
   <div
