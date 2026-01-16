@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { cn } from "$lib/components/magicui/utils/cn";
   import { setContext } from "svelte";
   import { Motion, useMotionValue } from "svelte-motion";
   let DEFAULT_MAGNIFICATION = 60;
@@ -8,9 +7,7 @@
   export let distance: number = DEFAULT_DISTANCE;
   export let magnification: number = DEFAULT_MAGNIFICATION;
 
-  let dockVariants = cn(
-    "mx-auto w-max mt-8 h-[80px] p-3 flex gap-2 rounded-2xl border supports-backdrop-blur:bg-white/10 supports-backdrop-blur:dark:bg-black/10 backdrop-blur-md"
-  );
+  let dockVariants = "mx-auto w-max mt-8 h-[80px] p-3 flex gap-2 rounded-2xl border supports-backdrop-blur:bg-white/10 supports-backdrop-blur:dark:bg-black/10 backdrop-blur-md";
   let mouseX = useMotionValue(Infinity);
   setContext("mouseX", mouseX);
 </script>
@@ -21,11 +18,7 @@
     on:mousemove={(e) => mouseX.set(e.pageX)}
     on:mouseleave={() => mouseX.set(Infinity)}
     use:motion
-    class={cn(dockVariants, {
-      "items-start": direction === "top",
-      "items-center": direction === "middle",
-      "items-end": direction === "bottom",
-    })}
+    class="{dockVariants} {direction === 'top' ? 'items-start' : direction === 'middle' ? 'items-center' : 'items-end'}"
   >
     <slot {mouseX}>
       <!-- Default -->Dock

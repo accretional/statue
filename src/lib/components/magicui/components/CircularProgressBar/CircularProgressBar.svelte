@@ -1,14 +1,9 @@
 <script lang="ts">
-    import { cn } from "$lib/components/magicui/utils/cn";
-  
     export let max: number = 100;
     export let value: number = 0;
     export let min: number = 0;
     export let gaugePrimaryColor: string = "#f00";
     export let gaugeSecondaryColor: string = "#ddd";
-  
-    let className: string = "";
-    export { className as class };
 
     let circumference = 2 * Math.PI * 45;
     let percentPx = circumference / 100;
@@ -16,7 +11,7 @@
   </script>
   
   <div
-    class={cn("relative size-40 text-2xl font-semibold", className)}
+    class="relative size-40 text-2xl font-semibold"
     style:--circle-size="100px"
     style:--circumference={circumference}
     style:--percent-to-px="{percentPx}px"

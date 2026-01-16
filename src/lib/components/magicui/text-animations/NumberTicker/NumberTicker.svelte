@@ -2,7 +2,6 @@
   import { cubicOut } from "svelte/easing";
   import { onMount } from "svelte";
   import { spring, tweened } from "svelte/motion";
-  import { cn } from "$lib/components/magicui/utils/cn";
   export let value = 100;
   export let initial = 0;
   export let duration = 6000;
@@ -10,18 +9,13 @@
     duration: duration,
     easing: cubicOut,
   });
-  let className: any = "";
-  export { className as class };
   onMount(() => {
     num.set(value);
   });
 </script>
 
 <div
-  class={cn(
-    "inline-block  text-black dark:text-white tracking-normal",
-    className
-  )}
+  class="inline-block  text-black dark:text-white tracking-normal"
   {...$$restProps}
 >
   {$num.toFixed(0)}

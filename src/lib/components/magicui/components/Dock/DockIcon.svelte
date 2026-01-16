@@ -1,12 +1,9 @@
 <script lang="ts">
-  import { cn } from "$lib/components/magicui/utils/cn";
   import { getContext } from "svelte";
   import { Motion, useSpring, useTransform } from "svelte-motion";
 
   let DEFAULT_MAGNIFICATION = 60;
   let DEFAULT_DISTANCE = 140;
-  let className = "";
-  export { className as class };
   let mouseX = getContext("mouseX");
   $: console.log(mouseX.current, "---");
   export let distance: number = DEFAULT_DISTANCE;
@@ -27,10 +24,7 @@
 
 <Motion style={{ width }} let:motion>
   <div
-    class={cn(
-      "flex aspect-square cursor-pointer items-center justify-center rounded-full",
-      className
-    )}
+    class="flex aspect-square cursor-pointer items-center justify-center rounded-full"
     bind:this={ref}
     use:motion
   >

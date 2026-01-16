@@ -1,10 +1,7 @@
 <script lang="ts">
-  import { cn } from "$lib/components/magicui/utils/cn";
   import { onMount, tick } from "svelte";
   import { M, Motion } from "svelte-motion";
 
-  let className: any = "";
-  export { className as class };
   export let containerRef;
   export let fromRef;
   export let toRef;
@@ -88,10 +85,7 @@
   width={svgDimensions.width}
   height={svgDimensions.height}
   xmlns="http://www.w3.org/2000/svg"
-  class={cn(
-    "pointer-events-none absolute left-0 top-0 transform-gpu stroke-2",
-    className
-  )}
+  class="pointer-events-none absolute left-0 top-0 transform-gpu stroke-2"
   viewBox={`0 0 ${svgDimensions.width} ${svgDimensions.height}`}
 >
   <path

@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { cn } from "$lib/components/magicui/utils/cn";
   import { Motion } from "svelte-motion";
 
   export let words='Pull Up';
@@ -17,9 +16,6 @@
     show: { y: 0, opacity: 1 },
   };
 
-  let className: any = "";
-  export { className as class };
-
   let wordSplit = words.split(" ");
 </script>
 
@@ -30,10 +26,7 @@
   let:motion
 >
   <h1
-    class={cn(
-      "font-display text-center text-4xl font-bold leading-[5rem] tracking-[-0.02em] drop-shadow-sm",
-      className
-    )}
+    class="font-display text-center text-4xl font-bold leading-[5rem] tracking-[-0.02em] drop-shadow-sm"
     use:motion
   >
     {#each wordSplit as word, i}

@@ -2,16 +2,12 @@
 	import { onMount } from 'svelte';
 	import createGlobe from 'cobe';
 	import { spring } from 'svelte/motion';
-	import { cn } from '$lib/components/magicui/utils/cn';
 
 	let x = spring(0, {
 		stiffness: 0.04,
 		damping: 0.4,
 		precision: 0.005
 	});
-
-	let className = '';
-	export { className as class };
 
 	// Optional color overrides - if not provided, will use CSS theme variables
 	export let baseColorOverride: string | undefined = undefined;
@@ -114,10 +110,7 @@
 </script>
 
 <main
-  class={cn(
-    "absolute inset-0 mx-auto aspect-[1/1] w-full max-w-[600px]",
-    className
-  )}
+  class="absolute inset-0 mx-auto aspect-[1/1] w-full max-w-[600px]"
 >
   <canvas
     class="h-full w-full [contain:layout_paint_size]"

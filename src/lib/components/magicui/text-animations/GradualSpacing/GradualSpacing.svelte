@@ -1,9 +1,5 @@
 <script lang="ts">
-  import { cn } from "$lib/components/magicui/utils/cn";
   import { AnimatePresence, Motion } from "svelte-motion";
-
-  let className: any = "Gradual Spacing";
-  export { className as class };
 
   export let words = "Gradual Spacing";
   export let duration = 0.5;
@@ -29,7 +25,7 @@
         }}
         let:motion
       >
-        <span use:motion class={cn("drop-shadow-sm", className)}>
+        <span use:motion class="drop-shadow-sm">
           {#if char === " "}
             <span>&nbsp;</span>
           {:else}

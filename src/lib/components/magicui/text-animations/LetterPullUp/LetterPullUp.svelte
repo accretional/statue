@@ -1,11 +1,8 @@
 <script lang="ts">
-  import { cn } from "$lib/components/magicui/utils/cn";
   import { AnimatePresence, Motion } from "svelte-motion";
 
   export let words = "Letter Pull Up";
   export let delay = 0.05;
-  let className: any = "";
-  export { className as class };
   let pullupVariant = {
     hidden: { y: 100, opacity: 0 },
     visible: (i: any) => ({
@@ -28,10 +25,7 @@
         let:motion
       >
         <h1
-          class={cn(
-            "font-display text-center text-4xl font-bold tracking-[-0.02em] text-black drop-shadow-sm dark:text-white md:text-4xl md:leading-[5rem]",
-            className
-          )}
+          class="font-display text-center text-4xl font-bold tracking-[-0.02em] text-black drop-shadow-sm dark:text-white md:text-4xl md:leading-[5rem]"
           use:motion
         >
           {#if letter === " "}

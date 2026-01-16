@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { cn } from "$lib/components/magicui/utils/cn";
   import { Motion } from "svelte-motion";
 
   export let word: string = "Blur In";
@@ -11,8 +10,6 @@
     visible: { filter: "blur(0px)", opacity: 1 },
   };
   export let duration: number = 1;
-  let className = "";
-  export { className as class };
 
   let defaultVariants = {
     hidden: { filter: "blur(10px)", opacity: 0 },
@@ -29,10 +26,7 @@
   let:motion
 >
   <h1
-    class={cn(
-      className,
-      "font-display text-center text-4xl font-bold tracking-[-0.02em] drop-shadow-sm md:text-7xl md:leading-[5rem]"
-    )}
+    class="font-display text-center text-4xl font-bold tracking-[-0.02em] drop-shadow-sm md:text-7xl md:leading-[5rem]"
     use:motion
   >
     {word}

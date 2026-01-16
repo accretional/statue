@@ -1,12 +1,9 @@
 <script lang="ts">
-  import { cn } from "$lib/components/magicui/utils/cn";
   import { onMount } from "svelte";
 
   export let text: string = "Typing Animation";
   export let duration: number = 200;
-  let className: string = "";
-  export { className as class };
-  
+
   let displayedText = "";
   onMount(() => {
     let i = 0;
@@ -23,10 +20,7 @@
 </script>
 
 <h1
-  class={cn(
-    "font-display text-center text-4xl font-bold leading-[5rem] tracking-[-0.02em] drop-shadow-sm transition-all",
-    className
-  )}
+  class="font-display text-center text-4xl font-bold leading-[5rem] tracking-[-0.02em] drop-shadow-sm transition-all"
 >
   {displayedText ? displayedText : text}
 </h1>

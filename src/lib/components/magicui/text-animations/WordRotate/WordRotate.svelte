@@ -1,13 +1,9 @@
 <script lang="ts">
-  import { cn } from "$lib/components/magicui/utils/cn";
   import { onMount } from "svelte";
   import { fly } from "svelte/transition";
 
   export let words: string[] = ["Hello", "Svelte", "Coders"];
   export let duration: number = 2100;
-
-  let className: string = "";
-  export { className as class };
 
   let index = 0;
   let chnageIndex = () => {
@@ -27,7 +23,7 @@
     <h1
       in:fly={{ y: -50, delay: 200 }}
       out:fly={{ y: 40, duration: 200 }}
-      class={cn(className, "text-center")}
+      class="text-center"
     >
       {words[index]}
     </h1>

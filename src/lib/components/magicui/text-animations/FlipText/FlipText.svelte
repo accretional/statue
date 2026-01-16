@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { cn } from "$lib/components/magicui/utils/cn";
   import { AnimatePresence, Motion } from "svelte-motion";
 
   export let word = "Flip Text";
@@ -9,8 +8,6 @@
     hidden: { rotateX: -90, opacity: 0 },
     visible: { rotateX: 0, opacity: 1 },
   };
-  let className: any = "";
-  export { className as class };
   let wordsspilit = word.split("");
 </script>
 
@@ -28,7 +25,7 @@
         }}
         let:motion
       >
-        <span use:motion class={cn("origin-center drop-shadow-sm", className)}>
+        <span use:motion class="origin-center drop-shadow-sm">
           {letter}
         </span>
       </Motion>
