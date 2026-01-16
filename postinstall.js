@@ -72,7 +72,7 @@ async function setupStatueSSG(options = {}) {
   // 5. Copy required scripts
   const scriptsDir = path.join(targetDir, 'scripts');
   fs.ensureDirSync(scriptsDir);
-  for (const script of ['generate-seo-files.js', 'run-pagefind.js']) {
+  for (const script of ['generate-seo-files.js', 'run-pagefind.js', 'autopr.sh','validate-contribution.sh']) {
     fs.copySync(path.join(sourceDir, 'scripts', script), path.join(scriptsDir, script), { overwrite: true });
   }
   console.log(chalk.green('✓ scripts copied'));
