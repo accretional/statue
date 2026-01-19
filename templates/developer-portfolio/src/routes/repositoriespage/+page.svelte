@@ -271,9 +271,8 @@
             <div class="ascii-art">
                 <pre>{asciiFrame}</pre>
             </div>
-            <div class="empty-icon">📂</div>
             <h2>Select a repository</h2>
-            <p>Click on a card to explore the code in VS Code view</p>
+            <p>Click on a repo card on the left to explore the code</p>
         </div>
 	{/if}
 
@@ -389,11 +388,6 @@
         white-space: pre;
         text-align: center;
         margin: 0;
-    }
-
-    .empty-icon {
-        font-size: 48px;
-        margin-bottom: 1rem;
     }
 
 	@keyframes windowAppear {

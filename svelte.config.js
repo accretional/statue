@@ -4,7 +4,6 @@ import path from 'path';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-  // Using vitePreprocess for preprocessor
   preprocess: vitePreprocess(),
 
   kit: {
@@ -27,10 +26,7 @@ const config = {
     // Static site pre-processing options
     prerender: {
       crawl: true,
-      entries: [
-        '/',
-        '/about'
-      ],
+      entries: ['*'],
       handleHttpError: 'warn'
     }
   }

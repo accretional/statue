@@ -1,16 +1,19 @@
-<script lang="ts">
-  export let title = '';
-  export let content = '';
-  export let metadata: {
-    date?: string;
-    author?: string;
-    [key: string]: any;
-  } = {};
+<script>
+  import { getPageMetadata } from 'statue-ssg';
+  export let metadata = {};
+  export let filename = '';
 </script>
 
-<div class="markdown-wrapper max-w-prose mx-auto">
-  {#if title}
-    <h1 class="text-3xl font-bold mb-6">{title}</h1>
+<svelte:head>
+  <title>{metadata.title || 'Page'}</title>
+  {#if metadata.description}
+    <meta name="description" content={metadata.description} />
+  {/if}
+</svelte:head>
+
+<div class="markdown-wrapper">
+  {#if metadata.title}
+    <h1 class="text-3xl font-bold mb-6">{metadata.title}</h1>
   {/if}
 
   {#if metadata.date}
@@ -23,12 +26,16 @@
   {/if}
 
   <div class="prose prose-blue max-w-none">
-    {@html content}
+    <slot />
   </div>
 </div>
 
 <style>
-  /* Custom styling for markdown content */
+  .markdown-wrapper {
+    max-width: 65ch;
+    margin: 0 auto;
+  }
+
   :global(.prose h1) {
     font-size: 1.5rem;
     font-weight: bold;
@@ -83,4 +90,4 @@
     margin-bottom: 1rem;
     overflow-x: auto;
   }
-</style> 
+</style>

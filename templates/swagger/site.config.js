@@ -11,6 +11,24 @@ export const siteConfig = {
     author: "Statue Team"
   },
 
+  // Navigation bar configuration
+  navbar: {
+    // Site title displayed in the navbar (null to hide)
+    siteTitle: "Statue SSG",
+
+    // Logo image URL (null or false for no logo)
+    logo: null,
+
+    // Default navigation items (add cta: true for CTA button style)
+    defaultNavItems: [
+      { title: 'Home', url: '/' },
+      { title: 'About', url: '/about' }
+    ],
+
+    // Hide these directories from navbar (by folder name content/foldername)
+    hiddenFromNav: ['legal']
+  },
+
   // Contact information
   contact: {
     // Main contact email
@@ -66,7 +84,7 @@ export const siteConfig = {
   // Search configuration
   search: {
     // Enable/disable search functionality
-    enabled: true,
+    enabled: false,
 
     // UI options
     placeholder: 'Search...',
