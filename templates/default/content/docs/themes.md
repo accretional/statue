@@ -37,6 +37,7 @@ Pick one:
 @import "statue-ssg/themes/cyan.css";        /* Dark cyan + cyan */
 @import "statue-ssg/themes/pink.css";        /* Dark pink + pink */
 @import "statue-ssg/themes/black-white.css"; /* Monochrome */
+@import "statue-ssg/themes/claude-theme.css"; /* Warm dark + coral */
 ```
 
 ---
