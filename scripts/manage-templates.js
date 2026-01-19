@@ -36,7 +36,7 @@ program
     }
 
     if (!options.force) {
-      console.log(chalk.yellow('⚠️  This will overwrite src/ and site.config.js'));
+      console.log(chalk.yellow('⚠️  This will overwrite src/ and site.config.json'));
       console.log(chalk.yellow('   Note: Core library (components, cms, themes) may be affected.'));
       console.log(chalk.red('Use -f or --force to proceed.'));
       return;
@@ -52,11 +52,11 @@ program
       console.log(chalk.gray('  ✓ Copied src/'));
     }
 
-    // Copy site.config.js
-    const sourceConfig = path.join(templateDir, 'site.config.js');
+    // Copy site.config.json
+    const sourceConfig = path.join(templateDir, 'site.config.json');
     if (fs.existsSync(sourceConfig)) {
-      fs.copySync(sourceConfig, path.join(rootDir, 'site.config.js'), { overwrite: true });
-      console.log(chalk.gray('  ✓ Copied site.config.js'));
+      fs.copySync(sourceConfig, path.join(rootDir, 'site.config.json'), { overwrite: true });
+      console.log(chalk.gray('  ✓ Copied site.config.json'));
     }
 
     console.log(chalk.green(`✅ Template '${templateName}' loaded!`));
@@ -85,11 +85,11 @@ program
       console.log(chalk.gray('  ✓ Saved src/'));
     }
 
-    // Save site.config.js
-    const sourceConfig = path.join(rootDir, 'site.config.js');
+    // Save site.config.json
+    const sourceConfig = path.join(rootDir, 'site.config.json');
     if (fs.existsSync(sourceConfig)) {
-      fs.copySync(sourceConfig, path.join(templateDir, 'site.config.js'), { overwrite: true });
-      console.log(chalk.gray('  ✓ Saved site.config.js'));
+      fs.copySync(sourceConfig, path.join(templateDir, 'site.config.json'), { overwrite: true });
+      console.log(chalk.gray('  ✓ Saved site.config.json'));
     }
 
     console.log(chalk.green(`✅ Template '${templateName}' saved!`));
