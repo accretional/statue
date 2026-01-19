@@ -30,6 +30,7 @@ export default defineConfig({
       mode: 'tags-split',
       clean: true,
       prettier: true,
+      //Change this to your own API endpoint
       baseUrl: 'https://petstore.swagger.io/v2'
     }
   }
