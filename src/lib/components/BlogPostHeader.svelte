@@ -12,12 +12,21 @@
   export let backLink = '/blog';
   export let backLinkText = 'Blog';
 
+  //Date parsing without confusion due to timezone
+
+  function parseLocalDate(dateStr) {
+  if (!dateStr) return null;
+  const [year, month, day] = dateStr.split('-').map(Number);
+  return new Date(year, month - 1, day);
+}
+
   // Format date
-  $: formattedDate = date ? new Date(date).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: '2-digit'
-  }) : '';
+  $: formattedDate = date ? parseLocalDate(date).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: '2-digit'
+    })
+  : '';
 
   // Check if thumbnail exists
   $: hasThumbnail = !!thumbnail;

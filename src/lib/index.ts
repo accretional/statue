@@ -54,3 +54,5 @@ export { default as SlidingTestimonial } from './components/SlidingTestimonial.s
 
 export { default as Table } from './components/Table.svelte';
 export { default as SQLite } from './components/SQLite.svelte';
+// API Documentation
+export { default as SwaggerUI } from './components/SwaggerUI.svelte';

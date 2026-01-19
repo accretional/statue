@@ -1,114 +1,138 @@
 // Node.js specific modules should only run on the server side
-// This file should only be imported on the server side
+// This file uses mdsvex for markdown processing instead of marked
 
 // Node.js modules
 import fs from 'fs';
 import path from 'path';
-import { marked } from 'marked';
+import { compile } from 'mdsvex';
 import matter from 'gray-matter';
-
-// Import site configuration
-import { siteConfig } from '/site.config.js';
+import rehypeSlug from 'rehype-slug';
+import remarkGfm from 'remark-gfm';
 
 // This error check is to provide an early warning when this module is attempted to be used in the browser
 const isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined';
 if (isBrowser) {
-  console.error('content-processor.js should only be used on the server side!');
+  console.error('content-processor-mdsvex.js should only be used on the server side!');
   throw new Error('Content processor cannot run on the client side!');
 }
 
+// Try to load site config, but don't fail if not available
+let siteConfig = {};
+try {
+  // eslint-disable-next-line import/no-unresolved
+  const configModule = await import('/site.config.js').catch(() => ({ siteConfig: {} }));
+  siteConfig = configModule.siteConfig || {};
+} catch {
+  // siteConfig not available, will use empty object
+}
+
+// Configure mdsvex options
+const mdsvexOptions = {
+  extensions: ['.md'],
+  remarkPlugins: [remarkGfm],
+  rehypePlugins: [rehypeSlug],
+  layout: null // We'll handle layout in Svelte components
+};
+
+/**
+ * Process markdown with mdsvex and extract HTML content
+ * Since mdsvex produces Svelte component code, we need to extract just the HTML part
+ */
+const processMarkdownWithMDSvex = async (markdown) => {
+  try {
+    const { code } = await compile(markdown, mdsvexOptions);
+
+    // Extract HTML from mdsvex output
+    // mdsvex outputs Svelte component code, we need to get the template part
+    // The HTML is typically between `<script>` tags (if any) and the end
+    let html = code;
+
+    // Remove script tags and their content to get just the template
+    html = html.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+
+    // Remove any remaining Svelte-specific directives that might break HTML rendering
+    // Keep the HTML structure for {@html} rendering
+    html = html.trim();
+
+    return html;
+  } catch (error) {
+    console.error('MDSvex processing error:', error);
+    // Fallback to simple markdown processing if mdsvex fails
+    return `<p>Error processing markdown: ${error.message}</p>`;
+  }
+};
+
 // Function to remove the first h1 heading from HTML content
 const removeFirstH1 = (html) => {
-  // Find the first heading and remove it
-  // This regex matches the first <h1> tag and its content up to the closing </h1>
   return html.replace(/<h1[^>]*>(.*?)<\/h1>/, '');
 };
 
 /**
- * Creates a custom marked renderer that transforms internal markdown links
- * to proper URLs based on the current file's location in the content tree
- *
- * @param {string} currentDirectory - The directory of the current content file (e.g., 'docs', 'blog')
- * @returns {marked.Renderer} - A configured marked renderer
+ * Creates a custom marked-like renderer for link transformation
+ * We'll handle this with post-processing since mdsvex uses rehype/remark
  */
-const createLinkTransformer = (currentDirectory) => {
-  const renderer = new marked.Renderer();
-  const originalLinkRenderer = renderer.link.bind(renderer);
-
-  renderer.link = function(token) {
-    // In marked v15+, the link renderer receives a token object
-    let href = token.href || '';
-    const title = token.title || null;
-    const text = token.text || '';
-
-    // Check if link has a protocol (mailto:, tel:, http:, https:, ftp:, etc.)
-    const hasProtocol = href && typeof href === 'string' && /^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(href);
-
-    // Only transform relative links that point to .md files or local paths
-    // Do not transform links with protocols or anchor links (#)
-    if (href && typeof href === 'string' && !hasProtocol && !href.startsWith('#')) {
-      // Handle .md file links - remove the extension
-      if (href.endsWith('.md')) {
-        href = href.slice(0, -3);
-      }
-
-      // Handle relative paths (./file, ../dir/file)
-      if (href.startsWith('./') || href.startsWith('../')) {
-        // Resolve the path relative to the current directory
-        const resolvedPath = path.join('/', currentDirectory, href);
-        // Normalize path separators and remove any trailing slashes
-        href = resolvedPath.replace(/\\/g, '/').replace(/\/$/, '');
-      } else if (!href.startsWith('/')) {
-        // If it's not absolute and not explicitly relative, treat as relative to current dir
-        // This handles cases like [link](other-file.md) without ./ prefix
-        href = path.join('/', currentDirectory, href).replace(/\\/g, '/');
-      }
+const transformLinks = (html, currentDirectory) => {
+  // Transform internal .md links
+  return html.replace(/href="([^"]+)"/g, (match, href) => {
+    // Skip external links and anchors
+    if (href.startsWith('http') || href.startsWith('#') || href.startsWith('mailto:')) {
+      return match;
     }
 
-    // Create modified token with transformed href
-    const modifiedToken = { ...token, href };
-    return originalLinkRenderer(modifiedToken);
-  };
+    // Remove .md extension
+    let transformedHref = href;
+    if (transformedHref.endsWith('.md')) {
+      transformedHref = transformedHref.slice(0, -3);
+    }
 
-  return renderer;
+    // Handle relative paths
+    if (transformedHref.startsWith('./') || transformedHref.startsWith('../')) {
+      const resolvedPath = path.join('/', currentDirectory, transformedHref);
+      transformedHref = resolvedPath.replace(/\\/g, '/').replace(/\/$/, '');
+    } else if (!transformedHref.startsWith('/')) {
+      transformedHref = path.join('/', currentDirectory, transformedHref).replace(/\\/g, '/');
+    }
+
+    return `href="${transformedHref}"`;
+  });
 };
 
 // Scans all markdown files and folders in the content directory
-const scanContentDirectory = () => {
+const scanContentDirectory = async () => {
   const contentPath = path.resolve('content');
   const contentEntries = [];
-  
+
   if (!fs.existsSync(contentPath)) {
     console.warn('Content folder not found!');
     return contentEntries;
   }
-  
+
   // Recursively scan the content folder
-  function scanDir(dirPath, relativePath = '') {
+  async function scanDir(dirPath, relativePath = '') {
     const entries = fs.readdirSync(dirPath);
-    
+
     for (const entry of entries) {
       const fullPath = path.join(dirPath, entry);
       const entryRelativePath = path.join(relativePath, entry);
       const stats = fs.statSync(fullPath);
-      
+
       if (stats.isDirectory()) {
         // If it's a folder, scan its contents
-        scanDir(fullPath, entryRelativePath);
+        await scanDir(fullPath, entryRelativePath);
       } else if (stats.isFile() && entry.endsWith('.md')) {
         // Add markdown files to the list
         const slug = entry.replace('.md', '');
-        const url = relativePath 
-          ? `/${relativePath}/${slug}`.replace(/\\/g, '/') 
+        const url = relativePath
+          ? `/${relativePath}/${slug}`.replace(/\\/g, '/')
           : `/${slug}`;
-          
+
         const content = fs.readFileSync(fullPath, 'utf-8');
         const { data, content: markdownContent } = matter(content);
-        
+
         // Process template variables (both in markdown content and metadata)
         const processedMarkdownContent = processTemplateVariables(markdownContent);
         const processedMetadata = {};
-        
+
         // Process string values in metadata through template processing
         for (const [key, value] of Object.entries(data)) {
           if (typeof value === 'string') {
@@ -117,7 +141,7 @@ const scanContentDirectory = () => {
             processedMetadata[key] = value;
           }
         }
-        
+
         // Add default values and process them through template processing
         const finalMetadata = {
           title: processedMetadata.title || formatTitle(slug),
@@ -130,16 +154,14 @@ const scanContentDirectory = () => {
         // Fix directory - use full path
         let directory = relativePath.replace(/\\/g, '/');
 
-        // Create custom renderer for link transformation based on the file's directory
-        const renderer = createLinkTransformer(directory);
+        // Process markdown to HTML with mdsvex, then remove the first h1 heading
+        let html = await processMarkdownWithMDSvex(processedMarkdownContent);
+        html = removeFirstH1(html);
+        html = transformLinks(html, directory);
 
-        // Parse markdown to HTML with link transformation, then remove the first h1 heading
-        const html = removeFirstH1(marked.parse(processedMarkdownContent, { renderer }));
-        
         // Add main directory information to create content tree
-        // Example: blog/categories/js -> blog
         const mainDirectory = directory.split('/')[0] || 'root';
-        
+
         contentEntries.push({
           slug,
           path: entryRelativePath,
@@ -154,10 +176,10 @@ const scanContentDirectory = () => {
       }
     }
   }
-  
+
   // Start scanning the content folder
-  scanDir(contentPath);
-  
+  await scanDir(contentPath);
+
   return contentEntries;
 };
 
@@ -165,14 +187,14 @@ const scanContentDirectory = () => {
 const getContentDirectories = () => {
   const contentPath = path.resolve('content');
   const directories = [];
-  
+
   if (!fs.existsSync(contentPath)) {
     console.warn('Content folder not found!');
     return directories;
   }
-  
+
   const entries = fs.readdirSync(contentPath);
-  
+
   for (const entry of entries) {
     const fullPath = path.join(contentPath, entry);
     if (fs.statSync(fullPath).isDirectory()) {
@@ -184,15 +206,8 @@ const getContentDirectories = () => {
       });
     }
   }
-  
-  return directories;
-};
 
-// Function that shortens markdown content up to a specific length
-const truncateContent = (content, maxLength = 200) => {
-  if (content.length <= maxLength) return content;
-  
-  return content.substring(0, maxLength) + '...';
+  return directories;
 };
 
 // Function to create a title from a slug
@@ -207,37 +222,37 @@ const formatTitle = (slug) => {
 let cachedContent = null;
 
 // Get all content (using cache)
-const getAllContent = () => {
+const getAllContent = async () => {
   // Check for development mode to skip caching
   const isDev = process.env.NODE_ENV === 'development' || (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.DEV);
 
   if (!isDev && cachedContent) return cachedContent;
-  
+
   // In development, we want to scan every time to pick up changes
   if (isDev) {
     // Clear cache to be safe
     cachedContent = null;
   }
 
-  const content = scanContentDirectory();
-  
+  const content = await scanContentDirectory();
+
   // Only cache in production
   if (!isDev) {
     cachedContent = content;
   }
-  
+
   return content;
 };
 
 // Get content for a specific URL
-const getContentByUrl = (url) => {
-  const allContent = getAllContent();
-  
+const getContentByUrl = async (url) => {
+  const allContent = await getAllContent();
+
   // Remove trailing slash (/) from URL
   const normalizedUrl = url.endsWith('/') ? url.slice(0, -1) : url;
-  
+
   console.log('Normalized URL for lookup:', normalizedUrl);
-  
+
   // Check content URLs and find matching content
   const result = allContent.find(entry => {
     // Remove trailing slash from content URL as well
@@ -245,20 +260,20 @@ const getContentByUrl = (url) => {
     console.log(`Comparing: "${entryUrl}" vs "${normalizedUrl}"`);
     return entryUrl === normalizedUrl;
   });
-  
+
   console.log('Match result:', result ? `Found: ${result.url}` : 'Not found');
   return result;
 };
 
 // Get content from a specific directory
-const getContentByDirectory = (directory) => {
-  const allContent = getAllContent();
-  
+const getContentByDirectory = async (directory) => {
+  const allContent = await getAllContent();
+
   // Direct matching for main directories
   if (directory === 'root') {
     return allContent.filter(entry => entry.directory === 'root');
   }
-  
+
   // Get all content that starts with the specified directory, including subdirectories
   return allContent.filter(entry => {
     // 1. Exact match case (e.g., 'blog' directory for 'blog')
@@ -273,16 +288,16 @@ const clearContentCache = () => {
 };
 
 // Function to find subdirectories - returns subdirectories for a specific directory
-const getSubDirectories = (directory) => {
-  const allContent = getAllContent();
+const getSubDirectories = async (directory) => {
+  const allContent = await getAllContent();
   const subdirs = new Set();
-  
+
   // If not the main directory, filter relevant content
-  const contents = allContent.filter(entry => 
-    entry.directory !== 'root' && 
+  const contents = allContent.filter(entry =>
+    entry.directory !== 'root' &&
     (entry.directory === directory || entry.directory.startsWith(directory + '/'))
   );
-  
+
   // Extract subdirectories from contents
   contents.forEach(entry => {
     // Get only subdirectories by skipping the main directory
@@ -293,7 +308,7 @@ const getSubDirectories = (directory) => {
       subdirs.add(firstLevel);
     }
   });
-  
+
   return Array.from(subdirs).map(subdir => ({
     name: subdir,
     path: `${directory}/${subdir}`,
@@ -304,52 +319,59 @@ const getSubDirectories = (directory) => {
 
 // Function to process template variables
 const processTemplateVariables = (content) => {
-  // Get variables from configuration
+  // Get variables from configuration (with safe defaults)
+  const site = siteConfig.site || {};
+  const contact = siteConfig.contact || {};
+  const social = siteConfig.social || {};
+  const legal = siteConfig.legal || {};
+
   const variables = {
     // Site information
-    'site.name': siteConfig.site.name,
-    'site.description': siteConfig.site.description,
-    'site.url': siteConfig.site.url,
-    'site.author': siteConfig.site.author,
-    
+    'site.name': site.name,
+    'site.description': site.description,
+    'site.url': site.url,
+    'site.author': site.author,
+
     // Contact information
-    'contact.email': siteConfig.contact.email,
-    'contact.privacyEmail': siteConfig.contact.privacyEmail,
-    'contact.supportEmail': siteConfig.contact.supportEmail,
-    'contact.phone': siteConfig.contact.phone,
-    'contact.address.street': siteConfig.contact.address.street,
-    'contact.address.city': siteConfig.contact.address.city,
-    'contact.address.state': siteConfig.contact.address.state,
-    'contact.address.zipCode': siteConfig.contact.address.zipCode,
-    'contact.address.country': siteConfig.contact.address.country,
-    'contact.address.full': `${siteConfig.contact.address.street}, ${siteConfig.contact.address.city}, ${siteConfig.contact.address.state} ${siteConfig.contact.address.zipCode}`,
-    
+    'contact.email': contact.email,
+    'contact.privacyEmail': contact.privacyEmail,
+    'contact.supportEmail': contact.supportEmail,
+    'contact.phone': contact.phone,
+    'contact.address.street': contact.address?.street,
+    'contact.address.city': contact.address?.city,
+    'contact.address.state': contact.address?.state,
+    'contact.address.zipCode': contact.address?.zipCode,
+    'contact.address.country': contact.address?.country,
+    'contact.address.full': contact.address
+      ? `${contact.address.street || ''}, ${contact.address.city || ''}, ${contact.address.state || ''} ${contact.address.zipCode || ''}`.trim()
+      : '',
+
     // Social media
-    'social.twitter': siteConfig.social.twitter,
-    'social.github': siteConfig.social.github,
-    'social.linkedin': siteConfig.social.linkedin,
-    'social.facebook': siteConfig.social.facebook,
-    'social.instagram': siteConfig.social.instagram,
-    'social.youtube': siteConfig.social.youtube,
-    'social.discord': siteConfig.social.discord,
-    'social.reddit': siteConfig.social.reddit,
-    
+    'social.twitter': social.twitter,
+    'social.github': social.github,
+    'social.linkedin': social.linkedin,
+    'social.facebook': social.facebook,
+    'social.instagram': social.instagram,
+    'social.youtube': social.youtube,
+    'social.discord': social.discord,
+    'social.reddit': social.reddit,
+
     // Legal information
-    'legal.privacyPolicyLastUpdated': siteConfig.legal.privacyPolicyLastUpdated,
-    'legal.termsLastUpdated': siteConfig.legal.termsLastUpdated,
-    'legal.doNotSell.processingTime': siteConfig.legal.doNotSell.processingTime,
-    
+    'legal.privacyPolicyLastUpdated': legal.privacyPolicyLastUpdated,
+    'legal.termsLastUpdated': legal.termsLastUpdated,
+    'legal.doNotSell.processingTime': legal.doNotSell?.processingTime,
+
     // Dynamic date functions
     'date.now': new Date().toLocaleDateString('en-US'),
     'date.year': new Date().getFullYear().toString(),
     'date.month': new Date().toLocaleDateString('en-US', { month: 'long' }),
     'date.day': new Date().getDate().toString()
   };
-  
+
   // Replace template variables
   // Support {{variable.name}} format variables
   let processedContent = content;
-  
+
   // Process {{variable}} format variables
   processedContent = processedContent.replace(/\{\{([^}]+)\}\}/g, (match, variableName) => {
     const trimmedName = variableName.trim();
@@ -359,13 +381,13 @@ const processTemplateVariables = (content) => {
     console.warn(`Template variable not found: ${trimmedName}`);
     return match; // Leave unfound variables as they are
   });
-  
+
   return processedContent;
 };
 
 // Function to build sidebar navigation tree for a directory
-const getSidebarTree = (directory) => {
-  const allContent = getAllContent();
+const getSidebarTree = async (directory) => {
+  const allContent = await getAllContent();
 
   // Filter content for this directory
   const directoryContent = allContent.filter(entry =>
@@ -426,7 +448,7 @@ const getSidebarTree = (directory) => {
 };
 
 // Function to get all directories as sidebar navigation
-const getAllDirectoriesSidebar = () => {
+const getAllDirectoriesSidebar = async () => {
   const directories = getContentDirectories();
   const result = [];
 
@@ -448,7 +470,6 @@ const getAllDirectoriesSidebar = () => {
 export {
   scanContentDirectory,
   getContentDirectories,
-  truncateContent,
   formatTitle,
   getAllContent,
   getContentByUrl,
@@ -458,4 +479,4 @@ export {
   processTemplateVariables,
   getSidebarTree,
   getAllDirectoriesSidebar
-}; 
+};

@@ -7,7 +7,23 @@
   export let activePath = '';
   export let showSearch = false;
   export let searchPlaceholder = "Search...";
-  
+
+  // Customizable site branding
+  export let siteTitle = null;
+  export let logo = null; // Can be image URL string or null for default SVG
+
+  // Default navigation items (Home, About, etc.)
+  // Set to empty array to hide all default links
+  export let defaultNavItems = [
+    { title: 'Home', url: '/' }
+  ];
+
+  // Hide specific directories from navbar (by folder name)
+  export let hiddenFromNav = [];
+
+  // Filter navbarItems based on hiddenFromNav
+  $: filteredNavbarItems = navbarItems.filter(item => !hiddenFromNav.includes(item.name));
+
   let isMenuOpen = false;
   let isHidden = false;
   let lastScrollY = 0;
@@ -15,6 +31,9 @@
 
   // Reactive current path from SvelteKit store
   $: currentPath = $page.url.pathname;
+
+  // Find first CTA item from nav items (only first one is used)
+  $: ctaItem = [...defaultNavItems, ...filteredNavbarItems].find(item => item.cta);
 
   // Check if a nav item is active (exact match for home, startsWith for others)
   function isActive(itemUrl, path) {
@@ -49,38 +68,41 @@
     <div class="flex items-center justify-between h-16">
       <div class="flex items-center">
         <a href="/" class="flex items-center space-x-2">
-          <!-- Logo icon - custom SVG similar to BotGauge -->
-          <div class="text-[var(--color-primary)] w-8 h-8">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
-              <path d="M8 12H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              <path d="M12 8L12 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <span class="font-bold text-xl">
-            <span class="text-[var(--color-primary)]">Statue</span>SSG
-          </span>
+          <!-- Logo: true = default SVG, string = custom image, false/null = no logo -->
+          {#if logo === true}
+            <div class="text-[var(--color-primary)] w-8 h-8">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+                <path d="M8 12H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M12 8L12 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+          {:else if logo}
+            <img src={logo} alt={siteTitle || 'Logo'} class="w-8 h-8 object-contain" />
+          {/if}
+          {#if siteTitle}
+            <span class="font-bold text-xl text-[var(--color-foreground)]">
+              {siteTitle}
+            </span>
+          {/if}
         </a>
       </div>
       
       <!-- Desktop Menu -->
       <div class="hidden md:flex items-center space-x-4">
-        <a
-          href="/"
-          class="py-2 px-3 font-medium text-sm transition-colors duration-200 {isActive('/', currentPath) ? 'text-[var(--color-primary)]' : 'text-[var(--color-foreground)] hover:text-[var(--color-primary)]'}"
-        >
-          Home
-        </a>
+        {#each defaultNavItems as item}
+          {#if !item.cta}
+            <a
+              href={item.url}
+              class="py-2 px-3 font-medium text-sm transition-colors duration-200 {isActive(item.url, currentPath) ? 'text-[var(--color-primary)]' : 'text-[var(--color-foreground)] hover:text-[var(--color-primary)]'}"
+            >
+              {item.title}
+            </a>
+          {/if}
+        {/each}
 
-        <a
-          href="/about"
-          class="py-2 px-3 font-medium text-sm transition-colors duration-200 {isActive('/about', currentPath) ? 'text-[var(--color-primary)]' : 'text-[var(--color-foreground)] hover:text-[var(--color-primary)]'}"
-        >
-          About
-        </a>
-
-        {#each navbarItems as item}
-          {#if item.name !== 'legal'}
+        {#each filteredNavbarItems as item}
+          {#if !item.cta}
             <a
               href={item.url}
               class="py-2 px-3 font-medium text-sm transition-colors duration-200 {isActive(item.url, currentPath) ? 'text-[var(--color-primary)]' : 'text-[var(--color-foreground)] hover:text-[var(--color-primary)]'}"
@@ -96,10 +118,12 @@
             <Search placeholder={searchPlaceholder} />
           </div>
         {/if}
-        
-        <a href="/docs" class="ml-4 px-4 py-2 rounded-lg bg-[var(--color-primary)] hover:brightness-110 text-[var(--color-on-primary)] text-sm font-medium transition-colors duration-200">
-          Documentation
-        </a>
+
+        {#if ctaItem}
+          <a href={ctaItem.url} class="ml-4 px-4 py-2 rounded-lg bg-[var(--color-primary)] hover:brightness-110 text-[var(--color-on-primary)] text-sm font-medium transition-colors duration-200">
+            {ctaItem.title}
+          </a>
+        {/if}
       </div>
       
       <!-- Mobile menu button -->
@@ -129,15 +153,20 @@
             <Search placeholder={searchPlaceholder} />
           </div>
         {/if}
-        <a
-          href="/"
-          class="block px-3 py-2 rounded-md text-base font-medium {isActive('/', currentPath) ? 'bg-surface text-white' : 'text-slate-300 hover:bg-surface hover:text-white'}"
-        >
-          Home
-        </a>
 
-        {#each navbarItems as item}
-          {#if item.name !== 'legal'}
+        {#each defaultNavItems as item}
+          {#if !item.cta}
+            <a
+              href={item.url}
+              class="block px-3 py-2 rounded-md text-base font-medium {isActive(item.url, currentPath) ? 'bg-surface text-white' : 'text-[var(--color-muted)] hover:bg-surface hover:text-white'}"
+            >
+              {item.title}
+            </a>
+          {/if}
+        {/each}
+
+        {#each filteredNavbarItems as item}
+          {#if !item.cta}
             <a
               href={item.url}
               class="block px-3 py-2 rounded-md text-base font-medium {isActive(item.url, currentPath) ? 'bg-surface text-white' : 'text-slate-300 hover:bg-surface hover:text-white'}"
@@ -146,10 +175,12 @@
             </a>
           {/if}
         {/each}
-        
-        <a href="/docs" class="block px-3 py-2 rounded-md text-base font-medium bg-[var(--color-primary)] hover:brightness-110 text-[var(--color-on-primary)] mt-3">
-          Documentation
-        </a>
+
+        {#if ctaItem}
+          <a href={ctaItem.url} class="block px-3 py-2 rounded-md text-base font-medium bg-[var(--color-primary)] hover:brightness-110 text-[var(--color-on-primary)] mt-3">
+            {ctaItem.title}
+          </a>
+        {/if}
       </div>
     </div>
   {/if}
