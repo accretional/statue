@@ -1,3 +1,12 @@
+<!--
+This is a Svelte component from Kampsy-ui
+
+Website: [ui.kampsy.xyz](https://ui.kampsy.xyz/)
+GitHub Repository: [kampsy/ui](https://github.com/kampsy/ui)
+
+All components in this directory are sourced from the Kampsy-ui project. Please refer to the original repository for documentation, examples, and additional components.
+-->
+
 <script lang="ts">
 	import { getContext, type Snippet } from 'svelte';
 	import { cubicOut } from 'svelte/easing';
