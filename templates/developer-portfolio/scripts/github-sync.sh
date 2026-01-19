@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # GitHub Sync Script
-# Syncs GitHub user data to site.config.js, repositories.json, and avatar
+# Syncs GitHub user data to site.config.json, repositories.json, and avatar
 
 set -e
 
@@ -111,7 +111,7 @@ SOCIAL_LINKS=""
 if echo "$SOCIAL_DATA" | jq -e 'type == "array"' > /dev/null 2>&1; then
     LINKEDIN_URL=$(echo "$SOCIAL_DATA" | jq -r '[.[] | select(.provider == "linkedin")] | .[0].url // ""')
 
-    # Get all social links as JSON array for site.config.js
+    # Get all social links as JSON array for site.config.json
     SOCIAL_LINKS=$(echo "$SOCIAL_DATA" | jq -c '[.[] | {provider: .provider, url: .url}]')
 
     SOCIAL_COUNT=$(echo "$SOCIAL_DATA" | jq 'length')
@@ -205,12 +205,12 @@ else
     echo -e "  ${YELLOW}⚠${NC} Could not fetch contribution data (API may be unavailable)"
 fi
 
-# Update site.config.js
-echo -e "${YELLOW}Updating site.config.js...${NC}"
-CONFIG_PATH="$ROOT_DIR/site.config.js"
+# Update site.config.json
+echo -e "${YELLOW}Updating site.config.json...${NC}"
+CONFIG_PATH="$ROOT_DIR/site.config.json"
 
 if [ ! -f "$CONFIG_PATH" ]; then
-    echo -e "${RED}Error: site.config.js not found at $CONFIG_PATH${NC}"
+    echo -e "${RED}Error: site.config.json not found at $CONFIG_PATH${NC}"
     exit 1
 fi
 
@@ -229,7 +229,7 @@ export GH_FOLLOWING="$FOLLOWING"
 export GH_LINKEDIN="$LINKEDIN_URL"
 export GH_SOCIAL_LINKS="$SOCIAL_LINKS"
 
-# Use node to update the config (more reliable than sed for JS files)
+# Use node to update the JSON config
 node << 'NODESCRIPT'
 const fs = require('fs');
 const configPath = process.env.CONFIG_PATH;
@@ -250,72 +250,54 @@ const data = {
     socialLinks: process.env.GH_SOCIAL_LINKS ? JSON.parse(process.env.GH_SOCIAL_LINKS) : []
 };
 
-let content = fs.readFileSync(configPath, 'utf8');
+// Read and parse JSON config
+const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 
-// Helper to update a string field
-function updateField(content, field, value) {
-    if (value === 'null' || value === null) value = '';
-    // Escape backslashes, quotes, and replace newlines with spaces
-    const escapedValue = (value || '')
-        .replace(/\r\n/g, ' ')
-        .replace(/\n/g, ' ')
-        .replace(/\r/g, ' ')
-        .replace(/\\/g, '\\\\')
-        .replace(/'/g, "\\'");
-    const regex = new RegExp(`(\\s*${field}:\\s*)(['"])[^'"]*\\2`, 'g');
-    if (content.match(regex)) {
-        return content.replace(regex, `$1'${escapedValue}'`);
-    }
-    return content;
+// Update profile section
+if (config.profile) {
+    config.profile.name = data.name;
+    config.profile.username = data.username;
+    config.profile.bio = data.bio;
+    config.profile.location = data.location;
+    config.profile.website = data.website;
+    config.profile.company = data.company;
+    config.profile.email = data.email;
+    config.profile.linkedin = data.linkedin;
+    config.profile.followers = data.followers;
+    config.profile.following = data.following;
 }
-
-// Helper to update a numeric field
-function updateNumericField(content, field, value) {
-    const regex = new RegExp(`(\\s*${field}:\\s*)\\d+`, 'g');
-    if (content.match(regex)) {
-        return content.replace(regex, `$1${value}`);
-    }
-    return content;
-}
-
-// Helper to update or add an array field
-function updateArrayField(content, field, value) {
-    const arrayStr = JSON.stringify(value, null, 4).replace(/\n/g, '\n    ');
-    const regex = new RegExp(`(\\s*${field}:\\s*)\\[[^\\]]*\\]`, 's');
-    if (content.match(regex)) {
-        return content.replace(regex, `$1${arrayStr}`);
-    }
-    return content;
-}
-
-// Update profile fields
-content = updateField(content, 'name', data.name);
-content = updateField(content, 'username', data.username);
 
 // Update navbar siteTitle to match profile name
-content = updateField(content, 'siteTitle', data.name);
-content = updateField(content, 'bio', data.bio);
-content = updateField(content, 'location', data.location);
-content = updateField(content, 'website', data.website);
-content = updateField(content, 'company', data.company);
-content = updateField(content, 'email', data.email);
-content = updateField(content, 'twitter', data.twitter);
-content = updateField(content, 'linkedin', data.linkedin);
-
-// Update numeric fields
-content = updateNumericField(content, 'followers', data.followers);
-content = updateNumericField(content, 'following', data.following);
-
-// Update social links array in the social section
-if (data.socialLinks && data.socialLinks.length > 0) {
-    content = updateArrayField(content, 'socialLinks', data.socialLinks);
+if (config.navbar) {
+    config.navbar.siteTitle = data.name;
 }
 
-fs.writeFileSync(configPath, content);
+// Update site author
+if (config.site) {
+    config.site.author = data.name;
+}
+
+// Update social section
+if (config.social) {
+    if (data.twitter) config.social.twitter = `https://twitter.com/${data.twitter}`;
+    if (data.linkedin) config.social.linkedin = data.linkedin;
+    config.social.github = `https://github.com/${data.username}`;
+    if (data.socialLinks && data.socialLinks.length > 0) {
+        config.social.socialLinks = data.socialLinks;
+    }
+}
+
+// Update contact email
+if (config.contact && data.email) {
+    config.contact.email = data.email;
+}
+
+// Write back to JSON file with nice formatting
+fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
 console.log('Config updated successfully');
 NODESCRIPT
 
-echo -e "  ${GREEN}✓${NC} Updated site.config.js"
+echo -e "  ${GREEN}✓${NC} Updated site.config.json"
 
 # ========================================
 # RANDOM THEME SELECTOR
@@ -373,7 +355,7 @@ echo -e "  ${BLUE}Contributions:${NC} ${CONTRIB_TOTAL:-N/A}"
 echo -e "  ${BLUE}Theme:${NC} ${SELECTED_THEME%.css}"
 echo ""
 echo -e "  ${YELLOW}Files synced:${NC}"
-echo -e "    - site.config.js"
+echo -e "    - site.config.json"
 echo -e "    - static/repositories.json"
 echo -e "    - static/contributions.json"
 echo -e "    - static/avatar.jpg"

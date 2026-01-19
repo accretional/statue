@@ -1,5 +1,5 @@
 import { getContentDirectories, getContentByDirectory } from 'statue-ssg/cms/content-processor';
-import siteConfig from '../../site.config.js';
+import siteConfig from '../../site.config.json';
 
 /** @type {import('./$types').LayoutServerLoad} */
 export async function load() {
