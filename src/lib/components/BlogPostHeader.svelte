@@ -12,13 +12,22 @@
   export let backLink = '/blog';
   export let backLinkText = 'Blog';
 
-  //Date parsing without confusion due to timezone
+  // Date parsing without confusion due to timezone
+  // Handles both string ("2025-12-11") and Date object from gray-matter
+  function parseLocalDate(dateInput) {
+    if (!dateInput) return null;
 
-  function parseLocalDate(dateStr) {
-  if (!dateStr) return null;
-  const [year, month, day] = dateStr.split('-').map(Number);
-  return new Date(year, month - 1, day);
-}
+    // If it's already a Date object, return it
+    if (dateInput instanceof Date) {
+      return dateInput;
+    }
+
+    if (typeof dateInput === 'string') {
+      const [year, month, day] = dateInput.split('-').map(Number);
+      return new Date(year, month - 1, day);
+    }
+    return null;
+  }
 
   // Format date
   $: formattedDate = date ? parseLocalDate(date).toLocaleDateString('en-US', {
