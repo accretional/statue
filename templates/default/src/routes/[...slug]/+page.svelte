@@ -32,21 +32,18 @@
 		return null;
 	}
 
-	// Reactive MDX component lookup
+	// Reactive values
 	let mdxComponent = $derived(findMdxComponent($page.url.pathname));
 	let isMdxContent = $derived(mdxComponent !== null);
-
-	let isDocsContent = $derived(data.layoutType === 'docs');
-	let isBlogContent = $derived(data.layoutType === 'blog');
 	let activePath = $derived($page.url.pathname);
 	let title = $derived(data.content ? data.content.metadata.title : 'Content Not Found');
+	let layoutType = $derived(data.layoutType || 'default');
 
 	let headings = $state([]);
 	let mdxContainer = $state(null);
 
 	// Extract headings from MDX content after render
 	$effect(() => {
-		// This effect depends on mdxComponent and page changes
 		mdxComponent;
 		if (isMdxContent && mdxContainer) {
 			tick().then(() => {
@@ -80,11 +77,10 @@
 </svelte:head>
 
 {#if isMdxContent}
-	<!-- MDX Content with Svelte Components -->
-	{#if isDocsContent}
+	<!-- MDX Content - Layout determined by layoutType -->
+	{#if layoutType === 'docs'}
 		<DocsLayout sidebarItems={data.sidebarItems || []} {headings} {activePath} sidebarTitle="Docs">
 			<div bind:this={mdxContainer}>
-				<!-- Title and description header for MDX docs (matching DocsContent styling) -->
 				{#if data.content?.metadata?.title}
 					<header class="mb-8 pb-8 border-(--color-border)">
 						<h1 class="text-3xl sm:text-4xl font-bold text-(--color-foreground) mb-4">
@@ -97,13 +93,12 @@
 						{/if}
 					</header>
 				{/if}
-				<!-- MDX content -->
 				<div class="prose prose-docs max-w-none pb-16">
 					{@render mdxComponent?.()}
 				</div>
 			</div>
 		</DocsLayout>
-	{:else if isBlogContent}
+	{:else if layoutType === 'blog'}
 		<div class="min-h-screen bg-(--color-background)">
 			<div class="container mx-auto px-4 py-16">
 				<div class="max-w-4xl mx-auto prose prose-invert">
@@ -121,7 +116,8 @@
 		</div>
 	{/if}
 {:else if data.content}
-	{#if isDocsContent}
+	<!-- Markdown Content - Layout determined by layoutType -->
+	{#if layoutType === 'docs'}
 		<DocsLayout sidebarItems={data.sidebarItems || []} {headings} {activePath} sidebarTitle="Docs">
 			{#if data.content.metadata.warning}
 				<div class="mb-6">
@@ -137,7 +133,7 @@
 				bind:headings
 			/>
 		</DocsLayout>
-	{:else if isBlogContent}
+	{:else if layoutType === 'blog'}
 		<BlogPostLayout
 			title={data.content.metadata.title}
 			description={data.content.metadata.description}
