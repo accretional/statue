@@ -64,5 +64,18 @@
     "keywords": ["static site generator", "markdown", "sveltekit", "ssg"],
     "ogImage": "/images/og-image.png",
     "twitterCard": "summary_large_image"
+  },
+  "rss": {
+    "enabled": true,
+    "title": "Statue SSG Blog & Updates",
+    "description": "Latest posts, tutorials, and announcements from Statue SSG",
+    "language": "en-us",
+    "includeDirectories": ["blog"],
+    "maxItems": 50,
+    "contentMode": "summary",
+    "summaryLength": 280,
+    "includeAuthor": true,
+    "includeThumbnail": true,
+    "includeCategories": true
   }
 }

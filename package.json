@@ -53,7 +53,7 @@
 		"predev": "npm run generate:exports",
 		"prebuild": "npm run generate:exports",
 		"build": "vite build",
-		"postbuild": "node scripts/generate-seo-files.js && node scripts/run-pagefind.js",
+		"postbuild": "node scripts/generate-seo-files.js && node scripts/run-pagefind.js && node scripts/generate-rss-feed.js",
 		"generate:exports": "node scripts/generate-exports.js",
 		"preview": "npx -y serve build",
 		"preview:vite": "vite preview",
