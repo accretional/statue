@@ -84,7 +84,18 @@ async function setupStatueSSG(options = {}) {
     const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
     const sourcePkg = JSON.parse(fs.readFileSync(sourcePkgPath, 'utf8'));
 
-    pkg.scripts = { ...pkg.scripts, ...sourcePkg.scripts };
+    // Copy only production scripts - exclude development and build-time generation scripts
+    const isDevelopmentScript = (name) =>
+      (/^(pre|post)/.test(name) && name !== 'postbuild') || // Exclude pre/post hooks except postbuild
+      ['dev', 'build', 'preview'].includes(name) || // Exclude dev/build/preview (users have their own)
+      name.includes(':') || // Exclude namespaced scripts like test:*, generate:*
+      /^(test|lint|format|release)/.test(name); // Exclude dev tooling
+
+    const productionScripts = Object.fromEntries(
+      Object.entries(sourcePkg.scripts).filter(([name]) => !isDevelopmentScript(name))
+    );
+
+    pkg.scripts = { ...pkg.scripts, ...productionScripts };
     pkg.devDependencies = { ...pkg.devDependencies, ...sourcePkg.devDependencies };
 
     fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
