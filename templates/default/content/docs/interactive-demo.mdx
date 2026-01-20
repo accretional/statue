@@ -1,0 +1,54 @@
+---
+title: Interactive MDX Demo
+description: Learn how to use Svelte components inside your markdown files
+date: 2026-01-19
+order: 10
+---
+
+<script>
+  import { Warning, CTA, CopyCommand } from 'statue-ssg';
+</script>
+
+This page demonstrates **MDX support** - combining Markdown with Svelte components.
+
+## Live Components
+
+Below are real Svelte components rendered inside markdown:
+
+### Warning Component
+
+<Warning warning="This is a live Warning component imported from statue-ssg!" />
+
+### Copy Command Component
+
+<CopyCommand command="npx statue init --template default" />
+
+### CTA Component
+
+<CTA
+  title="Ready to get started?"
+  description="Create your first statue-ssg project with interactive MDX support."
+  primaryButtonText="Get Started"
+  primaryButtonLink="/docs/get-started"
+  secondaryButtonText="Learn More"
+  secondaryButtonLink="/docs"
+/>
+
+## Regular Markdown Still Works
+
+- Lists work normally
+- **Bold** and *italic* text
+- [Links](/docs) work too
+
+```javascript
+// Code blocks also work
+const greeting = "Hello from MDX!";
+console.log(greeting);
+```
+
+## Why MDX?
+
+1. Write content in familiar Markdown
+2. Embed interactive Svelte components
+3. No need for custom shortcodes
+4. Full component props support
