@@ -30,21 +30,31 @@ export async function load({ params }) {
   // Get folders in content directory for navigation links
   const directories = getContentDirectories();
 
-  // Get sidebar items for docs content
-  const isDocsContent = content?.directory?.startsWith('docs') || url.startsWith('/docs');
-  const sidebarItems = isDocsContent ? await getSidebarTree('docs') : [];
+  // Infer layout type from directory structure
+  function inferLayoutType(directory) {
+    if (!directory) return 'default';
+    if (directory.startsWith('docs')) return 'docs';
+    if (directory.startsWith('blog')) return 'blog';
+    return 'default';
+  }
+
+  const layoutType = content ? inferLayoutType(content.directory) : 'default';
+
+  // Get sidebar items for docs-style layouts
+  const sidebarItems = layoutType === 'docs' ? await getSidebarTree('docs') : [];
 
   // If content is not found
   if (!content) {
     // Allow SvelteKit to handle routing
     // If a Svelte component exists, it will be shown, otherwise it will return 404
-    return { notFound: true, directories, sidebarItems };
+    return { notFound: true, directories, sidebarItems, layoutType: 'default' };
   }
 
-  // Return content
+  // Return content with layout type
   return {
     content,
     directories,
-    sidebarItems
+    sidebarItems,
+    layoutType
   };
 }

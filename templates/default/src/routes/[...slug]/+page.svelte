@@ -36,10 +36,8 @@
 	let mdxComponent = $derived(findMdxComponent($page.url.pathname));
 	let isMdxContent = $derived(mdxComponent !== null);
 
-	let isDocsContent = $derived(data.content?.directory?.startsWith('docs'));
-	let isBlogContent = $derived(
-		data.content?.directory === 'blog' || data.content?.directory?.startsWith('blog/')
-	);
+	let isDocsContent = $derived(data.layoutType === 'docs');
+	let isBlogContent = $derived(data.layoutType === 'blog');
 	let activePath = $derived($page.url.pathname);
 	let title = $derived(data.content ? data.content.metadata.title : 'Content Not Found');
 
@@ -83,17 +81,17 @@
 
 {#if isMdxContent}
 	<!-- MDX Content with Svelte Components -->
-	{#if activePath.startsWith('/docs')}
+	{#if isDocsContent}
 		<DocsLayout sidebarItems={data.sidebarItems || []} {headings} {activePath} sidebarTitle="Docs">
 			<div bind:this={mdxContainer}>
 				<!-- Title and description header for MDX docs (matching DocsContent styling) -->
 				{#if data.content?.metadata?.title}
-					<header class="mb-8 pb-8 border-b border-[var(--color-border)]">
-						<h1 class="text-3xl sm:text-4xl font-bold text-[var(--color-foreground)] mb-4">
+					<header class="mb-8 pb-8 border-(--color-border)">
+						<h1 class="text-3xl sm:text-4xl font-bold text-(--color-foreground) mb-4">
 							{data.content.metadata.title}
 						</h1>
 						{#if data.content?.metadata?.description}
-							<p class="text-lg text-[var(--color-muted)] leading-relaxed">
+							<p class="text-lg text-muted leading-relaxed">
 								{data.content.metadata.description}
 							</p>
 						{/if}
@@ -101,15 +99,15 @@
 				{/if}
 				<!-- MDX content -->
 				<div class="prose prose-docs max-w-none pb-16">
-					<svelte:component this={mdxComponent} />
+					{@render mdxComponent?.()}
 				</div>
 			</div>
 		</DocsLayout>
-	{:else if activePath.startsWith('/blog')}
+	{:else if isBlogContent}
 		<div class="min-h-screen bg-(--color-background)">
 			<div class="container mx-auto px-4 py-16">
 				<div class="max-w-4xl mx-auto prose prose-invert">
-					<svelte:component this={mdxComponent} />
+					{@render mdxComponent?.()}
 				</div>
 			</div>
 		</div>
@@ -117,7 +115,7 @@
 		<div class="min-h-screen text-white bg-linear-to-b from-(--color-hero-from) via-(--color-hero-via) to-(--color-hero-to)">
 			<div class="container mx-auto px-4 py-16">
 				<div class="max-w-6xl mx-auto prose prose-invert">
-					<svelte:component this={mdxComponent} />
+					{@render mdxComponent?.()}
 				</div>
 			</div>
 		</div>
