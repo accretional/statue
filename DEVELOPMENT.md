@@ -35,7 +35,7 @@ npm run template:save blog
 ### 4. Working on Default Template
 The default template lives in the root. To "restore" it after working on another template:
 ```bash
-git checkout src/routes content site.config.js
+git checkout src/routes content site.config.json
 ```
 (Or simply use `git` to manage the default template changes).
 

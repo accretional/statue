@@ -14,7 +14,7 @@ Follow this checklist to replace placeholder content and make the site your own.
 
 ### ✅ 1. Update Site Configuration
 
-**File:** `site.config.js`
+**File:** `site.config.json`
 
 - [ ] Change `site.name`, `site.description`, `site.url`, `site.author`
 - [ ] Update all `contact` emails and address
@@ -116,7 +116,7 @@ Available: `blue`, `red`, `orange`, `green`, `purple`, `cyan`, `pink`, `black-wh
 
 ### ✅ 9. Update SEO
 
-**File:** `site.config.js`
+**File:** `site.config.json`
 
 - [ ] Set `seo.defaultTitle`, `seo.titleTemplate`
 - [ ] Set `seo.defaultDescription`, `seo.keywords`

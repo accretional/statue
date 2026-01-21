@@ -507,7 +507,7 @@ npm run template:load blog
 npm run template:save blog
 ```
 
-**Warning**: `template:load` overwrites `src/routes`, `content`, and `site.config.js` in the root directory. Commit your changes first!
+**Warning**: `template:load` overwrites `src/routes`, `content`, and `site.config.json` in the root directory. Commit your changes first!
 
 ### Testing a Package Build
 
@@ -628,14 +628,14 @@ General principles:
 
 To add new template variables that users can use in markdown:
 
-1. Add the value to `site.config.js`:
-```javascript
-export const siteConfig = {
+1. Add the value to `site.config.json`:
+```json
+{
   // ... existing config
-  newSection: {
-    newValue: "Your new value"
+  "newSection": {
+    "newValue": "Your new value"
   }
-};
+}
 ```
 
 2. Register it in `src/lib/cms/content-processor.js`:
