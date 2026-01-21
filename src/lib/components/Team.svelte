@@ -1,11 +1,15 @@
-<script>
+<script lang="ts">
+  import type { TeamProps } from './types';
+
   // Team component - Team members section
-  export let title = 'Our Team';
-  export let teamMembers = [
-    { name: 'Statue SSG', role: 'Static Site Generator, Web Framework', initials: '🗿' },
-    { name: 'Markdown', role: 'Content Format, Simple Formatting', initials: '.md' },
-    { name: 'Svelte', role: 'General Web Framework, Custom Functionality', initials: '.svelte' }
-  ];
+  let {
+    title = 'Our Team',
+    teamMembers = [
+      { name: 'Statue SSG', role: 'Static Site Generator, Web Framework', initials: '🗿' },
+      { name: 'Markdown', role: 'Content Format, Simple Formatting', initials: '.md' },
+      { name: 'Svelte', role: 'General Web Framework, Custom Functionality', initials: '.svelte' }
+    ]
+  }: TeamProps = $props();
 </script>
 
 <div class="max-w-5xl mx-auto mt-24 mb-20">

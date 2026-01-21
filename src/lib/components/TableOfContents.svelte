@@ -24,23 +24,32 @@
   - activeId: Currently active heading ID for highlighting
 -->
 
-<script>
+<script lang="ts">
   import { onDestroy, tick } from 'svelte';
   import { browser } from '$app/environment';
+  import type { TableOfContentsProps } from './types';
 
-  export let headings = [];
-  export let title = 'On this page';
+  type Props = TableOfContentsProps & {
+    title?: string;
+  };
 
-  let activeId = '';
-  let observer;
+  let {
+    headings = [],
+    title = 'On this page'
+  }: Props = $props();
+
+  let activeId = $state('');
+  let observer: IntersectionObserver | undefined;
 
   // Filter to only show h2 and h3 headings
-  $: visibleHeadings = headings.filter(h => h.level === 2 || h.level === 3);
+  let visibleHeadings = $derived(headings.filter(h => h.level === 2 || h.level === 3));
 
   // Setup observer when headings change
-  $: if (browser && headings.length > 0) {
-    setupObserver();
-  }
+  $effect(() => {
+    if (browser && headings.length > 0) {
+      setupObserver();
+    }
+  });
 
   async function setupObserver() {
     await tick(); // Wait for DOM to update
@@ -69,7 +78,7 @@
     headings.forEach((heading) => {
       const element = document.getElementById(heading.id);
       if (element) {
-        observer.observe(element);
+        observer!.observe(element);
       }
     });
   }
@@ -80,7 +89,7 @@
     }
   });
 
-  function scrollToHeading(id) {
+  function scrollToHeading(id: string) {
     const element = document.getElementById(id);
     if (element) {
       const offset = 80; // Navbar height
@@ -126,4 +135,3 @@
     </nav>
   </aside>
 {/if}
-

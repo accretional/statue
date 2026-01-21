@@ -90,7 +90,7 @@ All components in this directory are sourced from the svelte-animations project 
     },
   };
 
-  $: selectedAnimation = animationVariants[animationStyle];
+  let selectedAnimation = $derived(animationVariants[animationStyle]);
 </script>
 
 <div class="relative">

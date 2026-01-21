@@ -28,7 +28,7 @@ All components in this directory are sourced from the svelte-animations project 
     }
   });
 
-  $: effectiveBoxColor = boxColor || themeColor || "#5046e6";
+  let effectiveBoxColor = $derived(boxColor || themeColor || "#5046e6");
 
   //   Animation Controls
   let mainControls = useAnimation();

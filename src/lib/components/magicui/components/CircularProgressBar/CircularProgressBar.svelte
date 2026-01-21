@@ -16,7 +16,7 @@ All components in this directory are sourced from the svelte-animations project 
 
     let circumference = 2 * Math.PI * 45;
     let percentPx = circumference / 100;
-    $: currentPercent = ((value - min) / (max - min)) * 100;
+    let currentPercent = $derived(((value - min) / (max - min)) * 100);
   </script>
   
   <div
