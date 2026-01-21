@@ -1,8 +1,12 @@
-<script>
+<script lang="ts">
+  import type { CategoriesProps } from './types';
+
   // Categories component - Categories section
-  export let directories = [];
-  export let title = 'Categories';
-  export let viewContentText = 'View Content';
+  let {
+    directories = [],
+    title = 'Categories',
+    viewContentText = 'View Content'
+  }: CategoriesProps = $props();
 </script>
 
 {#if directories && directories.length > 0}
@@ -37,4 +41,3 @@
     </div>
   </div>
 {/if}
-

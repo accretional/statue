@@ -35,17 +35,16 @@
   - showSearch: Show search input (default: true)
 -->
 
-<script>
-  export let items = [];
-  export let activePath = '';
-  export let title = 'Documentation';
-  export let showSearch = true;
+<script lang="ts">
+  import type { DocsSidebarProps } from './types';
 
-  let searchQuery = '';
-  let expandedSections = {};
+  let { items = [], activePath = '', title = 'Documentation', showSearch = true }: DocsSidebarProps = $props();
+
+  let searchQuery = $state('');
+  let expandedSections = $state({});
 
   // Initialize expanded state based on active path
-  $: {
+  $effect(() => {
     if (activePath && items.length > 0) {
       items.forEach((item, index) => {
         if (item.children) {
@@ -60,12 +59,12 @@
       });
       expandedSections = expandedSections;
     }
-  }
+  });
 
   // Filter items based on search
-  $: filteredItems = searchQuery
+  let filteredItems = $derived(searchQuery
     ? filterItems(items, searchQuery.toLowerCase())
-    : items;
+    : items);
 
   function filterItems(itemList, query) {
     return itemList.reduce((acc, item) => {

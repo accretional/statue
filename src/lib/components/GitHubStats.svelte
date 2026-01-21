@@ -2,59 +2,54 @@
   GitHub Stats Component - Showcase your GitHub repos with stats
 -->
 
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
+  import type { GitHubStatsProps } from './types';
 
   // GitHub repository (e.g., "username/repo")
-  export let githubRepo = '';
+  let {
+    githubRepo = '',
+    repo = '',
+    title = 'Open Source & Community Driven',
+    description = 'Join our fully open source project and help build something amazing together.',
+    contributions = [
+      {
+        title: 'Create Components',
+        description: 'Develop reusable components for the community. Every contribution helps.'
+      },
+      {
+        title: 'Write Documentation',
+        description: 'Help improve our docs, write tutorials, or create guides.'
+      },
+      {
+        title: 'Contribute Code',
+        description: 'Fix bugs, add features, or optimize performance.'
+      }
+    ],
+    ctaButtons = [
+      {
+        text: 'Contribute on GitHub',
+        href: '#',
+        primary: true,
+        target: '_blank',
+        rel: 'noopener noreferrer'
+      },
+      {
+        text: 'Contribution Guide',
+        href: '#',
+        primary: false,
+        target: '_blank',
+        rel: 'noopener noreferrer'
+      }
+    ],
+    customStats = [],
+    showGitHubStats = true,
+    sectionClass = 'integrations-section',
+    containerClass = ''
+  }: GitHubStatsProps = $props();
 
-  // Content props
-  export let title = 'Open Source & Community Driven';
-  export let description = 'Join our fully open source project and help build something amazing together.';
-
-  // Contribution items
-  export let contributions = [
-    {
-      title: 'Create Components',
-      description: 'Develop reusable components for the community. Every contribution helps.'
-    },
-    {
-      title: 'Write Documentation',
-      description: 'Help improve our docs, write tutorials, or create guides.'
-    },
-    {
-      title: 'Contribute Code',
-      description: 'Fix bugs, add features, or optimize performance.'
-    }
-  ];
-
-  // CTA buttons
-  export let ctaButtons = [
-    {
-      text: 'Contribute on GitHub',
-      href: '#',
-      primary: true,
-      target: '_blank',
-      rel: 'noopener noreferrer'
-    },
-    {
-      text: 'Contribution Guide',
-      href: '#',
-      primary: false,
-      target: '_blank',
-      rel: 'noopener noreferrer'
-    }
-  ];
-
-  // Custom stats (in addition to GitHub stats)
-  export let customStats = [];
-
-  // Show/hide GitHub stats
-  export let showGitHubStats = true;
-
-  // Style customization
-  export let sectionClass = 'integrations-section';
-  export let containerClass = '';
+  // Use githubRepo if provided, otherwise fall back to repo
+  const repoName = githubRepo || repo;
 
   // GitHub stats state
   let stars = 'Loading...';
@@ -62,13 +57,13 @@
   let statsLoaded = false;
 
   onMount(() => {
-    if (showGitHubStats && githubRepo) {
+    if (showGitHubStats && repoName) {
       fetchGitHubStats();
     }
   });
 
   async function fetchGitHubStats() {
-    if (!githubRepo) {
+    if (!repoName) {
       console.warn('OpenSource component: No GitHub repository provided');
       stars = 'N/A';
       contributors = 'N/A';
@@ -77,12 +72,12 @@
 
     try {
       // Fetch repository data
-      const repoResponse = await fetch(`https://api.github.com/repos/${githubRepo}`);
+      const repoResponse = await fetch(`https://api.github.com/repos/${repoName}`);
       if (!repoResponse.ok) throw new Error('Failed to fetch repository data');
       const repoData = await repoResponse.json();
 
       // Fetch contributors count
-      const contributorsResponse = await fetch(`https://api.github.com/repos/${githubRepo}/contributors?per_page=1`);
+      const contributorsResponse = await fetch(`https://api.github.com/repos/${repoName}/contributors?per_page=1`);
       const linkHeader = contributorsResponse.headers.get('Link');
       let contributorsCount = 0;
 

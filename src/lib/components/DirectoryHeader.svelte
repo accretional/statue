@@ -1,6 +1,7 @@
-<script>
-  // DirectoryHeader component - Directory header section
-  export let title = '';
+<script lang="ts">
+  import type { DirectoryHeaderProps } from './types';
+
+  let { title = '' }: DirectoryHeaderProps = $props();
 </script>
 
 <div class="max-w-5xl mx-auto">

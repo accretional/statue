@@ -1,11 +1,17 @@
-<script>
+<script lang="ts">
   // CTA component - Call to Action section
-  export let title = 'Ready to get started?';
-  export let description = 'Join the growing community of creators using Statue SSG';
-  export let primaryButtonText = 'Explore Features';
-  export let primaryButtonLink = '/';
-  export let secondaryButtonText = 'Read Documentation';
-  export let secondaryButtonLink = '/docs';
+  import type { CTAProps } from './types';
+
+  type Props = CTAProps;
+
+  let {
+    title = 'Ready to get started?',
+    description = 'Join the growing community of creators using Statue SSG',
+    primaryButtonText = 'Explore Features',
+    primaryButtonLink = '/',
+    secondaryButtonText = 'Read Documentation',
+    secondaryButtonLink = '/docs',
+  }: Props = $props();
 </script>
 
 <div class="max-w-3xl mx-auto mt-24 text-center">

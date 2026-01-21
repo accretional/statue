@@ -39,17 +39,10 @@
   - document: Default document icon
 -->
 
-<script>
-  export let title = '';
-  export let description = 'Guides, resources, and references to help you build with Statue.';
-  export let content = [];
-  export let subDirectories = [];
+<script lang="ts">
+  import type { DocsDirectoryListProps } from './types';
 
-  // CTA Button props (optional - defaults to first two sorted items)
-  export let primaryButtonText = '';
-  export let primaryButtonUrl = '';
-  export let secondaryButtonText = '';
-  export let secondaryButtonUrl = '';
+  let { title = '', description = 'Guides, resources, and references to help you build with Statue.', content = [], subDirectories = [], primaryButtonText = '', primaryButtonUrl = '', secondaryButtonText = '', secondaryButtonUrl = '' }: DocsDirectoryListProps = $props();
 
   // Icon SVG paths map - users can set icon in markdown frontmatter
   const iconPaths = {
@@ -78,20 +71,20 @@
   }
 
   // Sort content by order (items with order come first, then by order value)
-  $: sortedContent = [...content].sort((a, b) => {
+  let sortedContent = $derived([...content].sort((a, b) => {
     const orderA = a.metadata?.order ?? 999;
     const orderB = b.metadata?.order ?? 999;
     return orderA - orderB;
-  });
+  }));
 
   // Featured content is first 2 items after sorting
-  $: featuredContent = sortedContent.slice(0, 2);
+  let featuredContent = $derived(sortedContent.slice(0, 2));
 
   // Resolved button values (props override defaults from content)
-  $: resolvedPrimaryText = primaryButtonText || featuredContent[0]?.metadata?.title || 'Get Started';
-  $: resolvedPrimaryUrl = primaryButtonUrl || featuredContent[0]?.url || '/docs';
-  $: resolvedSecondaryText = secondaryButtonText || featuredContent[1]?.metadata?.title || '';
-  $: resolvedSecondaryUrl = secondaryButtonUrl || featuredContent[1]?.url || '';
+  let resolvedPrimaryText = $derived(primaryButtonText || featuredContent[0]?.metadata?.title || 'Get Started');
+  let resolvedPrimaryUrl = $derived(primaryButtonUrl || featuredContent[0]?.url || '/docs');
+  let resolvedSecondaryText = $derived(secondaryButtonText || featuredContent[1]?.metadata?.title || '');
+  let resolvedSecondaryUrl = $derived(secondaryButtonUrl || featuredContent[1]?.url || '');
 </script>
 
 <article class="docs-directory relative">
