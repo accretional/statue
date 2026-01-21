@@ -1,11 +1,19 @@
-<script>
+<script lang="ts">
+  import type { BlogPostContentProps } from './types';
+
   // BlogPostContent component - Linear-style blog post content
-  export let content = '';
+  let {
+    content = '',
+    html = ''
+  }: BlogPostContentProps = $props();
+
+  // Use content if provided, otherwise fall back to html
+  const htmlContent = content || html;
 </script>
 
 <article class="blog-post-content">
   <div class="prose">
-    {@html content}
+    {@html htmlContent}
   </div>
 </article>
 

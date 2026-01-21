@@ -1,21 +1,22 @@
 
 <script lang="ts">
+  import type { BuiltByProps } from './types';
   import accretionIconSrc from '../assets/accretion.png';
   import statueIconSrc from '../assets/favicon.png';
 
-  export let builtByText = 'Built by';
-  export let builtByLinkText = 'Accretional.com';
-  export let builtByLinkUrl = 'https://accretional.com';
-  export let builtByIcon = accretionIconSrc;
-
-  export let builtInText = 'Built in';
-  export let builtInLinkText = 'Statue.dev';
-  export let builtInLinkUrl = 'https://statue.dev';
-  export let builtInIcon = statueIconSrc;
-
-  export let builtForText = 'Built for';
-  export let communityLinkText = 'Statue Community';
-  export let communityLinkUrl = 'https://discord.gg/accretional';
+  let {
+    builtByText = 'Built by',
+    builtByLinkText = 'Accretional.com',
+    builtByLinkUrl = 'https://accretional.com',
+    builtByIcon = accretionIconSrc,
+    builtInText = 'Built in',
+    builtInLinkText = 'Statue.dev',
+    builtInLinkUrl = 'https://statue.dev',
+    builtInIcon = statueIconSrc,
+    builtForText = 'Built for',
+    communityLinkText = 'Statue Community',
+    communityLinkUrl = 'https://discord.gg/accretional'
+  }: BuiltByProps = $props();
 </script>
 
 <div class="built-by-container flex flex-wrap justify-center items-center gap-2">

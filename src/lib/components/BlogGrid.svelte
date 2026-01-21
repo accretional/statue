@@ -1,9 +1,14 @@
-<script>
+<script lang="ts">
   // BlogGrid component - Masonry-style mixed blog grid
+  import type { BlogGridProps } from './types';
   import BlogCard from './BlogCard.svelte';
 
-  export let posts = [];
-  export let emptyMessage = 'No posts found.';
+  type Props = BlogGridProps;
+
+  let {
+    posts = [],
+    emptyMessage = 'No posts found.',
+  }: Props = $props();
 </script>
 
 {#if posts && posts.length > 0}

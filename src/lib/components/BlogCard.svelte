@@ -1,41 +1,46 @@
-<script>
+<script lang="ts">
   // BlogCard component - Linear-style blog card with thumbnail or minimal design
   import { onMount, onDestroy } from 'svelte';
   import { browser } from '$app/environment';
+  import type { BlogCardProps } from './types';
   import AuthorAvatar from './AuthorAvatar.svelte';
 
-  export let title = '';
-  export let description = '';
-  export let date = '';
-  export let author = '';
-  export let authorAvatar = '';
-  export let thumbnail = '';
-  export let url = '';
-  export let enableScrollAnimation = false;
-  export let nextHasThumbnail = false;
-  export let isLast = false;
+  type Props = BlogCardProps;
+
+  let {
+    title = '',
+    description = '',
+    date = '',
+    author = '',
+    authorAvatar = '',
+    thumbnail = '',
+    url = '',
+    enableScrollAnimation = false,
+    nextHasThumbnail = false,
+    isLast = false,
+  }: Props = $props();
 
   // Check if thumbnail exists
-  $: hasThumbnail = !!thumbnail;
+  let hasThumbnail = $derived(!!thumbnail);
 
   // Generate unique view transition name from URL - use slug only
-  $: slug = url ? url.split('/').filter(Boolean).pop() : '';
-  $: transitionName = slug ? `blog-thumb-${slug}` : '';
+  let slug = $derived(url ? url.split('/').filter(Boolean).pop() : '');
+  let transitionName = $derived(slug ? `blog-thumb-${slug}` : '');
 
   // Get title initial for minimal card
-  $: titleInitial = title ? title.trim().charAt(0).toUpperCase() : '?';
+  let titleInitial = $derived(title ? title.trim().charAt(0).toUpperCase() : '?');
 
   // Format date
-  $: formattedDate = date ? new Date(date).toLocaleDateString('en-US', {
+  let formattedDate = $derived(date ? new Date(date).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'short',
     day: '2-digit'
-  }) : '';
+  }) : '');
 
   // Scroll-based transform
-  let cardElement;
-  let scale = 1;
-  let rotation = 0;
+  let cardElement = $state(null);
+  let scale = $state(1);
+  let rotation = $state(0);
 
   // Generate unique random direction for this card instance
   const rotationDirection = Math.random() > 0.5 ? 1 : -1;
