@@ -22,17 +22,19 @@ This will:
 - Download your avatar to `static/avatar.jpg`
 - Fetch your repositories to `static/repositories.json`
 - Fetch your contribution graph to `static/contributions.json`
-- Update `site.config.js` with your profile info
+- Update `site.config.json` with your profile info
 
 ### 2. Customize Your Profile
 
-Edit `site.config.js` to fine-tune your profile:
+Edit `site.config.json` to fine-tune your profile:
 
-```javascript
-profile: {
-  name: 'Your Name',
-  username: 'your-github-username',
-  bio: 'Your custom bio'
+```json
+{
+  "profile": {
+    "name": "Your Name",
+    "username": "your-github-username",
+    "bio": "Your custom bio"
+  }
 }
 ```
 
