@@ -234,10 +234,10 @@ copy_template_files() {
         cp -r "$template_path/content" content
     fi
 
-    # Copy site.config.js if exists
-    if [ -f "$template_path/site.config.js" ]; then
-        log_info "  Copying site.config.js..."
-        cp -f "$template_path/site.config.js" site.config.js
+    # Copy site.config.json if exists
+    if [ -f "$template_path/site.config.json" ]; then
+        log_info "  Copying site.config.json..."
+        cp -f "$template_path/site.config.json" site.config.json
     fi
 
     # Copy static if exists

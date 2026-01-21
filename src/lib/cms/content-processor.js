@@ -19,9 +19,10 @@ if (isBrowser) {
 // Try to load site config, but don't fail if not available
 let siteConfig = {};
 try {
-  // eslint-disable-next-line import/no-unresolved
-  const configModule = await import('/site.config.js').catch(() => ({ siteConfig: {} }));
-  siteConfig = configModule.siteConfig || {};
+  const configPath = path.resolve('site.config.json');
+  if (fs.existsSync(configPath)) {
+    siteConfig = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
+  }
 } catch {
   // siteConfig not available, will use empty object
 }

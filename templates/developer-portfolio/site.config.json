@@ -1,0 +1,87 @@
+{
+  "$schema": "../../site.config.schema.json",
+  "profile": {
+    "name": "Your Name",
+    "username": "your-github-username",
+    "avatarUrl": "/avatar.jpg",
+    "bio": "Software Developer",
+    "followers": 0,
+    "following": 0,
+    "location": "Your City",
+    "website": "",
+    "linkedin": "",
+    "company": "",
+    "email": ""
+  },
+  "blog": {
+    "defaultAuthorAvatar": "/avatar.jpg"
+  },
+  "features": {
+    "showExperience": false,
+    "showMacScreen": false
+  },
+  "site": {
+    "name": "My Portfolio",
+    "description": "Developer portfolio",
+    "url": "https://example.com",
+    "author": "Your Name"
+  },
+  "navbar": {
+    "siteTitle": "My Portfolio",
+    "logo": null,
+    "defaultNavItems": [
+      { "title": "Home", "url": "/" }
+    ]
+  },
+  "contact": {
+    "email": "",
+    "privacyEmail": "privacy@example.com",
+    "supportEmail": "support@example.com",
+    "phone": "",
+    "address": {
+      "street": "",
+      "city": "",
+      "state": "",
+      "zipCode": "",
+      "country": ""
+    }
+  },
+  "social": {
+    "twitter": "",
+    "github": "",
+    "linkedin": "",
+    "facebook": "",
+    "instagram": "",
+    "youtube": "",
+    "socialLinks": []
+  },
+  "legal": {
+    "privacyPolicyLastUpdated": "2024-01-15",
+    "termsLastUpdated": "2024-01-15",
+    "isCaliforniaCompliant": true,
+    "doNotSell": {
+      "processingTime": "15 business days",
+      "confirmationRequired": true
+    }
+  },
+  "search": {
+    "enabled": false,
+    "placeholder": "Search...",
+    "noResultsText": "No results found",
+    "debounceMs": 300,
+    "minQueryLength": 2,
+    "maxResults": 10,
+    "showCategories": true,
+    "showDates": true,
+    "showExcerpts": true,
+    "excerptLength": 30
+  },
+  "seo": {
+    "defaultTitle": "Developer Portfolio",
+    "titleTemplate": "%s | Portfolio",
+    "defaultDescription": "My developer portfolio",
+    "keywords": ["developer", "portfolio", "software engineer"],
+    "ogImage": "/images/og-image.png",
+    "twitterCard": "summary_large_image"
+  }
+}

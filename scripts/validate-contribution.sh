@@ -261,11 +261,11 @@ validate_template() {
         log_warn "No content directory (recommended but not required)"
     fi
 
-    # Check for site.config.js
-    if [[ -f "$template_dir/site.config.js" ]]; then
-        log_success "Found site.config.js"
+    # Check for site.config.json
+    if [[ -f "$template_dir/site.config.json" ]]; then
+        log_success "Found site.config.json"
     else
-        log_warn "No site.config.js (recommended but not required)"
+        log_warn "No site.config.json (recommended but not required)"
     fi
 
     return 0

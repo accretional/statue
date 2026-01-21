@@ -297,7 +297,7 @@ Components use CSS variables like `--color-primary`, `--color-secondary`, `--col
 />
 ```
   - **Integration with NavigationBar**:
-    - NavigationBar automatically shows search when `search.enabled` is true in `site.config.js`
+    - NavigationBar automatically shows search when `search.enabled` is true in `site.config.json`
     - No need to set `showSearch` prop unless you want to override the config
     - Example:
 ```svelte
@@ -314,15 +314,15 @@ Components use CSS variables like `--color-primary`, `--color-secondary`, `--col
 <!-- Or override config on specific pages -->
 <NavigationBar {navbarItems} activePath="/" showSearch={false} />
 ```
-  - **Configuration**: Enable search in `site.config.js`:
-```js
-export const siteConfig = {
-  search: {
-    enabled: true,
-    placeholder: 'Search...',
-    maxResults: 10
+  - **Configuration**: Enable search in `site.config.json`:
+```json
+{
+  "search": {
+    "enabled": true,
+    "placeholder": "Search...",
+    "maxResults": 10
   }
-};
+}
 ```
   - **Note**: Search requires Pagefind to be installed (`npm install -D pagefind`) and runs automatically during build via the postbuild script.
 
