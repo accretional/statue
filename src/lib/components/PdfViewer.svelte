@@ -1,16 +1,20 @@
 <script lang="ts">
-  export let src: string;
-  export let height: string = '600px';
-  export let width: string = '100%';
-  export let showToolbar: boolean = true;
-  export let showDownload: boolean = false;
-  export let showFullscreen: boolean = true;
+  import type { PdfViewerProps } from './types';
+
+  let {
+    src,
+    height = '600px',
+    width = '100%',
+    showToolbar = true,
+    showDownload = false,
+    showFullscreen = true
+  }: PdfViewerProps = $props();
 
   let containerElement: HTMLDivElement;
   let isFullscreen = false;
 
   // Build PDF URL with parameters to hide browser's built-in toolbar and fit width
-  $: pdfSrc = `${src}#toolbar=0&navpanes=0&view=FitH`;
+  let pdfSrc = $derived(`${src}#toolbar=0&navpanes=0&view=FitH`);
 
   function toggleFullscreen() {
     if (!document.fullscreenElement) {

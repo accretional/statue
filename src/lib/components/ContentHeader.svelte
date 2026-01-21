@@ -1,10 +1,7 @@
-<script>
-  // ContentHeader component - Content header section
-  export let title = '';
-  export let date = null;
-  export let author = null;
-  export let backLink = '/';
-  export let backLinkText = 'Home';
+<script lang="ts">
+  import type { ContentHeaderProps } from './types';
+
+  let { title = '', date = null, author = null, backLink = '/', backLinkText = 'Home' }: ContentHeaderProps = $props();
 </script>
 
 <header class="mb-10">

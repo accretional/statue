@@ -1,18 +1,22 @@
 <script lang="ts">
-    interface Directory {
-      name: string;
-      path: string;
+  import type { SitemapProps } from './types';
+
+  interface Directory {
+    name: string;
+    path: string;
+    title: string;
+    url: string;
+    subpages?: {
       title: string;
       url: string;
-      subpages?: {
-        title: string;
-        url: string;
-      }[];
-    }
-  
-    export let directories: Directory[] = [];
-    export let currentPath: string = '';
-  </script>
+    }[];
+  }
+
+  let {
+    directories = [],
+    currentPath = ''
+  }: SitemapProps = $props();
+</script>
   
   <div class="sitemap mt-6 pt-4">
   

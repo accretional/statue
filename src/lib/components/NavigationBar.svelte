@@ -1,42 +1,58 @@
-<script>
-
+<script lang="ts">
   import { page } from '$app/stores';
+  import type { NavigationBarProps } from './types';
   import Search from './Search.svelte';
 
-  export let navbarItems = [];
-  export let activePath = '';
-  export let showSearch = false;
-  export let searchPlaceholder = "Search...";
+  type Props = NavigationBarProps & {
+    navbarItems?: Array<{
+      title: string;
+      url: string;
+      cta?: boolean;
+      name?: string;
+    }>;
+    activePath?: string;
+    showSearch?: boolean;
+    searchPlaceholder?: string;
+    siteTitle?: string | null;
+    defaultNavItems?: Array<{
+      title: string;
+      url: string;
+      cta?: boolean;
+    }>;
+    hiddenFromNav?: string[];
+  };
 
-  // Customizable site branding
-  export let siteTitle = null;
-  export let logo = null; // Can be image URL string or null for default SVG
-
-  // Default navigation items (Home, About, etc.)
-  // Set to empty array to hide all default links
-  export let defaultNavItems = [
-    { title: 'Home', url: '/' }
-  ];
-
-  // Hide specific directories from navbar (by folder name)
-  export let hiddenFromNav = [];
+  let {
+    logo = null,
+    siteName = 'Site',
+    items = [],
+    navbarItems = [],
+    activePath = '',
+    showSearch = false,
+    searchPlaceholder = "Search...",
+    siteTitle = null,
+    defaultNavItems = [
+      { title: 'Home', url: '/' }
+    ],
+    hiddenFromNav = []
+  }: Props = $props();
 
   // Filter navbarItems based on hiddenFromNav
-  $: filteredNavbarItems = navbarItems.filter(item => !hiddenFromNav.includes(item.name));
+  let filteredNavbarItems = $derived(navbarItems.filter(item => !hiddenFromNav.includes(item.name || '')));
 
-  let isMenuOpen = false;
-  let isHidden = false;
-  let lastScrollY = 0;
-  let scrollY = 0;
+  let isMenuOpen = $state(false);
+  let isHidden = $state(false);
+  let lastScrollY = $state(0);
+  let scrollY = $state(0);
 
   // Reactive current path from SvelteKit store
-  $: currentPath = $page.url.pathname;
+  let currentPath = $derived($page.url.pathname);
 
   // Find first CTA item from nav items (only first one is used)
-  $: ctaItem = [...defaultNavItems, ...filteredNavbarItems].find(item => item.cta);
+  let ctaItem = $derived([...defaultNavItems, ...filteredNavbarItems].find(item => item.cta));
 
   // Check if a nav item is active (exact match for home, startsWith for others)
-  function isActive(itemUrl, path) {
+  function isActive(itemUrl: string, path: string): boolean {
     if (itemUrl === '/') {
       return path === '/';
     }
@@ -77,12 +93,16 @@
                 <path d="M12 8L12 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
               </svg>
             </div>
-          {:else if logo}
-            <img src={logo} alt={siteTitle || 'Logo'} class="w-8 h-8 object-contain" />
+          {:else if logo && typeof logo === 'string'}
+            <img src={logo} alt={siteTitle || siteName} class="w-8 h-8 object-contain" />
           {/if}
           {#if siteTitle}
             <span class="font-bold text-xl text-[var(--color-foreground)]">
               {siteTitle}
+            </span>
+          {:else if siteName}
+            <span class="font-bold text-xl text-[var(--color-foreground)]">
+              {siteName}
             </span>
           {/if}
         </a>
@@ -185,4 +205,3 @@
     </div>
   {/if}
 </nav>
-

@@ -1,6 +1,7 @@
-<script>
-  // ContentBody component - Content body section
-  export let content = '';
+<script lang="ts">
+  import type { ContentBodyProps } from './types';
+
+  let { content = '' }: ContentBodyProps = $props();
 </script>
 
 <main class="prose prose-invert max-w-none">

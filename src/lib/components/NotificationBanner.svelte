@@ -1,18 +1,21 @@
 <script lang="ts">
-  interface Props {
+  import type { NotificationBannerProps } from './types';
+
+  type Props = NotificationBannerProps & {
     buttonText?: string;
-    description: string;
     onClose?: (() => void) | undefined;
     onClick?: (() => void) | undefined;
     containerClass?: string;
     descriptionClass?: string;
     buttonClass?: string;
     closeButtonClass?: string;
-  }
+  };
 
   let {
+    message = '',
+    type = 'info',
+    dismissible = false,
     buttonText = 'Upgrade',
-    description = '',
     onClose = undefined,
     onClick = undefined,
     containerClass = '',
@@ -38,7 +41,7 @@
   <div class="banner-content">
     <div class="banner-description">
       <p class="description-text {descriptionClass}">
-        {description}
+        {message}
       </p>
     </div>
 
@@ -50,7 +53,7 @@
         {buttonText}
       </button>
 
-      {#if onClose}
+      {#if dismissible && onClose}
         <button
           onclick={handleClose}
           class="close-button {closeButtonClass}"

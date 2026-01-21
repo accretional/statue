@@ -3,10 +3,10 @@
   
   Example Usage:
   
-  <script>
+  <script lang="ts">
     import Signup from '$lib/components/Signup.svelte';
     
-    async function handleWaitlistSubmit({ name, email }) {
+    async function handleWaitlistSubmit(data: { name: string; email: string }) {
       console.log('New waitlist signup:', { name, email });
       // Add your API call or email service integration here
     }
@@ -23,24 +23,28 @@
   />
 -->
 
-<script>
-  export let nameLabel = 'Name';
-  export let namePlaceholder = 'Enter your name';
-  export let emailLabel = 'Email';
-  export let emailPlaceholder = 'you@example.com';
-  export let buttonText = 'Submit';
-  export let privacyText = 'We respect your privacy. Unsubscribe at any time.';
-  export let containerClass = 'bg-[var(--color-card)]/50 backdrop-blur-sm border border-[var(--color-border)] rounded-2xl p-6 md:p-8';
-  export let wrapperClass = 'max-w-xl mx-auto';
-  export let onSubmit = async (data) => {
-    console.log('Form submitted:', data);
-  };
+<script lang="ts">
+  import type { SignupProps } from './types';
+
+  let {
+    nameLabel = 'Name',
+    namePlaceholder = 'Enter your name',
+    emailLabel = 'Email',
+    emailPlaceholder = 'you@example.com',
+    buttonText = 'Submit',
+    privacyText = 'We respect your privacy. Unsubscribe at any time.',
+    containerClass = 'bg-[var(--color-card)]/50 backdrop-blur-sm border border-[var(--color-border)] rounded-2xl p-6 md:p-8',
+    wrapperClass = 'max-w-xl mx-auto',
+    onSubmit = async (data: { name: string; email: string }) => {
+      console.log('Form submitted:', data);
+    }
+  }: SignupProps = $props();
   
   let isSubmitting = false;
   let name = '';
   let email = '';
   
-  async function handleSubmit(event) {
+  async function handleSubmit(event: Event) {
     event.preventDefault();
     isSubmitting = true;
     
@@ -59,7 +63,7 @@
 
 <div class={wrapperClass}>
   <div class={containerClass}>
-  <form on:submit={handleSubmit} class="space-y-4">
+  <form onsubmit={handleSubmit} class="space-y-4">
   <div>
     <label for="name" class="block text-sm font-medium mb-1.5 text-[var(--color-foreground)]">
       {nameLabel}
@@ -116,4 +120,3 @@
 </form>
 </div>
 </div>
-
