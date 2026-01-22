@@ -29,6 +29,8 @@ export async function load() {
   return {
     globalDirectories: enhancedDirectories,
     searchConfig: siteConfig.search || null,
-    navbarConfig: siteConfig.navbar || null
+    navbarConfig: siteConfig.navbar || null,
+    rssEnabled: siteConfig.rss?.enabled ?? false,
+    siteUrl: siteConfig.site?.url || ''
   };
 }
