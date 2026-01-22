@@ -86,8 +86,8 @@ async function setupStatueSSG(options = {}) {
 
     // Copy only production scripts - exclude development and build-time generation scripts
     const isDevelopmentScript = (name) =>
-      (/^(pre|post)/.test(name) && name !== 'postbuild') || // Exclude pre/post hooks except postbuild
-      ['dev', 'build', 'preview'].includes(name) || // Exclude dev/build/preview (users have their own)
+      (['prebuild', 'postbuild'].includes(name) && name !== 'postbuild') || // Exclude prebuild/postbuild hooks except postbuild
+      ['dev', 'build'].includes(name) || // Exclude dev/build (users have their own)
       name.includes(':') || // Exclude namespaced scripts like test:*, generate:*
       /^(test|lint|format|release)/.test(name); // Exclude dev tooling
 
