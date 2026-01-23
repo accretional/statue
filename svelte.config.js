@@ -1,10 +1,22 @@
 import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+import { mdsvex } from 'mdsvex';
 import path from 'path';
+import rehypeSlug from 'rehype-slug';
+import remarkGfm from 'remark-gfm';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-  preprocess: vitePreprocess(),
+  extensions: ['.svelte', '.mdx'],
+
+  preprocess: [
+    vitePreprocess(),
+    mdsvex({
+      extensions: ['.mdx'],
+      remarkPlugins: [remarkGfm],
+      rehypePlugins: [rehypeSlug]
+    })
+  ],
 
   kit: {
     // Static site generator

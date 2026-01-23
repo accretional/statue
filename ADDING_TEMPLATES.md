@@ -41,7 +41,7 @@ mkdir -p templates/your-template/content
 **Your template must have:**
 - `src/routes/` - Route files that define page layouts
 - `content/` - Example markdown content
-- `site.config.js` - Default configuration for this template
+- `site.config.json` - Default configuration for this template
 
 **Optional:**
 - `static/` - Custom assets (favicon, images)
@@ -208,28 +208,28 @@ Add more example content to demonstrate features.
 
 ### 5. Create Template Configuration
 
-**Create `templates/your-template/site.config.js`:**
+**Create `templates/your-template/site.config.json`:**
 
-```javascript
-export default {
-  site: {
-    name: 'My Template Site',
-    description: 'A brief description for this template',
-    url: 'https://example.com',
-    author: 'Template Author'
+```json
+{
+  "site": {
+    "name": "My Template Site",
+    "description": "A brief description for this template",
+    "url": "https://example.com",
+    "author": "Template Author"
   },
-  contact: {
-    email: 'hello@example.com',
-    address: {}
+  "contact": {
+    "email": "hello@example.com",
+    "address": {}
   },
-  social: {
-    github: 'https://github.com/username',
-    twitter: 'https://twitter.com/username'
+  "social": {
+    "github": "https://github.com/username",
+    "twitter": "https://twitter.com/username"
   },
-  legal: {
-    doNotSell: {}
+  "legal": {
+    "doNotSell": {}
   }
-};
+}
 ```
 
 **Why:** This provides sensible defaults for users who initialize with your template. They'll customize it later.
@@ -263,7 +263,7 @@ npm run dev
 **When done testing, restore the default template:**
 
 ```bash
-git checkout src/routes content site.config.js
+git checkout src/routes content site.config.json
 ```
 
 ---
@@ -575,7 +575,7 @@ Don't add new configuration fields that only your template uses.
 
 ### ✅ Do: Use Standard Config
 
-Use fields from the standard `site.config.js` schema.
+Use fields from the standard `site.config.json` schema.
 
 ---
 
@@ -607,7 +607,7 @@ npm run template:load blog --force
 npm run template:save my-template
 
 # Restore default template
-git checkout src/routes content site.config.js
+git checkout src/routes content site.config.json
 ```
 
 **Why these exist:** Templates are tested by loading them into the main project workspace.
@@ -633,7 +633,7 @@ Use the automated PR script from the root of your Statue site:
 ### Template Mode
 
 **What it does:**
-1. Looks for `src/routes/`, `content/`, `site.config.js`, `static/` in current directory
+1. Looks for `src/routes/`, `content/`, `site.config.json`, `static/` in current directory
 2. Forks the statue repository (if needed)
 3. Creates a new branch
 4. Copies all template files to `templates/portfolio/`
@@ -663,7 +663,7 @@ Use the automated PR script from the root of your Statue site:
 - GitHub CLI (`gh`) installed and authenticated
 - Run from the root of your Statue site
 - Must have `src/routes/` directory (required)
-- Optionally includes `content/`, `site.config.js`, `static/`
+- Optionally includes `content/`, `site.config.json`, `static/`
 - For `all` mode: Automatically includes any `src/lib/components/` and `src/lib/themes/`
 
 **Note:** You'll still need to add documentation manually after the PR is created. The script just handles the git workflow.
@@ -679,14 +679,14 @@ The process is straightforward:
 1. **Identify the key files:**
    - `src/routes/` - Your route files
    - `content/` - Your example content
-   - `site.config.js` - Your config (sanitize personal info first!)
+   - `site.config.json` - Your config (sanitize personal info first!)
 
 2. **Copy to template directory:**
    ```bash
    mkdir -p templates/your-template/src
    cp -r src/routes templates/your-template/src/
    cp -r content templates/your-template/
-   cp site.config.js templates/your-template/
+   cp site.config.json templates/your-template/
    ```
 
 3. **Clean up the content:**

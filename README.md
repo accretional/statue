@@ -70,7 +70,7 @@ After running the setup command above, your site is live at `http://localhost:30
 
 - **[Getting Started](./content/docs/get-started.md)** - Key concepts and quick start
 - **[New Site Checklist](./content/docs/new-site-checklist.md)** - Step-by-step customization guide
-- **[Site Configuration](./content/docs/site-config.md)** - Configure site.config.js
+- **[Site Configuration](./content/docs/site-config.md)** - Configure site.config.json
 - **[Themes](./content/docs/themes.md)** - Built-in themes and customization
 - **[Components](./content/docs/components.md)** - Component reference
 - **[Templates](./content/docs/templates.md)** - Using templates

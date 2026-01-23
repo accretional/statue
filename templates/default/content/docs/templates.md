@@ -15,7 +15,7 @@ Templates provide pre-configured starting points for different types of sites. T
 A template is a complete set of:
 - Route files (`src/routes/`)
 - Example content (`content/`)
-- Site configuration (`site.config.js`)
+- Site configuration (`site.config.json`)
 
 When you run `npx statue init`, these files are copied into your project.
 
@@ -97,7 +97,7 @@ Templates copy these files to your project:
 your-project/
 ├── src/routes/        # Page templates
 ├── content/           # Example content
-└── site.config.js     # Initial configuration
+└── site.config.json   # Initial configuration
 ```
 
 **Note:** Templates only affect initial setup. After initialization, you customize these files directly.
@@ -109,7 +109,7 @@ your-project/
 If you want to change templates:
 1. Manually copy route files from another template
 2. Update your content structure
-3. Modify `site.config.js`
+3. Modify `site.config.json`
 
 Or start a new project with a different template.
 
@@ -127,7 +127,7 @@ Edit files in `src/routes/` to change page layouts:
 Replace example content in `content/` with your own markdown files.
 
 ### Configure Settings
-Edit `site.config.js` to set your site information.
+Edit `site.config.json` to set your site information.
 
 ## Creating Custom Templates
 
@@ -139,7 +139,7 @@ To create a new template:
 2. Add these subdirectories:
    - `src/routes/` - Route files
    - `content/` - Example content
-3. Add `site.config.js` with appropriate defaults
+3. Add `site.config.json` with appropriate defaults
 4. Test with `npm run template:load my-template`
 
 See [DEVELOPMENT.md](../../DEVELOPMENT.md) for details.

@@ -141,7 +141,7 @@ show_usage() {
     echo "    Searches current directory first, then subdirectories"
     echo "  - For themes: Looks for theme-name.css (extension optional)"
     echo "    Searches current directory first, then subdirectories"
-    echo "  - For templates: Copies src/routes/, content/, site.config.js from current directory"
+    echo "  - For templates: Copies src/routes/, content/, site.config.json from current directory"
     echo "  - For all: Template + bundles all custom components and themes into the template"
 }
 
@@ -234,7 +234,7 @@ parse_args() {
             ;;
 
         template)
-            # Template: current dir (src/routes/, content/, site.config.js) -> templates/template-name/
+            # Template: current dir (src/routes/, content/, site.config.json) -> templates/template-name/
             if [ ! -d "src/routes" ]; then
                 log_error "src/routes/ directory not found in current directory"
                 log_error "Make sure you're in the root of a Statue site"
@@ -252,11 +252,11 @@ parse_args() {
                 log_warn "content/ directory not found, skipping"
             fi
 
-            if [ -f "site.config.js" ]; then
-                SOURCE_PATHS+=("site.config.js")
-                DEST_PATHS+=("templates/$name/site.config.js")
+            if [ -f "site.config.json" ]; then
+                SOURCE_PATHS+=("site.config.json")
+                DEST_PATHS+=("templates/$name/site.config.json")
             else
-                log_warn "site.config.js not found, skipping"
+                log_warn "site.config.json not found, skipping"
             fi
 
             # Optional: static directory
@@ -294,12 +294,12 @@ parse_args() {
                 log_warn "content/ directory not found, skipping"
             fi
 
-            # Optional: site.config.js
-            if [ -f "site.config.js" ]; then
-                SOURCE_PATHS+=("site.config.js")
-                DEST_PATHS+=("templates/$name/site.config.js")
+            # Optional: site.config.json
+            if [ -f "site.config.json" ]; then
+                SOURCE_PATHS+=("site.config.json")
+                DEST_PATHS+=("templates/$name/site.config.json")
             else
-                log_warn "site.config.js not found, skipping"
+                log_warn "site.config.json not found, skipping"
             fi
 
             # Optional: static
