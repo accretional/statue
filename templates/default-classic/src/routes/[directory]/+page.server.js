@@ -4,7 +4,7 @@ import { getContentDirectories, getContentByDirectory, getSubDirectories, getSid
 export const prerender = true;
 
 /** @type {import('./$types').PageServerLoad} */
-export function load({ params }) {
+export async function load({ params }) {
   // Get directory name
   const directoryName = params.directory;
 
@@ -12,10 +12,10 @@ export function load({ params }) {
   const directories = getContentDirectories();
 
   // Get content from specific directory (including content from subdirectories)
-  const directoryContent = getContentByDirectory(directoryName);
+  const directoryContent = await getContentByDirectory(directoryName);
 
   // Find subdirectories of this directory
-  const subDirectories = getSubDirectories(directoryName);
+  const subDirectories = await getSubDirectories(directoryName);
 
   // Get directory information
   const currentDirectory = directories.find(dir => dir.name === directoryName) || {
@@ -24,7 +24,7 @@ export function load({ params }) {
   };
 
   // Get sidebar tree for docs directory
-  const sidebarItems = directoryName === 'docs' ? getSidebarTree(directoryName) : [];
+  const sidebarItems = directoryName === 'docs' ? await getSidebarTree(directoryName) : [];
 
   return {
     directories,

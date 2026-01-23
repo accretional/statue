@@ -12,7 +12,7 @@ Statue SSG includes built-in client-side search powered by [Pagefind](https://gi
 
 ### 1. Enable Search
 
-Edit your `site.config.js`:
+Edit your `site.config.json`:
 
 ```js
 export const siteConfig = {
@@ -87,7 +87,7 @@ Deploy your `build/` directory to any static host. The search index is included 
 
 ### Search Settings
 
-Configure search behavior in `site.config.js`:
+Configure search behavior in `site.config.json`:
 
 ```js
 export const siteConfig = {

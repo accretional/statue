@@ -62,7 +62,7 @@ Or create your own. **[See all components →](./components.md)**
 
 ### ⚙️ Config Sets Globals
 
-One file (`site.config.js`) controls site-wide settings:
+One file (`site.config.json`) controls site-wide settings:
 
 ```javascript
 export const siteConfig = {
@@ -101,7 +101,7 @@ your-project/
 │       ├── [directory]/+page.svelte   # Directory pages
 │       └── [...slug]/+page.svelte     # Content pages
 ├── static/              # Images, favicon
-└── site.config.js       # Site configuration
+└── site.config.json       # Site configuration
 ```
 
 ---
@@ -121,7 +121,7 @@ Edit `src/routes/+page.svelte`.
 Create `src/routes/pagename/+page.svelte`.
 
 ### Update site info
-Edit `site.config.js`.
+Edit `site.config.json`.
 
 ---
 

@@ -5,9 +5,10 @@
 		ContentHeader,
 		ContentBody,
 		DocsLayout,
-		DocsContent,
-		BlogPostLayout
+		DocsContent
 	} from 'statue-ssg';
+	import BlogPostHeader from '$lib/components/BlogPostHeader.svelte';
+	import BlogPostContent from '$lib/components/BlogPostContent.svelte';
 
 	let { data } = $props();
 
@@ -81,17 +82,22 @@
 			/>
 		</DocsLayout>
 	{:else if isBlogContent}
-		<BlogPostLayout
-			title={data.content.metadata.title}
-			description={data.content.metadata.description}
-			date={data.content.metadata.date}
-			author={data.content.metadata.author}
-			authorAvatar={data.content.metadata.authorAvatar}
-			thumbnail={data.content.metadata.thumbnail}
-			content={data.content.content}
-			backLink={getBackLink(data.content.directory)}
-			backLinkText={getBackLinkText(data.content.directory)}
-		/>
+		<div class="blog-post-layout">
+			<div class="blog-post-container">
+				<BlogPostHeader
+					title={data.content.metadata.title}
+					description={data.content.metadata.description}
+					date={data.content.metadata.date}
+					author={data.content.metadata.author}
+					authorAvatar={data.content.metadata.authorAvatar}
+					thumbnail={data.content.metadata.thumbnail}
+					backLink={getBackLink(data.content.directory)}
+					backLinkText={getBackLinkText(data.content.directory)}
+				/>
+
+				<BlogPostContent content={data.content.content} />
+			</div>
+		</div>
 	{:else}
 		<div
 			class="min-h-screen text-white bg-linear-to-b from-(--color-hero-from) via-(--color-hero-via) to-(--color-hero-to)"
@@ -123,3 +129,22 @@
 		<p class="my-2">Data: {JSON.stringify(data)}</p>
 	</div>
 {/if}
+
+<style>
+	.blog-post-layout {
+		min-height: 100vh;
+		background: var(--color-background);
+	}
+
+	.blog-post-container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 60px 48px 120px;
+	}
+
+	@media (max-width: 768px) {
+		.blog-post-container {
+			padding: 80px 24px 80px;
+		}
+	}
+</style>

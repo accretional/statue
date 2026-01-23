@@ -1,18 +1,18 @@
 ---
 title: Site Configuration
-description: Configuring your Statue site with site.config.js
+description: Configuring your Statue site with site.config.json
 icon: settings
 ---
 
 # Site Configuration
 
-The `site.config.js` file is your site's central configuration. It stores information used throughout your site via template variables and component props.
+The `site.config.json` file is your site's central configuration. It stores information used throughout your site via template variables and component props.
 
 > **Contribute to Statue!** Built a useful component, theme, or template? Share it with the community—it only takes a single command. **[Learn how →](https://github.com/accretional/statue/blob/main/CONTRIBUTING.md)**
 
 ## Location
 
-`site.config.js` - in your project root
+`site.config.json` - in your project root
 
 ## Basic Structure
 
@@ -321,7 +321,7 @@ Access config in Svelte components:
 
 ```svelte
 <script>
-  import siteConfig from '/site.config.js';
+  import siteConfig from '/site.config.json';
 
   const siteName = siteConfig.site.name;
   const email = siteConfig.contact.email;
@@ -487,7 +487,7 @@ export const siteConfig = {
 **Check:**
 1. Is the variable name correct?
 2. Did you restart the dev server?
-3. Is the value defined in `site.config.js`?
+3. Is the value defined in `site.config.json`?
 
 **Fix:**
 ```bash

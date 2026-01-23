@@ -4,9 +4,9 @@
 		SubDirectories,
 		DirectoryContent,
 		DocsLayout,
-		DocsDirectoryList,
-		BlogLayout
+		DocsDirectoryList
 	} from 'statue-ssg';
+	import BlogLayout from '$lib/components/BlogLayout.svelte';
 
 	const { data } = $props();
 
