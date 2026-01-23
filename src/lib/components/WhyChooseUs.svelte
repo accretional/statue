@@ -1,5 +1,11 @@
 <script lang="ts">
-  import type { WhyChooseUsProps } from './types';
+  export interface WhyChooseUsProps {
+    title?: string;
+    features?: Array<{
+      title: string;
+      description: string;
+    }>;
+  }
 
   // WhyChooseUs component - Why choose us section
   let {

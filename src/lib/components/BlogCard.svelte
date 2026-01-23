@@ -2,10 +2,20 @@
   // BlogCard component - Linear-style blog card with thumbnail or minimal design
   import { onMount, onDestroy } from 'svelte';
   import { browser } from '$app/environment';
-  import type { BlogCardProps } from './types';
   import AuthorAvatar from './AuthorAvatar.svelte';
 
-  type Props = BlogCardProps;
+  export interface BlogCardProps {
+    title: string;
+    description?: string;
+    date?: string;
+    author?: string;
+    authorAvatar?: string;
+    thumbnail?: string;
+    url: string;
+    enableScrollAnimation?: boolean;
+    nextHasThumbnail?: boolean;
+    isLast?: boolean;
+  }
 
   let {
     title = '',
@@ -18,7 +28,7 @@
     enableScrollAnimation = false,
     nextHasThumbnail = false,
     isLast = false,
-  }: Props = $props();
+  }: BlogCardProps = $props();
 
   // Check if thumbnail exists
   let hasThumbnail = $derived(!!thumbnail);

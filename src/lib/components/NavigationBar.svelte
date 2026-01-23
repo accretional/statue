@@ -1,9 +1,18 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import type { NavigationBarProps } from './types';
   import Search from './Search.svelte';
 
-  type Props = NavigationBarProps & {
+  export interface NavigationBarProps {
+    logo?: string;
+    siteName: string;
+    items: Array<{
+      label: string;
+      url: string;
+      items?: Array<{
+        label: string;
+        url: string;
+      }>;
+    }>;
     navbarItems?: Array<{
       title: string;
       url: string;
@@ -20,7 +29,7 @@
       cta?: boolean;
     }>;
     hiddenFromNav?: string[];
-  };
+  }
 
   let {
     logo = null,
@@ -35,7 +44,7 @@
       { title: 'Home', url: '/' }
     ],
     hiddenFromNav = []
-  }: Props = $props();
+  }: NavigationBarProps = $props();
 
   // Filter navbarItems based on hiddenFromNav
   let filteredNavbarItems = $derived(navbarItems.filter(item => !hiddenFromNav.includes(item.name || '')));

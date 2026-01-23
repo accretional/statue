@@ -1,5 +1,15 @@
 <script lang="ts">
-  import type { LatestContentProps } from './types';
+  export interface LatestContentProps {
+    rootContent?: Array<{
+      url: string;
+      metadata?: {
+        title?: string;
+        description?: string;
+      };
+    }>;
+    title?: string;
+    readMoreText?: string;
+  }
 
   let { rootContent = [], title = 'Latest Content', readMoreText = 'Read more' }: LatestContentProps = $props();
 </script>
@@ -36,4 +46,3 @@
     </div>
   </div>
 {/if}
-

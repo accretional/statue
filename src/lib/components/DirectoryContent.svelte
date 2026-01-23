@@ -1,5 +1,17 @@
 <script lang="ts">
-  import type { DirectoryContentProps } from './types';
+  export interface DirectoryContentProps {
+    content?: Array<{
+      url: string;
+      metadata?: {
+        title?: string;
+        description?: string;
+        date?: string;
+      };
+      directory?: string;
+    }>;
+    showDirectory?: boolean;
+    emptyMessage?: string;
+  }
 
   let { content = [], showDirectory = false, emptyMessage = 'No content found in this directory.' }: DirectoryContentProps = $props();
 </script>

@@ -1,5 +1,9 @@
 <script lang="ts">
-  import type { PageHeroProps } from './types';
+  export interface PageHeroProps {
+    title: string;
+    description?: string;
+    backgroundImage?: string;
+  }
 
   // PageHero component - Page header section (for about, docs, etc.)
   let {
@@ -20,4 +24,3 @@
     {/if}
   </div>
 </div>
-

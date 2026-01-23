@@ -37,7 +37,17 @@
 -->
 
 <script lang="ts">
-  import type { CollapsibleTreeProps } from './types';
+  export interface CollapsibleTreeProps {
+    items: Array<{
+      id: string;
+      label: string;
+      name?: string;
+      badge?: string;
+      children?: Array<any>;
+      url?: string;
+    }>;
+    title?: string;
+  }
 
   let {
     items = [],
@@ -140,4 +150,3 @@
     {/each}
   </div>
 </div>
-

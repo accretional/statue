@@ -1,5 +1,7 @@
 <script lang="ts">
-  import type { ContentBodyProps } from './types';
+  export interface ContentBodyProps {
+    content?: string;
+  }
 
   let { content = '' }: ContentBodyProps = $props();
 </script>
@@ -33,4 +35,3 @@
   :global(main.prose > div > ul > li > *), :global(.prose ul > li > *) { margin-top: 0.25rem; margin-bottom: 0.25rem; }
   :global(main.prose > div > ol > li > *), :global(.prose ol > li > *) { margin-top: 0.25rem; margin-bottom: 0.25rem; }
 </style>
-

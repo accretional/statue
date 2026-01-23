@@ -1,5 +1,12 @@
 <script lang="ts">
-  import type { CategoriesProps } from './types';
+  export interface CategoriesProps {
+    directories?: Array<{
+      title: string;
+      url: string;
+    }>;
+    title?: string;
+    viewContentText?: string;
+  }
 
   // Categories component - Categories section
   let {

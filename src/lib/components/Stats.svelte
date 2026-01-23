@@ -1,5 +1,11 @@
 <script lang="ts">
-  import type { StatsProps } from './types';
+  export interface StatsProps {
+    stats?: Array<{
+      title: string;
+      description: string;
+      color?: string;
+    }>;
+  }
 
   // Stats component - Statistics cards section
   let { 

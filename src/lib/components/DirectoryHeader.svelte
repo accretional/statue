@@ -1,5 +1,7 @@
 <script lang="ts">
-  import type { DirectoryHeaderProps } from './types';
+  export interface DirectoryHeaderProps {
+    title?: string;
+  }
 
   let { title = '' }: DirectoryHeaderProps = $props();
 </script>
@@ -9,4 +11,3 @@
     {title}
   </h1>
 </div>
-

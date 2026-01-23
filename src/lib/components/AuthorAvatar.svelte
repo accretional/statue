@@ -1,14 +1,17 @@
 <script lang="ts">
   // AuthorAvatar component - Shows author profile image or initials
-  import type { AuthorAvatarProps } from './types';
 
-  type Props = AuthorAvatarProps;
+  export interface AuthorAvatarProps {
+    author: string;
+    avatar?: string;
+    size?: number;
+  }
 
   let {
     author = '',
     avatar = '',
     size = 24,
-  }: Props = $props();
+  }: AuthorAvatarProps = $props();
 
   // Get initial from author name (first letter only)
   let initial = $derived(getInitial(author));

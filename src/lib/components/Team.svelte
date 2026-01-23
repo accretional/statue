@@ -1,5 +1,12 @@
 <script lang="ts">
-  import type { TeamProps } from './types';
+  export interface TeamProps {
+    title?: string;
+    teamMembers?: Array<{
+      name: string;
+      role: string;
+      initials?: string;
+    }>;
+  }
 
   // Team component - Team members section
   let {

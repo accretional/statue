@@ -4,7 +4,34 @@
 
 <script lang="ts">
   import { onMount } from 'svelte';
-  import type { GitHubStatsProps } from './types';
+
+  export interface GitHubStatsProps {
+    githubRepo?: string;
+    repo?: string;
+    showStars?: boolean;
+    showForks?: boolean;
+    showIssues?: boolean;
+    title?: string;
+    description?: string;
+    contributions?: Array<{
+      title: string;
+      description: string;
+    }>;
+    ctaButtons?: Array<{
+      text: string;
+      href: string;
+      primary?: boolean;
+      target?: string;
+      rel?: string;
+    }>;
+    customStats?: Array<{
+      value: string;
+      label: string;
+    }>;
+    showGitHubStats?: boolean;
+    sectionClass?: string;
+    containerClass?: string;
+  }
 
   // GitHub repository (e.g., "username/repo")
   let {

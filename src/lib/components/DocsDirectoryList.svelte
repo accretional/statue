@@ -40,7 +40,30 @@
 -->
 
 <script lang="ts">
-  import type { DocsDirectoryListProps } from './types';
+  export interface DocsDirectoryListProps {
+    title?: string;
+    description?: string;
+    content?: Array<{
+      url: string;
+      metadata?: {
+        title?: string;
+        description?: string;
+        icon?: string;
+        order?: number;
+      };
+      title?: string;
+      slug?: string;
+    }>;
+    subDirectories?: Array<{
+      name: string;
+      url: string;
+      description?: string;
+    }>;
+    primaryButtonText?: string;
+    primaryButtonUrl?: string;
+    secondaryButtonText?: string;
+    secondaryButtonUrl?: string;
+  }
 
   let { title = '', description = 'Guides, resources, and references to help you build with Statue.', content = [], subDirectories = [], primaryButtonText = '', primaryButtonUrl = '', secondaryButtonText = '', secondaryButtonUrl = '' }: DocsDirectoryListProps = $props();
 

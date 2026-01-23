@@ -24,7 +24,17 @@
 -->
 
 <script lang="ts">
-  import type { SignupProps } from './types';
+  export interface SignupProps {
+    nameLabel?: string;
+    namePlaceholder?: string;
+    emailLabel?: string;
+    emailPlaceholder?: string;
+    buttonText?: string;
+    privacyText?: string;
+    containerClass?: string;
+    wrapperClass?: string;
+    onSubmit?: (data: { name: string; email: string }) => Promise<void>;
+  }
 
   let {
     nameLabel = 'Name',

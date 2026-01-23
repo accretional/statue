@@ -36,7 +36,23 @@
 -->
 
 <script lang="ts">
-  import type { DocsSidebarProps } from './types';
+  export interface DocsSidebarProps {
+    items?: Array<{
+      title: string;
+      url?: string;
+      children?: Array<{
+        title: string;
+        url?: string;
+        children?: Array<{
+          title: string;
+          url: string;
+        }>;
+      }>;
+    }>;
+    activePath?: string;
+    title?: string;
+    showSearch?: boolean;
+  }
 
   let { items = [], activePath = '', title = 'Documentation', showSearch = true }: DocsSidebarProps = $props();
 

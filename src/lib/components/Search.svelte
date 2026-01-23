@@ -26,7 +26,20 @@
 <script lang="ts">
   import { browser } from '$app/environment';
   import { onMount, onDestroy } from 'svelte';
-  import type { SearchProps } from './types';
+
+  export interface SearchProps {
+    placeholder?: string;
+    searchEndpoint?: string;
+    debounceMs?: number;
+    minQueryLength?: number;
+    maxResults?: number;
+    showCategories?: boolean;
+    showDates?: boolean;
+    showExcerpts?: boolean;
+    containerClass?: string;
+    inputClass?: string;
+    resultsClass?: string;
+  }
 
   // Props
   let {
@@ -359,7 +372,7 @@
           <div class="flex items-center gap-2 text-xs {selectedIndex === index ? 'opacity-80' : 'text-[var(--color-muted)]'}">
             <span>{result.url}</span>
             {#if showDates && result.meta?.date}
-              <span>•</span>
+              <span>-</span>
               <span>{formatDate(result.meta.date)}</span>
             {/if}
           </div>

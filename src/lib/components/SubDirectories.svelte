@@ -1,5 +1,13 @@
 <script lang="ts">
-  import type { SubDirectoriesProps } from './types';
+  export interface SubDirectoriesProps {
+    directories: Array<{
+      name: string;
+      url: string;
+      title: string;
+      description?: string;
+    }>;
+    title?: string;
+  }
 
   // SubDirectories component - Subdirectories section
   let {

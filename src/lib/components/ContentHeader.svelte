@@ -1,5 +1,11 @@
 <script lang="ts">
-  import type { ContentHeaderProps } from './types';
+  export interface ContentHeaderProps {
+    title?: string;
+    date?: string | null;
+    author?: string | null;
+    backLink?: string;
+    backLinkText?: string;
+  }
 
   let { title = '', date = null, author = null, backLink = '/', backLinkText = 'Home' }: ContentHeaderProps = $props();
 </script>
@@ -31,4 +37,3 @@
     </a>
   </div>
 </header>
-

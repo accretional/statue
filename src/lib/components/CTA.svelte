@@ -1,8 +1,14 @@
 <script lang="ts">
   // CTA component - Call to Action section
-  import type { CTAProps } from './types';
 
-  type Props = CTAProps;
+  export interface CTAProps {
+    title?: string;
+    description?: string;
+    primaryButtonText?: string;
+    primaryButtonLink?: string;
+    secondaryButtonText?: string;
+    secondaryButtonLink?: string;
+  }
 
   let {
     title = 'Ready to get started?',
@@ -11,7 +17,7 @@
     primaryButtonLink = '/',
     secondaryButtonText = 'Read Documentation',
     secondaryButtonLink = '/docs',
-  }: Props = $props();
+  }: CTAProps = $props();
 </script>
 
 <div class="max-w-3xl mx-auto mt-24 text-center">

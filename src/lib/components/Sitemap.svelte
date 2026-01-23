@@ -1,5 +1,17 @@
 <script lang="ts">
-  import type { SitemapProps } from './types';
+  export interface SitemapProps {
+    directories?: Array<{
+      name: string;
+      path: string;
+      title: string;
+      url: string;
+      subpages?: Array<{
+        title: string;
+        url: string;
+      }>;
+    }>;
+    currentPath?: string;
+  }
 
   interface Directory {
     name: string;
@@ -109,4 +121,4 @@
     .sitemap-category {
       margin-bottom: 1rem;
     }
-  </style> 
+  </style>

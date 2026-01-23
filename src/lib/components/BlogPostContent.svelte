@@ -1,7 +1,11 @@
 <script lang="ts">
-  import type { BlogPostContentProps } from './types';
-
   // BlogPostContent component - Linear-style blog post content
+
+  export interface BlogPostContentProps {
+    html?: string;
+    content?: string;
+  }
+
   let {
     content = '',
     html = ''

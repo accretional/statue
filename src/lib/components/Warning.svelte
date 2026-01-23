@@ -1,17 +1,18 @@
 <script lang="ts">
-  import type { WarningProps } from './types';
-
-  type Props = WarningProps & {
-    warning?: Props;
-  };
+  export interface WarningProps {
+    title?: string;
+    message: string;
+    type?: 'warning' | 'error' | 'info' | 'success';
+    warning?: WarningProps;
+  }
 
   let {
     title = '',
     message = '',
     type = 'info'
-  }: Props = $props();
-  
-  const warning: Props = {
+  }: WarningProps = $props();
+
+  const warning: WarningProps = {
     title,
     message,
     type

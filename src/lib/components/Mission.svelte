@@ -1,5 +1,9 @@
 <script lang="ts">
-  import type { MissionProps } from './types';
+  export interface MissionProps {
+    title?: string;
+    paragraph1?: string;
+    paragraph2?: string;
+  }
 
   // Mission component - Mission section
   let {

@@ -4,7 +4,16 @@
 
 <script lang="ts">
   import { browser } from '$app/environment';
-  import type { CopyCommandProps } from './types';
+
+  export interface CopyCommandProps {
+    command: string;
+    language?: string;
+    maxWidth?: string;
+    copiedText?: string;
+    copiedDuration?: number;
+    wrapperClass?: string;
+    commandClass?: string;
+  }
 
   // Command to display and copy
   let {

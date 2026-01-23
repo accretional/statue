@@ -1,10 +1,20 @@
 <script lang="ts">
   // BlogPostHeader component - Linear-style blog post header with thumbnail
   import { page } from '$app/stores';
-  import type { BlogPostHeaderProps } from './types';
   import AuthorAvatar from './AuthorAvatar.svelte';
 
-  type Props = BlogPostHeaderProps;
+  export interface BlogPostHeaderProps {
+    title: string;
+    description?: string;
+    date?: string | Date;
+    author?: string;
+    authorAvatar?: string;
+    thumbnail?: string;
+    backLink?: string;
+    backLinkText?: string;
+    tags?: string[];
+    readingTime?: number;
+  }
 
   let {
     title = '',
@@ -15,7 +25,7 @@
     thumbnail = '',
     backLink = '/blog',
     backLinkText = 'Blog',
-  }: Props = $props();
+  }: BlogPostHeaderProps = $props();
 
   // Date parsing without confusion due to timezone
   // Handles both string ("2025-12-11") and Date object from gray-matter

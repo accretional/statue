@@ -1,8 +1,16 @@
 <script lang="ts">
   // Hero component - Homepage hero section
-  import type { HeroProps } from './types';
 
-  type Props = HeroProps;
+  export interface HeroProps {
+    badgeText?: string;
+    titleLine1?: string;
+    titleLine2?: string;
+    description?: string;
+    primaryButtonText?: string;
+    primaryButtonLink?: string;
+    secondaryButtonText?: string;
+    secondaryButtonLink?: string;
+  }
 
   let {
     badgeText = '<a href="https://github.com/accretional/statue" target="_blank">✨ Powered by Statue SSG</a>',
@@ -13,7 +21,7 @@
     primaryButtonLink = '#directories',
     secondaryButtonText = 'Documentation',
     secondaryButtonLink = '/docs',
-  }: Props = $props();
+  }: HeroProps = $props();
 </script>
 
 <div class="container mx-auto px-4 pt-20 pb-16 md:pt-32 md:pb-20">

@@ -1,8 +1,12 @@
 <script lang="ts">
-  import type { BlogLayoutProps } from './types';
   // BlogLayout component - Linear-style blog layout wrapper
   import BlogHeader from './BlogHeader.svelte';
   import BlogGrid from './BlogGrid.svelte';
+
+  export interface BlogLayoutProps {
+    title?: string;
+    posts?: Array<any>;
+  }
 
   let {
     title = 'Blog',

@@ -27,16 +27,20 @@
 <script lang="ts">
   import { onDestroy, tick } from 'svelte';
   import { browser } from '$app/environment';
-  import type { TableOfContentsProps } from './types';
 
-  type Props = TableOfContentsProps & {
+  export interface TableOfContentsProps {
+    headings: Array<{
+      id: string;
+      text: string;
+      level: number;
+    }>;
     title?: string;
-  };
+  }
 
   let {
     headings = [],
     title = 'On this page'
-  }: Props = $props();
+  }: TableOfContentsProps = $props();
 
   let activeId = $state('');
   let observer: IntersectionObserver | undefined;

@@ -1,5 +1,12 @@
 <script lang="ts">
-  import type { PdfViewerProps } from './types';
+  export interface PdfViewerProps {
+    src: string;
+    height?: string;
+    width?: string;
+    showToolbar?: boolean;
+    showDownload?: boolean;
+    showFullscreen?: boolean;
+  }
 
   let {
     src,

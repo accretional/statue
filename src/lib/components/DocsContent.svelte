@@ -29,7 +29,20 @@
 <script lang="ts">
   import { onMount, tick } from 'svelte';
   import { browser } from '$app/environment';
-  import type { DocsContentProps } from './types';
+
+  export interface DocsContentProps {
+    html: string;
+    content?: string;
+    title?: string;
+    description?: string;
+    lastUpdated?: string;
+    editUrl?: string;
+    headings?: Array<{
+      id: string;
+      text: string;
+      level: number;
+    }>;
+  }
 
   let {
     content = '',

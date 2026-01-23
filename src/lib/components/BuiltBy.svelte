@@ -1,8 +1,20 @@
-
 <script lang="ts">
-  import type { BuiltByProps } from './types';
   import accretionIconSrc from '../assets/accretion.png';
   import statueIconSrc from '../assets/favicon.png';
+
+  export interface BuiltByProps {
+    builtByText?: string;
+    builtByLinkText?: string;
+    builtByLinkUrl?: string;
+    builtByIcon?: string;
+    builtInText?: string;
+    builtInLinkText?: string;
+    builtInLinkUrl?: string;
+    builtInIcon?: string;
+    builtForText?: string;
+    communityLinkText?: string;
+    communityLinkUrl?: string;
+  }
 
   let {
     builtByText = 'Built by',
@@ -89,7 +101,7 @@
     }
     50% {
       transform: scale(1.05);
-      text-shadow: 0 0 30px rgba(255, 99, 71, 1), 0 0 40px rgba(255, 69, 0, 0.8), 0 0 50px rgba(255, 69, 0, 0.6);
+      text-shadow: 0 0 30px rgba(255, 99, 71, 1), 0 0 40px rgba(255, 69, 71, 0.8), 0 0 50px rgba(255, 69, 0, 0.6);
     }
   }
   
@@ -111,4 +123,3 @@
   
   /* .statue-group removed display styles as they are now in HTML classes */
 </style>
-

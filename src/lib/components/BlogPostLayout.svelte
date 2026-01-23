@@ -1,7 +1,19 @@
 <script lang="ts">
-  import type { BlogPostLayoutProps } from './types';
+  // BlogPostLayout component - Full blog post page layout
   import BlogPostHeader from './BlogPostHeader.svelte';
   import BlogPostContent from './BlogPostContent.svelte';
+
+  export interface BlogPostLayoutProps {
+    title?: string;
+    description?: string;
+    date?: string;
+    author?: string;
+    authorAvatar?: string;
+    thumbnail?: string;
+    content?: string;
+    backLink?: string;
+    backLinkText?: string;
+  }
 
   let { title = '', description = '', date = '', author = '', authorAvatar = '', thumbnail = '', content = '', backLink = '/blog', backLinkText = 'Blog' }: BlogPostLayoutProps = $props();
 </script>

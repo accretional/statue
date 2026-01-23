@@ -1,7 +1,8 @@
 <script lang="ts">
-  import type { NotificationBannerProps } from './types';
-
-  type Props = NotificationBannerProps & {
+  export interface NotificationBannerProps {
+    message: string;
+    type?: 'info' | 'warning' | 'error' | 'success';
+    dismissible?: boolean;
     buttonText?: string;
     onClose?: (() => void) | undefined;
     onClick?: (() => void) | undefined;
@@ -9,7 +10,7 @@
     descriptionClass?: string;
     buttonClass?: string;
     closeButtonClass?: string;
-  };
+  }
 
   let {
     message = '',
@@ -22,7 +23,7 @@
     descriptionClass = '',
     buttonClass = '',
     closeButtonClass = ''
-  }: Props = $props();
+  }: NotificationBannerProps = $props();
   
   function handleClose() {
     if (onClose) {
