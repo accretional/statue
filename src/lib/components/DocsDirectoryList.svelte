@@ -154,7 +154,7 @@
   {#if sortedContent && sortedContent.length > 0}
     <section class="mb-12 relative z-10">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {#each sortedContent as item, index}
+        {#each sortedContent as item}
           <a
             href={item.url}
             class="group relative p-6 rounded-xl border border-[var(--color-border)] bg-gradient-to-br from-[var(--color-card)]/50 to-transparent hover:border-[var(--color-primary)]/50 hover:from-[var(--color-card)] transition-all"

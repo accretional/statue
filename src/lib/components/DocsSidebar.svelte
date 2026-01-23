@@ -54,7 +54,7 @@
     showSearch?: boolean;
   }
 
-  let { items = [], activePath = '', title = 'Documentation', showSearch = true }: DocsSidebarProps = $props();
+  let { items = [], activePath = '', title: _title = 'Documentation', showSearch: _showSearch = true }: DocsSidebarProps = $props();
 
   let searchQuery = $state('');
   let expandedSections = $state({});

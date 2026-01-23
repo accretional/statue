@@ -38,7 +38,7 @@
   let transitionName = $derived(slug ? `blog-thumb-${slug}` : '');
 
   // Get title initial for minimal card
-  let titleInitial = $derived(title ? title.trim().charAt(0).toUpperCase() : '?');
+  let _titleInitial = $derived(title ? title.trim().charAt(0).toUpperCase() : '?');
 
   // Format date
   let formattedDate = $derived(date ? new Date(date).toLocaleDateString('en-US', {
@@ -68,7 +68,7 @@
     const distanceFromCenter = cardCenter - viewportCenter;
 
     // Normalize: -1 when card is at top, 0 at center, 1 at bottom
-    const normalizedPosition = distanceFromCenter / (windowHeight / 2);
+    const _normalizedPosition = distanceFromCenter / (windowHeight / 2);
 
     // Only apply effect when card is in viewport
     if (rect.top < windowHeight && rect.bottom > 0) {
