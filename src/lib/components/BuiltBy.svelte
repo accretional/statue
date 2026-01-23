@@ -1,6 +1,6 @@
 <script lang="ts">
-  import accretionIconSrc from '../assets/accretion.png';
-  import statueIconSrc from '../assets/favicon.png';
+  import accretionIconSrc from '/accretion.png';
+  import statueIconSrc from '/favicon.png';
 
   export interface BuiltByProps {
     builtByText?: string;
