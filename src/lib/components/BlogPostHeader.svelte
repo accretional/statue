@@ -4,7 +4,6 @@
 
 	let { title = '', description = '', date = '', author = '', thumbnail = '' } = $props();
 
-	// Format date using $derived
 	let formattedDate = $derived(
 		date
 			? new Date(date).toLocaleDateString('en-US', {
