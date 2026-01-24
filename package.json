@@ -119,7 +119,8 @@
 		"swagger-ui-dist": "^5.31.0",
 		"svelte-inview": "^4.0.4",
 		"svelte-motion": "^0.12.2",
-		"three": "^0.182.0"
+		"three": "^0.182.0",
+		"number-flow": "^0.5.9"
 	},
 	"keywords": [
 		"static-site-generator",
