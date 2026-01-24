@@ -242,7 +242,7 @@ All contributions are automatically validated before PR creation. The validation
 **For Components:**
 - ✅ Valid Svelte syntax
 - ✅ Uses CSS variables (var(--color-*))
-- ✅ Exported in src/lib/index.ts
+- ✅ **Auto-exported in src/lib/index.ts** (via `npm run generate:exports`)
 - ⚠️  Documented in COMPONENTS_README.md (warning only)
 - ⚠️  TypeScript usage (warning only)
 - ⚠️  No hardcoded colors (warning only)

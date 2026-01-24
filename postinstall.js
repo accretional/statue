@@ -84,7 +84,13 @@ async function setupStatueSSG(options = {}) {
     const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
     const sourcePkg = JSON.parse(fs.readFileSync(sourcePkgPath, 'utf8'));
 
-    pkg.scripts = { ...pkg.scripts, ...sourcePkg.scripts };
+    const scriptsToInclude = ['preview', 'postbuild', 'setup'];
+
+    const productionScripts = Object.fromEntries(
+      Object.entries(sourcePkg.scripts).filter(([name]) => scriptsToInclude.includes(name))
+    );
+
+    pkg.scripts = { ...pkg.scripts, ...productionScripts };
     pkg.devDependencies = { ...pkg.devDependencies, ...sourcePkg.devDependencies };
 
     fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
