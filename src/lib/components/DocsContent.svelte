@@ -26,20 +26,36 @@
   - bind:headings: Extracted headings for TOC (reactive output)
 -->
 
-<script>
+<script lang="ts">
   import { onMount, tick } from 'svelte';
   import { browser } from '$app/environment';
 
-  export let content = '';
-  export let title = '';
-  export let description = '';
-  export let lastUpdated = '';
-  export let editUrl = '';
-  export let headings = [];
+  export interface DocsContentProps {
+    html: string;
+    content?: string;
+    title?: string;
+    description?: string;
+    lastUpdated?: string;
+    editUrl?: string;
+    headings?: Array<{
+      id: string;
+      text: string;
+      level: number;
+    }>;
+  }
 
-  let contentElement;
-  let lastContent = '';
-  let mounted = false;
+  let {
+    content = '',
+    title = '',
+    description = '',
+    lastUpdated = '',
+    editUrl = '',
+    headings = $bindable([])
+  }: DocsContentProps = $props();
+
+  let contentElement = $state(null);
+  let lastContent = $state('');
+  let mounted = $state(false);
 
   onMount(() => {
     mounted = true;
@@ -75,10 +91,12 @@
   }
 
   // Re-extract headings when content changes
-  $: if (mounted && content !== lastContent) {
-    lastContent = content;
-    extractHeadings();
-  }
+  $effect(() => {
+    if (mounted && content !== lastContent) {
+      lastContent = content;
+      extractHeadings();
+    }
+  });
 </script>
 
 <article class="docs-content">

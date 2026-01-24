@@ -1,14 +1,26 @@
-<script>
+<script lang="ts">
+  export interface SubDirectoriesProps {
+    directories: Array<{
+      name: string;
+      url: string;
+      title: string;
+      description?: string;
+    }>;
+    title?: string;
+  }
+
   // SubDirectories component - Subdirectories section
-  export let subDirectories = [];
-  export let title = 'Subcategories';
+  let {
+    directories = [],
+    title = 'Subcategories'
+  }: SubDirectoriesProps = $props();
 </script>
 
-{#if subDirectories && subDirectories.length > 0}
+{#if directories && directories.length > 0}
   <div class="mb-16">
     <h2 class="text-2xl font-bold mb-6 text-[var(--color-foreground)]">{title}</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {#each subDirectories as subdir}
+      {#each directories as subdir}
         <div class="subdir-card bg-[var(--color-card)]/50 backdrop-blur-sm border border-[var(--color-border)] p-6 rounded-xl hover:border-[var(--color-primary)] transition-all duration-300 ">
           <a href={subdir.url} class="block">
             <h3 class="font-bold text-xl text-[var(--color-foreground)]">{subdir.title}</h3>

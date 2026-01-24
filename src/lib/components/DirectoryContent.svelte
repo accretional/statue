@@ -1,8 +1,19 @@
-<script>
-  // DirectoryContent component - Directory content section
-  export let content = [];
-  export let showDirectory = false;
-  export let emptyMessage = 'No content found in this directory.';
+<script lang="ts">
+  export interface DirectoryContentProps {
+    content?: Array<{
+      url: string;
+      metadata?: {
+        title?: string;
+        description?: string;
+        date?: string;
+      };
+      directory?: string;
+    }>;
+    showDirectory?: boolean;
+    emptyMessage?: string;
+  }
+
+  let { content = [], showDirectory = false, emptyMessage = 'No content found in this directory.' }: DirectoryContentProps = $props();
 </script>
 
 {#if content && content.length > 0}

@@ -1,16 +1,31 @@
-<script>
+<script lang="ts">
   // BlogPostHeader component - Linear-style blog post header with thumbnail
   import { page } from '$app/stores';
   import AuthorAvatar from './AuthorAvatar.svelte';
 
-  export let title = '';
-  export let description = '';
-  export let date = '';
-  export let author = '';
-  export let authorAvatar = '';
-  export let thumbnail = '';
-  export let backLink = '/blog';
-  export let backLinkText = 'Blog';
+  export interface BlogPostHeaderProps {
+    title: string;
+    description?: string;
+    date?: string | Date;
+    author?: string;
+    authorAvatar?: string;
+    thumbnail?: string;
+    backLink?: string;
+    backLinkText?: string;
+    tags?: string[];
+    readingTime?: number;
+  }
+
+  let {
+    title = '',
+    description = '',
+    date = '',
+    author = '',
+    authorAvatar = '',
+    thumbnail = '',
+    backLink = '/blog',
+    backLinkText = 'Blog',
+  }: BlogPostHeaderProps = $props();
 
   // Date parsing without confusion due to timezone
   // Handles both string ("2025-12-11") and Date object from gray-matter
@@ -30,19 +45,19 @@
   }
 
   // Format date
-  $: formattedDate = date ? parseLocalDate(date).toLocaleDateString('en-US', {
+  let formattedDate = $derived(date ? parseLocalDate(date).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
       day: '2-digit'
     })
-  : '';
+  : '');
 
   // Check if thumbnail exists
-  $: hasThumbnail = !!thumbnail;
+  let hasThumbnail = $derived(!!thumbnail);
 
   // Generate matching view transition name from current URL - use slug only
-  $: slug = $page.url.pathname ? $page.url.pathname.split('/').filter(Boolean).pop() : '';
-  $: transitionName = slug ? `blog-thumb-${slug}` : '';
+  let slug = $derived($page.url.pathname ? $page.url.pathname.split('/').filter(Boolean).pop() : '');
+  let transitionName = $derived(slug ? `blog-thumb-${slug}` : '');
 </script>
 
 <header class="blog-post-header">

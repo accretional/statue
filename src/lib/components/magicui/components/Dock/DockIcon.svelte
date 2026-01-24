@@ -14,7 +14,9 @@ All components in this directory are sourced from the svelte-animations project 
   let DEFAULT_MAGNIFICATION = 60;
   let DEFAULT_DISTANCE = 140;
   let mouseX = getContext("mouseX");
-  $: console.log(mouseX.current, "---");
+  $effect(() => {
+    console.log(mouseX.current, "---");
+  });
   export let distance: number = DEFAULT_DISTANCE;
   export let magnification: number = DEFAULT_MAGNIFICATION;
   let ref: HTMLElement;

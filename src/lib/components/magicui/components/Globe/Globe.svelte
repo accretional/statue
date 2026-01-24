@@ -29,7 +29,9 @@ All components in this directory are sourced from the svelte-animations project 
 
 	let phi = 0;
 	let width = 0;
-  $: console.log(width, "X");
+  $effect(() => {
+    console.log(width, "X");
+  });
 	let onResize = () => {
 		width = canvas.offsetWidth;
 	};

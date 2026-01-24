@@ -1,8 +1,19 @@
-<script>
+<script lang="ts">
+  export interface CategoriesProps {
+    directories?: Array<{
+      title: string;
+      url: string;
+    }>;
+    title?: string;
+    viewContentText?: string;
+  }
+
   // Categories component - Categories section
-  export let directories = [];
-  export let title = 'Categories';
-  export let viewContentText = 'View Content';
+  let {
+    directories = [],
+    title = 'Categories',
+    viewContentText = 'View Content'
+  }: CategoriesProps = $props();
 </script>
 
 {#if directories && directories.length > 0}
@@ -37,4 +48,3 @@
     </div>
   </div>
 {/if}
-
