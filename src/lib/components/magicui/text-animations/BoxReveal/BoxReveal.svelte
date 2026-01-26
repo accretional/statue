@@ -12,9 +12,17 @@ All components in this directory are sourced from the svelte-animations project 
   import { Motion, useAnimation } from "svelte-motion";
   import { onMount } from "svelte";
 
-  export let width = "fit-content";
-  export let boxColor: string | undefined = undefined;
-  export let duration = 0.5;
+  interface Props {
+    width?: string;
+    boxColor?: string | undefined;
+    duration?: number;
+  }
+
+  let {
+    width = "fit-content",
+    boxColor = undefined,
+    duration = 0.5
+  }: Props = $props();
 
   let themeColor = "";
 

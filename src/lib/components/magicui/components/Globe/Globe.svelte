@@ -18,10 +18,17 @@ All components in this directory are sourced from the svelte-animations project 
 		precision: 0.005
 	});
 
-	// Optional color overrides - if not provided, will use CSS theme variables
-	export let baseColorOverride: string | undefined = undefined;
-	export let markerColorOverride: string | undefined = undefined;
-	export let glowColorOverride: string | undefined = undefined;
+	interface Props {
+		baseColorOverride?: string | undefined;
+		markerColorOverride?: string | undefined;
+		glowColorOverride?: string | undefined;
+	}
+
+	let {
+		baseColorOverride = undefined,
+		markerColorOverride = undefined,
+		glowColorOverride = undefined
+	}: Props = $props();
 
 	let pointerInteracting: any = null;
 	let pointerInteractionMovement = 0;
