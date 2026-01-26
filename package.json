@@ -37,6 +37,7 @@
 		"scripts/generate-seo-files.js",
 		"scripts/run-pagefind.js",
 		"scripts/manage-templates.js",
+		"scripts/generate-rss-feed.js",
 		"svelte.config.js",
 		"vite.config.js",
 		"tailwind.config.js",
