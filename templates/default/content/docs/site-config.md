@@ -18,12 +18,22 @@ The `site.config.json` file is your site's central configuration. It stores info
 
 ```json
 {
-  "$schema": "./node_modules/statue-ssg/site.config.schema.json",
-  "site": { /* Site info */ },
-  "contact": { /* Contact details */ },
-  "social": { /* Social media */ },
-  "legal": { /* Legal pages */ },
-  "seo": { /* SEO settings */ }
+	"$schema": "./node_modules/statue-ssg/site.config.schema.json",
+	"site": {
+		/* Site info */
+	},
+	"contact": {
+		/* Contact details */
+	},
+	"social": {
+		/* Social media */
+	},
+	"legal": {
+		/* Legal pages */
+	},
+	"seo": {
+		/* SEO settings */
+	}
 }
 ```
 
@@ -35,21 +45,23 @@ Basic information about your site:
 
 ```json
 {
-  "site": {
-    "name": "Your Site Name",
-    "description": "Your site description",
-    "url": "https://yoursite.com",
-    "author": "Your Name or Organization"
-  }
+	"site": {
+		"name": "Your Site Name",
+		"description": "Your site description",
+		"url": "https://yoursite.com",
+		"author": "Your Name or Organization"
+	}
 }
 ```
 
 **Usage:**
+
 - `{{site.name}}` in markdown
 - `{data.siteConfig.site.name}` in components
 - SEO meta tags
 
 **When to update:**
+
 - When you first set up your site
 - When you rebrand
 - When you change domains
@@ -62,16 +74,17 @@ Basic information about your site:
 
 ```json
 {
-  "contact": {
-    "email": "hello@yoursite.com",
-    "privacyEmail": "privacy@yoursite.com",
-    "supportEmail": "support@yoursite.com",
-    "phone": "+1 (555) 123-4567"
-  }
+	"contact": {
+		"email": "hello@yoursite.com",
+		"privacyEmail": "privacy@yoursite.com",
+		"supportEmail": "support@yoursite.com",
+		"phone": "+1 (555) 123-4567"
+	}
 }
 ```
 
 **Usage:**
+
 - `{{contact.email}}` in markdown
 - Legal pages (privacy policy, terms)
 - Contact forms
@@ -83,19 +96,20 @@ Basic information about your site:
 
 ```json
 {
-  "contact": {
-    "address": {
-      "street": "123 Main Street",
-      "city": "San Francisco",
-      "state": "CA",
-      "zipCode": "94103",
-      "country": "United States"
-    }
-  }
+	"contact": {
+		"address": {
+			"street": "123 Main Street",
+			"city": "San Francisco",
+			"state": "CA",
+			"zipCode": "94103",
+			"country": "United States"
+		}
+	}
 }
 ```
 
 **Usage:**
+
 - `{{contact.address.street}}` - Individual fields
 - `{{contact.address.full}}` - Auto-formatted full address
 - Legal pages (business address requirements)
@@ -111,20 +125,21 @@ Links to your social media profiles:
 
 ```json
 {
-  "social": {
-    "twitter": "https://twitter.com/yourhandle",
-    "github": "https://github.com/yourorg",
-    "linkedin": "https://linkedin.com/company/yourcompany",
-    "facebook": "https://facebook.com/yourpage",
-    "instagram": "https://instagram.com/yourhandle",
-    "youtube": "https://youtube.com/@yourchannel",
-    "discord": "https://discord.gg/yourserver",
-    "reddit": "https://reddit.com/r/yourcommunity"
-  }
+	"social": {
+		"twitter": "https://twitter.com/yourhandle",
+		"github": "https://github.com/yourorg",
+		"linkedin": "https://linkedin.com/company/yourcompany",
+		"facebook": "https://facebook.com/yourpage",
+		"instagram": "https://instagram.com/yourhandle",
+		"youtube": "https://youtube.com/@yourchannel",
+		"discord": "https://discord.gg/yourserver",
+		"reddit": "https://reddit.com/r/yourcommunity"
+	}
 }
 ```
 
 **Usage:**
+
 - `{{social.twitter}}` in markdown
 - Footer social links
 - Share buttons
@@ -139,24 +154,26 @@ Configuration for legal pages:
 
 ```json
 {
-  "legal": {
-    "privacyPolicyLastUpdated": "2025-01-15",
-    "termsLastUpdated": "2025-01-15",
-    "isCaliforniaCompliant": true,
-    "doNotSell": {
-      "processingTime": "15 business days",
-      "confirmationRequired": true
-    }
-  }
+	"legal": {
+		"privacyPolicyLastUpdated": "2025-01-15",
+		"termsLastUpdated": "2025-01-15",
+		"isCaliforniaCompliant": true,
+		"doNotSell": {
+			"processingTime": "15 business days",
+			"confirmationRequired": true
+		}
+	}
 }
 ```
 
 **Usage:**
+
 - `{{legal.privacyPolicyLastUpdated}}` - Shows update date
 - Privacy policy requirements
 - CCPA/CPRA compliance
 
 **When to update:**
+
 - When you modify your privacy policy
 - When you modify your terms of service
 - When you update data handling practices
@@ -171,43 +188,49 @@ Search engine optimization configuration:
 
 ```json
 {
-  "seo": {
-    "defaultTitle": "Your Site - Tagline",
-    "titleTemplate": "%s | Your Site",
-    "defaultDescription": "Your site description for search results",
-    "keywords": ["your", "site", "keywords"],
-    "ogImage": "/images/og-image.png",
-    "twitterCard": "summary_large_image"
-  }
+	"seo": {
+		"defaultTitle": "Your Site - Tagline",
+		"titleTemplate": "%s | Your Site",
+		"defaultDescription": "Your site description for search results",
+		"keywords": ["your", "site", "keywords"],
+		"ogImage": "/images/og-image.png",
+		"twitterCard": "summary_large_image"
+	}
 }
 ```
 
 ### SEO Fields
 
 **`defaultTitle`**
+
 - Fallback title when no title is specified
 - Used on homepage if no custom title set
 
 **`titleTemplate`**
+
 - Template for page titles
 - `%s` is replaced with the page title
 - Example: "Blog Post | Your Site"
 
 **`defaultDescription`**
+
 - Fallback meta description
 - Used when pages don't specify description
 - Shows in search results
 
 **`keywords`**
+
 - Array of site-wide keywords
 - Less important for modern SEO but still useful
 
 **`ogImage`**
+
 - Image URL for social sharing (Open Graph)
 - Shows when links are shared on social media
 - Should be 1200x630px
 
 **`twitterCard`**
+
 - Twitter card type
 - Options: `summary`, `summary_large_image`, `player`
 
@@ -217,7 +240,7 @@ Search engine optimization configuration:
 
 ### Template Variables
 
-Statue lets you use config values and dynamic variables in your markdown using the `{{variable}}` syntax.
+Statue lets you use config values and dynamic variables in your markdown using the `\{\{variable\}\}` syntax.
 
 #### Basic Usage
 
@@ -244,12 +267,14 @@ Follow us on [Twitter]({{social.twitter}})
 #### Available Variables
 
 **Site Information:**
+
 - `{{site.name}}` - Site name
 - `{{site.description}}` - Site description
 - `{{site.url}}` - Site URL
 - `{{site.author}}` - Site author
 
 **Contact Information:**
+
 - `{{contact.email}}` - Main email
 - `{{contact.privacyEmail}}` - Privacy email
 - `{{contact.supportEmail}}` - Support email
@@ -262,6 +287,7 @@ Follow us on [Twitter]({{social.twitter}})
 - `{{contact.address.full}}` - Full formatted address
 
 **Social Media:**
+
 - `{{social.twitter}}` - Twitter URL
 - `{{social.github}}` - GitHub URL
 - `{{social.linkedin}}` - LinkedIn URL
@@ -272,11 +298,13 @@ Follow us on [Twitter]({{social.twitter}})
 - `{{social.reddit}}` - Reddit URL
 
 **Legal:**
+
 - `{{legal.privacyPolicyLastUpdated}}` - Privacy policy date
 - `{{legal.termsLastUpdated}}` - Terms of service date
 - `{{legal.doNotSell.processingTime}}` - Processing time
 
 **Date Variables:**
+
 - `{{date.now}}` - Today's date (e.g., "12/7/2025")
 - `{{date.year}}` - Current year (e.g., "2025")
 - `{{date.month}}` - Current month name (e.g., "December")
@@ -296,25 +324,30 @@ description: {{site.name}}'s privacy policy, last updated {{legal.privacyPolicyL
 #### Template Variable Examples
 
 **Email links:**
+
 ```markdown
 Contact us: [{{contact.email}}](mailto:{{contact.email}})
 Privacy: [{{contact.privacyEmail}}](mailto:{{contact.privacyEmail}})
 ```
 
 **Social media:**
+
 ```markdown
 Follow us:
+
 - [Twitter]({{social.twitter}})
 - [GitHub]({{social.github}})
 - [Discord]({{social.discord}})
 ```
 
 **Copyright notices:**
+
 ```markdown
 (c) {{date.year}} {{site.name}}. All rights reserved.
 ```
 
 **Dynamic dates:**
+
 ```markdown
 Last updated: {{date.now}}
 ```
@@ -322,7 +355,7 @@ Last updated: {{date.now}}
 #### How Variables Work
 
 - Variables are processed at **build time**, not runtime
-- If a variable isn't found, the `{{variable}}` text stays unchanged
+- If a variable isn't found, the `\{\{variable\}\}` text stays unchanged
 - A warning is logged to console for missing variables
 - Variables are safe - no user input is evaluated
 
@@ -334,10 +367,10 @@ Access config in Svelte components:
 
 ```svelte
 <script>
-  import siteConfig from '/site.config.json';
+	import siteConfig from '/site.config.json';
 
-  const siteName = siteConfig.site.name;
-  const email = siteConfig.contact.email;
+	const siteName = siteConfig.site.name;
+	const email = siteConfig.contact.email;
 </script>
 
 <h1>Welcome to {siteName}</h1>
@@ -351,6 +384,7 @@ Access config in Svelte components:
 ### 1. Update Immediately
 
 Change placeholder values when you first set up:
+
 ```json
 "email": "your-email@example.com"  // Don't leave this
 "email": "hello@yoursite.com"      // Change to your email
@@ -387,6 +421,7 @@ Change placeholder values when you first set up:
 ### 5. Validate Email Addresses
 
 Ensure emails are valid:
+
 ```json
 "email": "hello@yoursite.com"      // Valid
 "email": "hello @ yoursite.com"    // Invalid (spaces)
@@ -401,20 +436,20 @@ Ensure emails are valid:
 
 ```json
 {
-  "site": {
-    "name": "YourApp",
-    "description": "The best app for X",
-    "url": "https://yourapp.com",
-    "author": "YourApp Team"
-  },
-  "contact": {
-    "email": "hello@yourapp.com",
-    "supportEmail": "support@yourapp.com"
-  },
-  "social": {
-    "twitter": "https://twitter.com/yourapp",
-    "github": "https://github.com/yourorg"
-  }
+	"site": {
+		"name": "YourApp",
+		"description": "The best app for X",
+		"url": "https://yourapp.com",
+		"author": "YourApp Team"
+	},
+	"contact": {
+		"email": "hello@yourapp.com",
+		"supportEmail": "support@yourapp.com"
+	},
+	"social": {
+		"twitter": "https://twitter.com/yourapp",
+		"github": "https://github.com/yourorg"
+	}
 }
 ```
 
@@ -422,19 +457,19 @@ Ensure emails are valid:
 
 ```json
 {
-  "site": {
-    "name": "John's Blog",
-    "description": "Thoughts on code and life",
-    "url": "https://johnblog.com",
-    "author": "John Doe"
-  },
-  "contact": {
-    "email": "john@johnblog.com"
-  },
-  "social": {
-    "twitter": "https://twitter.com/johndoe",
-    "github": "https://github.com/johndoe"
-  }
+	"site": {
+		"name": "John's Blog",
+		"description": "Thoughts on code and life",
+		"url": "https://johnblog.com",
+		"author": "John Doe"
+	},
+	"contact": {
+		"email": "john@johnblog.com"
+	},
+	"social": {
+		"twitter": "https://twitter.com/johndoe",
+		"github": "https://github.com/johndoe"
+	}
 }
 ```
 
@@ -442,19 +477,19 @@ Ensure emails are valid:
 
 ```json
 {
-  "site": {
-    "name": "ProjectDocs",
-    "description": "Official documentation for Project",
-    "url": "https://docs.project.com",
-    "author": "Project Team"
-  },
-  "contact": {
-    "email": "docs@project.com"
-  },
-  "social": {
-    "github": "https://github.com/project/project",
-    "discord": "https://discord.gg/project"
-  }
+	"site": {
+		"name": "ProjectDocs",
+		"description": "Official documentation for Project",
+		"url": "https://docs.project.com",
+		"author": "Project Team"
+	},
+	"contact": {
+		"email": "docs@project.com"
+	},
+	"social": {
+		"github": "https://github.com/project/project",
+		"discord": "https://discord.gg/project"
+	}
 }
 ```
 
@@ -465,11 +500,13 @@ Ensure emails are valid:
 ### Variables not showing in markdown
 
 **Check:**
+
 1. Is the variable name correct?
 2. Did you restart the dev server?
 3. Is the value defined in `site.config.json`?
 
 **Fix:**
+
 ```bash
 # Restart dev server
 npm run dev
@@ -478,6 +515,7 @@ npm run dev
 ### Config changes not applying
 
 **Build cache issue.** Clear build artifacts:
+
 ```bash
 rm -rf .svelte-kit build
 npm run dev
