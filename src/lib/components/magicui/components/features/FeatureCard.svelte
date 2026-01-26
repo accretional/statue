@@ -13,10 +13,7 @@ All components in this directory are sourced from the svelte-animations project 
 
   // Svelte 5 Code : https://svelte.dev/playground/39866a136f0d4268821e5ae901dce47f?version=5.0.5
 
-  export let collapseDelay = 5000;
-  export let ltr = false;
-  export let linePosition: "left" | "right" | "top" | "bottom" = "left";
-  export let data: Array<{
+  interface FeatureData {
     id: number;
     title: string;
     content: string;
@@ -24,7 +21,21 @@ All components in this directory are sourced from the svelte-animations project 
     video?: string;
     poster?: string;
     icon?: any;
-  }> = [];
+  }
+
+  interface Props {
+    collapseDelay?: number;
+    ltr?: boolean;
+    linePosition?: "left" | "right" | "top" | "bottom";
+    data?: Array<FeatureData>;
+  }
+
+  let {
+    collapseDelay = 5000,
+    ltr = false,
+    linePosition = "left",
+    data = []
+  }: Props = $props();
 
   let currentIndex = writable(-1);
   let carouselRef: HTMLUListElement;

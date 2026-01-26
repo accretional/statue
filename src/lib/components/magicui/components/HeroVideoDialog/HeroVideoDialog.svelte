@@ -29,11 +29,21 @@ All components in this directory are sourced from the svelte-animations project 
   // 	thumbnailAlt?: string;
   // }
 
-  export let animationStyle: AnimationStyle = "from-center";
-  export let videoSrc: string;
-  export let thumbnailSrc: string; 
-  export let thumbnailAlt: string = "Video thumbnail";
-  export let iconColor: string = "white";
+  interface Props {
+    animationStyle?: AnimationStyle;
+    videoSrc: string;
+    thumbnailSrc: string;
+    thumbnailAlt?: string;
+    iconColor?: string;
+  }
+
+  let {
+    animationStyle = "from-center",
+    videoSrc,
+    thumbnailSrc,
+    thumbnailAlt = "Video thumbnail",
+    iconColor = "white"
+  }: Props = $props();
 
   const isVideoOpen = writable(false);
   const isCloseHovered = writable(false);

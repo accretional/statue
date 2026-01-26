@@ -10,16 +10,29 @@ All components in this directory are sourced from the svelte-animations project 
 <script lang="ts">
   import { AnimatePresence, Motion } from "svelte-motion";
 
-  export let words = "Fade In";
-  export let delay = 0.19;
-  export let variants = {
-    hidden: { opacity: 0 },
-    visible: (i: any) => ({
-      y: 0,
-      opacity: 1,
-      transition: { delay: i * delay },
-    }),
-  };
+  interface Variants {
+    hidden: { opacity: number };
+    visible: (i: any) => { y: number; opacity: number; transition: { delay: number } };
+  }
+
+  interface Props {
+    words?: string;
+    delay?: number;
+    variants?: Variants;
+  }
+
+  let {
+    words = "Fade In",
+    delay = 0.19,
+    variants = {
+      hidden: { opacity: 0 },
+      visible: (i: any) => ({
+        y: 0,
+        opacity: 1,
+        transition: { delay: i * delay },
+      }),
+    }
+  }: Props = $props();
   let wordsspilit = words.split(" ");
 </script>
 

@@ -12,9 +12,17 @@ All components in this directory are sourced from the svelte-animations project 
   import { Motion, useMotionValue } from "svelte-motion";
   let DEFAULT_MAGNIFICATION = 60;
   let DEFAULT_DISTANCE = 140;
-  export let direction: "top" | "middle" | "bottom" = "top";
-  export let distance: number = DEFAULT_DISTANCE;
-  export let magnification: number = DEFAULT_MAGNIFICATION;
+  interface Props {
+    direction?: "top" | "middle" | "bottom";
+    distance?: number;
+    magnification?: number;
+  }
+
+  let {
+    direction = "top",
+    distance = DEFAULT_DISTANCE,
+    magnification = DEFAULT_MAGNIFICATION
+  }: Props = $props();
 
   let dockVariants = "mx-auto w-max mt-8 h-[80px] p-3 flex gap-2 rounded-2xl border supports-backdrop-blur:bg-white/10 supports-backdrop-blur:dark:bg-black/10 backdrop-blur-md";
   let mouseX = useMotionValue(Infinity);

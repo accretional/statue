@@ -10,15 +10,25 @@ All components in this directory are sourced from the svelte-animations project 
 <script lang="ts">
   import { Motion } from "svelte-motion";
 
-  export let word: string = "Blur In";
-  export let variant: {
+  interface Variant {
     hidden: { filter: string; opacity: number };
     visible: { filter: string; opacity: number };
-  } = {
-    hidden: { filter: "blur(10px)", opacity: 0 },
-    visible: { filter: "blur(0px)", opacity: 1 },
-  };
-  export let duration: number = 1;
+  }
+
+  interface Props {
+    word?: string;
+    variant?: Variant;
+    duration?: number;
+  }
+
+  let {
+    word = "Blur In",
+    variant = {
+      hidden: { filter: "blur(10px)", opacity: 0 },
+      visible: { filter: "blur(0px)", opacity: 1 },
+    },
+    duration = 1
+  }: Props = $props();
 
   let defaultVariants = {
     hidden: { filter: "blur(10px)", opacity: 0 },

@@ -10,20 +10,41 @@ All components in this directory are sourced from the svelte-animations project 
 <script lang="ts">
   import { Motion } from "svelte-motion";
 
-  export let words='Pull Up';
-  export let wrapperFramerProps = {
-    hidden: { opacity: 0 },
+  interface FramerProps {
+    hidden: { y: number; opacity: number };
+    show: { y: number; opacity: number };
+  }
+
+  interface WrapperFramerProps {
+    hidden: { opacity: number };
     show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.25,
+      opacity: number;
+      transition: { staggerChildren: number };
+    };
+  }
+
+  interface Props {
+    words?: string;
+    wrapperFramerProps?: WrapperFramerProps;
+    framerProps?: FramerProps;
+  }
+
+  let {
+    words = 'Pull Up',
+    wrapperFramerProps = {
+      hidden: { opacity: 0 },
+      show: {
+        opacity: 1,
+        transition: {
+          staggerChildren: 0.25,
+        },
       },
     },
-  };
-  export let framerProps = {
-    hidden: { y: 20, opacity: 0 },
-    show: { y: 0, opacity: 1 },
-  };
+    framerProps = {
+      hidden: { y: 20, opacity: 0 },
+      show: { y: 0, opacity: 1 },
+    }
+  }: Props = $props();
 
   let wordSplit = words.split(" ");
 </script>

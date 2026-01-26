@@ -10,14 +10,22 @@ All components in this directory are sourced from the svelte-animations project 
 <script lang="ts">
   import { cubicOut } from "svelte/easing";
   import { onMount } from "svelte";
-  import { spring, tweened } from "svelte/motion";
-  export let value = 100;
-  export let initial = 0;
-  export let duration = 6000;
+  import { tweened } from "svelte/motion";
+
+  interface Props {
+    value?: number;
+    initial?: number;
+    duration?: number;
+    [key: string]: any;
+  }
+
+  let { value = 100, initial = 0, duration = 6000, ...restProps }: Props = $props();
+
   let num = tweened(initial, {
     duration: duration,
     easing: cubicOut,
   });
+
   onMount(() => {
     num.set(value);
   });
@@ -25,7 +33,7 @@ All components in this directory are sourced from the svelte-animations project 
 
 <div
   class="inline-block  text-black dark:text-white tracking-normal"
-  {...$$restProps}
+  {...restProps}
 >
   {$num.toFixed(0)}
 </div>
