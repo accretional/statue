@@ -64,5 +64,8 @@
     "keywords": ["static site generator", "markdown", "sveltekit", "ssg"],
     "ogImage": "/images/og-image.png",
     "twitterCard": "summary_large_image"
+  },
+  "rss": {
+    "enabled": false
   }
 }

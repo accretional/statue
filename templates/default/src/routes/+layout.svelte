@@ -44,7 +44,7 @@
 	{@render children()}
 </main>
 
-<Footer directories={data.globalDirectories} {currentPath} />
+<Footer directories={data.globalDirectories} {currentPath} rssEnabled={data.rssEnabled} siteUrl={data.siteUrl} />
 
 <style>
 	:global(body) {
