@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { execSync } from 'child_process';
+import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
@@ -8,8 +9,8 @@ const __dirname = dirname(__filename);
 
 async function runOrval() {
   try {
-    const configPath = join(__dirname, '../site.config.js');
-    const { siteConfig } = await import(configPath);
+    const configPath = join(__dirname, '../site.config.json');
+    const siteConfig = JSON.parse(readFileSync(configPath, 'utf-8'));
 
     // Only run orval if enabled in config
     const orvalEnabled = siteConfig?.orval?.runPreBuild ?? false;
