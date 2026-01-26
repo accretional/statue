@@ -45,6 +45,9 @@
       "confirmationRequired": true
     }
   },
+  "orval": {
+    "runPreBuild": true
+  },
   "search": {
     "enabled": false,
     "placeholder": "Search...",
