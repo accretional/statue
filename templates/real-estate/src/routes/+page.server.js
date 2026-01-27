@@ -11,6 +11,9 @@ export async function load() {
 
 	return {
 		directories,
+		site: siteConfig.site || {},
+		seo: siteConfig.seo || {},
+		footer: siteConfig.footer || {},
 		property: siteConfig.property || {}
 	};
 }

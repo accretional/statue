@@ -7,12 +7,15 @@
 		PropertyGallery,
 		PropertyFeatures,
 		PropertyLocation,
-		PropertyContact,
-		PropertyFooter
+		PropertyContact
 	} from '$lib/components';
 
 	const { data } = $props();
+	let site = $derived(data.site || {});
+	let seo = $derived(data.seo || {});
+	let footer = $derived(data.footer || {});
 	let property = $derived(data.property || {});
+	const year = new Date().getFullYear();
 
 	// Intersection Observer for scroll animations
 	let observer;
@@ -42,11 +45,8 @@
 </script>
 
 <svelte:head>
-	<title>Luxury Estate</title>
-	<meta
-		name="description"
-		content="A rare international estate offering exceptional luxury living."
-	/>
+	<title>{seo.defaultTitle ?? site.name}</title>
+	<meta name="description" content={seo.defaultDescription ?? site.description} />
 </svelte:head>
 
 <div class="min-h-screen bg-[var(--color-background)]">
@@ -101,12 +101,12 @@
 	<!-- Custom Footer for this template -->
 	<footer class="py-16 px-4 border-t border-[var(--color-border)]">
 		<div class="max-w-6xl mx-auto text-center">
-			<p class="text-white text-2xl font-light tracking-wider mb-4">Luxury Estate</p>
-			<p class="text-gray-500 text-sm mb-6">
-				A rare international estate offering exceptional luxury living
+			<p class="text-white text-2xl font-light tracking-wider mb-4">
+				{footer.brand ?? site.name}
 			</p>
+			<p class="text-gray-500 text-sm mb-6">{footer.tagline ?? site.description}</p>
 			<p class="text-gray-600 text-xs">
-				© 2025 Luxury Estate. All rights reserved.
+				© {year} {footer.brand ?? site.name}. {footer.copyrightText}
 			</p>
 		</div>
 	</footer>

@@ -155,5 +155,10 @@
     "defaultDescription": "A rare international estate offering exceptional luxury living.",
     "keywords": ["luxury real estate", "estate", "luxury home", "premium property"],
     "ogImage": "/images/og-image.png"
+  },
+  "footer": {
+    "brand": "Luxury Estate",
+    "tagline": "A rare international estate offering exceptional luxury living",
+    "copyrightText": "All rights reserved."
   }
 }
