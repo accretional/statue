@@ -1,0 +1,148 @@
+@import "tailwindcss";
+/* Theme - Available: black-white, black-red, blue, charcoal, cyan, green, orange, pink, purple, red
+   Custom: copy node_modules/statue-ssg/src/lib/themes/custom-theme.template.css here, rename & import */
+
+/* Luxury Real Estate Theme */
+@theme {
+  /* Core palette - Elegant dark luxury */
+  --color-background: #0a0a0a;
+  --color-card: #141414;
+  --color-border: #2a2a2a;
+  --color-foreground: #e8e8e8;
+  --color-muted: #888888;
+
+  /* Brand colors - Gold & Champagne tones */
+  --color-primary: #c9a962;
+  --color-secondary: #d4b87a;
+  --color-accent: #8b7355;
+
+  /* Text colors */
+  --color-on-primary: #0a0a0a;
+  --color-on-background: #e8e8e8;
+
+  /* Hero gradients */
+  --color-hero-from: #0a0a0a;
+  --color-hero-via: #141414;
+  --color-hero-to: #0a0a0a;
+
+  /* Prose overrides */
+  --color-prose-link: #c9a962;
+  --color-prose-code-bg: #1a1a1a;
+  --color-prose-pre-bg: #1a1a1a;
+}
+
+@source "../";
+@source "../../node_modules/statue-ssg/src/**/*.{svelte,js,ts}";
+
+:root {
+  color-scheme: dark;
+}
+
+/* Scroll animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-on-scroll {
+  opacity: 0;
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.animate-on-scroll.visible {
+  opacity: 1;
+}
+
+.animate-fade-up {
+  transform: translateY(40px);
+}
+
+.animate-fade-up.visible {
+  transform: translateY(0);
+}
+
+.animate-fade-left {
+  transform: translateX(-40px);
+}
+
+.animate-fade-left.visible {
+  transform: translateX(0);
+}
+
+.animate-fade-right {
+  transform: translateX(40px);
+}
+
+.animate-fade-right.visible {
+  transform: translateX(0);
+}
+
+.animate-scale {
+  transform: scale(0.95);
+}
+
+.animate-scale.visible {
+  transform: scale(1);
+}
+
+/* Smooth scroll */
+:global(html) {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+:global(::-webkit-scrollbar) {
+  width: 10px;
+}
+
+:global(::-webkit-scrollbar-track) {
+  background: #0a0a0a;
+}
+
+:global(::-webkit-scrollbar-thumb) {
+  background: #2a2a2a;
+  border-radius: 5px;
+}
+
+:global(::-webkit-scrollbar-thumb:hover) {
+  background: #c9a962;
+}
