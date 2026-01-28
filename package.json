@@ -107,8 +107,7 @@
 		"rehype-slug": "^6.0.0",
 		"remark-gfm": "^4.0.1",
 		"swagger-ui-dist": "^5.31.0",
-		"three": "^0.182.0",
-		"highlight.js": "^11.11.1"
+		"three": "^0.182.0"
 	},
 	"keywords": [
 		"static-site-generator",
