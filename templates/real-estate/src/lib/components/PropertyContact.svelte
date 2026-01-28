@@ -16,6 +16,9 @@
 			instagram?: string;
 			linkedin?: string;
 			facebook?: string;
+			pinterest?: string;
+			twitter?: string;
+			youtube?: string;
 		};
 	}
 
@@ -43,56 +46,19 @@
 			<h2 class="text-4xl md:text-5xl font-light text-white mb-6">{title}</h2>
 			<p class="text-gray-400 text-lg">{description}</p>
 		</div>
-		<div class="grid md:grid-cols-2 gap-12">
-			<div class="animate-on-scroll animate-fade-left" style:transition-delay="0.1s;">
-				<form class="space-y-6">
-					<div>
-						<label class="block text-white text-xs tracking-wider uppercase mb-2">Full Name</label>
-						<input
-							type="text"
-							class="w-full bg-transparent border border-[var(--color-border)] px-4 py-3 text-white focus:border-[var(--color-primary)] focus:outline-none transition-colors"
-							placeholder="Your Name"
-						/>
-					</div>
-					<div>
-						<label class="block text-white text-xs tracking-wider uppercase mb-2">Email</label>
-						<input
-							type="email"
-							class="w-full bg-transparent border border-[var(--color-border)] px-4 py-3 text-white focus:border-[var(--color-primary)] focus:outline-none transition-colors"
-							placeholder="your@email.com"
-						/>
-					</div>
-					<div>
-						<label class="block text-white text-xs tracking-wider uppercase mb-2">Phone</label>
-						<input
-							type="tel"
-							class="w-full bg-transparent border border-[var(--color-border)] px-4 py-3 text-white focus:border-[var(--color-primary)] focus:outline-none transition-colors"
-							placeholder="+1 (555) 123-4567"
-						/>
-					</div>
-					<div>
-						<label class="block text-white text-xs tracking-wider uppercase mb-2">Message</label>
-						<textarea
-							rows="4"
-							class="w-full bg-transparent border border-[var(--color-border)] px-4 py-3 text-white focus:border-[var(--color-primary)] focus:outline-none transition-colors resize-none"
-							placeholder="I am interested in scheduling a private viewing..."
-						></textarea>
-					</div>
-					<button
-						type="submit"
-						class="w-full bg-[var(--color-primary)] text-[var(--color-on-primary)] py-4 text-sm tracking-wider uppercase font-medium hover:bg-[var(--color-secondary)] transition-all duration-300"
-					>
-						Submit Inquiry
-					</button>
-				</form>
-			</div>
-			<div class="animate-on-scroll animate-fade-right" style:transition-delay="0.2s;">
+		<div class="grid md:grid-cols-1 gap-12 max-w-2xl mx-auto">
+			<div class="animate-on-scroll animate-fade-up" style:transition-delay="0.1s;">
 				<div class="mb-8">
 					<p class="text-[var(--color-primary)] text-xs tracking-wider uppercase mb-4">Contact Details</p>
 					<div class="space-y-4">
 						<div>
 							<p class="text-white text-sm">Email</p>
-							<p class="text-gray-400">{email}</p>
+							<a
+								href="mailto:{email}"
+								class="text-gray-400 hover:text-[var(--color-primary)] transition-colors"
+							>
+								{email}
+							</a>
 						</div>
 						<div>
 							<p class="text-white text-sm">Phone</p>
@@ -117,8 +83,13 @@
 									target="_blank"
 									rel="noopener noreferrer"
 									class="w-10 h-10 border border-[var(--color-border)] flex items-center justify-center text-white hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] transition-colors"
+									aria-label="Instagram"
 								>
-									IG
+									<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+										<rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+										<path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+										<line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
+									</svg>
 								</a>
 							{/if}
 							{#if social.linkedin}
@@ -127,8 +98,13 @@
 									target="_blank"
 									rel="noopener noreferrer"
 									class="w-10 h-10 border border-[var(--color-border)] flex items-center justify-center text-white hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] transition-colors"
+									aria-label="LinkedIn"
 								>
-									LI
+									<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+										<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+										<rect width="4" height="12" x="2" y="9"></rect>
+										<circle cx="4" cy="4" r="2"></circle>
+									</svg>
 								</a>
 							{/if}
 							{#if social.facebook}
@@ -137,8 +113,53 @@
 									target="_blank"
 									rel="noopener noreferrer"
 									class="w-10 h-10 border border-[var(--color-border)] flex items-center justify-center text-white hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] transition-colors"
+									aria-label="Facebook"
 								>
-									FB
+									<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+										<path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+									</svg>
+								</a>
+							{/if}
+							{#if social.pinterest}
+								<a
+									href={social.pinterest}
+									target="_blank"
+									rel="noopener noreferrer"
+									class="w-10 h-10 border border-[var(--color-border)] flex items-center justify-center text-white hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] transition-colors"
+									aria-label="Pinterest"
+								>
+									<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+										<path d="M8 12a4 4 0 1 1 8 0 4 4 0 0 1-8 0z"></path>
+										<path d="M12 2v20"></path>
+										<path d="M8 8a4 4 0 0 1 8 0c0 1.5-1 2.5-2 3.5"></path>
+									</svg>
+								</a>
+							{/if}
+							{#if social.twitter}
+								<a
+									href={social.twitter}
+									target="_blank"
+									rel="noopener noreferrer"
+									class="w-10 h-10 border border-[var(--color-border)] flex items-center justify-center text-white hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] transition-colors"
+									aria-label="Twitter"
+								>
+									<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+										<path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path>
+									</svg>
+								</a>
+							{/if}
+							{#if social.youtube}
+								<a
+									href={social.youtube}
+									target="_blank"
+									rel="noopener noreferrer"
+									class="w-10 h-10 border border-[var(--color-border)] flex items-center justify-center text-white hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] transition-colors"
+									aria-label="YouTube"
+								>
+									<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+										<path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.6 49.6 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.6 49.6 0 0 1-16.2 0A2 2 0 0 1 2.5 17"></path>
+										<polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"></polygon>
+									</svg>
 								</a>
 							{/if}
 						</div>

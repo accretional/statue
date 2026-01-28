@@ -24,7 +24,7 @@
 </script>
 
 <section class="relative h-screen flex items-center justify-center overflow-hidden">
-	<div class="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-[var(--color-background)] z-10"></div>
+	<div class="absolute inset-0 bg-gradient-to-b from-[var(--color-background)] via-transparent to-[var(--color-background)] z-10"></div>
 	<img src={heroImage} alt="Luxury Estate" class="absolute inset-0 w-full h-full object-cover" />
 	<div class="relative z-20 text-center px-4 max-w-5xl">
 		<p
@@ -45,18 +45,22 @@
 			{description}
 		</p>
 		<div class="flex flex-col sm:flex-row justify-center gap-4 animate-on-scroll animate-fade-up" style:transition-delay="0.3s;">
-			<a
-				href={primaryCta.url}
-				class="px-10 py-4 bg-[var(--color-primary)] text-[var(--color-on-primary)] font-medium rounded-none tracking-wider hover:bg-[var(--color-secondary)] transition-all duration-300 text-sm uppercase"
-			>
-				{primaryCta.text}
-			</a>
-			<a
-				href={secondaryCta.url}
-				class="px-10 py-4 bg-transparent border border-white/30 text-white font-medium rounded-none tracking-wider hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] transition-all duration-300 text-sm uppercase"
-			>
-				{secondaryCta.text}
-			</a>
+			{#if primaryCta}
+				<a
+					href={primaryCta.url}
+					class="px-10 py-4 bg-[var(--color-primary)] text-[var(--color-on-primary)] font-medium rounded-none tracking-wider hover:bg-[var(--color-secondary)] transition-all duration-300 text-sm uppercase"
+				>
+					{primaryCta.text}
+				</a>
+			{/if}
+			{#if secondaryCta}
+				<a
+					href={secondaryCta.url}
+					class="px-10 py-4 bg-transparent border border-white/30 text-white font-medium rounded-none tracking-wider hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] transition-all duration-300 text-sm uppercase"
+				>
+					{secondaryCta.text}
+				</a>
+			{/if}
 		</div>
 	</div>
 </section>

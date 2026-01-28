@@ -1,5 +1,5 @@
 <script>
-	import { NavigationBar, Footer } from 'statue-ssg';
+	import { NavigationBar } from 'statue-ssg';
 	import { page } from '$app/stores';
 	import { onNavigate } from '$app/navigation';
 	import '$lib/index.css';
@@ -7,7 +7,6 @@
 	let { data, children } = $props();
 
 	let navbarConfig = $derived(data.navbarConfig);
-	let currentPath = $derived($page.url.pathname);
 
 	// Disable view transitions for smoother scroll animations
 	onNavigate(() => {
@@ -27,8 +26,6 @@
 <main>
 	{@render children()}
 </main>
-
-<Footer directories={data.globalDirectories} {currentPath} />
 
 <style>
 	:global(body) {

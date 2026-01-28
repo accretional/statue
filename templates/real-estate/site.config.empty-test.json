@@ -1,0 +1,101 @@
+{
+  "$schema": "../../site.config.schema.json",
+  "site": {
+    "name": "Empty Edge Case Test",
+    "description": "Testing with completely empty arrays.",
+    "url": "https://example.com",
+    "author": "Test"
+  },
+  "navbar": {
+    "siteTitle": "Empty Test",
+    "logo": null,
+    "defaultNavItems": []
+  },
+  "property": {
+    "badge": "Edge Case Test",
+    "title": "Empty Content Test",
+    "heroImage": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2075",
+    "description": "Testing with all empty arrays - 0 images, 0 features, 0 stats.",
+    "primaryCta": null,
+    "secondaryCta": null,
+    "overview": {
+      "subtitle": "Overview",
+      "title": "Empty Content Test",
+      "image": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053",
+      "paragraphs": [
+        "This configuration has empty gallery, features, stats, and location highlights."
+      ]
+    },
+    "stats": [],
+    "gallery": {
+      "title": "Gallery",
+      "subtitle": "Photos",
+      "images": []
+    },
+    "features": {
+      "title": "Features",
+      "subtitle": "Amenities",
+      "items": []
+    },
+    "location": {
+      "title": "Location",
+      "subtitle": "Where",
+      "image": "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?q=80&w=2069",
+      "description": "Location description with no highlights.",
+      "highlights": []
+    },
+    "contact": {
+      "title": "Contact",
+      "subtitle": "Get in Touch",
+      "description": "Contact test with all social platforms.",
+      "email": "empty@test.com",
+      "phone": "+1 (555) 111-1111",
+      "address": {
+        "street": "123 Empty St",
+        "city": "Empty City",
+        "state": "EC",
+        "zipCode": "11111",
+        "country": "Emptyland"
+      },
+      "social": {
+        "instagram": "https://instagram.com/empty",
+        "linkedin": "https://linkedin.com/company/empty",
+        "facebook": "https://facebook.com/empty",
+        "pinterest": "https://pinterest.com/empty",
+        "twitter": "https://twitter.com/empty",
+        "youtube": "https://youtube.com/@empty"
+      }
+    }
+  },
+  "contact": {
+    "email": "empty@test.com",
+    "phone": "+1 (555) 111-1111",
+    "address": {
+      "street": "123 Empty St",
+      "city": "Empty City",
+      "state": "EC",
+      "zipCode": "11111",
+      "country": "Emptyland"
+    }
+  },
+  "social": {
+    "instagram": "https://instagram.com/empty",
+    "linkedin": "https://linkedin.com/company/empty",
+    "facebook": "https://facebook.com/empty",
+    "pinterest": "https://pinterest.com/empty",
+    "twitter": "https://twitter.com/empty",
+    "youtube": "https://youtube.com/@empty"
+  },
+  "seo": {
+    "defaultTitle": "Empty Edge Case Test",
+    "titleTemplate": "%s | Empty Test",
+    "defaultDescription": "Testing empty arrays configuration.",
+    "keywords": ["test", "empty", "edge case"],
+    "ogImage": "/images/og-image.png"
+  },
+  "footer": {
+    "brand": "Empty Test",
+    "tagline": "Empty arrays test configuration",
+    "copyrightText": "All rights reserved."
+  }
+}
