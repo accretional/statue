@@ -15,12 +15,16 @@
   Note: Requires +page.js with `export const ssr = false;`
 -->
 
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
   import 'swagger-ui-dist/swagger-ui.css';
   import { SwaggerUIBundle } from 'swagger-ui-dist';
 
-  export let url = '/openapi-example.json';
+  export interface SwaggerUIProps {
+    url?: string;
+  }
+
+  let { url = '/openapi-example.json' }: SwaggerUIProps = $props();
 
   let loaded = false;
 

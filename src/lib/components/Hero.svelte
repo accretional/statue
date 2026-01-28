@@ -1,13 +1,27 @@
-<script>
+<script lang="ts">
   // Hero component - Homepage hero section
-  export let badgeText = '<a href="https://github.com/accretional/statue" target="_blank">✨ Powered by Statue SSG</a>';
-  export let titleLine1 = 'Welcome to Your Site!';
-  export let titleLine2 = '(Statue <img src="/favicon.png" alt="Statue" class="inline-block w-16 h-16 align-middle" /> Default)';
-  export let description = 'Create amazing static sites easily with Statue using Markdown and Svelte. Fast, secure, and SEO-friendly sites ready in minutes.';
-  export let primaryButtonText = 'Explore Content';
-  export let primaryButtonLink = '#directories';
-  export let secondaryButtonText = 'Documentation';
-  export let secondaryButtonLink = '/docs';
+
+  export interface HeroProps {
+    badgeText?: string;
+    titleLine1?: string;
+    titleLine2?: string;
+    description?: string;
+    primaryButtonText?: string;
+    primaryButtonLink?: string;
+    secondaryButtonText?: string;
+    secondaryButtonLink?: string;
+  }
+
+  let {
+    badgeText = '<a href="https://github.com/accretional/statue" target="_blank">✨ Powered by Statue SSG</a>',
+    titleLine1 = 'Welcome to Your Site!',
+    titleLine2 = '(Statue <img src="/favicon.png" alt="Statue" class="inline-block w-16 h-16 align-middle" /> Default)',
+    description = 'Create amazing static sites easily with Statue using Markdown and Svelte. Fast, secure, and SEO-friendly sites ready in minutes.',
+    primaryButtonText = 'Explore Content',
+    primaryButtonLink = '#directories',
+    secondaryButtonText = 'Documentation',
+    secondaryButtonLink = '/docs',
+  }: HeroProps = $props();
 </script>
 
 <div class="container mx-auto px-4 pt-20 pb-16 md:pt-32 md:pb-20">

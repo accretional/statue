@@ -11,22 +11,43 @@ All components in this directory are sourced from the svelte-animations project 
   import { onMount, tick } from "svelte";
   import { M, Motion } from "svelte-motion";
 
-  export let containerRef;
-  export let fromRef;
-  export let toRef;
-  export let curvature = 0;
-  export let reverse = false; // Include the reverse pro;
-  export let duration = Math.random() * 3 + 4;
-  export let delay = 0;
-  export let pathColor = "gray";
-  export let pathWidth = 2;
-  export let pathOpacity = 0.2;
-  export let gradientStartColor = "#ffaa40";
-  export let gradientStopColor = "#9c40ff";
-  export let startXOffset = 0;
-  export let startYOffset = 0;
-  export let endXOffset = 0;
-  export let endYOffset = 0;
+  interface Props {
+    containerRef: any;
+    fromRef: any;
+    toRef: any;
+    curvature?: number;
+    reverse?: boolean;
+    duration?: number;
+    delay?: number;
+    pathColor?: string;
+    pathWidth?: number;
+    pathOpacity?: number;
+    gradientStartColor?: string;
+    gradientStopColor?: string;
+    startXOffset?: number;
+    startYOffset?: number;
+    endXOffset?: number;
+    endYOffset?: number;
+  }
+
+  let {
+    containerRef,
+    fromRef,
+    toRef,
+    curvature = 0,
+    reverse = false,
+    duration = Math.random() * 3 + 4,
+    delay = 0,
+    pathColor = "gray",
+    pathWidth = 2,
+    pathOpacity = 0.2,
+    gradientStartColor = "#ffaa40",
+    gradientStopColor = "#9c40ff",
+    startXOffset = 0,
+    startYOffset = 0,
+    endXOffset = 0,
+    endYOffset = 0
+  }: Props = $props();
 
   let id = crypto.randomUUID().slice(0, 8);
   let pathD = "";

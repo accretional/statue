@@ -1,13 +1,13 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  
-  interface Slide {
+
+  export interface Slide {
     title: string;
     button: string;
     src: string;
   }
 
-  interface Props {
+  export interface ImageCarouselProps {
     slides: Slide[];
     height?: string;
   }
@@ -15,7 +15,7 @@
   let {
     slides = [],
     height = '600px'
-  }: Props = $props();
+  }: ImageCarouselProps = $props();
 
   let currentIndex = $state(0);
   let isTransitioning = $state(false);

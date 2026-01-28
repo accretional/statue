@@ -1,10 +1,20 @@
-<script>
+<script lang="ts">
+  export interface StatsProps {
+    stats?: Array<{
+      title: string;
+      description: string;
+      color?: string;
+    }>;
+  }
+
   // Stats component - Statistics cards section
-  export let stats = [
-    { title: 'Fast', description: 'Put your content on a static site in seconds', color: 'primary' },
-    { title: 'Simple', description: 'Just write Markdown, we\'ll handle the rest', color: 'secondary' },
-    { title: 'Secure', description: 'Static sites require no server maintenance or configuration', color: 'primary' }
-  ];
+  let { 
+    stats = [
+      { title: 'Fast', description: 'Put your content on a static site in seconds', color: 'primary' },
+      { title: 'Simple', description: 'Just write Markdown, we\'ll handle the rest', color: 'secondary' },
+      { title: 'Secure', description: 'Static sites require no server maintenance or configuration', color: 'primary' }
+    ]
+  }: StatsProps = $props();
 </script>
 
 <div class="container mx-auto px-4 pt-8 pb-24">
@@ -24,4 +34,3 @@
     </div>
   </div>
 </div>
-

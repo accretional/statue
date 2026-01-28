@@ -3,6 +3,22 @@ import { getContentByUrl, getContentDirectories, getSidebarTree } from 'statue-s
 // Make this page pre-rendered as a static page
 export const prerender = true;
 
+// Layout component mapping - maps metadata layout names to components
+const LAYOUT_CONFIG = {
+	docs: {
+		component: 'DocsLayout',
+		props: { sidebarTitle: 'Docs' }
+	},
+	blog: {
+		component: 'BlogPostLayout',
+		props: {}
+	},
+	default: {
+		component: 'DefaultLayout',
+		props: {}
+	}
+};
+
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ params }) {
   // Add slash to the beginning of the URL
@@ -30,21 +46,44 @@ export async function load({ params }) {
   // Get folders in content directory for navigation links
   const directories = getContentDirectories();
 
-  // Get sidebar items for docs content
-  const isDocsContent = content?.directory?.startsWith('docs') || url.startsWith('/docs');
-  const sidebarItems = isDocsContent ? await getSidebarTree('docs') : [];
+  // Infer layout type from metadata first, fallback to directory structure
+  function inferLayoutType(metadata, directory) {
+    // Check metadata for layout override
+    if (metadata?.layout) {
+      return metadata.layout;
+    }
+
+    // Fallback to directory convention
+    if (!directory) return 'default';
+    if (directory.startsWith('docs')) return 'docs';
+    if (directory.startsWith('blog')) return 'blog';
+    return 'default';
+  }
+
+  const layoutType = content ? inferLayoutType(content.metadata, content.directory) : 'default';
+  const layoutConfig = LAYOUT_CONFIG[layoutType] || LAYOUT_CONFIG.default;
+
+  // Get sidebar items for docs-style layouts
+  const sidebarItems = layoutType === 'docs' ? await getSidebarTree('docs') : [];
 
   // If content is not found
   if (!content) {
     // Allow SvelteKit to handle routing
     // If a Svelte component exists, it will be shown, otherwise it will return 404
-    return { notFound: true, directories, sidebarItems };
+    return {
+      notFound: true,
+      directories,
+      sidebarItems,
+      layoutConfig: LAYOUT_CONFIG.default
+    };
   }
 
-  // Return content
+  // Return content with layout configuration
   return {
     content,
     directories,
-    sidebarItems
+    sidebarItems,
+    layoutConfig,
+    layoutType
   };
 }

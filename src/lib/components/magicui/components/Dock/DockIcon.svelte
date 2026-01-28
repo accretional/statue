@@ -14,9 +14,15 @@ All components in this directory are sourced from the svelte-animations project 
   let DEFAULT_MAGNIFICATION = 60;
   let DEFAULT_DISTANCE = 140;
   let mouseX = getContext("mouseX");
-  $: console.log(mouseX.current, "---");
-  export let distance: number = DEFAULT_DISTANCE;
-  export let magnification: number = DEFAULT_MAGNIFICATION;
+  $effect(() => {
+    console.log(mouseX.current, "---");
+  });
+  interface Props {
+    distance?: number;
+    magnification?: number;
+  }
+
+  let { distance = DEFAULT_DISTANCE, magnification = DEFAULT_MAGNIFICATION }: Props = $props();
   let ref: HTMLElement;
   let distanceCalc = useTransform(mouseX, (val: number) => {
     const bounds = ref?.getBoundingClientRect() ?? { x: 0, width: 0 };

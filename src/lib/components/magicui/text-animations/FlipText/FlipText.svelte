@@ -10,13 +10,27 @@ All components in this directory are sourced from the svelte-animations project 
 <script lang="ts">
   import { AnimatePresence, Motion } from "svelte-motion";
 
-  export let word = "Flip Text";
-  export let duration = 0.5;
-  export let delayMultiple = 0.08;
-  export let framerProps = {
-    hidden: { rotateX: -90, opacity: 0 },
-    visible: { rotateX: 0, opacity: 1 },
-  };
+  interface FramerProps {
+    hidden: { rotateX: number; opacity: number };
+    visible: { rotateX: number; opacity: number };
+  }
+
+  interface Props {
+    word?: string;
+    duration?: number;
+    delayMultiple?: number;
+    framerProps?: FramerProps;
+  }
+
+  let {
+    word = "Flip Text",
+    duration = 0.5,
+    delayMultiple = 0.08,
+    framerProps = {
+      hidden: { rotateX: -90, opacity: 0 },
+      visible: { rotateX: 0, opacity: 1 },
+    }
+  }: Props = $props();
   let wordsspilit = word.split("");
 </script>
 

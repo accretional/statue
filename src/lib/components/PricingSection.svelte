@@ -1,16 +1,16 @@
 <script lang="ts">
-    interface PlanFeature {
+    export interface PlanFeature {
         text: string;
         limit?: string;
         tooltip?: string;
     }
 
-    interface PlanPrice {
+    export interface PlanPrice {
         monthly: number;
         yearly: number;
     }
 
-    interface Plan {
+    export interface Plan {
         id?: string;
         name: string;
         info: string;
@@ -23,7 +23,7 @@
         highlighted?: boolean;
     }
 
-    interface Props {
+    export interface PricingSectionProps {
         plans: Plan[];
         heading?: string;
         description?: string;
@@ -35,9 +35,9 @@
         saveVsMonthlyText?: string;
     }
 
-    let { 
-        plans, 
-        heading = '', 
+    let {
+        plans,
+        heading = '',
         description = '',
         monthlyLabel = 'Monthly',
         yearlyLabel = 'Yearly',
@@ -45,7 +45,7 @@
         popularBadgeText = 'Most Popular',
         billedAnnuallyText = 'Billed annually',
         saveVsMonthlyText = 'Save'
-    }: Props = $props();
+    }: PricingSectionProps = $props();
 
     let isYearly = $state(false);
     let openTooltip = $state<string | null>(null);

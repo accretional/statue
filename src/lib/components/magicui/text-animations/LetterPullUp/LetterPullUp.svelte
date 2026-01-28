@@ -10,8 +10,12 @@ All components in this directory are sourced from the svelte-animations project 
 <script lang="ts">
   import { AnimatePresence, Motion } from "svelte-motion";
 
-  export let words = "Letter Pull Up";
-  export let delay = 0.05;
+  interface Props {
+    words?: string;
+    delay?: number;
+  }
+
+  let { words = "Letter Pull Up", delay = 0.05 }: Props = $props();
   let pullupVariant = {
     hidden: { y: 100, opacity: 0 },
     visible: (i: any) => ({

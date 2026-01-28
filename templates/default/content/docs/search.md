@@ -12,16 +12,16 @@ Statue SSG includes built-in client-side search powered by [Pagefind](https://gi
 
 ### 1. Enable Search
 
-Edit your `site.config.js`:
+Edit your `site.config.json`:
 
-```js
-export const siteConfig = {
+```json
+{
   // ... other config
 
-  search: {
-    enabled: true
+  "search": {
+    "enabled": true
   }
-};
+}
 ```
 
 ### 2. Add Search Component
@@ -87,30 +87,26 @@ Deploy your `build/` directory to any static host. The search index is included 
 
 ### Search Settings
 
-Configure search behavior in `site.config.js`:
+Configure search behavior in `site.config.json`:
 
-```js
-export const siteConfig = {
-  search: {
-    // Enable/disable search
-    enabled: true,
+```json
+{
+  "search": {
+    "enabled": true,
 
-    // UI options
-    placeholder: 'Search...',
-    noResultsText: 'No results found',
+    "placeholder": "Search...",
+    "noResultsText": "No results found",
 
-    // Search behavior
-    debounceMs: 300,        // Delay before search executes (ms)
-    minQueryLength: 2,      // Minimum characters to trigger search
-    maxResults: 10,         // Maximum results to display
+    "debounceMs": 300,
+    "minQueryLength": 2,
+    "maxResults": 10,
 
-    // Result display
-    showCategories: true,   // Show category badges
-    showDates: true,        // Show dates in results
-    showExcerpts: true,     // Show content excerpts
-    excerptLength: 30       // Words in excerpt
+    "showCategories": true,
+    "showDates": true,
+    "showExcerpts": true,
+    "excerptLength": 30
   }
-};
+}
 ```
 
 ### Component Props

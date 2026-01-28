@@ -54,7 +54,7 @@
 		days: ContributionDay[];
 	}
 
-	// Data from server (site.config.js)
+	// Data from server (site.config.json)
 	export let data: {
 		profile: UserProfile;
 		features: Features;

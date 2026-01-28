@@ -3,7 +3,7 @@
   import { tweened } from 'svelte/motion';
   import { linear } from 'svelte/easing';
 
-  interface Review {
+  export interface Review {
     id: number;
     name: string;
     affiliation: string;
@@ -12,11 +12,11 @@
     thumbnailSrc: string;
   }
 
-  interface Props {
+  export interface SlidingTestimonialProps {
     reviews: Review[];
   }
 
-  let { reviews = [] }: Props = $props();
+  let { reviews = [] }: SlidingTestimonialProps = $props();
 
   let currentIndex = $state(0);
   let intervalId: number | null = null;

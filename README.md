@@ -3,6 +3,7 @@
 Statue is a wicked-fast static site generator based on Markdown, Svelte, Tailwind, Pagefind, and reusable components.
 
 **One-line setup! (requires npm):**
+
 ```bash
 yes | npx sv create statue-site --template minimal --types ts --no-add-ons --install npm && cd statue-site && npm install statue-ssg && npx statue init && npm install && npm run build && npm run preview
 ```
@@ -31,6 +32,7 @@ yes | npx sv create statue-site --template minimal --types ts --no-add-ons --ins
 **Windows**: Support for Windows is provided on a best-effort basis. Statue's dev team lacks regular Windows users, so we cannot easily keep Statue working seemlessly for Windows: contact us if you'd like to help maintain Statue support for Windows! The above commands should work, but you may run into pathing issues and other incompatibilities during or after setup.
 
 ---
+
 </details>
 
 Content like blogs and docs are added and changed directly through `.md` files. Other parts of the Statue site are based on Svelte components and the site's config. Statue sites are fully static, so **development is straightforward, management is simple, and hosting is ~free!**
@@ -60,21 +62,21 @@ After running the setup command above, your site is live at `http://localhost:30
 
 **Next steps:**
 
-1. **[Complete the New Site Checklist](./content/docs/new-site-checklist.md)** - Customize your site step-by-step
-2. **[Read Getting Started](./content/docs/get-started.md)** - Learn key concepts
+1. **[Complete the New Site Checklist](/templates/default/content/docs/new-site-checklist.md)** - Customize your site step-by-step
+2. **[Read Getting Started](/templates/default/content/docs/get-started.md)** - Learn key concepts
 3. **Add content** - Create `.md` files in `content/` and they become pages automatically
 
 ## Documentation
 
 ### 📚 For Users
 
-- **[Getting Started](./content/docs/get-started.md)** - Key concepts and quick start
-- **[New Site Checklist](./content/docs/new-site-checklist.md)** - Step-by-step customization guide
-- **[Site Configuration](./content/docs/site-config.md)** - Configure site.config.js
-- **[Themes](./content/docs/themes.md)** - Built-in themes and customization
-- **[Components](./content/docs/components.md)** - Component reference
-- **[Templates](./content/docs/templates.md)** - Using templates
-- **[Routing](./content/docs/routing.md)** - How URLs work
+- **[Getting Started](/templates/developer-portfolio/content/blog/getting-started.md)** - Key concepts and quick start
+- **[New Site Checklist](/templates/default/content/docs/new-site-checklist.md)** - Step-by-step customization guide
+- **[Site Configuration](/templates/default/content/docs/site-config.md)** - Configure site.config.json
+- **[Themes](/templates/default/content/docs/themes.md)** - Built-in themes and customization
+- **[Components](/templates/default/content/docs/components.md)** - Component reference
+- **[Templates](/templates/default/content/docs/templates.md)** - Using templates
+- **[Routing](/templates/default/content/docs/routing.md)** - How URLs work
 
 ### 🔧 For Developers
 

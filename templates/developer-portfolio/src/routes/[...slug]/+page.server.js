@@ -1,5 +1,5 @@
 import { getContentByUrl, getContentDirectories, getSidebarTree } from 'statue-ssg/cms/content-processor';
-import { siteConfig } from '../../../site.config.js';
+import siteConfig from '../../../site.config.json';
 
 // Make this page pre-rendered as a static page
 export const prerender = true;

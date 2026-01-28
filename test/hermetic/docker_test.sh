@@ -26,7 +26,7 @@ echo "Container ID: $CONTAINER_ID"
 echo "Waiting for preview server to start..."
 
 # Step: Keep curling the container to see when npm run preview starts successfully
-MAX_ATTEMPTS=30
+MAX_ATTEMPTS=60
 ATTEMPT=0
 SUCCESS=false
 SERVER_URL="http://localhost:3000"

@@ -21,7 +21,7 @@ async function setupStatueSSG(options = {}) {
     console.log(chalk.green('✓ shared resources copied'));
   }
 
-  // 3. Copy template (src + site.config.js + static + scripts)
+  // 3. Copy template (src + site.config.json + static + scripts)
   const templateDir = path.join(sourceDir, 'templates', templateName);
 
   // Copy routes
@@ -33,7 +33,7 @@ async function setupStatueSSG(options = {}) {
     fs.copySync(templateLibDir, path.join(targetDir, 'src/lib'), { overwrite: true });
   }
 
-  fs.copySync(path.join(templateDir, 'site.config.js'), path.join(targetDir, 'site.config.js'), { overwrite: true });
+  fs.copySync(path.join(templateDir, 'site.config.json'), path.join(targetDir, 'site.config.json'), { overwrite: true });
 
   // Copy template's static if exists (overlay on shared resources)
   const templateStaticDir = path.join(templateDir, 'static');
@@ -84,7 +84,13 @@ async function setupStatueSSG(options = {}) {
     const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
     const sourcePkg = JSON.parse(fs.readFileSync(sourcePkgPath, 'utf8'));
 
-    pkg.scripts = { ...pkg.scripts, ...sourcePkg.scripts };
+    const scriptsToInclude = ['preview', 'postbuild', 'setup'];
+
+    const productionScripts = Object.fromEntries(
+      Object.entries(sourcePkg.scripts).filter(([name]) => scriptsToInclude.includes(name))
+    );
+
+    pkg.scripts = { ...pkg.scripts, ...productionScripts };
     pkg.devDependencies = { ...pkg.devDependencies, ...sourcePkg.devDependencies };
 
     fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));

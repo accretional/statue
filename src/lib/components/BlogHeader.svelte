@@ -1,6 +1,14 @@
-<script>
+<script lang="ts">
   // BlogHeader component - Linear-style blog header
-  export let title = 'Blog';
+
+  export interface BlogHeaderProps {
+    title: string;
+    description?: string;
+  }
+
+  let {
+    title = 'Blog',
+  }: BlogHeaderProps = $props();
 </script>
 
 <header class="blog-header">

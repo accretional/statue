@@ -1,21 +1,34 @@
-
 <script lang="ts">
-  import accretionIconSrc from '../assets/accretion.png';
-  import statueIconSrc from '../assets/favicon.png';
+  import accretionIconSrc from '/accretion.png';
+  import statueIconSrc from '/favicon.png';
 
-  export let builtByText = 'Built by';
-  export let builtByLinkText = 'Accretional.com';
-  export let builtByLinkUrl = 'https://accretional.com';
-  export let builtByIcon = accretionIconSrc;
+  export interface BuiltByProps {
+    builtByText?: string;
+    builtByLinkText?: string;
+    builtByLinkUrl?: string;
+    builtByIcon?: string;
+    builtInText?: string;
+    builtInLinkText?: string;
+    builtInLinkUrl?: string;
+    builtInIcon?: string;
+    builtForText?: string;
+    communityLinkText?: string;
+    communityLinkUrl?: string;
+  }
 
-  export let builtInText = 'Built in';
-  export let builtInLinkText = 'Statue.dev';
-  export let builtInLinkUrl = 'https://statue.dev';
-  export let builtInIcon = statueIconSrc;
-
-  export let builtForText = 'Built for';
-  export let communityLinkText = 'Statue Community';
-  export let communityLinkUrl = 'https://discord.gg/accretional';
+  let {
+    builtByText = 'Built by',
+    builtByLinkText = 'Accretional.com',
+    builtByLinkUrl = 'https://accretional.com',
+    builtByIcon = accretionIconSrc,
+    builtInText = 'Built in',
+    builtInLinkText = 'Statue.dev',
+    builtInLinkUrl = 'https://statue.dev',
+    builtInIcon = statueIconSrc,
+    builtForText = 'Built for',
+    communityLinkText = 'Statue Community',
+    communityLinkUrl = 'https://discord.gg/accretional'
+  }: BuiltByProps = $props();
 </script>
 
 <div class="built-by-container flex flex-wrap justify-center items-center gap-2">
@@ -88,7 +101,7 @@
     }
     50% {
       transform: scale(1.05);
-      text-shadow: 0 0 30px rgba(255, 99, 71, 1), 0 0 40px rgba(255, 69, 0, 0.8), 0 0 50px rgba(255, 69, 0, 0.6);
+      text-shadow: 0 0 30px rgba(255, 99, 71, 1), 0 0 40px rgba(255, 69, 71, 0.8), 0 0 50px rgba(255, 69, 0, 0.6);
     }
   }
   
@@ -110,4 +123,3 @@
   
   /* .statue-group removed display styles as they are now in HTML classes */
 </style>
-

@@ -19,9 +19,10 @@ if (isBrowser) {
 // Try to load site config, but don't fail if not available
 let siteConfig = {};
 try {
-  // eslint-disable-next-line import/no-unresolved
-  const configModule = await import('/site.config.js').catch(() => ({ siteConfig: {} }));
-  siteConfig = configModule.siteConfig || {};
+  const configPath = path.resolve('site.config.json');
+  if (fs.existsSync(configPath)) {
+    siteConfig = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
+  }
 } catch {
   // siteConfig not available, will use empty object
 }
@@ -43,21 +44,29 @@ const processMarkdownWithMDSvex = async (markdown) => {
     const { code } = await compile(markdown, mdsvexOptions);
 
     // Extract HTML from mdsvex output
-    // mdsvex outputs Svelte component code, we need to get the template part
-    // The HTML is typically between `<script>` tags (if any) and the end
     let html = code;
 
-    // Remove script tags and their content to get just the template
+    // Remove script tags and their content
     html = html.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
 
-    // Remove any remaining Svelte-specific directives that might break HTML rendering
-    // Keep the HTML structure for {@html} rendering
+    // Remove Svelte {@html `...`} wrappers and keep just the inner HTML
+    // mdsvex wraps code blocks in {@html `...`} which we need to unwrap
+    html = html.replace(/\{@html\s+`([^`]*(?:`[^`]*`)*)`\}/g, '$1');
+
+    // Remove remaining Svelte-specific wrappers
+    html = html.replace(/\{[\s\S]*?\}/g, (match) => {
+      // Keep if it's not a Svelte directive (like {@html} already handled)
+      if (match.startsWith('{@') || match.includes('=>')) {
+        return '';
+      }
+      return match;
+    });
+
     html = html.trim();
 
     return html;
   } catch (error) {
     console.error('MDSvex processing error:', error);
-    // Fallback to simple markdown processing if mdsvex fails
     return `<p>Error processing markdown: ${error.message}</p>`;
   }
 };
@@ -119,9 +128,10 @@ const scanContentDirectory = async () => {
       if (stats.isDirectory()) {
         // If it's a folder, scan its contents
         await scanDir(fullPath, entryRelativePath);
-      } else if (stats.isFile() && entry.endsWith('.md')) {
-        // Add markdown files to the list
-        const slug = entry.replace('.md', '');
+      } else if (stats.isFile() && (entry.endsWith('.md') || entry.endsWith('.mdx'))) {
+        // Add markdown and mdx files to the list
+        const isMdx = entry.endsWith('.mdx');
+        const slug = entry.replace(/\.mdx?$/, '');
         const url = relativePath
           ? `/${relativePath}/${slug}`.replace(/\\/g, '/')
           : `/${slug}`;
@@ -154,10 +164,13 @@ const scanContentDirectory = async () => {
         // Fix directory - use full path
         let directory = relativePath.replace(/\\/g, '/');
 
-        // Process markdown to HTML with mdsvex, then remove the first h1 heading
-        let html = await processMarkdownWithMDSvex(processedMarkdownContent);
-        html = removeFirstH1(html);
-        html = transformLinks(html, directory);
+        // Process content: MDX files are rendered as Svelte components, MD files as HTML
+        let html = '';
+        if (!isMdx) {
+          html = await processMarkdownWithMDSvex(processedMarkdownContent);
+          html = removeFirstH1(html);
+          html = transformLinks(html, directory);
+        }
 
         // Add main directory information to create content tree
         const mainDirectory = directory.split('/')[0] || 'root';
@@ -168,10 +181,10 @@ const scanContentDirectory = async () => {
           url,
           directory,
           mainDirectory,
-          // Depth of the path
           depth: directory === '' ? 0 : directory.split('/').length,
           content: html,
-          metadata: finalMetadata
+          metadata: finalMetadata,
+          isMdx // Flag for MDX files - rendered client-side as Svelte components
         });
       }
     }

@@ -11,8 +11,12 @@ All components in this directory are sourced from the svelte-animations project 
   import { onMount } from "svelte";
   import { fly } from "svelte/transition";
 
-  export let words: string[] = ["Hello", "Svelte", "Coders"];
-  export let duration: number = 2100;
+  interface Props {
+    words?: string[];
+    duration?: number;
+  }
+
+  let { words = ["Hello", "Svelte", "Coders"], duration = 2100 }: Props = $props();
 
   let index = 0;
   let chnageIndex = () => {

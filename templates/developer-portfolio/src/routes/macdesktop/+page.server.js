@@ -1,4 +1,4 @@
-import { siteConfig } from '../../../site.config.js';
+import siteConfig from '../../../site.config.json';
 
 export const prerender = true;
 

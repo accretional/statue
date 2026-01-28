@@ -10,8 +10,12 @@ All components in this directory are sourced from the svelte-animations project 
 <script lang="ts">
   import { onMount } from "svelte";
 
-  export let text: string = "Typing Animation";
-  export let duration: number = 200;
+  interface Props {
+    text?: string;
+    duration?: number;
+  }
+
+  let { text = "Typing Animation", duration = 200 }: Props = $props();
 
   let displayedText = "";
   onMount(() => {

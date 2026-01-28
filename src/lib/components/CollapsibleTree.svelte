@@ -36,20 +36,36 @@
   All items are expanded by default. Click chevron to collapse/expand.
 -->
 
-<script>
-  export let items = [];
-  export let title = 'Collapsible Tree';
-  
-  let expanded = {};
-  
-  // Initialize all as expanded when items change
-  $: if (items.length > 0 && Object.keys(expanded).length === 0) {
-    items.forEach(item => initExpanded(item));
-    expanded = expanded; // trigger reactivity
+<script lang="ts">
+  export interface CollapsibleTreeProps {
+    items: Array<{
+      id: string;
+      label: string;
+      name?: string;
+      badge?: string;
+      children?: Array<any>;
+      url?: string;
+    }>;
+    title?: string;
   }
-  
+
+  let {
+    items = [],
+    title = 'Collapsible Tree'
+  }: CollapsibleTreeProps = $props();
+
+  let expanded = $state({});
+
+  // Initialize all as expanded when items change
+  $effect(() => {
+    if (items.length > 0 && Object.keys(expanded).length === 0) {
+      items.forEach(item => initExpanded(item));
+      expanded = expanded; // trigger reactivity
+    }
+  });
+
   // Flatten all items with their levels - reactive to expanded changes
-  $: flatItems = flattenItems(items, expanded);
+  let flatItems = $derived(flattenItems(items, expanded));
   
   function initExpanded(item) {
     expanded[item.id] = true;
@@ -134,4 +150,3 @@
     {/each}
   </div>
 </div>
-
