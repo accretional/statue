@@ -213,6 +213,205 @@ Search engine optimization configuration:
 
 ---
 
+## RSS Feed Configuration
+
+Automatic RSS feed generation for your blog and content:
+
+```json
+{
+  "rss": {
+    "enabled": true,
+    "title": "Your Site Blog & Updates",
+    "description": "Latest posts and announcements",
+    "language": "en-us",
+    "copyright": null,
+    "includeDirectories": ["blog"],
+    "excludeDirectories": [],
+    "maxItems": 50,
+    "contentMode": "summary",
+    "summaryLength": 280,
+    "includeAuthor": true,
+    "includeThumbnail": true,
+    "includeCategories": true,
+    "pubDateField": "date",
+    "itemGuidUsesUrl": true
+  }
+}
+```
+
+### RSS Fields
+
+**`enabled`** (boolean, default: `true`)
+- Master switch to enable/disable RSS feed generation
+- Set to `false` to skip RSS generation entirely
+
+**`title`** (string, default: `site.name`)
+- Feed title shown in RSS readers
+- Defaults to your site name if not specified
+
+**`description`** (string, default: `site.description`)
+- Feed description shown in RSS readers
+- Defaults to your site description if not specified
+
+**`language`** (string, default: `'en-us'`)
+- RSS language code (e.g., 'en-us', 'en-gb', 'es', 'fr')
+- Helps RSS readers display content correctly
+
+**`copyright`** (string, default: `"Copyright {year} {site.author}"`)
+- Copyright notice for the feed
+- Auto-generated if not specified
+
+**`includeDirectories`** (array, default: `['blog']`)
+- Which content directories to include in the feed
+- Examples: `['blog']`, `['blog', 'news']`, `['*']` for all
+- Only content with both `title` and `date` will be included
+
+**`excludeDirectories`** (array, default: `[]`)
+- Content directories to explicitly exclude
+- Useful when using `['*']` for includeDirectories
+
+**`maxItems`** (number, default: `50`)
+- Maximum number of items in the feed
+- Older items beyond this limit are not included
+
+**`contentMode`** (string, default: `'summary'`)
+- How to include content in feed items
+- Options:
+  - `'summary'` - Include excerpt/summary (encourages clicks)
+  - `'full'` - Include complete HTML content
+  - `'none'` - Only include title and description
+
+**`summaryLength`** (number, default: `280`)
+- Character limit for summaries when `contentMode: 'summary'`
+- Truncates at word boundary
+
+**`includeAuthor`** (boolean, default: `true`)
+- Include author metadata from frontmatter in feed items
+
+**`includeThumbnail`** (boolean, default: `true`)
+- Include thumbnail images from frontmatter as media enclosures
+- Converts relative URLs to absolute
+
+**`includeCategories`** (boolean, default: `true`)
+- Include category tags from frontmatter in feed items
+
+**`pubDateField`** (string, default: `'date'`)
+- Which frontmatter field to use for publication date
+- Items without this field are skipped
+
+**`itemGuidUsesUrl`** (boolean, default: `true`)
+- Use item URL as GUID (globally unique identifier)
+- Set to `false` to generate a GUID from URL + date
+
+### Feed Location
+
+The RSS feed is generated at:
+- **Build output:** `build/rss.xml`
+- **Website URL:** `https://yoursite.com/rss.xml`
+
+### RSS Feed Requirements
+
+For content to appear in the RSS feed:
+1. Must be in an included directory (e.g., `content/blog/`)
+2. Must have `title` in frontmatter
+3. Must have `date` in frontmatter (or whatever `pubDateField` specifies)
+4. Date must be valid and parseable
+
+Example valid blog post:
+```markdown
+---
+title: "My Blog Post"
+description: "Post description"
+date: "2025-01-20"
+author: "Your Name"
+category: "Technology"
+thumbnail: "/images/post-thumbnail.jpg"
+---
+
+Your blog post content here.
+```
+
+### RSS Configuration Examples
+
+**Minimal (Use Defaults):**
+```json
+{
+  "rss": {
+    "enabled": true
+  }
+}
+```
+Result: Blog-only feed with summaries, 50 items max
+
+**Personal Blog (Full Content):**
+```json
+{
+  "rss": {
+    "enabled": true,
+    "contentMode": "full",
+    "maxItems": 100
+  }
+}
+```
+Result: Full post content in feed, 100 items max
+
+**Multi-Section Site:**
+```json
+{
+  "rss": {
+    "enabled": true,
+    "includeDirectories": ["blog", "news", "updates"],
+    "maxItems": 75
+  }
+}
+```
+Result: Combined feed from multiple directories
+
+**Custom Feed Metadata:**
+```json
+{
+  "rss": {
+    "enabled": true,
+    "title": "My Custom Feed Title",
+    "description": "Custom description for feed readers",
+    "copyright": "© 2025 My Company. All rights reserved.",
+    "language": "en-gb"
+  }
+}
+```
+Result: Overrides default feed metadata
+
+**Disable RSS:**
+```json
+{
+  "rss": {
+    "enabled": false
+  }
+}
+```
+Result: No RSS feed generated
+
+### Using Your RSS Feed
+
+After building your site, the RSS feed will be available at `https://yoursite.com/rss.xml`.
+
+**Add to your site:**
+```html
+<link rel="alternate" type="application/rss+xml"
+      title="Your Site RSS Feed"
+      href="/rss.xml" />
+```
+
+**Validate your feed:**
+- https://validator.w3.org/feed/
+
+**Test in feed readers:**
+- Feedly: https://feedly.com
+- NewsBlur: https://newsblur.com
+- Inoreader: https://inoreader.com
+
+---
+
 ## Using Configuration in Markdown
 
 ### Template Variables

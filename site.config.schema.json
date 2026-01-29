@@ -377,6 +377,98 @@
           "description": "Twitter card type"
         }
       }
+    },
+    "rss": {
+      "type": "object",
+      "description": "RSS feed generation configuration",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable/disable RSS feed generation"
+        },
+        "title": {
+          "type": ["string", "null"],
+          "description": "Feed title (defaults to site.name if not specified)"
+        },
+        "description": {
+          "type": ["string", "null"],
+          "description": "Feed description (defaults to site.description if not specified)"
+        },
+        "language": {
+          "type": "string",
+          "default": "en-us",
+          "description": "RSS language code (e.g., 'en-us', 'en-gb', 'es', 'fr')"
+        },
+        "copyright": {
+          "type": ["string", "null"],
+          "description": "Copyright notice (auto-generated if not specified)"
+        },
+        "includeDirectories": {
+          "type": "array",
+          "default": ["*"],
+          "description": "Content directories to include in feed (use ['*'] for all)",
+          "items": {
+            "type": "string"
+          }
+        },
+        "excludeDirectories": {
+          "type": "array",
+          "default": [],
+          "description": "Content directories to exclude from feed",
+          "items": {
+            "type": "string"
+          }
+        },
+        "maxItems": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 50,
+          "description": "Maximum number of items in feed"
+        },
+        "contentMode": {
+          "type": "string",
+          "enum": ["summary", "full", "none"],
+          "default": "summary",
+          "description": "How to include content: 'summary' (excerpt), 'full' (complete HTML), or 'none' (title/description only)"
+        },
+        "summaryLength": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 280,
+          "description": "Character limit for summaries when contentMode is 'summary'"
+        },
+        "includeAuthor": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include author metadata from frontmatter"
+        },
+        "includeThumbnail": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include thumbnail images as media enclosures"
+        },
+        "includeCategories": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include category tags from frontmatter"
+        },
+        "pubDateField": {
+          "type": "string",
+          "default": "date",
+          "description": "Frontmatter field to use for publication date"
+        },
+        "itemGuidUsesUrl": {
+          "type": "boolean",
+          "default": true,
+          "description": "Use item URL as GUID (globally unique identifier)"
+        },
+        "baseUrl": {
+          "type": ["string", "null"],
+          "format": "uri",
+          "description": "Override site.url for feed URLs (rarely needed)"
+        }
+      }
     }
   }
 }

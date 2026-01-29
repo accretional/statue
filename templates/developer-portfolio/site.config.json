@@ -83,5 +83,12 @@
     "keywords": ["developer", "portfolio", "software engineer"],
     "ogImage": "/images/og-image.png",
     "twitterCard": "summary_large_image"
+  },
+  "rss": {
+    "enabled": true,
+    "title": "Developer Blog",
+    "includeDirectories": ["blog"],
+    "contentMode": "summary",
+    "maxItems": 50
   }
 }
