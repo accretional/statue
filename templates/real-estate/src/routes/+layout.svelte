@@ -40,4 +40,19 @@
 	:global(*) {
 		box-sizing: border-box;
 	}
+
+	/* Fix mobile menu button padding - try multiple selectors */
+	:global(nav button:last-child) {
+		padding-right: 1rem !important;
+	}
+
+	:global(.mobile-menu-button) {
+		padding-right: 1rem !important;
+	}
+
+	@media (max-width: 768px) {
+		:global(nav button[aria-label*='menu']) {
+			padding-right: 1rem !important;
+		}
+	}
 </style>

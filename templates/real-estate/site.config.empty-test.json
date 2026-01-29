@@ -44,6 +44,9 @@
       "description": "Location description with no highlights.",
       "highlights": []
     },
+    "map": {
+      "enabled": false
+    },
     "contact": {
       "title": "Contact",
       "subtitle": "Get in Touch",

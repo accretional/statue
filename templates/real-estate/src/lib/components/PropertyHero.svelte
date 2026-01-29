@@ -24,23 +24,27 @@
 </script>
 
 <section class="relative h-screen flex items-center justify-center overflow-hidden">
-	<div class="absolute inset-0 bg-gradient-to-b from-[var(--color-background)] via-transparent to-[var(--color-background)] z-10"></div>
+	<!-- Subtle scrim overlay: only darken top and bottom edges -->
+	<div class="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/50 z-10"></div>
+	<!-- Additional bottom fade to match background -->
+	<div class="absolute inset-0 bg-gradient-to-t from-[var(--color-background)] via-transparent to-transparent z-10"></div>
 	<img src={heroImage} alt="Luxury Estate" class="absolute inset-0 w-full h-full object-cover" />
-	<div class="relative z-20 text-center px-4 max-w-5xl">
+	<div class="relative z-20 text-center px-4 max-w-5xl -mt-20">
 		<p
-			class="text-[var(--color-primary)] text-sm md:text-base tracking-[0.3em] uppercase mb-6 animate-on-scroll animate-fade-up"
+			class="text-[var(--color-primary)] text-sm md:text-base tracking-[0.3em] uppercase mb-4 animate-on-scroll animate-fade-up"
+			style="text-shadow: 0 2px 8px rgba(0,0,0,0.8), 0 4px 16px rgba(0,0,0,0.6);"
 		>
 			{badge}
 		</p>
 		<h1
-			class="text-5xl md:text-7xl lg:text-8xl font-light text-white mb-8 leading-tight animate-on-scroll animate-fade-up"
-			style="transition-delay: 0.1s;"
+			class="text-5xl md:text-7xl lg:text-8xl font-light text-white mb-6 leading-tight animate-on-scroll animate-fade-up"
+			style="transition-delay: 0.1s; text-shadow: 0 4px 12px rgba(0,0,0,0.9), 0 8px 24px rgba(0,0,0,0.7), 0 2px 4px rgba(0,0,0,0.8);"
 		>
 			{@html title}
 		</h1>
 		<p
 			class="text-lg md:text-xl text-gray-300 mb-12 max-w-2xl mx-auto font-light leading-relaxed animate-on-scroll animate-fade-up"
-			style="transition-delay: 0.2s;"
+			style="transition-delay: 0.2s; text-shadow: 0 2px 10px rgba(0,0,0,0.8), 0 4px 20px rgba(0,0,0,0.6);"
 		>
 			{description}
 		</p>

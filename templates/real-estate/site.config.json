@@ -113,6 +113,13 @@
         }
       ]
     },
+    "map": {
+      "enabled": true,
+      "title": "Visit Our Property",
+      "subtitle": "Location Map",
+      "description": "Explore the exact location of this exclusive estate on the map.",
+      "zoom": 15
+    },
     "contact": {
       "title": "Private Showing",
       "subtitle": "Contact",
@@ -124,7 +131,9 @@
         "city": "San Francisco",
         "state": "CA",
         "zipCode": "94102",
-        "country": "United States"
+        "country": "United States",
+        "latitude": 37.7749,
+        "longitude": -122.4194
       },
       "social": {
         "instagram": "https://instagram.com/example",

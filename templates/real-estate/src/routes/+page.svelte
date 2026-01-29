@@ -7,6 +7,7 @@
 		PropertyGallery,
 		PropertyFeatures,
 		PropertyLocation,
+		PropertyMap,
 		PropertyContact
 	} from '$lib/components';
 
@@ -87,6 +88,18 @@
 		description={property.location?.description}
 		highlights={property.location?.highlights}
 	/>
+
+	{#if property.map?.enabled}
+		<PropertyMap
+			title={property.map?.title ?? "Visit Our Property"}
+			subtitle={property.map?.subtitle ?? "Location Map"}
+			description={property.map?.description ?? "Explore the exact location of this exclusive estate on the map."}
+			latitude={property.contact?.address?.latitude ?? 37.7749}
+			longitude={property.contact?.address?.longitude ?? -122.4194}
+			zoom={property.map?.zoom ?? 15}
+			markerLabel="Property Location"
+		/>
+	{/if}
 
 	<PropertyContact
 		title={property.contact?.title}

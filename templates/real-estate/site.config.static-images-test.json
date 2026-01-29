@@ -1,0 +1,115 @@
+{
+  "$schema": "../../site.config.schema.json",
+  "site": {
+    "name": "Static Images Test",
+    "description": "Testing with local static folder images.",
+    "url": "https://example.com",
+    "author": "Test"
+  },
+  "navbar": {
+    "siteTitle": "Static Test",
+    "logo": null,
+    "defaultNavItems": [
+      { "title": "Home", "url": "/" },
+      { "title": "Gallery", "url": "#gallery" }
+    ]
+  },
+  "property": {
+    "badge": "Static Images Test",
+    "title": "Local Images Work!",
+    "heroImage": "/avatar.jpg",
+    "description": "This config uses local images from the /static folder. Hero image is avatar.jpg",
+    "primaryCta": {
+      "text": "Test Local",
+      "url": "#gallery"
+    },
+    "secondaryCta": null,
+    "overview": {
+      "subtitle": "Overview",
+      "title": "Testing Static Folder Images",
+      "image": "/avatar.jpg",
+      "paragraphs": [
+        "All images in this config are loaded from the /static folder using paths like /avatar.jpg",
+        "This proves that local images work the same way as external URLs."
+      ]
+    },
+    "stats": [
+      { "value": "100%", "label": "Local Images" },
+      { "value": "1", "label": "Static Folder" }
+    ],
+    "gallery": {
+      "title": "Local Gallery",
+      "subtitle": "Static Images",
+      "images": [
+        { "url": "/avatar.jpg", "caption": "From /static/avatar.jpg" },
+        { "url": "/avatar.jpg", "caption": "Same Image Twice" },
+        { "url": "/avatar.jpg", "caption": "Testing Reuse" }
+      ]
+    },
+    "features": {
+      "title": "Features",
+      "subtitle": "Static Test",
+      "items": [
+        {
+          "title": "Static Support",
+          "description": "Local images from /static folder work perfectly",
+          "icon": "🖼️"
+        },
+        {
+          "title": "Easy Config",
+          "description": "Just use /filename.jpg in site.config.json",
+          "icon": "⚙️"
+        }
+      ]
+    },
+    "location": {
+      "title": "Static Location",
+      "subtitle": "Test",
+      "image": "/avatar.jpg",
+      "description": "Location image also from /static folder",
+      "highlights": []
+    },
+    "map": {
+      "enabled": false
+    },
+    "contact": {
+      "title": "Contact",
+      "subtitle": "Test",
+      "description": "Static images test configuration",
+      "email": "static@test.com",
+      "phone": "+1 (555) 999-9999",
+      "address": {
+        "street": "123 Static St",
+        "city": "Static City",
+        "state": "SC",
+        "zipCode": "99999",
+        "country": "Staticland"
+      },
+      "social": {}
+    }
+  },
+  "contact": {
+    "email": "static@test.com",
+    "phone": "+1 (555) 999-9999",
+    "address": {
+      "street": "123 Static St",
+      "city": "Static City",
+      "state": "SC",
+      "zipCode": "99999",
+      "country": "Staticland"
+    }
+  },
+  "social": {},
+  "seo": {
+    "defaultTitle": "Static Images Test",
+    "titleTemplate": "%s | Static Test",
+    "defaultDescription": "Testing local static folder images support.",
+    "keywords": ["test", "static", "images"],
+    "ogImage": "/avatar.jpg"
+  },
+  "footer": {
+    "brand": "Static Test",
+    "tagline": "Testing local static folder images",
+    "copyrightText": "All rights reserved."
+  }
+}
