@@ -1,13 +1,38 @@
+<!--
+This is a Svelte component from Svelte UX:
+
+Demo Site: [svelte-ux.techniq.dev](https://svelte-ux.techniq.dev/)
+GitHub Repository: [techniq/svelte-ux](https://github.com/techniq/svelte-ux)
+
+All components in this directory are sourced from the Svelte UX project. Please refer to the original repository for documentation, examples, and additional components.
+-->
+
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
   import { mdiMinus, mdiPlus } from '@mdi/js';
-  import { cls } from '@layerstack/tailwind';
   import { step as stepUtil } from '@layerstack/utils/number';
   import { selectOnFocus } from '@layerstack/svelte-actions';
 
   import Button from './Button.svelte';
   import TextField from './TextField.svelte';
-  import { getComponentClasses } from './theme.js';
+
+  function cn(...inputs: any[]): string {
+    return inputs
+      .flat()
+      .filter(Boolean)
+      .map(input => {
+        if (typeof input === 'string') return input;
+        if (typeof input === 'object') {
+          return Object.entries(input)
+            .filter(([_, value]) => value)
+            .map(([key]) => key)
+            .join(' ');
+        }
+        return '';
+      })
+      .filter(Boolean)
+      .join(' ');
+  }
 
   export let value: number = 0;
   export let min: number | undefined = undefined;
@@ -15,8 +40,6 @@
   export let step = 1;
   let className: string | undefined = undefined;
   export { className as class };
-
-  const settingsClasses = getComponentClasses('NumberStepper');
 
   const dispatch = createEventDispatcher();
 
@@ -30,7 +53,7 @@
   {max}
   {step}
   align="center"
-  class={cls('NumberStepper w-24', settingsClasses.root, className)}
+  class={cn('NumberStepper w-24', className)}
   actions={(node) => [selectOnFocus(node)]}
   {...$$restProps}
 >

@@ -1,3 +1,12 @@
+<!--
+This is a Svelte component from Svelte UX:
+
+Demo Site: [svelte-ux.techniq.dev](https://svelte-ux.techniq.dev/)
+GitHub Repository: [techniq/svelte-ux](https://github.com/techniq/svelte-ux)
+
+All components in this directory are sourced from the Svelte UX project. Please refer to the original repository for documentation, examples, and additional components.
+-->
+
 <script lang="ts">
   /*
     TODO:
@@ -32,10 +41,26 @@
 
   import { decimalCount, round } from '@layerstack/utils/number';
   import { movable } from '@layerstack/svelte-actions';
-  import { cls } from '@layerstack/tailwind';
 
   import Icon from './Icon.svelte';
-  import { getComponentClasses } from './theme.js';
+
+  function cn(...inputs: any[]): string {
+    return inputs
+      .flat()
+      .filter(Boolean)
+      .map(input => {
+        if (typeof input === 'string') return input;
+        if (typeof input === 'object') {
+          return Object.entries(input)
+            .filter(([_, value]) => value)
+            .map(([key]) => key)
+            .join(' ');
+        }
+        return '';
+      })
+      .filter(Boolean)
+      .join(' ');
+  }
 
   export let min = 0;
   export let max = 100;
@@ -46,8 +71,6 @@
 
   let className: string | undefined = undefined;
   export { className as class };
-
-  const settingsClasses = getComponentClasses('RangeSlider');
 
   $: stepPercent = step / (max - min);
   $: stepDecimals = decimalCount(step);
@@ -230,11 +253,10 @@
 <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 <!-- svelte-ignore a11y-role-has-required-aria-props -->
 <div
-  class={cls(
+  class={cn(
     'RangeSlider',
     'group relative h-2 bg-surface-content/10 rounded-full select-none outline-none',
     disabled && ' pointer-events-none opacity-50',
-    settingsClasses.root,
     className
   )}
   style="--start: {$start}; --end: {$end};"
@@ -265,7 +287,7 @@
     on:mouseleave={onMouseLeave('range')}
     on:dblclick={() => (value = [min, max])}
     style="left: calc((((var(--end) - var(--start)) / 2 ) + var(--start)) * 100%);"
-    class={cls(
+    class={cn(
       'range-thumb',
       'absolute top-1/2 w-8 h-4 -translate-x-1/2 -translate-y-1/2',
       'rounded-full',
@@ -287,7 +309,7 @@
     on:mouseleave={onMouseLeave('start')}
     on:dblclick={() => (value = [min, value[1]])}
     style="left: calc(var(--start) * 100%);"
-    class={cls(
+    class={cn(
       'thumb',
       'absolute top-1/2 w-4 h-4 -translate-x-1/2 -translate-y-1/2',
       'border bg-white rounded-full outline-4',
@@ -307,7 +329,7 @@
     on:mouseleave={onMouseLeave('end')}
     on:dblclick={() => (value = [value[0], max])}
     style="left: calc(var(--end) * 100%);"
-    class={cls(
+    class={cn(
       'thumb',
       'absolute top-1/2 w-4 h-4 -translate-x-1/2 -translate-y-1/2',
       'border bg-white rounded-full outline-4',

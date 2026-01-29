@@ -1,9 +1,34 @@
+<!--
+This is a Svelte component from Svelte UX:
+
+Demo Site: [svelte-ux.techniq.dev](https://svelte-ux.techniq.dev/)
+GitHub Repository: [techniq/svelte-ux](https://github.com/techniq/svelte-ux)
+
+All components in this directory are sourced from the Svelte UX project. Please refer to the original repository for documentation, examples, and additional components.
+-->
+
 <script lang="ts" generics="TItem">
   import { mdiChevronRight } from '@mdi/js';
 
   import Icon from './Icon.svelte';
-  import { cls } from '@layerstack/tailwind';
-  import { getComponentClasses } from './theme.js';
+
+  function cn(...inputs: any[]): string {
+    return inputs
+      .flat()
+      .filter(Boolean)
+      .map(input => {
+        if (typeof input === 'string') return input;
+        if (typeof input === 'object') {
+          return Object.entries(input)
+            .filter(([_, value]) => value)
+            .map(([key]) => key)
+            .join(' ');
+        }
+        return '';
+      })
+      .filter(Boolean)
+      .join(' ');
+  }
 
   export let items: TItem[] = [];
   export let divider: string | undefined = undefined;
@@ -11,18 +36,15 @@
   let className: string | undefined = undefined;
   export { className as class };
 
-  const settingsClasses = getComponentClasses('Breadcrumb');
-
   $: displayItems = items?.filter((x) => x != null) ?? [];
 </script>
 
 <div
   {...$$restProps}
-  class={cls(
+  class={cn(
     'Breadcrumb',
     inline ? 'inline-flex' : 'flex',
     'items-center justify-start flex-wrap',
-    settingsClasses.root,
     className
   )}
 >
