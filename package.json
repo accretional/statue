@@ -68,7 +68,7 @@
 		"format": "prettier --plugin-search-dir . --write .",
 		"format:check": "prettier --plugin-search-dir . --check .",
 		"release": "npm run build && npm publish",
-		"test:local": "./scripts/test-local.sh",
+		"test:local": "./test/test-local.sh",
 		"docker:build": "cd test/hermetic && docker build -t statue-ssg .",
 		"docker:test": "npm run docker:build && ./test/hermetic/docker_test.sh",
 		"template:load": "node scripts/manage-templates.js load",
