@@ -1,0 +1,174 @@
+{
+  "$schema": "../../site.config.schema.json",
+  "site": {
+    "name": "Villa Meridian",
+    "description": "An exceptional architectural masterpiece offering refined luxury living.",
+    "url": "https://example.com",
+    "author": "Meridian Properties"
+  },
+  "navbar": {
+    "siteTitle": "Villa Meridian",
+    "logo": null,
+    "hiddenFromNav": ["legal"],
+    "defaultNavItems": [
+      { "title": "Home", "url": "/" },
+      { "title": "Gallery", "url": "#gallery" },
+      { "title": "Features", "url": "#features" },
+      { "title": "Location", "url": "#location" },
+      { "title": "Contact", "url": "#contact" }
+    ]
+  },
+  "property": {
+    "badge": "An Exceptional Architectural Masterpiece",
+    "title": "Villa Meridian",
+    "heroImage": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2075",
+    "description": "Experience unparalleled luxury in this architectural masterpiece, where timeless elegance meets modern sophistication.",
+    "primaryCta": {
+      "text": "Inquire Now",
+      "url": "#contact"
+    },
+    "secondaryCta": {
+      "text": "View Gallery",
+      "url": "#gallery"
+    },
+    "overview": {
+      "subtitle": "Property Overview",
+      "title": "Timeless Elegance in the Heart of the City",
+      "image": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053",
+      "paragraphs": [
+        "This extraordinary residence represents the pinnacle of luxury living. Meticulously crafted with the finest materials and attention to detail, every aspect of this home has been designed to exceed the expectations of the most discerning homeowner.",
+        "Featuring soaring ceilings, expansive windows, and seamless indoor-outdoor living spaces, this estate offers a lifestyle of unparalleled sophistication and comfort."
+      ]
+    },
+    "stats": [
+      { "value": "8,500", "label": "Square Feet" },
+      { "value": "5", "label": "Bedrooms" },
+      { "value": "6.5", "label": "Bathrooms" },
+      { "value": "3", "label": "Car Garage" }
+    ],
+    "gallery": {
+      "title": "Exceptional Spaces",
+      "subtitle": "Gallery",
+      "images": [
+        { "url": "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?q=80&w=2070", "caption": "Living Room" },
+        { "url": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070", "caption": "Gourmet Kitchen" },
+        { "url": "https://images.unsplash.com/photo-1600573472592-401b489a3cdc?q=80&w=2074", "caption": "Master Suite" },
+        { "url": "https://images.unsplash.com/photo-1600566752355-35792bedcfea?q=80&w=2070", "caption": "Spa Bathroom" },
+        { "url": "https://images.unsplash.com/photo-1600585154526-990dced4db0d?q=80&w=2070", "caption": "Infinity Pool" },
+        { "url": "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?q=80&w=2084", "caption": "Landscaped Gardens" }
+      ]
+    },
+    "features": {
+      "title": "Exceptional Amenities",
+      "subtitle": "Features",
+      "items": [
+        {
+          "title": "Smart Home System",
+          "description": "Complete home automation with climate, lighting, and security control at your fingertips.",
+          "icon": "✦"
+        },
+        {
+          "title": "Wine Cellar",
+          "description": "Climate-controlled wine cellar with capacity for over 500 bottles with tasting area.",
+          "icon": "✦"
+        },
+        {
+          "title": "Home Theater",
+          "description": "Professional-grade theater room with 4K projection and immersive surround sound.",
+          "icon": "✦"
+        },
+        {
+          "title": "Infinity Pool",
+          "description": "Lap pool with infinity edge, integrated spa, and stunning city views.",
+          "icon": "✦"
+        },
+        {
+          "title": "Private Gym",
+          "description": "State-of-the-art fitness center with premium equipment and yoga studio.",
+          "icon": "✦"
+        },
+        {
+          "title": "Chef's Kitchen",
+          "description": "Gourmet kitchen with commercial-grade appliances and custom stone finishes.",
+          "icon": "✦"
+        }
+      ]
+    },
+    "location": {
+      "title": "Prestigious Address",
+      "subtitle": "Location",
+      "image": "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?q=80&w=2069",
+      "description": "Nestled in one of the city's most coveted neighborhoods, this property offers the perfect blend of privacy and convenience. World-class dining, shopping, and cultural venues are just moments away.",
+      "highlights": [
+        {
+          "title": "Prime Location",
+          "description": "Prestigious neighborhood with exclusive access"
+        },
+        {
+          "title": "City Views",
+          "description": "Panoramic views of the city skyline"
+        },
+        {
+          "title": "Exclusive Access",
+          "description": "Private community with 24/7 security"
+        }
+      ]
+    },
+    "map": {
+      "enabled": true,
+      "title": "Visit Our Property",
+      "subtitle": "Location Map",
+      "description": "Explore the exact location of this exclusive estate on the map.",
+      "zoom": 15
+    },
+    "contact": {
+      "title": "Private Showing",
+      "subtitle": "Contact",
+      "description": "To schedule a private viewing or request additional information, please contact our estate team.",
+      "email": "inquiry@example.com",
+      "phone": "+1 (555) 123-4567",
+      "address": {
+        "street": "123 Luxury Lane",
+        "city": "San Francisco",
+        "state": "CA",
+        "zipCode": "94102",
+        "country": "United States",
+        "latitude": 37.7749,
+        "longitude": -122.4194
+      },
+      "social": {
+        "instagram": "https://instagram.com/example",
+        "linkedin": "https://linkedin.com/company/example",
+        "facebook": "https://facebook.com/example"
+      }
+    }
+  },
+  "contact": {
+    "email": "inquiry@example.com",
+    "phone": "+1 (555) 123-4567",
+    "address": {
+      "street": "123 Luxury Lane",
+      "city": "San Francisco",
+      "state": "CA",
+      "zipCode": "94102",
+      "country": "United States"
+    }
+  },
+  "social": {
+    "instagram": "https://instagram.com/example",
+    "linkedin": "https://linkedin.com/company/example",
+    "facebook": "https://facebook.com/example"
+  },
+  "seo": {
+    "defaultTitle": "Luxury Estate",
+    "titleTemplate": "%s | Luxury Estate",
+    "defaultDescription": "A rare international estate offering exceptional luxury living.",
+    "keywords": ["luxury real estate", "estate", "luxury home", "premium property"],
+    "ogImage": "/images/og-image.png"
+  },
+  "footer": {
+    "brand": "Luxury Estate",
+    "tagline": "A rare international estate offering exceptional luxury living",
+    "copyrightText": "All rights reserved."
+  }
+}
