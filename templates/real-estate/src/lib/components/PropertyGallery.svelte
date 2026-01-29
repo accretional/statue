@@ -59,8 +59,10 @@
 				<p class="text-lg">No images available</p>
 			</div>
 		{:else}
+			<!-- Show only first 6 images on page -->
+			{@const displayImages = images.slice(0, 6)}
 			<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-				{#each images as image, index}
+				{#each displayImages as image, index}
 					<button
 						class="animate-on-scroll animate-scale cursor-pointer text-left"
 						style:transition-delay="{index * 0.1}s"
@@ -74,14 +76,8 @@
 								class="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500"
 							/>
 							<div
-								class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center"
-							>
-								<span
-									class="text-white text-4xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-								>
-									+
-								</span>
-							</div>
+								class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300"
+							/>
 						</div>
 						<p class="text-white text-xs tracking-wider uppercase mt-3 text-center">
 							{image.caption}
@@ -89,6 +85,12 @@
 					</button>
 				{/each}
 			</div>
+			<!-- Show more indicator if there are additional images -->
+			{#if images.length > 6}
+				<p class="text-center text-gray-500 text-sm mt-6">
+					+{images.length - 6} more images available in gallery
+				</p>
+			{/if}
 		{/if}
 	</div>
 </section>
