@@ -1,9 +1,17 @@
+<!--
+This is a Svelte component from Svelte UX:
+
+Demo Site: [svelte-ux.techniq.dev](https://svelte-ux.techniq.dev/)
+GitHub Repository: [techniq/svelte-ux](https://github.com/techniq/svelte-ux)
+
+All components in this directory are sourced from the Svelte UX project. Please refer to the original repository for documentation, examples, and additional components.
+-->
+
 <script lang="ts">
   import { mdiChevronLeft, mdiChevronRight, mdiMenuDown, mdiPageFirst, mdiPageLast } from '@mdi/js';
 
   import type { paginationStore } from '@layerstack/svelte-stores';
   import type { StoresValues } from '@layerstack/svelte-stores/types';
-  import { cls } from '@layerstack/tailwind';
 
   import Button from './Button.svelte';
   import Icon from './Icon.svelte';
@@ -11,8 +19,28 @@
   import MenuItem from './MenuItem.svelte';
   import Toggle from './Toggle.svelte';
   import Tooltip from './Tooltip.svelte';
-  import { getComponentClasses } from './theme.js';
-  import { getSettings } from './settings.js';
+
+  function cn(...inputs: any[]): string {
+    return inputs
+      .flat()
+      .filter(Boolean)
+      .map(input => {
+        if (typeof input === 'string') return input;
+        if (typeof input === 'object') {
+          return Object.entries(input)
+            .filter(([_, value]) => value)
+            .map(([key]) => key)
+            .join(' ');
+        }
+        return '';
+      })
+      .filter(Boolean)
+      .join(' ');
+  }
+
+  function formatValue(val: number, format: string) {
+    return val.toLocaleString();
+  }
 
   type Pagination = ReturnType<typeof paginationStore>;
 
@@ -41,16 +69,13 @@
     pagination?: string;
     perPage?: string;
   } = {};
-  const { format: formatValue } = getSettings();
-  const settingsClasses = getComponentClasses('Pagination');
 </script>
 
 {#if $pagination.totalPages > 1 || !hideSinglePage}
   <div
-    class={cls(
+    class={cn(
       'Pagination',
       'flex items-center gap-1',
-      settingsClasses.root,
       classes.root,
       $$props.class
     )}
@@ -67,7 +92,7 @@
             on:click={pagination.firstPage}
             disabled={$pagination.isFirst}
             aria-label="First Page"
-            class={cls('p-2', settingsClasses.buttons, classes.buttons)}
+            class={cn('p-2', classes.buttons)}
           />
         </Tooltip>
       {/if}
@@ -79,7 +104,7 @@
             on:click={pagination.prevPage}
             disabled={$pagination.isFirst}
             aria-label="Previous Page"
-            class={cls('p-2', settingsClasses.buttons, classes.buttons)}
+            class={cn('p-2', classes.buttons)}
           />
         </Tooltip>
       {/if}
@@ -91,7 +116,7 @@
             on:click={pagination.nextPage}
             disabled={$pagination.isLast}
             aria-label="Next Page"
-            class={cls('p-2', settingsClasses.buttons, classes.buttons)}
+            class={cn('p-2', classes.buttons)}
           />
         </Tooltip>
       {/if}
@@ -103,13 +128,13 @@
             on:click={pagination.lastPage}
             disabled={$pagination.isLast}
             aria-label="Last Page"
-            class={cls('p-2', settingsClasses.buttons, classes.buttons)}
+            class={cn('p-2', classes.buttons)}
           />
         </Tooltip>
       {/if}
 
       {#if component === 'perPage'}
-        <div class={cls('text-sm text-center', settingsClasses.perPage, classes.perPage)}>
+        <div class={cn('text-sm text-center', classes.perPage)}>
           Per page:
           <Toggle let:on={open} let:toggle let:toggleOff>
             <span>
@@ -131,7 +156,7 @@
                     selected={$pagination.perPage === option}
                     on:click={() => pagination.setPerPage(option)}
                   >
-                    {$formatValue(option, 'integer')}
+                    {formatValue(option, 'integer')}
                   </MenuItem>
                 {/each}
               </Menu>
@@ -142,7 +167,7 @@
 
       {#if component === 'pagination'}
         <slot name="pagination" pagination={$pagination}>
-          <div class={cls('text-sm tabular-nums', settingsClasses.pagination, classes.pagination)}>
+          <div class={cn('text-sm tabular-nums', classes.pagination)}>
             {format($pagination)}
           </div>
         </slot>

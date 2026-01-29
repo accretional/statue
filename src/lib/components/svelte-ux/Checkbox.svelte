@@ -1,10 +1,35 @@
+<!--
+This is a Svelte component from Svelte UX:
+
+Demo Site: [svelte-ux.techniq.dev](https://svelte-ux.techniq.dev/)
+GitHub Repository: [techniq/svelte-ux](https://github.com/techniq/svelte-ux)
+
+All components in this directory are sourced from the Svelte UX project. Please refer to the original repository for documentation, examples, and additional components.
+-->
+
 <script lang="ts">
   import { mdiCheck, mdiMinus } from '@mdi/js';
-  import { cls } from '@layerstack/tailwind';
   import { uniqueId } from '@layerstack/utils';
 
   import Icon from './Icon.svelte';
-  import { getComponentClasses } from './theme.js';
+
+  function cn(...inputs: any[]): string {
+    return inputs
+      .flat()
+      .filter(Boolean)
+      .map(input => {
+        if (typeof input === 'string') return input;
+        if (typeof input === 'object') {
+          return Object.entries(input)
+            .filter(([_, value]) => value)
+            .map(([key]) => key)
+            .join(' ');
+        }
+        return '';
+      })
+      .filter(Boolean)
+      .join(' ');
+  }
 
   export let id = uniqueId('checkbox-');
   export let name = '';
@@ -25,7 +50,6 @@
     label?: string;
     icon?: string;
   } = {};
-  const settingsClasses = getComponentClasses('Checkbox');
 
   // Update when group changes.  Separate function to break reactivity loop
   $: if (group !== null) {
@@ -51,11 +75,10 @@
 </script>
 
 <div
-  class={cls(
+  class={cn(
     'Checkbox',
     fullWidth ? 'flex' : 'inline-flex',
     'items-center',
-    settingsClasses.root,
     classes.root,
     $$props.class
   )}
@@ -68,13 +91,13 @@
     on:change={onChange}
     on:change
     {value}
-    class={cls('input', 'peer appearance-none absolute', settingsClasses.input, classes.input)}
+    class={cn('input', 'peer appearance-none absolute', classes.input)}
     {required}
     {disabled}
   />
   <label
     for={id}
-    class={cls(
+    class={cn(
       'checkbox',
       'inline-grid place-items-center border-2',
       circle ? 'rounded-full' : 'rounded',
@@ -87,17 +110,15 @@
           ? 'bg-surface-content border-surface-content'
           : 'bg-primary border-primary'
         : 'border-surface-content/50',
-      settingsClasses.checkbox,
       classes.checkbox
     )}
   >
     <Icon
       path={indeterminate ? mdiMinus : mdiCheck}
-      class={cls(
+      class={cn(
         'icon',
         'pointer-events-none text-primary-content transition-transform',
         checked ? 'scale-100' : 'scale-0',
-        settingsClasses.icon,
         classes.icon
       )}
       size={{
@@ -112,7 +133,7 @@
   {#if $$slots.default}
     <label
       for={id}
-      class={cls(
+      class={cn(
         'label',
         'flex-1',
         'pl-1 peer-disabled:opacity-50',
@@ -122,7 +143,6 @@
           md: 'text-md', // 16px
           lg: 'text-lg', // 18px
         }[size],
-        settingsClasses.label,
         classes.label
       )}
     >

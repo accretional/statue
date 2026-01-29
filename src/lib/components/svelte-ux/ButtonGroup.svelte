@@ -1,7 +1,19 @@
+<!--
+This is a Svelte component from Svelte UX:
+
+Demo Site: [svelte-ux.techniq.dev](https://svelte-ux.techniq.dev/)
+GitHub Repository: [techniq/svelte-ux](https://github.com/techniq/svelte-ux)
+
+All components in this directory are sourced from the Svelte UX project. Please refer to the original repository for documentation, examples, and additional components.
+-->
+
 <script lang="ts" context="module">
-  import { type ComponentProps, setContext, getContext } from 'svelte';
-  import type Button from './Button.svelte';
-  import type { ButtonColor, ButtonRounded, ButtonSize, ButtonVariant } from '../types/index.js';
+  import { setContext, getContext } from 'svelte';
+
+  type ButtonVariant = 'default' | 'outline' | 'fill' | 'fill-outline' | 'fill-light' | 'text' | 'none';
+  type ButtonColor = 'default' | 'primary' | 'secondary' | 'accent' | 'neutral' | 'info' | 'success' | 'warning' | 'danger';
+  type ButtonSize = 'sm' | 'md' | 'lg';
+  type ButtonRounded = boolean | 'full';
 
   type ButtonGroupContext = {
     variant: ButtonVariant | undefined;
@@ -22,20 +34,33 @@
 </script>
 
 <script lang="ts">
-  import { cls } from '@layerstack/tailwind';
-  import { getComponentSettings } from './settings.js';
+  function cn(...inputs: any[]): string {
+    return inputs
+      .flat()
+      .filter(Boolean)
+      .map(input => {
+        if (typeof input === 'string') return input;
+        if (typeof input === 'object') {
+          return Object.entries(input)
+            .filter(([_, value]) => value)
+            .map(([key]) => key)
+            .join(' ');
+        }
+        return '';
+      })
+      .filter(Boolean)
+      .join(' ');
+  }
 
-  const { classes: settingsClasses, defaults } = getComponentSettings('ButtonGroup');
-
-  export let variant: ComponentProps<Button>['variant'] = defaults.variant;
-  export let size: ComponentProps<Button>['size'] | undefined = defaults.size;
-  export let color: ComponentProps<Button>['color'] | undefined = defaults.color;
-  export let rounded: ComponentProps<Button>['rounded'] | undefined = defaults.rounded;
+  export let variant: ButtonVariant | undefined = undefined;
+  export let size: ButtonSize | undefined = undefined;
+  export let color: ButtonColor | undefined = undefined;
+  export let rounded: ButtonRounded | undefined = undefined;
   export let disabled: boolean = false;
   let className: string | undefined = undefined;
   export { className as class };
 
-  $: _class = cls(
+  $: _class = cn(
     'ButtonGroup',
     'inline-flex',
     disabled && 'opacity-50 pointer-events-none',
@@ -61,7 +86,6 @@
     '[&.variant-fill-light_.Button:not(:first-child)]:ml-px',
     '[&.variant-fill-light_:not(:first-child)_.Button]:ml-px',
 
-    settingsClasses.root,
     className
   );
 

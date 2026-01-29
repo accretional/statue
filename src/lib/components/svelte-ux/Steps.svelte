@@ -1,3 +1,12 @@
+<!--
+This is a Svelte component from Svelte UX:
+
+Demo Site: [svelte-ux.techniq.dev](https://svelte-ux.techniq.dev/)
+GitHub Repository: [techniq/svelte-ux](https://github.com/techniq/svelte-ux)
+
+All components in this directory are sourced from the Svelte UX project. Please refer to the original repository for documentation, examples, and additional components.
+-->
+
 <script lang="ts" context="module">
   import { type ComponentProps, setContext, getContext } from 'svelte';
 
@@ -18,10 +27,25 @@
 
 <script lang="ts">
   import Step from './Step.svelte';
-  import { cls } from '@layerstack/tailwind';
-  import { getComponentClasses } from './theme.js';
-
   import Icon from './Icon.svelte';
+
+  function cn(...inputs: any[]): string {
+    return inputs
+      .flat()
+      .filter(Boolean)
+      .map(input => {
+        if (typeof input === 'string') return input;
+        if (typeof input === 'object') {
+          return Object.entries(input)
+            .filter(([_, value]) => value)
+            .map(([key]) => key)
+            .join(' ');
+        }
+        return '';
+      })
+      .filter(Boolean)
+      .join(' ');
+  }
 
   type StepData = {
     label: string;
@@ -39,7 +63,6 @@
     root?: string;
     item?: ComponentProps<Step>['classes'];
   } = {};
-  const settingsClasses = getComponentClasses('Steps');
 
   setSteps({
     vertical,
@@ -47,11 +70,10 @@
 </script>
 
 <ul
-  class={cls(
+  class={cn(
     'Steps',
     'inline-grid grid-flow-col overflow-hidden overflow-x-auto auto-cols-fr [counter-reset:step]',
     vertical ? 'grid-flow-row' : 'grid-flow-col',
-    settingsClasses.root,
     classes.root,
     $$props.class
   )}

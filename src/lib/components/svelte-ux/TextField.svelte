@@ -1,19 +1,62 @@
+<!--
+This is a Svelte component from Svelte UX:
+
+Demo Site: [svelte-ux.techniq.dev](https://svelte-ux.techniq.dev/)
+GitHub Repository: [techniq/svelte-ux](https://github.com/techniq/svelte-ux)
+
+All components in this directory are sourced from the Svelte UX project. Please refer to the original repository for documentation, examples, and additional components.
+-->
+
 <script lang="ts">
   import { createEventDispatcher, type ComponentProps } from 'svelte';
   import type { AriaRole, HTMLInputAttributes } from 'svelte/elements';
   import { mdiClose, mdiCurrencyUsd, mdiEye, mdiInformationOutline, mdiPercent } from '@mdi/js';
   import { uniqueId } from 'lodash-es';
-  import { cls } from '@layerstack/tailwind';
   import { isLiteralObject } from '@layerstack/utils/object';
   import { autoFocus, multi, type Actions } from '@layerstack/svelte-actions';
-
-  import { DEFAULT_LABEL_PLACEMENT, type LabelPlacement } from '../types/index.js';
-  import { getComponentSettings } from './settings.js';
 
   import Button from './Button.svelte';
   import Icon from './Icon.svelte';
   import Input from './Input.svelte';
-  import { type IconInput, asIconData } from '../utils/icons.js';
+
+  type LabelPlacement = 'inset' | 'float' | 'top' | 'left';
+  type IconInput = any;
+
+  const DEFAULT_LABEL_PLACEMENT: LabelPlacement = 'inset';
+
+  function cn(...inputs: any[]): string {
+    return inputs
+      .flat()
+      .filter(Boolean)
+      .map(input => {
+        if (typeof input === 'string') return input;
+        if (typeof input === 'object') {
+          return Object.entries(input)
+            .filter(([_, value]) => value)
+            .map(([key]) => key)
+            .join(' ');
+        }
+        return '';
+      })
+      .filter(Boolean)
+      .join(' ');
+  }
+
+  function asIconData(icon: IconInput) {
+    if (typeof icon === 'string') {
+      return icon;
+    }
+    if (icon && typeof icon === 'object') {
+      if ('icon' in icon) {
+        // FontAwesome IconDefinition
+        return icon;
+      }
+      if ('path' in icon) {
+        return icon;
+      }
+    }
+    return icon;
+  }
 
   type InputValue = string | number;
 
@@ -22,13 +65,9 @@
     change: { value: typeof value; inputValue: InputValue | null; operator?: string };
   }>();
 
-  const { classes: settingsClasses, defaults } = getComponentSettings('TextField');
-  const { defaults: fieldDefaults } = getComponentSettings('Field');
-
   export let name: string | undefined = undefined;
   export let label = '';
-  export let labelPlacement: LabelPlacement =
-    defaults.labelPlacement ?? fieldDefaults.labelPlacement ?? DEFAULT_LABEL_PLACEMENT;
+  export let labelPlacement: LabelPlacement = DEFAULT_LABEL_PLACEMENT;
   export let value: InputValue | { [operator: string]: InputValue | null } | null = ''; // TODO: Can also include operator: { "operator": "value" }
   export let type:
     | 'text'
@@ -213,14 +252,13 @@
 <label
   for={id}
   role="group"
-  class={cls(
+  class={cn(
     'TextField',
     'group flex gap-1',
     labelPlacement !== 'left' ? 'flex-col' : 'items-center',
     error ? '[--color:theme(colors.danger)]' : '[--color:theme(colors.primary)]',
     disabled && 'opacity-50 pointer-events-none',
     !base && (rounded ? 'rounded-full' : 'rounded'),
-    settingsClasses.root,
     classes.root,
     $$props.class
   )}
@@ -228,13 +266,12 @@
 >
   {#if label && ['top', 'left'].includes(labelPlacement)}
     <span
-      class={cls(
+      class={cn(
         'label',
         'block text-sm font-medium',
         'truncate group-hover:text-surface-content/70 group-focus-within:text-[var(--color)] group-hover:group-focus-within:text-[var(--color)] cursor-pointer',
         error ? 'text-danger/80' : 'text-surface-content/50',
         `placement-${labelPlacement}`,
-        settingsClasses.label,
         classes.label
       )}
     >
@@ -244,7 +281,7 @@
 
   <div class="flex-1">
     <div
-      class={cls(
+      class={cn(
         'border py-0 transition-shadow',
         disabled ? '' : 'hover:shadow',
         disabled ? '' : error ? 'hover:border-danger' : 'hover:border-surface-content',
@@ -255,17 +292,15 @@
         !base && ['bg-surface-100', rounded ? 'rounded-full' : 'rounded'],
         error && 'border-danger',
         'group-focus-within:shadow-md group-focus-within:border-[var(--color)]',
-        settingsClasses.container,
         classes.container
       )}
     >
       <div class="flex items-center">
         {#if hasPrepend}
           <div
-            class={cls(
+            class={cn(
               'prepend flex items-center whitespace-nowrap',
               rounded && 'pl-3',
-              settingsClasses.prepend,
               classes.prepend
             )}
           >
@@ -282,14 +317,13 @@
         <div role={role === 'combobox' ? role : undefined} class="flex-grow inline-grid" on:click>
           {#if label && ['inset', 'float'].includes(labelPlacement)}
             <span
-              class={cls(
+              class={cn(
                 'label',
                 'col-span-full row-span-full z-[1] flex items-center h-full truncate origin-top-left transition-all duration-200 group-hover:text-surface-content/70 group-focus-within:text-[var(--color)] group-hover:group-focus-within:text-[var(--color)] cursor-pointer',
                 error ? 'text-danger/80' : 'text-surface-content/50',
                 `placement-${labelPlacement}`,
                 (labelPlacement === 'inset' || hasInputValue) && 'shrink',
-                settingsClasses.label,
-                classes.label
+                        classes.label
               )}
             >
               {label}
@@ -297,7 +331,7 @@
           {/if}
 
           <div
-            class={cls(
+            class={cn(
               'input col-span-full row-span-full flex items-center',
               hasInsetLabel && 'pt-4',
               dense ? 'my-1' : 'my-2',
@@ -331,7 +365,7 @@
                 on:blur
                 on:keydown
                 on:keypress
-                class={cls(
+                class={cn(
                   'text-sm border-none w-full bg-transparent outline-none resize-none',
                   'placeholder-surface-content placeholder-opacity-0 group-focus-within:placeholder-opacity-50',
                   error && 'placeholder-danger',
@@ -341,7 +375,6 @@
                     'text-center': align === 'center',
                     'text-right': align === 'right',
                   },
-                  settingsClasses.input,
                   classes.input
                 )}
                 use:multi={textAreaMultiAction}
@@ -371,7 +404,7 @@
                 on:blur
                 on:keydown
                 on:keypress
-                class={cls(
+                class={cn(
                   'text-sm border-none w-full bg-transparent outline-none truncate',
                   'selection:bg-surface-content/30',
                   'placeholder-surface-content placeholder-opacity-0 group-focus-within:placeholder-opacity-50',
@@ -382,7 +415,6 @@
                     'text-center': align === 'center',
                     'text-right': align === 'right',
                   },
-                  settingsClasses.input,
                   classes.input
                 )}
               />
@@ -398,9 +430,8 @@
 
         {#if hasAppend}
           <div
-            class={cls(
+            class={cn(
               'append flex items-center whitespace-nowrap',
-              settingsClasses.append,
               classes.append
             )}
           >
@@ -461,11 +492,10 @@
     </div>
 
     <div
-      class={cls(
+      class={cn(
         error ? 'error' : 'hint',
         'text-xs ml-2 transition-transform ease-out overflow-hidden origin-top transform group-focus-within:scale-y-100',
         error ? 'text-danger' : 'text-surface-content/50 scale-y-0',
-        settingsClasses.error,
         classes.error
       )}
     >
