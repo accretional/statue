@@ -15,6 +15,7 @@
       { "title": "Gallery", "url": "#gallery" },
       { "title": "Features", "url": "#features" },
       { "title": "Location", "url": "#location" },
+      { "title": "Agent", "url": "#agent" },
       { "title": "Contact", "url": "#contact" }
     ]
   },
@@ -113,6 +114,31 @@
           "description": "Private community with 24/7 security"
         }
       ]
+    },
+    "agent": {
+      "subtitle": "Your Expert Guide",
+      "title": "Meet Your Real Estate Agent",
+      "name": "Sarah Mitchell",
+      "role": "Luxury Real Estate Specialist",
+      "image": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=400&h=400&fit=crop",
+      "bio": "With over 15 years of experience in luxury real estate, Sarah specializes in helping discerning clients find their dream properties. Her expertise, market knowledge, and dedication to exceptional service have earned her recognition as one of the top agents in the region.",
+      "phone": "+1 (555) 987-6543",
+      "email": "sarah.mitchell@example.com",
+      "specialties": [
+        "Luxury Properties",
+        "Investment Advisory",
+        "Market Analysis",
+        "Private Showings"
+      ],
+      "social": {
+        "linkedin": "https://linkedin.com/in/sarahmitchell",
+        "instagram": "https://instagram.com/sarahmitchell",
+        "facebook": "https://facebook.com/sarahmitchell"
+      },
+      "cta": {
+        "text": "Schedule Consultation",
+        "url": "#contact"
+      }
     },
     "map": {
       "enabled": true,

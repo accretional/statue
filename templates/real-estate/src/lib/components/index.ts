@@ -4,6 +4,7 @@ export { default as PropertyStats } from './PropertyStats.svelte';
 export { default as PropertyGallery } from './PropertyGallery.svelte';
 export { default as PropertyFeatures } from './PropertyFeatures.svelte';
 export { default as PropertyLocation } from './PropertyLocation.svelte';
+export { default as PropertyAgent } from './PropertyAgent.svelte';
 export { default as PropertyMap } from './PropertyMap.svelte';
 export { default as PropertyContact } from './PropertyContact.svelte';
 export { default as PropertyFooter } from './PropertyFooter.svelte';

@@ -7,6 +7,7 @@
 		PropertyGallery,
 		PropertyFeatures,
 		PropertyLocation,
+		PropertyAgent,
 		PropertyMap,
 		PropertyContact
 	} from '$lib/components';
@@ -87,6 +88,20 @@
 		image={property.location?.image}
 		description={property.location?.description}
 		highlights={property.location?.highlights}
+	/>
+
+	<PropertyAgent
+		title={property.agent?.title}
+		subtitle={property.agent?.subtitle}
+		agentName={property.agent?.name}
+		agentTitle={property.agent?.role}
+		agentImage={property.agent?.image}
+		agentBio={property.agent?.bio}
+		agentPhone={property.agent?.phone}
+		agentEmail={property.agent?.email}
+		specialties={property.agent?.specialties}
+		social={property.agent?.social}
+		cta={property.agent?.cta}
 	/>
 
 	{#if property.map?.enabled}
