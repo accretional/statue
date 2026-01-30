@@ -16,10 +16,6 @@
 		agentEmail?: string;
 		specialties?: string[];
 		social?: AgentSocial;
-		cta?: {
-			text: string;
-			url: string;
-		};
 	}
 
 	let {
@@ -41,10 +37,6 @@
 			linkedin: 'https://linkedin.com',
 			instagram: 'https://instagram.com',
 			facebook: 'https://facebook.com'
-		},
-		cta = {
-			text: 'Schedule Consultation',
-			url: '#contact'
 		}
 	}: PropertyAgentProps = $props();
 </script>
@@ -168,15 +160,6 @@
 						{/if}
 					</div>
 
-					<!-- CTA Button -->
-					<div class="pt-6">
-						<a
-							href={cta.url}
-							class="inline-block px-8 py-3 bg-[var(--color-primary)] text-black font-medium hover:bg-opacity-90 transition-all duration-300 transform hover:scale-105 active:scale-95"
-						>
-							{cta.text}
-						</a>
-					</div>
 				</div>
 			</div>
 		</div>
