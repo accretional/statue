@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+
 	export interface OpenHouseEvent {
 		date: string; // ISO date string e.g. "2025-02-01"
 		startTime: string; // e.g. "11:00"
@@ -25,6 +27,16 @@
 		description = 'Open House - Villa Meridian',
 		calendlyUrl = undefined
 	}: PropertyOpenHouseProps = $props();
+
+	// Load Calendly script if URL is provided
+	onMount(() => {
+		if (calendlyUrl && !document.querySelector('script[src*="calendly"]')) {
+			const script = document.createElement('script');
+			script.src = 'https://assets.calendly.com/assets/external/widget.js';
+			script.async = true;
+			document.head.appendChild(script);
+		}
+	});
 
 	function formatDate(dateStr: string): string {
 		const date = new Date(dateStr + 'T00:00:00');
@@ -199,13 +211,6 @@ END:VCALENDAR`;
 		{/if}
 	</div>
 </section>
-
-<!-- Calendly Widget Script -->
-{#if calendlyUrl}
-	<svelte:head>
-		<script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js"></script>
-	</svelte:head>
-{/if}
 
 <!-- Click outside to close dropdown -->
 <svelte:window onclick={(e) => {
