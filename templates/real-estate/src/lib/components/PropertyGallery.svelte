@@ -74,14 +74,8 @@
 								class="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500"
 							/>
 							<div
-								class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center"
-							>
-								<span
-									class="text-white text-4xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-								>
-									+
-								</span>
-							</div>
+								class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300"
+							/>
 						</div>
 						<p class="text-white text-xs tracking-wider uppercase mt-3 text-center">
 							{image.caption}

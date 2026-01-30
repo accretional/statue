@@ -8,6 +8,7 @@
 		PropertyFeatures,
 		PropertyLocation,
 		PropertyAgent,
+		PropertyOpenHouse,
 		PropertyMap,
 		PropertyContact
 	} from '$lib/components';
@@ -103,6 +104,17 @@
 		social={property.agent?.social}
 		cta={property.agent?.cta}
 	/>
+
+	{#if property.openHouse?.enabled}
+		<PropertyOpenHouse
+			title={property.openHouse?.title}
+			subtitle={property.openHouse?.subtitle}
+			events={property.openHouse?.events}
+			location={property.openHouse?.location}
+			description={property.openHouse?.description}
+			calendlyUrl={property.openHouse?.calendlyUrl}
+		/>
+	{/if}
 
 	{#if property.map?.enabled}
 		<PropertyMap

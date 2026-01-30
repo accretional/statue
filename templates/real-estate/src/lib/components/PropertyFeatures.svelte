@@ -31,13 +31,13 @@
 		{:else}
 			<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
 				{#each items as item, index}
-					<div class="animate-on-scroll animate-fade-up" style:transition-delay="{index * 0.1}s;">
+					<div class="animate-on-scroll animate-fade-up h-full" style:transition-delay="{index * 0.1}s;">
 						<div
-							class="border border-[var(--color-border)] p-8 hover:border-[var(--color-primary)] transition-colors duration-300"
+							class="border border-[var(--color-border)] p-8 hover:border-[var(--color-primary)] transition-colors duration-300 h-full flex flex-col"
 						>
 							<p class="text-[var(--color-primary)] text-2xl mb-4">{item.icon || '✦'}</p>
 							<h3 class="text-white text-lg mb-3 tracking-wider uppercase">{item.title}</h3>
-							<p class="text-gray-400 text-sm leading-relaxed">{item.description}</p>
+							<p class="text-gray-400 text-sm leading-relaxed flex-grow">{item.description}</p>
 						</div>
 					</div>
 				{/each}

@@ -16,6 +16,7 @@
       { "title": "Features", "url": "#features" },
       { "title": "Location", "url": "#location" },
       { "title": "Agent", "url": "#agent" },
+      { "title": "Open House", "url": "#open-house" },
       { "title": "Contact", "url": "#contact" }
     ]
   },
@@ -139,6 +140,36 @@
         "text": "Schedule Consultation",
         "url": "#contact"
       }
+    },
+    "openHouse": {
+      "enabled": true,
+      "subtitle": "Schedule a Visit",
+      "title": "Open House",
+      "events": [
+        {
+          "date": "2025-02-15",
+          "startTime": "11:00",
+          "endTime": "13:00"
+        },
+        {
+          "date": "2025-02-22",
+          "startTime": "14:00",
+          "endTime": "16:00"
+        },
+        {
+          "date": "2025-03-01",
+          "startTime": "10:00",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2025-03-08",
+          "startTime": "15:00",
+          "endTime": "17:00"
+        }
+      ],
+      "location": "123 Luxury Lane, San Francisco, CA 94102",
+      "description": "Open House - Villa Meridian",
+      "calendlyUrl": "https://calendly.com/sfic54/property-showing"
     },
     "map": {
       "enabled": true,
