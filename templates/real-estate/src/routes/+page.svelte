@@ -5,8 +5,10 @@
 		PropertyOverview,
 		PropertyStats,
 		PropertyGallery,
+		PropertyFloorPlan,
 		PropertyFeatures,
 		PropertyLocation,
+		PropertyDetails,
 		PropertyAgent,
 		PropertyOpenHouse,
 		PropertyMap,
@@ -77,6 +79,14 @@
 		images={property.gallery?.images}
 	/>
 
+	{#if property.floorPlan?.enabled}
+		<PropertyFloorPlan
+			title={property.floorPlan?.title}
+			subtitle={property.floorPlan?.subtitle}
+			levels={property.floorPlan?.levels}
+		/>
+	{/if}
+
 	<PropertyFeatures
 		title={property.features?.title}
 		subtitle={property.features?.subtitle}
@@ -90,6 +100,19 @@
 		description={property.location?.description}
 		highlights={property.location?.highlights}
 	/>
+
+	{#if property.details}
+		<PropertyDetails
+			title={property.details?.title}
+			subtitle={property.details?.subtitle}
+			interior={property.details?.interior}
+			parking={property.details?.parking}
+			lot={property.details?.lot}
+			construction={property.details?.construction}
+			hoa={property.details?.hoa}
+			financial={property.details?.financial}
+		/>
+	{/if}
 
 	<PropertyAgent
 		title={property.agent?.title}

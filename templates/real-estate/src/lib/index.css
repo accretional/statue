@@ -1,44 +1,34 @@
 @import "tailwindcss";
-/* Theme - Available: black-white, black-red, blue, charcoal, cyan, green, orange, pink, purple, red
-   Custom: copy node_modules/statue-ssg/src/lib/themes/custom-theme.template.css here, rename & import */
 
-/* Luxury Real Estate Theme */
-@theme {
-  /* Core palette - Elegant dark luxury */
-  --color-background: #0a0a0a;
-  --color-card: #141414;
-  --color-border: #2a2a2a;
-  --color-foreground: #e8e8e8;
-  --color-muted: #888888;
+/* ========================================
+ * THEME IMPORTS
+ * Uncomment the theme you want to use!
+ * ======================================== */
 
-  /* Brand colors - Gold & Champagne tones */
-  --color-primary: #c9a962;
-  --color-secondary: #d4b87a;
-  --color-accent: #8b7355;
+/* Custom Luxury Real Estate Theme (default) */
+@import "./theme-luxury.css";
 
-  /* Text colors */
-  --color-on-primary: #0a0a0a;
-  --color-on-background: #e8e8e8;
+/* Or use Statue SSG themes: */
+/* @import "statue-ssg/themes/black-white.css"; */
+/* @import "statue-ssg/themes/black-red.css"; */
+/* @import "statue-ssg/themes/blue.css"; */
+/* @import "statue-ssg/themes/charcoal.css"; */
+/* @import "statue-ssg/themes/cyan.css"; */
+/* @import "statue-ssg/themes/green.css"; */
+/* @import "statue-ssg/themes/orange.css"; */
+/* @import "statue-ssg/themes/pink.css"; */
+/* @import "statue-ssg/themes/purple.css"; */
+/* @import "statue-ssg/themes/red.css"; */
 
-  /* Hero gradients */
-  --color-hero-from: #0a0a0a;
-  --color-hero-via: #141414;
-  --color-hero-to: #0a0a0a;
-
-  /* Prose overrides */
-  --color-prose-link: #c9a962;
-  --color-prose-code-bg: #1a1a1a;
-  --color-prose-pre-bg: #1a1a1a;
-}
-
+/* Tailwind v4 content config */
 @source "../";
 @source "../../node_modules/statue-ssg/src/**/*.{svelte,js,ts}";
 
-:root {
-  color-scheme: dark;
-}
+/* ========================================
+ * ANIMATIONS
+ * Scroll-triggered animations for sections
+ * ======================================== */
 
-/* Scroll animations */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -83,6 +73,7 @@
   }
 }
 
+/* Animation classes */
 .animate-on-scroll {
   opacity: 0;
   transition: opacity 0.8s ease-out, transform 0.8s ease-out;
@@ -124,25 +115,29 @@
   transform: scale(1);
 }
 
+/* ========================================
+ * GLOBAL STYLES
+ * ======================================== */
+
 /* Smooth scroll */
 :global(html) {
   scroll-behavior: smooth;
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar - uses theme colors via CSS variables */
 :global(::-webkit-scrollbar) {
   width: 10px;
 }
 
 :global(::-webkit-scrollbar-track) {
-  background: #0a0a0a;
+  background: var(--color-background);
 }
 
 :global(::-webkit-scrollbar-thumb) {
-  background: #2a2a2a;
+  background: var(--color-border);
   border-radius: 5px;
 }
 
 :global(::-webkit-scrollbar-thumb:hover) {
-  background: #c9a962;
+  background: var(--color-primary);
 }
