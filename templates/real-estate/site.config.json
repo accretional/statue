@@ -13,12 +13,8 @@
     "defaultNavItems": [
       { "title": "Home", "url": "/" },
       { "title": "Gallery", "url": "#gallery" },
-      { "title": "Floor Plan", "url": "#floor-plan" },
-      { "title": "Features", "url": "#features" },
+      { "title": "Property", "url": "#property" },
       { "title": "Location", "url": "#location" },
-      { "title": "Details", "url": "#details" },
-      { "title": "Agent", "url": "#agent" },
-      { "title": "Open House", "url": "#open-house" },
       { "title": "Contact", "url": "#contact" }
     ]
   },
