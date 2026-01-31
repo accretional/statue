@@ -5,14 +5,9 @@
 		PropertyOverview,
 		PropertyStats,
 		PropertyGallery,
-		PropertyFloorPlan,
-		PropertyFeatures,
-		PropertyLocation,
-		PropertyDetails,
-		PropertyAgent,
-		PropertyOpenHouse,
-		PropertyMap,
-		PropertyContact
+		PropertyProperty,
+		PropertyLocationSection,
+		PropertyContactSection
 	} from '$lib/components';
 
 	const { data } = $props();
@@ -77,46 +72,34 @@
 		title={property.gallery?.title}
 		subtitle={property.gallery?.subtitle}
 		images={property.gallery?.images}
+		floorPlanEnabled={property.floorPlan?.enabled}
+		floorPlanLevels={property.floorPlan?.levels}
 	/>
 
-	{#if property.floorPlan?.enabled}
-		<PropertyFloorPlan
-			title={property.floorPlan?.title}
-			subtitle={property.floorPlan?.subtitle}
-			levels={property.floorPlan?.levels}
-		/>
-	{/if}
-
-	<PropertyFeatures
-		title={property.features?.title}
-		subtitle={property.features?.subtitle}
-		items={property.features?.items}
+	<PropertyProperty
+		title={property.features?.title || property.details?.title || 'Property Details'}
+		subtitle={property.features?.subtitle || property.details?.subtitle || 'Features & Information'}
+		features={property.features?.items || []}
+		details={property.details}
 	/>
 
-	<PropertyLocation
+	<PropertyLocationSection
 		title={property.location?.title}
 		subtitle={property.location?.subtitle}
 		image={property.location?.image}
 		description={property.location?.description}
 		highlights={property.location?.highlights}
+		mapEnabled={property.map?.enabled}
+		mapTitle={property.map?.title}
+		mapDescription={property.map?.description}
+		latitude={property.contact?.address?.latitude ?? 37.7749}
+		longitude={property.contact?.address?.longitude ?? -122.4194}
+		zoom={property.map?.zoom ?? 15}
 	/>
 
-	{#if property.details}
-		<PropertyDetails
-			title={property.details?.title}
-			subtitle={property.details?.subtitle}
-			interior={property.details?.interior}
-			parking={property.details?.parking}
-			lot={property.details?.lot}
-			construction={property.details?.construction}
-			hoa={property.details?.hoa}
-			financial={property.details?.financial}
-		/>
-	{/if}
-
-	<PropertyAgent
-		title={property.agent?.title}
-		subtitle={property.agent?.subtitle}
+	<PropertyContactSection
+		subtitle={property.contact?.subtitle || 'Get In Touch'}
+		title={property.contact?.title || 'Contact & Schedule'}
 		agentName={property.agent?.name}
 		agentTitle={property.agent?.role}
 		agentImage={property.agent?.image}
@@ -124,37 +107,13 @@
 		agentPhone={property.agent?.phone}
 		agentEmail={property.agent?.email}
 		specialties={property.agent?.specialties}
-		social={property.agent?.social}
-		cta={property.agent?.cta}
-	/>
-
-	{#if property.openHouse?.enabled}
-		<PropertyOpenHouse
-			title={property.openHouse?.title}
-			subtitle={property.openHouse?.subtitle}
-			events={property.openHouse?.events}
-			location={property.openHouse?.location}
-			description={property.openHouse?.description}
-			calendlyUrl={property.openHouse?.calendlyUrl}
-		/>
-	{/if}
-
-	{#if property.map?.enabled}
-		<PropertyMap
-			title={property.map?.title ?? "Visit Our Property"}
-			subtitle={property.map?.subtitle ?? "Location Map"}
-			description={property.map?.description ?? "Explore the exact location of this exclusive estate on the map."}
-			latitude={property.contact?.address?.latitude ?? 37.7749}
-			longitude={property.contact?.address?.longitude ?? -122.4194}
-			zoom={property.map?.zoom ?? 15}
-			markerLabel="Property Location"
-		/>
-	{/if}
-
-	<PropertyContact
-		title={property.contact?.title}
-		subtitle={property.contact?.subtitle}
-		description={property.contact?.description}
+		agentSocial={property.agent?.social}
+		openHouseEnabled={property.openHouse?.enabled}
+		openHouseTitle={property.openHouse?.title}
+		events={property.openHouse?.events}
+		location={property.openHouse?.location}
+		eventDescription={property.openHouse?.description}
+		calendlyUrl={property.openHouse?.calendlyUrl}
 		email={property.contact?.email}
 		phone={property.contact?.phone}
 		address={property.contact?.address}
