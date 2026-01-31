@@ -1,0 +1,300 @@
+{
+  "$schema": "../../site.config.schema.json",
+  "site": {
+    "name": "Villa Meridian",
+    "description": "An exceptional architectural masterpiece offering refined luxury living.",
+    "url": "https://example.com",
+    "author": "Meridian Properties"
+  },
+  "navbar": {
+    "siteTitle": "Villa Meridian",
+    "logo": null,
+    "hiddenFromNav": ["legal"],
+    "defaultNavItems": [
+      { "title": "Home", "url": "/" },
+      { "title": "Gallery", "url": "#gallery" },
+      { "title": "Property", "url": "#property" },
+      { "title": "Location", "url": "#location" },
+      { "title": "Contact", "url": "#contact" }
+    ]
+  },
+  "property": {
+    "badge": "An Exceptional Architectural Masterpiece",
+    "title": "Villa Meridian",
+    "heroImage": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2075",
+    "description": "Experience unparalleled luxury in this architectural masterpiece, where timeless elegance meets modern sophistication.",
+    "primaryCta": {
+      "text": "Inquire Now",
+      "url": "#contact"
+    },
+    "secondaryCta": {
+      "text": "View Gallery",
+      "url": "#gallery"
+    },
+    "overview": {
+      "subtitle": "Property Overview",
+      "title": "Timeless Elegance in the Heart of the City",
+      "image": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053",
+      "paragraphs": [
+        "This extraordinary residence represents the pinnacle of luxury living. Meticulously crafted with the finest materials and attention to detail, every aspect of this home has been designed to exceed the expectations of the most discerning homeowner.",
+        "Featuring soaring ceilings, expansive windows, and seamless indoor-outdoor living spaces, this estate offers a lifestyle of unparalleled sophistication and comfort."
+      ]
+    },
+    "stats": [
+      { "value": "8,500", "label": "Square Feet" },
+      { "value": "5", "label": "Bedrooms" },
+      { "value": "6.5", "label": "Bathrooms" },
+      { "value": "3", "label": "Car Garage" }
+    ],
+    "gallery": {
+      "title": "Exceptional Spaces",
+      "subtitle": "Gallery",
+      "images": [
+        { "url": "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?q=80&w=2070", "caption": "Living Room" },
+        { "url": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070", "caption": "Gourmet Kitchen" },
+        { "url": "https://images.unsplash.com/photo-1600573472592-401b489a3cdc?q=80&w=2074", "caption": "Master Suite" },
+        { "url": "https://images.unsplash.com/photo-1600566752355-35792bedcfea?q=80&w=2070", "caption": "Spa Bathroom" },
+        { "url": "https://images.unsplash.com/photo-1600585154526-990dced4db0d?q=80&w=2070", "caption": "Infinity Pool" },
+        { "url": "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?q=80&w=2084", "caption": "Landscaped Gardens" }
+      ]
+    },
+    "floorPlan": {
+      "enabled": true,
+      "subtitle": "Explore the Layout",
+      "title": "Floor Plan",
+      "levels": [
+        {
+          "title": "Main Level",
+          "image": "https://images.unsplash.com/photo-1721244653652-268631ec049a?q=80&w=1362",
+          "description": "3,200 sq ft - Living areas, kitchen, dining, and guest suite"
+        },
+        {
+          "title": "Upper Level",
+          "image": "https://images.unsplash.com/photo-1721244653652-268631ec049a?q=80&w=1362",
+          "description": "2,800 sq ft - Master suite, bedrooms, and family room"
+        }
+      ]
+    },
+    "features": {
+      "title": "Exceptional Amenities",
+      "subtitle": "Features",
+      "items": [
+        {
+          "title": "Smart Home System",
+          "description": "Complete home automation with climate, lighting, and security control at your fingertips.",
+          "icon": "✦"
+        },
+        {
+          "title": "Wine Cellar",
+          "description": "Climate-controlled wine cellar with capacity for over 500 bottles with tasting area.",
+          "icon": "✦"
+        },
+        {
+          "title": "Home Theater",
+          "description": "Professional-grade theater room with 4K projection and immersive surround sound.",
+          "icon": "✦"
+        },
+        {
+          "title": "Infinity Pool",
+          "description": "Lap pool with infinity edge, integrated spa, and stunning city views.",
+          "icon": "✦"
+        },
+        {
+          "title": "Private Gym",
+          "description": "State-of-the-art fitness center with premium equipment and yoga studio.",
+          "icon": "✦"
+        },
+        {
+          "title": "Chef's Kitchen",
+          "description": "Gourmet kitchen with commercial-grade appliances and custom stone finishes.",
+          "icon": "✦"
+        }
+      ]
+    },
+    "location": {
+      "title": "Prestigious Address",
+      "subtitle": "Location",
+      "image": "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?q=80&w=2069",
+      "description": "Nestled in one of the city's most coveted neighborhoods, this property offers the perfect blend of privacy and convenience. World-class dining, shopping, and cultural venues are just moments away.",
+      "highlights": [
+        {
+          "title": "Prime Location",
+          "description": "Prestigious neighborhood with exclusive access"
+        },
+        {
+          "title": "City Views",
+          "description": "Panoramic views of the city skyline"
+        },
+        {
+          "title": "Exclusive Access",
+          "description": "Private community with 24/7 security"
+        }
+      ]
+    },
+    "details": {
+      "subtitle": "Property Information",
+      "title": "Facts & Features",
+      "interior": {
+        "bedrooms": 5,
+        "bathrooms": 6,
+        "fullBathrooms": 5,
+        "halfBathrooms": 1,
+        "hasFireplace": true,
+        "livableArea": "6,200 sqft",
+        "totalArea": "8,500 sqft",
+        "rooms": [
+          { "name": "Primary Bedroom", "dimensions": "24 x 18", "area": "432 sqft" },
+          { "name": "Bedroom 2", "dimensions": "16 x 14", "area": "224 sqft" },
+          { "name": "Bedroom 3", "dimensions": "16 x 14", "area": "224 sqft" },
+          { "name": "Bedroom 4", "dimensions": "14 x 12", "area": "168 sqft" },
+          { "name": "Bedroom 5", "dimensions": "14 x 12", "area": "168 sqft" },
+          { "name": "Living Room", "dimensions": "28 x 22", "area": "616 sqft" },
+          { "name": "Kitchen", "dimensions": "20 x 18", "area": "360 sqft" },
+          { "name": "Dining Room", "dimensions": "18 x 14", "area": "252 sqft" },
+          { "name": "Family Room", "dimensions": "22 x 16", "area": "352 sqft" },
+          { "name": "Home Theater", "dimensions": "20 x 16", "area": "320 sqft" },
+          { "name": "Home Office", "dimensions": "14 x 12", "area": "168 sqft" },
+          { "name": "Wine Cellar", "dimensions": "16 x 10", "area": "160 sqft" }
+        ]
+      },
+      "parking": {
+        "totalSpaces": 3,
+        "features": ["Attached Garage", "Electric Vehicle Charging", "Heated"]
+      },
+      "lot": {
+        "size": "0.75 Acres",
+        "parcelNumber": "SF-2024-78543"
+      },
+      "construction": {
+        "homeType": "Single Family",
+        "propertySubtype": "Luxury Estate",
+        "yearBuilt": 2022,
+        "newConstruction": false,
+        "condition": "Excellent"
+      },
+      "hoa": {
+        "hasHoa": true,
+        "fee": "$850",
+        "frequency": "monthly"
+      },
+      "financial": {
+        "pricePerSqft": "$1,290/sqft",
+        "taxAssessedValue": "$7,200,000",
+        "annualTax": "$86,400",
+        "daysOnMarket": 14,
+        "dateOnMarket": "1/16/2025"
+      }
+    },
+    "agent": {
+      "subtitle": "Your Expert Guide",
+      "title": "Meet Your Real Estate Agent",
+      "name": "Sarah Mitchell",
+      "role": "Luxury Real Estate Specialist",
+      "image": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=400&h=400&fit=crop",
+      "bio": "With over 15 years of experience in luxury real estate, Sarah specializes in helping discerning clients find their dream properties. Her expertise, market knowledge, and dedication to exceptional service have earned her recognition as one of the top agents in the region.",
+      "phone": "+1 (555) 987-6543",
+      "email": "sarah.mitchell@example.com",
+      "specialties": [
+        "Luxury Properties",
+        "Investment Advisory",
+        "Market Analysis",
+        "Private Showings"
+      ],
+      "social": {
+        "linkedin": "https://linkedin.com/in/sarahmitchell",
+        "instagram": "https://instagram.com/sarahmitchell",
+        "facebook": "https://facebook.com/sarahmitchell"
+      },
+      "cta": {
+        "text": "Schedule Consultation",
+        "url": "#contact"
+      }
+    },
+    "openHouse": {
+      "enabled": true,
+      "subtitle": "Schedule a Visit",
+      "title": "Open House",
+      "events": [
+        {
+          "date": "2025-02-15",
+          "startTime": "11:00",
+          "endTime": "13:00"
+        },
+        {
+          "date": "2025-02-22",
+          "startTime": "14:00",
+          "endTime": "16:00"
+        },
+        {
+          "date": "2025-03-01",
+          "startTime": "10:00",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2025-03-08",
+          "startTime": "15:00",
+          "endTime": "17:00"
+        }
+      ],
+      "location": "123 Luxury Lane, San Francisco, CA 94102",
+      "description": "Open House - Villa Meridian",
+      "calendlyUrl": "https://calendly.com/sfic54/property-showing"
+    },
+    "map": {
+      "enabled": true,
+      "title": "Visit Our Property",
+      "subtitle": "Location Map",
+      "description": "Explore the exact location of this exclusive estate on the map.",
+      "zoom": 15
+    },
+    "contact": {
+      "title": "Private Showing",
+      "subtitle": "Contact",
+      "description": "To schedule a private viewing or request additional information, please contact our estate team.",
+      "email": "inquiry@example.com",
+      "phone": "+1 (555) 123-4567",
+      "address": {
+        "street": "123 Luxury Lane",
+        "city": "San Francisco",
+        "state": "CA",
+        "zipCode": "94102",
+        "country": "United States",
+        "latitude": 37.7749,
+        "longitude": -122.4194
+      },
+      "social": {
+        "instagram": "https://instagram.com/example",
+        "linkedin": "https://linkedin.com/company/example",
+        "facebook": "https://facebook.com/example"
+      }
+    }
+  },
+  "contact": {
+    "email": "inquiry@example.com",
+    "phone": "+1 (555) 123-4567",
+    "address": {
+      "street": "123 Luxury Lane",
+      "city": "San Francisco",
+      "state": "CA",
+      "zipCode": "94102",
+      "country": "United States"
+    }
+  },
+  "social": {
+    "instagram": "https://instagram.com/example",
+    "linkedin": "https://linkedin.com/company/example",
+    "facebook": "https://facebook.com/example"
+  },
+  "seo": {
+    "defaultTitle": "Luxury Estate",
+    "titleTemplate": "%s | Luxury Estate",
+    "defaultDescription": "A rare international estate offering exceptional luxury living.",
+    "keywords": ["luxury real estate", "estate", "luxury home", "premium property"],
+    "ogImage": "/images/og-image.png"
+  },
+  "footer": {
+    "brand": "Luxury Estate",
+    "tagline": "A rare international estate offering exceptional luxury living",
+    "copyrightText": "All rights reserved."
+  }
+}
