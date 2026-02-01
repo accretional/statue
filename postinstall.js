@@ -33,6 +33,12 @@ async function setupStatueSSG(options = {}) {
     fs.copySync(templateLibDir, path.join(targetDir, 'src/lib'), { overwrite: true });
   }
 
+  // Ensure shared mdsvex helpers are available in the target project
+  const sharedMdsvexDir = path.join(sourceDir, 'src/lib/mdsvex');
+  if (fs.existsSync(sharedMdsvexDir)) {
+    fs.copySync(sharedMdsvexDir, path.join(targetDir, 'src/lib/mdsvex'), { overwrite: true });
+  }
+
   fs.copySync(path.join(templateDir, 'site.config.json'), path.join(targetDir, 'site.config.json'), { overwrite: true });
 
   // Copy template's static if exists (overlay on shared resources)

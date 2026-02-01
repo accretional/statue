@@ -29,6 +29,7 @@
 <script lang="ts">
   import { onMount, tick } from 'svelte';
   import { browser } from '$app/environment';
+  import { centerFootnoteHash, handleFootnoteLinkClick } from '../utils/footnote-scroll.js';
 
   export interface DocsContentProps {
     html: string;
@@ -60,6 +61,7 @@
   onMount(() => {
     mounted = true;
     extractHeadings();
+    centerFootnoteHash();
   });
 
   // Extract headings when content changes
@@ -146,6 +148,7 @@
   <div
     bind:this={contentElement}
     class="prose prose-docs max-w-none pb-16"
+    on:click={handleFootnoteLinkClick}
   >
     {@html content}
   </div>

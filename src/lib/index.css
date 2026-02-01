@@ -7,3 +7,63 @@
 @source "../../node_modules/statue-ssg/src/**/*.{svelte,js,ts}";
 
 :root { color-scheme: dark; }
+
+/* Footnotes */
+.footnotes {
+  margin-top: 2.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border);
+  font-size: 0.875rem;
+  color: color-mix(in srgb, var(--color-foreground) 70%, var(--color-muted) 30%);
+}
+
+.footnotes-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.75rem;
+  color: var(--color-muted);
+}
+
+.footnotes-list {
+  margin: 0;
+  padding-left: 1.5rem;
+}
+
+.footnotes-list li {
+  margin: 0.5rem 0;
+}
+
+.footnote-item {
+  scroll-margin-top: 200px;
+}
+
+[id^="fnref-"] {
+  scroll-margin-top: 200px;
+}
+
+.footnotes p {
+  margin: 0.35rem 0;
+}
+
+.footnote-ref {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-size: 0.75em;
+  vertical-align: super;
+}
+
+.footnote-ref:hover {
+  opacity: 0.85;
+}
+
+.footnote-backref {
+  margin-left: 0.35rem;
+  color: var(--color-muted);
+  text-decoration: none;
+}
+
+.footnote-backref:hover {
+  color: var(--color-primary);
+}

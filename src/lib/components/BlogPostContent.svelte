@@ -1,5 +1,7 @@
 <script lang="ts">
   // BlogPostContent component - Linear-style blog post content
+  import { onMount } from 'svelte';
+  import { centerFootnoteHash, handleFootnoteLinkClick } from '../utils/footnote-scroll.js';
 
   export interface BlogPostContentProps {
     html?: string;
@@ -13,10 +15,14 @@
 
   // Use content if provided, otherwise fall back to html
   const htmlContent = content || html;
+
+  onMount(() => {
+    centerFootnoteHash();
+  });
 </script>
 
 <article class="blog-post-content">
-  <div class="prose">
+  <div class="prose" on:click={handleFootnoteLinkClick}>
     {@html htmlContent}
   </div>
 </article>

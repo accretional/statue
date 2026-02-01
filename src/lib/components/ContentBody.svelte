@@ -1,12 +1,18 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
+  import { centerFootnoteHash, handleFootnoteLinkClick } from '../utils/footnote-scroll.js';
   export interface ContentBodyProps {
     content?: string;
   }
 
   let { content = '' }: ContentBodyProps = $props();
+
+  onMount(() => {
+    centerFootnoteHash();
+  });
 </script>
 
-<main class="prose prose-invert max-w-none">
+<main class="prose prose-invert max-w-none" on:click={handleFootnoteLinkClick}>
   {@html content}
 </main>
 

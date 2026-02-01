@@ -8,6 +8,7 @@ import { compile } from 'mdsvex';
 import matter from 'gray-matter';
 import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
+import remarkFootnotes from '../mdsvex/remark-footnotes.js';
 
 // This error check is to provide an early warning when this module is attempted to be used in the browser
 const isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined';
@@ -30,7 +31,7 @@ try {
 // Configure mdsvex options
 const mdsvexOptions = {
   extensions: ['.md'],
-  remarkPlugins: [remarkGfm],
+  remarkPlugins: [remarkGfm, remarkFootnotes],
   rehypePlugins: [rehypeSlug],
   layout: null // We'll handle layout in Svelte components
 };
