@@ -1,0 +1,51 @@
+---
+title: Link Preview Component
+description: Hover over links to see live iframe previews
+date: 2026-02-02
+author: Statue Team
+order: 11
+---
+
+<script>
+  import { LinkPreview } from 'statue-ssg';
+</script>
+
+# Link Preview
+
+Hover over links to see a live preview. Purely frontend - no backend required.
+
+## Demo
+
+Hover over these links:
+
+- <LinkPreview href="/docs/get-started">Getting Started</LinkPreview>
+- <LinkPreview href="/docs/themes">Themes</LinkPreview>
+- <LinkPreview href="/docs/components">Components</LinkPreview>
+
+Inline usage: Check the <LinkPreview href="/docs/site-config">site config</LinkPreview> docs.
+
+## Usage
+
+```svelte
+<script>
+  import { LinkPreview } from 'statue-ssg';
+</script>
+
+<LinkPreview href="/docs/get-started">Getting Started</LinkPreview>
+
+<!-- With custom delay -->
+<LinkPreview href="/about" delay={500}>About</LinkPreview>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `href` | `string` | required | URL to link to |
+| `delay` | `number` | `300` | Delay in ms before showing |
+
+## Notes
+
+- Some external sites block iframe embedding
+- Internal links always work
+- Uses theme CSS variables for styling

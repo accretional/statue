@@ -326,6 +326,19 @@ Components use CSS variables like `--color-primary`, `--color-secondary`, `--col
 ```
   - **Note**: Search requires Pagefind to be installed (`npm install -D pagefind`) and runs automatically during build via the postbuild script.
 
+- **LinkPreview**: Hover preview for links showing live iframe content.
+  - Props: `href: string` (required), `delay?: number` (default: 300).
+  - Features: Purely frontend, iframe rendering, smart positioning, theme-aware styling.
+  - Example:
+```svelte
+<script>
+  import { LinkPreview } from 'statue-ssg';
+</script>
+
+<LinkPreview href="/docs/get-started">Getting Started</LinkPreview>
+```
+  - **Note**: Some external sites block iframe embedding. Internal links always work.
+
 ### Notes
 
 - All components are SSR-friendly and work in SvelteKit routes and layouts.
