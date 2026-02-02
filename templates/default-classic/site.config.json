@@ -1,5 +1,4 @@
 {
-  "$schema": "../../site.config.schema.json",
   "site": {
     "name": "Statue SSG",
     "description": "A simple static site generator for markdown content with SvelteKit",
@@ -45,11 +44,8 @@
       "confirmationRequired": true
     }
   },
-  "orval": {
-    "runPreBuild": true
-  },
   "search": {
-    "enabled": false,
+    "enabled": true,
     "placeholder": "Search...",
     "noResultsText": "No results found",
     "debounceMs": 300,
@@ -67,8 +63,5 @@
     "keywords": ["static site generator", "markdown", "sveltekit", "ssg"],
     "ogImage": "/images/og-image.png",
     "twitterCard": "summary_large_image"
-  },
-  "rss": {
-    "enabled": false
   }
 }

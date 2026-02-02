@@ -20,6 +20,12 @@ Thumbs.db
 
 # Vite
 vite.config.js.timestamp-*
+vite.config.ts.timestamp-*statue_test_env/
+
+#db
+*.db
+static/*.db
+*.tgz
 vite.config.ts.timestamp-*
 
 # Test

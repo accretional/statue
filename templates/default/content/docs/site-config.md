@@ -416,7 +416,7 @@ After building your site, the RSS feed will be available at `https://yoursite.co
 
 ### Template Variables
 
-Statue lets you use config values and dynamic variables in your markdown using the `{{variable}}` syntax.
+Statue lets you use config values and dynamic variables in your markdown using the `\{\{variable\}\}` syntax.
 
 #### Basic Usage
 
@@ -521,7 +521,7 @@ Last updated: {{date.now}}
 #### How Variables Work
 
 - Variables are processed at **build time**, not runtime
-- If a variable isn't found, the `{{variable}}` text stays unchanged
+- If a variable isn't found, the `\{\{variable\}\}` text stays unchanged
 - A warning is logged to console for missing variables
 - Variables are safe - no user input is evaluated
 
