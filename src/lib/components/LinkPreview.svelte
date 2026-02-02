@@ -58,7 +58,7 @@
 
 <style>
   .lp-wrap { position: relative; display: inline; }
-  
+
   .lp-link {
     color: var(--color-primary);
     text-decoration: underline dotted;

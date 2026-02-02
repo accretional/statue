@@ -74,7 +74,7 @@ Components use CSS variables like `--color-primary`, `--color-secondary`, `--col
     { title: 'Blog', url: '/blog' },
     { title: 'Docs', url: '/docs' }
   ];
-  
+
   // optional: add id="directories" anchor target for in-page links
 </script>
 
@@ -145,14 +145,14 @@ Components use CSS variables like `--color-primary`, `--color-secondary`, `--col
   import { CTA } from 'statue-ssg';
 </script>
 
-<CTA 
+<CTA
   title="Ready to get started?"
   description="Join the growing community of creators using Statue SSG"
   primaryButtonText="Explore Features"
   primaryButtonLink="/"
   secondaryButtonText="Read Documentation"
   secondaryButtonLink="/docs"
-/> 
+/>
 ```
 
 - **DirectoryHeader**: Directory title header.
@@ -193,7 +193,7 @@ Components use CSS variables like `--color-primary`, `--color-secondary`, `--col
   - Example: `<ContentBody content={html} />`
 
 - **Footer**: Footer with sitemap and links.
-  - Props: 
+  - Props:
     - `directories: Directory[]`
     - `currentPath: string`
     - `mainPagesTitle: string`
