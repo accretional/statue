@@ -69,7 +69,7 @@ async function setupStatueSSG(options = {}) {
     console.log(chalk.green(`✓ content copied (${fs.existsSync(templateContentDir) ? templateName : 'default'})`));
   }
 
-  // 4. Copy build configs (svelte, vite, postcss) - always from root 
+  // 4. Copy build configs (svelte, vite, postcss) - always from root
   for (const config of ['svelte.config.js', 'vite.config.js', 'postcss.config.js']) {
     const src = path.join(sourceDir, config);
     if (fs.existsSync(src)) {
@@ -81,7 +81,7 @@ async function setupStatueSSG(options = {}) {
   // 5. Copy required scripts
   const scriptsDir = path.join(targetDir, 'scripts');
   fs.ensureDirSync(scriptsDir);
-  for (const script of ['generate-exports.js', 'generate-seo-files.js', 'run-pagefind.js', 'run-orval.js']) {
+  for (const script of ['generate-exports.js', 'generate-seo-files.js', 'run-pagefind.js', 'run-orval.js', 'get-tag-routes.js']) {
     fs.copySync(path.join(sourceDir, 'scripts', script), path.join(scriptsDir, script), { overwrite: true });
   }
   console.log(chalk.green('✓ scripts copied'));

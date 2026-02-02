@@ -37,6 +37,7 @@
 		"scripts/generate-seo-files.js",
 		"scripts/run-pagefind.js",
 		"scripts/run-orval.js",
+		"scripts/get-tag-routes.js",
 		"scripts/manage-templates.js",
 		"svelte.config.js",
 		"vite.config.js",
