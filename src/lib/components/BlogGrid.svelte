@@ -11,6 +11,7 @@
         author?: string;
         authorAvatar?: string;
         thumbnail?: string;
+        tags?: string[];
       };
       url: string;
     }>;
@@ -40,6 +41,7 @@
           authorAvatar={post.metadata?.authorAvatar || ''}
           thumbnail={post.metadata?.thumbnail || ''}
           url={post.url}
+          tags={post.metadata?.tags || []}
           {nextHasThumbnail}
           {isLast}
         />
