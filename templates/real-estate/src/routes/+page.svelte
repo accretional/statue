@@ -3,10 +3,13 @@
 	import {
 		PropertyHero,
 		PropertyOverview,
+		PropertyHighlights,
+		PropertyAvailableSpaces,
 		PropertyStats,
 		PropertyGallery,
 		PropertyProperty,
 		PropertyLocationSection,
+		PropertyNearby,
 		PropertyContactSection
 	} from '$lib/components';
 
@@ -16,6 +19,9 @@
 	let footer = $derived(data.footer || {});
 	let property = $derived(data.property || {});
 	const year = new Date().getFullYear();
+
+	// Template type: 'single' (residential) or 'multi' (commercial/office)
+	let templateType = $derived(property.type || 'single');
 
 	// Intersection Observer for scroll animations
 	let observer;
@@ -59,14 +65,31 @@
 		secondaryCta={property.secondaryCta}
 	/>
 
-	<PropertyOverview
-		subtitle={property.overview?.subtitle}
-		title={property.overview?.title}
-		image={property.overview?.image}
-		paragraphs={property.overview?.paragraphs}
-	/>
+	{#if templateType === 'multi'}
+		<!-- Multi-unit: Highlights + Available Spaces -->
+		<PropertyHighlights
+			subtitle={property.highlights?.subtitle}
+			title={property.highlights?.title}
+			highlights={property.highlights?.items}
+		/>
 
-	<PropertyStats stats={property.stats} />
+		<PropertyAvailableSpaces
+			subtitle={property.availableSpaces?.subtitle}
+			title={property.availableSpaces?.title}
+			spaces={property.availableSpaces?.spaces}
+			showCapacity={property.availableSpaces?.showCapacity}
+		/>
+	{:else}
+		<!-- Single-unit: Overview + Stats -->
+		<PropertyOverview
+			subtitle={property.overview?.subtitle}
+			title={property.overview?.title}
+			image={property.overview?.image}
+			paragraphs={property.overview?.paragraphs}
+		/>
+
+		<PropertyStats stats={property.stats} />
+	{/if}
 
 	<PropertyGallery
 		title={property.gallery?.title}
@@ -96,6 +119,19 @@
 		longitude={property.contact?.address?.longitude ?? -122.4194}
 		zoom={property.map?.zoom ?? 15}
 	/>
+
+	{#if templateType === 'multi' && property.nearby}
+		<PropertyNearby
+			subtitle={property.nearby?.subtitle}
+			title={property.nearby?.title}
+			transportationEnabled={property.nearby?.transportationEnabled}
+			transportationTitle={property.nearby?.transportationTitle}
+			transportation={property.nearby?.transportation}
+			amenitiesEnabled={property.nearby?.amenitiesEnabled}
+			amenitiesTitle={property.nearby?.amenitiesTitle}
+			amenities={property.nearby?.amenities}
+		/>
+	{/if}
 
 	<PropertyContactSection
 		subtitle={property.contact?.subtitle || 'Get In Touch'}
