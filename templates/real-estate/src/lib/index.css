@@ -1,0 +1,143 @@
+@import "tailwindcss";
+
+/* ========================================
+ * THEME IMPORTS
+ * Uncomment the theme you want to use!
+ * ======================================== */
+
+/* Custom Luxury Real Estate Theme (default) */
+@import "./theme-luxury.css";
+
+/* Or use Statue SSG themes: */
+/* @import "statue-ssg/themes/black-white.css"; */
+/* @import "statue-ssg/themes/black-red.css"; */
+/* @import "statue-ssg/themes/blue.css"; */
+/* @import "statue-ssg/themes/charcoal.css"; */
+/* @import "statue-ssg/themes/cyan.css"; */
+/* @import "statue-ssg/themes/green.css"; */
+/* @import "statue-ssg/themes/orange.css"; */
+/* @import "statue-ssg/themes/pink.css"; */
+/* @import "statue-ssg/themes/purple.css"; */
+/* @import "statue-ssg/themes/red.css"; */
+
+/* Tailwind v4 content config */
+@source "../";
+@source "../../node_modules/statue-ssg/src/**/*.{svelte,js,ts}";
+
+/* ========================================
+ * ANIMATIONS
+ * Scroll-triggered animations for sections
+ * ======================================== */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Animation classes */
+.animate-on-scroll {
+  opacity: 0;
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.animate-on-scroll.visible {
+  opacity: 1;
+}
+
+.animate-fade-up {
+  transform: translateY(40px);
+}
+
+.animate-fade-up.visible {
+  transform: translateY(0);
+}
+
+.animate-fade-left {
+  transform: translateX(-40px);
+}
+
+.animate-fade-left.visible {
+  transform: translateX(0);
+}
+
+.animate-fade-right {
+  transform: translateX(40px);
+}
+
+.animate-fade-right.visible {
+  transform: translateX(0);
+}
+
+.animate-scale {
+  transform: scale(0.95);
+}
+
+.animate-scale.visible {
+  transform: scale(1);
+}
+
+/* ========================================
+ * GLOBAL STYLES
+ * ======================================== */
+
+/* Smooth scroll */
+:global(html) {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar - uses theme colors via CSS variables */
+:global(::-webkit-scrollbar) {
+  width: 10px;
+}
+
+:global(::-webkit-scrollbar-track) {
+  background: var(--color-background);
+}
+
+:global(::-webkit-scrollbar-thumb) {
+  background: var(--color-border);
+  border-radius: 5px;
+}
+
+:global(::-webkit-scrollbar-thumb:hover) {
+  background: var(--color-primary);
+}
