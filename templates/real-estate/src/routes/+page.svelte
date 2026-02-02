@@ -10,6 +10,7 @@
 		PropertyProperty,
 		PropertyLocationSection,
 		PropertyNearby,
+		PropertyBrochure,
 		PropertyContactSection
 	} from '$lib/components';
 
@@ -97,6 +98,7 @@
 		images={property.gallery?.images}
 		floorPlanEnabled={property.floorPlan?.enabled}
 		floorPlanLevels={property.floorPlan?.levels}
+		variant={templateType === 'multi' ? 'carousel' : 'grid'}
 	/>
 
 	<PropertyProperty
@@ -105,6 +107,18 @@
 		features={property.features?.items || []}
 		details={property.details}
 	/>
+
+	{#if templateType === 'multi' && property.brochure?.enabled}
+		<PropertyBrochure
+			subtitle={property.brochure?.subtitle}
+			title={property.brochure?.title}
+			description={property.brochure?.description}
+			pdfUrl={property.brochure?.pdfUrl}
+			downloadText={property.brochure?.downloadText}
+			showDownload={property.brochure?.showDownload}
+			height={property.brochure?.height}
+		/>
+	{/if}
 
 	<PropertyLocationSection
 		title={property.location?.title}
