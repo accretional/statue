@@ -93,18 +93,8 @@
 	}
 
 	function getTypeColor(type: string) {
-		switch (type) {
-			case 'rail':
-				return 'bg-blue-500';
-			case 'bus':
-				return 'bg-green-500';
-			case 'airport':
-				return 'bg-purple-500';
-			case 'highway':
-				return 'bg-orange-500';
-			default:
-				return 'bg-gray-500';
-		}
+		// Use CSS variable for theme color, fallback to type-specific colors
+		return 'bg-[var(--color-primary)]';
 	}
 </script>
 

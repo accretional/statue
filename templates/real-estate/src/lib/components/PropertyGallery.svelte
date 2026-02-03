@@ -137,7 +137,7 @@
 			<!-- Left Arrow -->
 			<button
 				onclick={() => scrollCarousel('left')}
-				class="absolute left-0 top-0 bottom-0 z-10 w-20 md:w-32 flex items-center justify-center bg-gradient-to-r from-black/90 via-black/50 to-transparent text-white transition-all duration-300 {canScrollLeft ? 'opacity-100' : 'opacity-0 pointer-events-none'}"
+				class="cursor-pointer absolute left-0 top-0 bottom-0 z-10 w-20 md:w-32 flex items-center justify-center bg-gradient-to-r from-black/90 via-black/50 to-transparent text-white transition-all duration-300 {canScrollLeft ? 'opacity-100' : 'opacity-0 pointer-events-none'}"
 				disabled={!canScrollLeft}
 				aria-label="Previous images"
 			>
@@ -149,7 +149,7 @@
 			<!-- Right Arrow -->
 			<button
 				onclick={() => scrollCarousel('right')}
-				class="absolute right-0 top-0 bottom-0 z-10 w-20 md:w-32 flex items-center justify-center bg-gradient-to-l from-black/90 via-black/50 to-transparent text-white transition-all duration-300 {canScrollRight ? 'opacity-100' : 'opacity-0 pointer-events-none'}"
+				class="cursor-pointer absolute right-0 top-0 bottom-0 z-10 w-20 md:w-32 flex items-center justify-center bg-gradient-to-l from-black/90 via-black/50 to-transparent text-white transition-all duration-300 {canScrollRight ? 'opacity-100' : 'opacity-0 pointer-events-none'}"
 				disabled={!canScrollRight}
 				aria-label="Next images"
 			>
