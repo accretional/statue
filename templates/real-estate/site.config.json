@@ -178,7 +178,7 @@
       "subtitle": "Download",
       "title": "Marketing Brochure",
       "description": "View or download our comprehensive property brochure with floor plans, pricing, and amenity details.",
-      "pdfUrl": "https://www.rd.usda.gov/sites/default/files/pdf-sample_0.pdf",
+      "pdfUrl": "/sample.pdf",
       "downloadText": "Download Brochure (PDF)",
       "showDownload": true,
       "height": "600px"
