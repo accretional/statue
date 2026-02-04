@@ -380,8 +380,6 @@ Hover preview for links showing live iframe content. Purely frontend - no backen
 - `href` (string, required) - URL to link to
 - `delay` (number, default: 300) - Delay in ms before showing
 
-**[See interactive demo →](./link-preview)**
-
 ---
 
 ## About Page Components
