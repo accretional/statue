@@ -25,7 +25,9 @@ async function setupStatueSSG(options = {}) {
   const templateDir = path.join(sourceDir, 'templates', templateName);
 
   // Copy routes
-  fs.copySync(path.join(templateDir, 'src/routes'), path.join(targetDir, 'src/routes'), { overwrite: true });
+  const targetRoutesDir = path.join(targetDir, 'src/routes');
+  fs.emptyDirSync(targetRoutesDir);
+  fs.copySync(path.join(templateDir, 'src/routes'), targetRoutesDir, { overwrite: true });
 
   // Copy template's src/lib if exists (components, assets, etc.)
   const templateLibDir = path.join(templateDir, 'src/lib');
@@ -65,7 +67,9 @@ async function setupStatueSSG(options = {}) {
     : path.join(sourceDir, 'templates', 'default', 'content');
 
   if (fs.existsSync(contentSource)) {
-    fs.copySync(contentSource, path.join(targetDir, 'content'), { overwrite: true });
+    const targetContentDir = path.join(targetDir, 'content');
+    fs.emptyDirSync(targetContentDir);
+    fs.copySync(contentSource, targetContentDir, { overwrite: true });
     console.log(chalk.green(`✓ content copied (${fs.existsSync(templateContentDir) ? templateName : 'default'})`));
   }
 
