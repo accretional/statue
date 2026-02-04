@@ -362,6 +362,28 @@ Call-to-action section with buttons.
 
 ---
 
+### LinkPreview
+
+Hover preview for links showing live iframe content. Purely frontend - no backend required.
+
+```svelte
+<script>
+  import { LinkPreview } from 'statue-ssg';
+</script>
+
+<p>
+  Check out the <LinkPreview href="/docs/get-started">Getting Started</LinkPreview> guide.
+</p>
+```
+
+**Props:**
+- `href` (string, required) - URL to link to
+- `delay` (number, default: 300) - Delay in ms before showing
+
+**[See interactive demo →](./link-preview)**
+
+---
+
 ## About Page Components
 
 ### Mission
@@ -582,30 +604,6 @@ Add JSDoc comments for custom components:
   export let description = '';
 </script>
 ```
-
----
-
-### LinkPreview
-
-Hover preview for links showing live iframe content. Purely frontend - no backend required.
-
-```svelte
-<script>
-  import { LinkPreview } from 'statue-ssg';
-</script>
-
-<p>
-  Check out the <LinkPreview href="/docs/get-started">Getting Started</LinkPreview> guide.
-</p>
-```
-
-**Props:**
-- `href` (string, required) - URL to link to
-- `delay` (number, default: 300) - Delay in ms before showing
-
-**[See interactive demo →](./link-preview)**
-
----
 
 ## Full Component Reference
 

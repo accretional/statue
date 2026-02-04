@@ -7,7 +7,6 @@ node_modules
 .wrangler
 /.svelte-kit
 /build
-*/build/test-default/statue-ssg-local.tgz
 
 # OS
 .DS_Store
