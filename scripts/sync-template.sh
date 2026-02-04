@@ -27,7 +27,9 @@ if [ -z "$1" ]; then
     for dir in "$TEMPLATES_DIR"/*/; do
         if [ -d "$dir" ]; then
             template_name=$(basename "$dir")
-            echo -e "  - ${GREEN}$template_name${NC}"
+            if [ "$template_name" != "_shared" ]; then
+                echo -e "  - ${GREEN}$template_name${NC}"
+            fi
         fi
     done
     exit 1
@@ -50,7 +52,9 @@ if [ ! -d "$SOURCE" ]; then
     for dir in "$TEMPLATES_DIR"/*/; do
         if [ -d "$dir" ]; then
             template_name=$(basename "$dir")
-            echo -e "  - ${GREEN}$template_name${NC}"
+            if [ "$template_name" != "_shared" ]; then
+                echo -e "  - ${GREEN}$template_name${NC}"
+            fi
         fi
     done
     exit 1
@@ -65,6 +69,13 @@ fi
 # Sync directories (overlay - keeps existing files, overwrites matching ones)
 echo -e "${YELLOW}Syncing src/...${NC}"
 rsync -av "$SOURCE/src/" "$DEST/src/"
+
+# Apply canonical SSG layout config
+SHARED_LAYOUT="$BASE_DIR/templates/_shared/src/routes/+layout.js"
+if [ -f "$SHARED_LAYOUT" ]; then
+    cp "$SHARED_LAYOUT" "$DEST/src/routes/+layout.js"
+    echo -e "${YELLOW}Applied canonical +layout.js${NC}"
+fi
 
 #echo -e "${YELLOW}Syncing static/...${NC}"
 #rsync -av "$SOURCE/static/" "$DEST/static/"

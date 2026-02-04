@@ -27,6 +27,12 @@ async function setupStatueSSG(options = {}) {
   // Copy routes
   fs.copySync(path.join(templateDir, 'src/routes'), path.join(targetDir, 'src/routes'), { overwrite: true });
 
+  // Apply canonical SSG config (overwrites template's +layout.js if present)
+  const sharedLayoutPath = path.join(sourceDir, 'templates', '_shared', 'src', 'routes', '+layout.js');
+  if (fs.existsSync(sharedLayoutPath)) {
+    fs.copySync(sharedLayoutPath, path.join(targetDir, 'src', 'routes', '+layout.js'), { overwrite: true });
+  }
+
   // Copy template's src/lib if exists (components, assets, etc.)
   const templateLibDir = path.join(templateDir, 'src/lib');
   if (fs.existsSync(templateLibDir)) {
