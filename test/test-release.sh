@@ -27,30 +27,49 @@ TEST_ROOT="$START_DIR/statue_test_env"
 # Clean start
 rm -rf "$TEST_ROOT"
 mkdir -p "$TEST_ROOT"
+cd "$TEST_ROOT"
 
 echo -e "${BLUE}Test Environment: $TEST_ROOT${NC}"
 
-TEMPLATES=($(ls templates))
+echo -e "\n${BLUE}Step 2: Initializing test environment...${NC}"
+echo "Creating SvelteKit project..."
+yes | npx sv create . --template minimal --types ts --no-add-ons --install npm > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+    echo -e "${RED}❌ Error: SvelteKit project creation failed.${NC}"
+    exit 1
+fi
+
+echo "Installing statue-ssg from local package..."
+npm install "$PACKAGE_PATH" > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+    echo -e "${RED}❌ Error: statue-ssg installation failed.${NC}"
+    exit 1
+fi
+
+echo -e "${GREEN}✓ Test environment setup complete.${NC}"
+
+TEMPLATES=($(ls "$START_DIR/templates"))
 TEST_COUNT=0
 
 for TEMPLATE in "${TEMPLATES[@]}"; do
     TEST_COUNT=$((TEST_COUNT + 1))
-    echo -e "\n${BLUE}Step $((TEST_COUNT + 1)): Testing '$TEMPLATE' Template...${NC}"
-    cd "$TEST_ROOT"
-    mkdir "test-$TEMPLATE"
-    cd "test-$TEMPLATE"
-
-    echo "Creating SvelteKit project..."
-    yes | npx sv create . --template minimal --types ts --no-add-ons --install npm > /dev/null 2>&1
-
-    echo "Installing statue-ssg from local pack..."
-    npm install "$PACKAGE_PATH" > /dev/null 2>&1
+    echo -e "\n${BLUE}Step $((TEST_COUNT + 2)): Testing '$TEMPLATE' Template...${NC}"
+    
+    # Clean build directories before each test
+    rm -rf build .svelte-kit
 
     echo "Running statue init --template $TEMPLATE..."
-    npx statue init --template "$TEMPLATE"
+    if ! npx statue init --template "$TEMPLATE"; then
+        echo -e "${RED}❌ TEST $TEST_COUNT FAILED: '$TEMPLATE' template initialization failed.${NC}"
+        exit 1
+    fi
 
-    echo "Installing dependencies..."
+    echo "Installing template dependencies..."
     npm install > /dev/null 2>&1
+    if [ $? -ne 0 ]; then
+        echo -e "${RED}❌ TEST $TEST_COUNT FAILED: '$TEMPLATE' template dependency installation failed.${NC}"
+        exit 1
+    fi
 
     echo "Attempting to build..."
     if npm run build; then
@@ -62,9 +81,9 @@ for TEMPLATE in "${TEMPLATES[@]}"; do
 done
 
 # Cleanup
-cd ../..
+cd "$START_DIR"
 rm -rf $TEST_ROOT
-rm $PACKAGE_NAME
+rm "$PACKAGE_NAME"
 
 echo -e "\n${GREEN}🎉 All tests passed! All templates built successfully.${NC}"
 # echo -e "Test artifacts are located in: $TEST_ROOT"
