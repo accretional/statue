@@ -11,6 +11,8 @@
 		PropertyLocationSection,
 		PropertyNearby,
 		PropertyBrochure,
+		PropertyRentCalculator,
+		PropertyLeaseTimeline,
 		PropertyContactSection
 	} from '$lib/components';
 
@@ -144,6 +146,29 @@
 			amenitiesEnabled={property.nearby?.amenitiesEnabled}
 			amenitiesTitle={property.nearby?.amenitiesTitle}
 			amenities={property.nearby?.amenities}
+		/>
+	{/if}
+
+	{#if templateType === 'multi' && property.rentCalculator?.enabled}
+		<PropertyRentCalculator
+			subtitle={property.rentCalculator?.subtitle}
+			title={property.rentCalculator?.title}
+			description={property.rentCalculator?.description}
+			baseRentPerSf={property.rentCalculator?.baseRentPerSf}
+			totalSf={property.rentCalculator?.totalSf}
+			defaultTerm={property.rentCalculator?.defaultTerm}
+			defaultFreeRent={property.rentCalculator?.defaultFreeRent}
+			defaultTi={property.rentCalculator?.defaultTi}
+			defaultEscalation={property.rentCalculator?.defaultEscalation}
+		/>
+	{/if}
+
+	{#if templateType === 'multi' && property.leaseTimeline?.enabled}
+		<PropertyLeaseTimeline
+			subtitle={property.leaseTimeline?.subtitle}
+			title={property.leaseTimeline?.title}
+			description={property.leaseTimeline?.description}
+			steps={property.leaseTimeline?.steps}
 		/>
 	{/if}
 

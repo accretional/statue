@@ -329,6 +329,24 @@
       "description": "Located in the heart of South Naperville's commercial district.",
       "zoom": 15
     },
+    "rentCalculator": {
+      "enabled": true,
+      "subtitle": "Estimate Your Cost",
+      "title": "Net Effective Rent Calculator",
+      "description": "Calculate your monthly effective rent factoring in free rent, tenant improvements, and annual escalations.",
+      "baseRentPerSf": 25,
+      "totalSf": 2500,
+      "defaultTerm": 5,
+      "defaultFreeRent": 1,
+      "defaultTi": 10,
+      "defaultEscalation": 3
+    },
+    "leaseTimeline": {
+      "enabled": true,
+      "subtitle": "The Process",
+      "title": "Your Journey to a New Office",
+      "description": "From your first tour to moving day, we make every step simple and transparent."
+    },
     "contact": {
       "title": "Lease Inquiry",
       "subtitle": "Contact",
