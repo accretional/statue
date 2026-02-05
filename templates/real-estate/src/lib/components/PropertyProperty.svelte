@@ -57,9 +57,9 @@
 	}
 
 	let {
-		title = 'Property Details',
-		subtitle = 'Features & Information',
-		features = [],
+		title,
+		subtitle,
+		features,
 		details
 	}: PropertyPropertyParams = $props();
 
