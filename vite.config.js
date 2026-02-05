@@ -19,8 +19,22 @@ const serveResources = () => ({
 	}
 });
 
+const plugins = [sveltekit(), serveResources()];
+
+try {
+	const { componentDataPlugin } = await import('./scripts/component-data-plugin.js');
+	plugins.unshift(componentDataPlugin({
+		componentDir: 'templates/real-estate/src/lib/components',
+		dataExtension: '.data.md',
+		strict: false
+	}));
+} catch (error) {
+	// Plugin not available, skip
+	console.warn('Component data plugin not available, skipping...');
+}
+
 export default defineConfig({
-	plugins: [sveltekit(), serveResources()],
+	plugins,
 
 	resolve: {
 		alias: {
