@@ -112,7 +112,10 @@ your-project/
 Edit `src/lib/index.css` and change the import line.
 
 ### Add a blog post
-Create `content/blog/post-name.md` with frontmatter.
+Create `content/blog/post-name.md` with frontmatter. Optionally add tags to organize posts by topic.
+
+### Enable blog tags
+Add `"blog": { "blogTag": { "enabled": true }}` to `site.config.json`. **[Learn more →](./blog-tags.md)**
 
 ### Customize the homepage
 Edit `src/routes/+page.svelte`.
@@ -132,6 +135,7 @@ Edit `site.config.json`.
 
 **Want to learn more?**
 - **[Site Configuration](./site-config.md)** - All config options
+- **[Blog Tags](./blog-tags.md)** - Organize posts with tags
 - **[Themes](./themes.md)** - Styling your site
 - **[Components](./components.md)** - Component reference
 - **[Templates](./templates.md)** - Using templates

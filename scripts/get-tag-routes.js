@@ -3,9 +3,36 @@ import path from 'path';
 import matter from 'gray-matter';
 
 // Get all tag routes for prerendering
+// Only supports default template - other templates do not have tag functionality
 export function getTagRoutes() {
-  const contentDir = path.resolve('./content');
+  const siteConfigPath = path.resolve('./site.config.json');
+
+  // Check if tags are enabled in site config (default template only)
+  let tagsEnabled = false; // Default to false for safety
+  if (fs.existsSync(siteConfigPath)) {
+    try {
+      const siteConfig = JSON.parse(fs.readFileSync(siteConfigPath, 'utf8'));
+      tagsEnabled = siteConfig.blog?.blogTag?.enabled === true;
+    } catch (error) {
+      console.warn('Warning: Could not parse site.config.json:', error.message);
+      return [];
+    }
+  }
+
+  // Return empty array if tags are disabled
+  if (!tagsEnabled) {
+    return [];
+  }
+
   const tagRoutes = new Set();
+  const contentDir = path.resolve('./content');
+  const blogDir = path.join(contentDir, 'blog');
+
+  // Verify this is a default template by checking if blog directory exists
+  if (!fs.existsSync(blogDir)) {
+    console.warn('Warning: blog directory not found. Tags are only supported in the default template.');
+    return [];
+  }
 
   function processDirectory(dir) {
     if (!fs.existsSync(dir)) return;
@@ -35,7 +62,8 @@ export function getTagRoutes() {
     }
   }
 
-  processDirectory(contentDir);
+  // Only process the blog directory (default template only)
+  processDirectory(blogDir);
 
   // Add the tags index route if we have any tags
   if (tagRoutes.size > 0) {

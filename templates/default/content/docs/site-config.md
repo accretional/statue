@@ -22,6 +22,7 @@ The `site.config.json` file is your site's central configuration. It stores info
   "site": { /* Site info */ },
   "contact": { /* Contact details */ },
   "social": { /* Social media */ },
+  "blog": { /* Blog settings */ },
   "legal": { /* Legal pages */ },
   "seo": { /* SEO settings */ }
 }
@@ -130,6 +131,56 @@ Links to your social media profiles:
 - Share buttons
 
 **Tip:** Remove or leave out the ones you don't use.
+
+---
+
+## Blog Settings
+
+Configuration for blog features:
+
+```json
+{
+  "blog": {
+    "blogTag": {
+      "enabled": true
+    }
+  }
+}
+```
+
+### Blog Tag Settings
+
+**`enabled`** (boolean, default: `false`)
+- Controls whether blog posts can have tags
+- When `true`, tags appear on blog cards and post headers
+- Automatically generates tag pages at `/tags/{tag-name}`
+- Only works in the **default template** (other templates don't support tags yet)
+
+**Example with tags enabled:**
+```json
+{
+  "blog": {
+    "blogTag": {
+      "enabled": true
+    }
+  }
+}
+```
+
+**To disable tags:**
+```json
+{
+  "blog": {
+    "blogTag": {
+      "enabled": false
+    }
+  }
+}
+```
+
+Or simply omit the `blog` configuration—tags are disabled by default.
+
+**Learn more:** See the **[Blog Tags](./blog-tags.md)** documentation for details on adding tags to your posts.
 
 ---
 

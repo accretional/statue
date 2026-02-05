@@ -13,9 +13,11 @@
     content?: string;
     backLink?: string;
     backLinkText?: string;
+    tags?: string[];
+    enableTags?: boolean;
   }
 
-  let { title = '', description = '', date = '', author = '', authorAvatar = '', thumbnail = '', content = '', backLink = '/blog', backLinkText = 'Blog' }: BlogPostLayoutProps = $props();
+  let { title = '', description = '', date = '', author = '', authorAvatar = '', thumbnail = '', content = '', backLink = '/blog', backLinkText = 'Blog', tags = [], enableTags = false }: BlogPostLayoutProps = $props();
 </script>
 
 <div class="blog-post-layout">
@@ -29,6 +31,8 @@
       {thumbnail}
       {backLink}
       {backLinkText}
+      {tags}
+      {enableTags}
     />
 
     <BlogPostContent {content} />

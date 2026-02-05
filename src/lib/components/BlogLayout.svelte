@@ -6,18 +6,20 @@
   export interface BlogLayoutProps {
     title?: string;
     posts?: Array<any>;
+    enableTags?: boolean;
   }
 
   let {
     title = 'Blog',
-    posts = []
+    posts = [],
+    enableTags = false
   }: BlogLayoutProps = $props();
 </script>
 
 <div class="blog-layout">
   <div class="blog-container">
     <BlogHeader {title} />
-    <BlogGrid {posts} />
+    <BlogGrid {posts} {enableTags} />
   </div>
 </div>
 

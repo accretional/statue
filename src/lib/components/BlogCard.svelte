@@ -2,8 +2,8 @@
   // BlogCard component - Linear-style blog card with thumbnail or minimal design
   import { onMount, onDestroy } from 'svelte';
   import { browser } from '$app/environment';
-  import { goto } from '$app/navigation';
   import AuthorAvatar from './AuthorAvatar.svelte';
+  import TagList from './TagList.svelte';
 
   export interface BlogCardProps {
     title: string;
@@ -14,6 +14,7 @@
     thumbnail?: string;
     url: string;
     tags?: string[];
+    enableTags?: boolean;
     enableScrollAnimation?: boolean;
     nextHasThumbnail?: boolean;
     isLast?: boolean;
@@ -28,6 +29,7 @@
     thumbnail = '',
     url = '',
     tags = [],
+    enableTags = false,
     enableScrollAnimation = false,
     nextHasThumbnail = false,
     isLast = false,
@@ -134,19 +136,8 @@
         <p class="description">{description}</p>
       {/if}
 
-      {#if tags && tags.length > 0}
-        <div class="flex flex-wrap gap-2 mt-3">
-          {#each tags as tag}
-            <button
-              onclick={(e) => { e.stopPropagation(); e.preventDefault(); goto(`/tags/${tag.toLowerCase().replace(/\s+/g, '-')}`); }}
-              class="inline-block px-2 py-1 text-xs font-medium rounded-full bg-[var(--color-muted)]/20
-              text-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-[var(--color-on-primary)]
-              transition-colors cursor-pointer border-0"
-            >
-              {tag}
-            </button>
-          {/each}
-        </div>
+      {#if enableTags}
+        <TagList {tags} />
       {/if}
     </div>
   </a>
@@ -170,19 +161,8 @@
       <p class="description">{description}</p>
     {/if}
 
-    {#if tags && tags.length > 0}
-      <div class="flex flex-wrap gap-2 mt-3">
-        {#each tags as tag}
-          <button
-            onclick={(e) => { e.stopPropagation(); e.preventDefault(); goto(`/tags/${tag.toLowerCase().replace(/\s+/g, '-')}`); }}
-            class="inline-block px-2 py-1 text-xs font-medium rounded-full bg-[var(--color-muted)]/20
-            text-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-[var(--color-on-primary)]
-            transition-colors cursor-pointer border-0"
-          >
-            {tag}
-          </button>
-        {/each}
-      </div>
+    {#if enableTags}
+      <TagList {tags} />
     {/if}
   </a>
 {/if}
@@ -235,6 +215,7 @@
 
   .blog-card--minimal .description {
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     font-size: 14px;
   }
 
@@ -287,6 +268,7 @@
     color: var(--color-muted);
     display: -webkit-box;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }

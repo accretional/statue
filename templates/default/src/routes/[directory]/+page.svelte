@@ -8,12 +8,14 @@
 		BlogLayout,
 		PageHero
 	} from 'statue-ssg';
+	import siteConfig from '../../../site.config.json';
 
 	const { data } = $props();
 
+	const enableTags = $derived(siteConfig.blog?.blogTag?.enabled ?? true);
 	const isDocsDirectory = $derived(data.currentDirectory.name === 'docs');
 	const isBlogDirectory = $derived(data.currentDirectory.name === 'blog');
-	const isTagsDirectory = $derived(data.isTagsDirectory || false);
+	const isTagsDirectory = $derived(enableTags && (data.isTagsDirectory || false));
 
 	const currentDirContent = $derived(
 		data.directoryContent.filter((page) => {
@@ -31,7 +33,7 @@
 	);
 
 	const allDocsContent = $derived([...currentDirContent, ...subDirContent]);
-	const tags = $derived(data.tags || []);
+	const tags = $derived(enableTags ? (data.tags || []) : []);
 </script>
 
 <svelte:head>
@@ -87,7 +89,7 @@
 		/>
 	</DocsLayout>
 {:else if isBlogDirectory}
-	<BlogLayout title={data.currentDirectory.title} posts={currentDirContent} />
+	<BlogLayout title={data.currentDirectory.title} posts={currentDirContent} {enableTags} />
 {:else}
 	<div
 		class="min-h-screen text-white bg-linear-to-b from-(--color-hero-from) via-(--color-hero-via) to-(--color-hero-to)"
