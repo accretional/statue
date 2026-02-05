@@ -204,55 +204,58 @@ Components use CSS variables like `--color-primary`, `--color-secondary`, `--col
 ```
 
 - **ContentGrid**: Responsive grid container for displaying image galleries and content grids with automatic layout adaptation.
-  - Props: `title?: string`, `columns?: number` (default: 3), `gap?: string` (default: '24px').
-  - Example:
+    - Props: `title?: string`, `columns?: number` (default: 3), `gap?: string` (default: '24px').
+    - Example:
+
 ```svelte
 <script>
-  import { ContentGrid, ImageGridElement, CaptionedGridElement } from 'statue-ssg';
+	import { ContentGrid, ImageGridElement, CaptionedGridElement } from 'statue-ssg';
 </script>
 
 <ContentGrid title="Photo Gallery" columns={3} gap="24px">
-  <ImageGridElement src="/image1.jpg" alt="Image 1" />
-  <CaptionedGridElement
-    src="/image2.jpg"
-    alt="Image 2"
-    title="Featured"
-    caption="A beautiful landscape"
-  />
+	<ImageGridElement src="/image1.jpg" alt="Image 1" />
+	<CaptionedGridElement
+		src="/image2.jpg"
+		alt="Image 2"
+		title="Featured"
+		caption="A beautiful landscape"
+	/>
 </ContentGrid>
 ```
 
 - **ImageGridElement**: Simple image element for grids with click-to-expand lightbox functionality.
-  - Props: `src: string` (required), `alt: string` (required), `aspectRatio?: string` (default: '1 / 1'), `expandable?: boolean` (default: true).
-  - Example:
+    - Props: `src: string` (required), `alt: string` (required), `aspectRatio?: string` (default: '1 / 1'), `expandable?: boolean` (default: true).
+    - Example:
+
 ```svelte
 <script>
-  import { ImageGridElement } from 'statue-ssg';
+	import { ImageGridElement } from 'statue-ssg';
 </script>
 
 <ImageGridElement
-  src="/photo.jpg"
-  alt="Descriptive alt text"
-  aspectRatio="16 / 9"
-  expandable={true}
+	src="/photo.jpg"
+	alt="Descriptive alt text"
+	aspectRatio="16 / 9"
+	expandable={true}
 />
 ```
 
 - **CaptionedGridElement**: Image element with title and caption text, includes click-to-expand lightbox.
-  - Props: `src: string` (required), `alt: string` (required), `title?: string`, `caption?: string`, `aspectRatio?: string` (default: '1 / 1'), `expandable?: boolean` (default: true).
-  - Example:
+    - Props: `src: string` (required), `alt: string` (required), `title?: string`, `caption?: string`, `aspectRatio?: string` (default: '1 / 1'), `expandable?: boolean` (default: true).
+    - Example:
+
 ```svelte
 <script>
-  import { CaptionedGridElement } from 'statue-ssg';
+	import { CaptionedGridElement } from 'statue-ssg';
 </script>
 
 <CaptionedGridElement
-  src="/photo.jpg"
-  alt="Mountain vista"
-  title="Mountain View"
-  caption="A breathtaking mountain landscape during golden hour."
-  aspectRatio="3 / 2"
-  expandable={true}
+	src="/photo.jpg"
+	alt="Mountain vista"
+	title="Mountain View"
+	caption="A breathtaking mountain landscape during golden hour."
+	aspectRatio="3 / 2"
+	expandable={true}
 />
 ```
 
@@ -371,6 +374,21 @@ Components use CSS variables like `--color-primary`, `--color-secondary`, `--col
 </script>
 
 <Playground />
+```
+
+- **XmlViewer**: Native XML renderer with a collapsible tree view.
+    - Features:
+        - Renders raw DOM nodes directly.
+        - Syntax highlighting with interactive node folding.
+        - Supports .xml, .svg, .rss, .atom, and .xhtml.
+    - Example:
+
+```svelte
+<script>
+	import { XmlViewer } from 'statue-ssg';
+</script>
+
+<XmlViewer xmlString="<rss><channel>...</channel></rss>" />
 ```
 
 - **Search**: Client-side search with dropdown results powered by Pagefind.
