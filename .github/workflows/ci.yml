@@ -58,3 +58,6 @@ jobs:
 
       - name: Run Docker test
         run: npm run docker:test
+
+      - name: Run E2E Template Tests
+        run: bash ./test/test-release.sh
