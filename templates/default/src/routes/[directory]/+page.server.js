@@ -1,4 +1,5 @@
 import { getContentDirectories, getContentByDirectory, getSubDirectories, getSidebarTree, getAllTags } from 'statue-ssg/cms/content-processor';
+import siteConfig from '../../../site.config.json';
 
 // Make this page prerendered as a static page
 export const prerender = true;
@@ -10,6 +11,21 @@ export async function load({ params }) {
 
   // Special handling for tags directory
   if (directoryName === 'tags') {
+    // Check if tags are enabled
+    const tagsEnabled = siteConfig.blog?.blogTag?.enabled ?? false;
+    if (!tagsEnabled) {
+      // Return 404 if tags are disabled
+      return {
+        notFound: true,
+        directories: getContentDirectories(),
+        currentDirectory: { name: 'tags', title: 'Tags' },
+        isTagsDirectory: false,
+        directoryContent: [],
+        subDirectories: [],
+        sidebarItems: []
+      };
+    }
+
     const tags = await getAllTags();
     return {
       directories: getContentDirectories(),

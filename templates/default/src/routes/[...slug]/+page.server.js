@@ -1,4 +1,5 @@
 import { getContentByUrl, getContentDirectories, getSidebarTree, getPostsByTag } from 'statue-ssg/cms/content-processor';
+import siteConfig from '../../../site.config.json';
 
 // Make this page pre-rendered as a static page
 export const prerender = true;
@@ -30,6 +31,19 @@ export async function load({ params }) {
 
   // Check if this is a tag page (e.g., /tags/javascript)
   if (params.slug.startsWith('tags/')) {
+    // Check if tags are enabled
+    const tagsEnabled = siteConfig.blog?.blogTag?.enabled ?? false;
+    if (!tagsEnabled) {
+      // Return 404 if tags are disabled
+      return {
+        notFound: true,
+        directories: getContentDirectories(),
+        sidebarItems: [],
+        layoutConfig: LAYOUT_CONFIG.default,
+        isTagPage: false
+      };
+    }
+
     const tagSlug = params.slug.replace('tags/', '').replace(/\/$/, ''); // Remove trailing slash
 
     try {
