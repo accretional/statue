@@ -11,15 +11,18 @@
         author?: string;
         authorAvatar?: string;
         thumbnail?: string;
+        tags?: string[];
       };
       url: string;
     }>;
     emptyMessage?: string;
+    enableTags?: boolean;
   }
 
   let {
     posts = [],
     emptyMessage = 'No posts found.',
+    enableTags = false,
   }: BlogGridProps = $props();
 </script>
 
@@ -40,6 +43,8 @@
           authorAvatar={post.metadata?.authorAvatar || ''}
           thumbnail={post.metadata?.thumbnail || ''}
           url={post.url}
+          tags={post.metadata?.tags || []}
+          {enableTags}
           {nextHasThumbnail}
           {isLast}
         />
@@ -58,6 +63,8 @@
           authorAvatar={post.metadata?.authorAvatar || ''}
           thumbnail={post.metadata?.thumbnail || ''}
           url={post.url}
+          tags={post.metadata?.tags || []}
+          {enableTags}
           {nextHasThumbnail}
           {isLast}
         />

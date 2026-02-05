@@ -57,6 +57,11 @@
     "showExcerpts": true,
     "excerptLength": 30
   },
+  "blog": {
+    "blogTag": {
+      "enabled": true
+    }
+  },
   "seo": {
     "defaultTitle": "Statue SSG - Static Site Generator",
     "titleTemplate": "%s | Statue SSG",
