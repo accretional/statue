@@ -102,6 +102,8 @@ docker stop $CONTAINER_ID > /dev/null 2>&1
 docker rm $CONTAINER_ID > /dev/null 2>&1
 echo "✅ Container cleanup completed"
 
+rm $PACKAGE_FILE
+
 # Step: If the curl request succeeds before then, consider the test passed
 if [ "$SUCCESS" = true ]; then
     echo "========================================="

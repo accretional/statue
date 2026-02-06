@@ -63,14 +63,14 @@ Before releasing, we must ensure that the package works from a user's perspectiv
 This script packs the library, creates a temporary environment outside the project, creates fresh SvelteKit apps, and installs Statue into them to verify everything builds correctly.
 
 ```bash
-./scripts/test-release.sh
+./test/test-release.sh
 ```
 Artifacts are generated in `statue_test_env/` (which is git-ignored).
 
 ## Release Process
 
 1. **Bump Version:** Update `version` in `package.json`.
-2. **Test:** Run `./scripts/test-release.sh` to ensure integrity.
+2. **Test:** Run `./test/test-release.sh` to ensure integrity.
 3. **Commit:** Commit changes.
 4. **Publish:**
    ```bash

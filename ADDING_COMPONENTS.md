@@ -106,7 +106,6 @@ Brief description of what it does.
 - `items` (array, optional) - Array of items to display
   - `name` (string) - Item name
   - `value` (string) - Item value
-```
 
 ---
 

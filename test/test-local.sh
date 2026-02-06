@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Test local statue-ssg package in a fresh project
-# Usage: ./scripts/test-local.sh [template-name]
+# Usage: ./test/test-local.sh [template-name]
 
 set -e
 

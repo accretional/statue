@@ -180,7 +180,7 @@ git checkout -b feature/my-new-feature
 3. **Test with a fresh project**
    ```bash
    # Run the release test script
-   ./scripts/test-release.sh
+   ./test/test-release.sh
    ```
    This creates a test environment and verifies the package installs correctly
 
@@ -489,7 +489,7 @@ npm run preview
 npm pack
 
 # Run release tests
-./scripts/test-release.sh
+./test/test-release.sh
 ```
 
 ### Template Management
@@ -515,7 +515,7 @@ Test that your changes work when installed as a package:
 
 ```bash
 # Build and test the package
-./scripts/test-release.sh
+./test/test-release.sh
 ```
 
 This script:
@@ -534,7 +534,7 @@ This script:
 
 1. **Ensure all tests pass**
    ```bash
-   ./scripts/test-release.sh
+   ./test/test-release.sh
    ```
 
 2. **Update version** in `package.json`
