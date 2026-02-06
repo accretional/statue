@@ -23,6 +23,10 @@
 		defaultEscalation = 3
 	}: PropertyRentCalculatorProps = $props();
 
+	// Allow editing baseRentPerSf and totalSf
+	let editableBaseRent = $state(baseRentPerSf);
+	let editableTotalSf = $state(totalSf);
+
 	// Form state
 	let term = $state(defaultTerm); // years
 	let freeRent = $state(defaultFreeRent); // months
@@ -30,26 +34,25 @@
 	let escalation = $state(defaultEscalation); // % annual increase
 
 	// Calculated values
-	let monthlyBaseRent = $derived((baseRentPerSf * totalSf) / 12);
+	let monthlyBaseRent = $derived((editableBaseRent * editableTotalSf) / 12);
 	let monthlyEffectiveRent = $state(0);
 	let totalLeaseCost = $state(0);
 	let tiAllowance = $state(0);
 
 	function calculate() {
 		// TI Allowance (one-time)
-		tiAllowance = ti * totalSf;
+		tiAllowance = ti * editableTotalSf;
 
 		// Calculate rent for each year with escalations
 		let totalRent = 0;
-		let monthlyRent = 0;
 
 		for (let year = 0; year < term; year++) {
-			const annualRent = baseRentPerSf * totalSf * Math.pow(1 + escalation / 100, year);
+			const annualRent = editableBaseRent * editableTotalSf * Math.pow(1 + escalation / 100, year);
 			totalRent += annualRent;
 		}
 
 		// Subtract free rent (first months of first year)
-		const freeRentValue = (baseRentPerSf * totalSf / 12) * freeRent;
+		const freeRentValue = (editableBaseRent * editableTotalSf / 12) * freeRent;
 		totalRent -= freeRentValue;
 
 		totalLeaseCost = totalRent;
@@ -87,10 +90,37 @@
 			<div class="space-y-6 animate-on-scroll animate-fade-left">
 				<h3 class="text-white text-lg font-medium mb-6">Lease Terms</h3>
 
-				<!-- Base Rent Display -->
+				<!-- Base Rent Input -->
 				<div class="p-4 border border-[var(--color-border)] bg-[var(--color-background)]">
-					<p class="text-gray-400 text-sm mb-1">Base Rent</p>
-					<p class="text-white text-2xl font-light">{formatCurrency(baseRentPerSf)} <span class="text-lg text-gray-400">/ SF / year</span></p>
+					<p class="text-gray-400 text-sm mb-3">Base Rent (per SF / year)</p>
+					<div class="flex items-center gap-3">
+						<span class="text-white text-lg">$</span>
+						<input
+							type="number"
+							bind:value={editableBaseRent}
+							min="1"
+							max="200"
+							step="1"
+							class="flex-1 px-3 py-2 bg-[var(--color-card)] border border-[var(--color-border)] rounded text-white text-2xl font-light cursor-pointer focus:outline-none focus:border-[var(--color-primary)]"
+						/>
+						<span class="text-gray-400 text-sm">/ SF</span>
+					</div>
+				</div>
+
+				<!-- Total SF Input -->
+				<div class="p-4 border border-[var(--color-border)] bg-[var(--color-background)]">
+					<p class="text-gray-400 text-sm mb-3">Total Square Feet</p>
+					<div class="flex items-center gap-3">
+						<input
+							type="number"
+							bind:value={editableTotalSf}
+							min="100"
+							max="50000"
+							step="100"
+							class="flex-1 px-3 py-2 bg-[var(--color-card)] border border-[var(--color-border)] rounded text-white text-2xl font-light cursor-pointer focus:outline-none focus:border-[var(--color-primary)]"
+						/>
+						<span class="text-gray-400 text-sm">SF</span>
+					</div>
 				</div>
 
 				<!-- Term -->
@@ -107,8 +137,16 @@
 						step="1"
 						class="w-full h-2 bg-[var(--color-border)] rounded-lg appearance-none cursor-pointer accent-[var(--color-primary)]"
 					/>
-					<div class="flex justify-between text-xs text-gray-500 mt-1">
+					<div class="flex items-center justify-between text-xs text-gray-500 mt-1">
 						<span>1 year</span>
+						<input
+							type="number"
+							bind:value={term}
+							min="1"
+							max="15"
+							step="1"
+							class="w-16 px-2 py-1 text-xs bg-[var(--color-background)] border border-[var(--color-border)] rounded text-white text-center cursor-pointer"
+						/>
 						<span>15 years</span>
 					</div>
 				</div>
@@ -127,8 +165,16 @@
 						step="0.5"
 						class="w-full h-2 bg-[var(--color-border)] rounded-lg appearance-none cursor-pointer accent-[var(--color-primary)]"
 					/>
-					<div class="flex justify-between text-xs text-gray-500 mt-1">
+					<div class="flex items-center justify-between text-xs text-gray-500 mt-1">
 						<span>0 months</span>
+						<input
+							type="number"
+							bind:value={freeRent}
+							min="0"
+							max="12"
+							step="0.5"
+							class="w-16 px-2 py-1 text-xs bg-[var(--color-background)] border border-[var(--color-border)] rounded text-white text-center cursor-pointer"
+						/>
 						<span>12 months</span>
 					</div>
 				</div>
@@ -147,8 +193,16 @@
 						step="1"
 						class="w-full h-2 bg-[var(--color-border)] rounded-lg appearance-none cursor-pointer accent-[var(--color-primary)]"
 					/>
-					<div class="flex justify-between text-xs text-gray-500 mt-1">
+					<div class="flex items-center justify-between text-xs text-gray-500 mt-1">
 						<span>$0</span>
+						<input
+							type="number"
+							bind:value={ti}
+							min="0"
+							max="100"
+							step="1"
+							class="w-16 px-2 py-1 text-xs bg-[var(--color-background)] border border-[var(--color-border)] rounded text-white text-center cursor-pointer"
+						/>
 						<span>$100</span>
 					</div>
 				</div>
@@ -167,8 +221,16 @@
 						step="0.5"
 						class="w-full h-2 bg-[var(--color-border)] rounded-lg appearance-none cursor-pointer accent-[var(--color-primary)]"
 					/>
-					<div class="flex justify-between text-xs text-gray-500 mt-1">
+					<div class="flex items-center justify-between text-xs text-gray-500 mt-1">
 						<span>0%</span>
+						<input
+							type="number"
+							bind:value={escalation}
+							min="0"
+							max="10"
+							step="0.5"
+							class="w-16 px-2 py-1 text-xs bg-[var(--color-background)] border border-[var(--color-border)] rounded text-white text-center cursor-pointer"
+						/>
 						<span>10%</span>
 					</div>
 				</div>
@@ -221,7 +283,7 @@
 </section>
 
 <style>
-	input[type="range"]::-webkit-slider-thumb {
+	input[type='range']::-webkit-slider-thumb {
 		-webkit-appearance: none;
 		appearance: none;
 		width: 20px;
@@ -232,11 +294,11 @@
 		transition: all 0.2s;
 	}
 
-	input[type="range"]::-webkit-slider-thumb:hover {
+	input[type='range']::-webkit-slider-thumb:hover {
 		transform: scale(1.1);
 	}
 
-	input[type="range"]::-moz-range-thumb {
+	input[type='range']::-moz-range-thumb {
 		width: 20px;
 		height: 20px;
 		border-radius: 50%;
@@ -246,7 +308,17 @@
 		transition: all 0.2s;
 	}
 
-	input[type="range"]::-moz-range-thumb:hover {
+	input[type='range']::-moz-range-thumb:hover {
 		transform: scale(1.1);
+	}
+
+	/* Number input styling */
+	input[type='number']::-webkit-inner-spin-button,
+	input[type='number']::-webkit-outer-spin-button {
+		opacity: 1;
+	}
+
+	input[type='number'] {
+		-moz-appearance: textfield;
 	}
 </style>
