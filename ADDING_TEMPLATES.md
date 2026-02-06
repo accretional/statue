@@ -174,6 +174,8 @@ export async function load({ params }) {
 
 **Why:** +layout.svelte wraps all pages with common elements like navigation and footer.
 
+**SSG config:** Do not create `+layout.js` in your template. Statue provides a canonical root layout config (`prerender`, `ssr`, `trailingSlash`) from `templates/_shared` and applies it automatically during install.
+
 **Important:** Use `$lib` imports in your template files - they will be automatically transformed to `statue-ssg` imports when users initialize the template.
 
 ---

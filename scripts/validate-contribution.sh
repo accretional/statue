@@ -202,6 +202,24 @@ validate_template() {
         return 1
     fi
 
+    # Check canonical SSG layout exists (templates/_shared)
+    local script_dir
+    script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    local base_dir
+    base_dir="$(dirname "$script_dir")"
+    local shared_layout="$base_dir/templates/_shared/src/routes/+layout.js"
+    if [[ -f "$shared_layout" ]]; then
+        if grep -q "export const prerender = true" "$shared_layout" && \
+           grep -q "export const ssr = true" "$shared_layout" && \
+           grep -q "export const trailingSlash = 'always'" "$shared_layout"; then
+            log_success "templates/_shared/+layout.js exists with required SSG config"
+        else
+            log_error "templates/_shared/+layout.js missing required exports (prerender, ssr, trailingSlash)"
+        fi
+    else
+        log_error "templates/_shared/src/routes/+layout.js not found"
+    fi
+
     # Check for required routes
     local routes_dir="$template_dir/src/routes"
     if [[ ! -d "$routes_dir" ]]; then
