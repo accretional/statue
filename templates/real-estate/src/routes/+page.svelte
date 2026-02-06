@@ -3,10 +3,16 @@
 	import {
 		PropertyHero,
 		PropertyOverview,
+		PropertyHighlights,
+		PropertyAvailableSpaces,
 		PropertyStats,
 		PropertyGallery,
 		PropertyProperty,
 		PropertyLocationSection,
+		PropertyNearby,
+		PropertyBrochure,
+		PropertyRentCalculator,
+		PropertyLeaseTimeline,
 		PropertyContactSection
 	} from '$lib/components';
 
@@ -16,6 +22,9 @@
 	let footer = $derived(data.footer || {});
 	let property = $derived(data.property || {});
 	const year = new Date().getFullYear();
+
+	// Template type: 'single' (residential) or 'multi' (commercial/office)
+	let templateType = $derived(property.type || 'single');
 
 	// Intersection Observer for scroll animations
 	let observer;
@@ -59,14 +68,31 @@
 		secondaryCta={property.secondaryCta}
 	/>
 
-	<PropertyOverview
-		subtitle={property.overview?.subtitle}
-		title={property.overview?.title}
-		image={property.overview?.image}
-		paragraphs={property.overview?.paragraphs}
-	/>
+	{#if templateType === 'multi'}
+		<!-- Multi-unit: Highlights + Available Spaces -->
+		<PropertyHighlights
+			subtitle={property.highlights?.subtitle}
+			title={property.highlights?.title}
+			highlights={property.highlights?.items}
+		/>
 
-	<PropertyStats stats={property.stats} />
+		<PropertyAvailableSpaces
+			subtitle={property.availableSpaces?.subtitle}
+			title={property.availableSpaces?.title}
+			spaces={property.availableSpaces?.spaces}
+			showCapacity={property.availableSpaces?.showCapacity}
+		/>
+	{:else}
+		<!-- Single-unit: Overview + Stats -->
+		<PropertyOverview
+			subtitle={property.overview?.subtitle}
+			title={property.overview?.title}
+			image={property.overview?.image}
+			paragraphs={property.overview?.paragraphs}
+		/>
+
+		<PropertyStats stats={property.stats} />
+	{/if}
 
 	<PropertyGallery
 		title={property.gallery?.title}
@@ -74,6 +100,7 @@
 		images={property.gallery?.images}
 		floorPlanEnabled={property.floorPlan?.enabled}
 		floorPlanLevels={property.floorPlan?.levels}
+		variant={templateType === 'multi' ? 'carousel' : 'grid'}
 	/>
 
 	<PropertyProperty
@@ -82,6 +109,18 @@
 		features={property.features?.items || []}
 		details={property.details}
 	/>
+
+	{#if templateType === 'multi' && property.brochure?.enabled}
+		<PropertyBrochure
+			subtitle={property.brochure?.subtitle}
+			title={property.brochure?.title}
+			description={property.brochure?.description}
+			pdfUrl={property.brochure?.pdfUrl}
+			downloadText={property.brochure?.downloadText}
+			showDownload={property.brochure?.showDownload}
+			height={property.brochure?.height}
+		/>
+	{/if}
 
 	<PropertyLocationSection
 		title={property.location?.title}
@@ -96,6 +135,42 @@
 		longitude={property.contact?.address?.longitude ?? -122.4194}
 		zoom={property.map?.zoom ?? 15}
 	/>
+
+	{#if templateType === 'multi' && property.nearby}
+		<PropertyNearby
+			subtitle={property.nearby?.subtitle}
+			title={property.nearby?.title}
+			transportationEnabled={property.nearby?.transportationEnabled}
+			transportationTitle={property.nearby?.transportationTitle}
+			transportation={property.nearby?.transportation}
+			amenitiesEnabled={property.nearby?.amenitiesEnabled}
+			amenitiesTitle={property.nearby?.amenitiesTitle}
+			amenities={property.nearby?.amenities}
+		/>
+	{/if}
+
+	{#if templateType === 'multi' && property.rentCalculator?.enabled}
+		<PropertyRentCalculator
+			subtitle={property.rentCalculator?.subtitle}
+			title={property.rentCalculator?.title}
+			description={property.rentCalculator?.description}
+			baseRentPerSf={property.rentCalculator?.baseRentPerSf}
+			totalSf={property.rentCalculator?.totalSf}
+			defaultTerm={property.rentCalculator?.defaultTerm}
+			defaultFreeRent={property.rentCalculator?.defaultFreeRent}
+			defaultTi={property.rentCalculator?.defaultTi}
+			defaultEscalation={property.rentCalculator?.defaultEscalation}
+		/>
+	{/if}
+
+	{#if templateType === 'multi' && property.leaseTimeline?.enabled}
+		<PropertyLeaseTimeline
+			subtitle={property.leaseTimeline?.subtitle}
+			title={property.leaseTimeline?.title}
+			description={property.leaseTimeline?.description}
+			steps={property.leaseTimeline?.steps}
+		/>
+	{/if}
 
 	<PropertyContactSection
 		subtitle={property.contact?.subtitle || 'Get In Touch'}

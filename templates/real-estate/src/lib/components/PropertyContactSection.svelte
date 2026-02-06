@@ -252,7 +252,7 @@ END:VCALENDAR`;
 							<p class="text-white text-xl font-light mb-2">{formatDate(event.date)}</p>
 							<p class="text-gray-400 text-lg mb-6">{formatTime(event.startTime)} - {formatTime(event.endTime)}</p>
 
-							<button type="button" onclick={() => handleAddToCalendar(event)} class="text-[var(--color-primary)] text-sm tracking-wide hover:underline underline-offset-4 transition-all flex items-center gap-2">
+							<button type="button" onclick={() => handleAddToCalendar(event)} class="cursor-pointer text-[var(--color-primary)] text-sm tracking-wide hover:underline underline-offset-4 transition-all flex items-center gap-2">
 								<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
 								</svg>
@@ -261,13 +261,13 @@ END:VCALENDAR`;
 
 							{#if activeEventIndex === index}
 								<div class="absolute left-0 right-0 top-full mt-2 bg-[var(--color-card)] border border-[var(--color-border)] shadow-xl z-10 animate-fade-in">
-									<button type="button" onclick={() => openGoogleCalendar(event)} class="w-full px-4 py-3 text-left text-gray-300 hover:bg-[var(--color-border)] hover:text-white transition-colors flex items-center gap-3">
+									<button type="button" onclick={() => openGoogleCalendar(event)} class="cursor-pointer w-full px-4 py-3 text-left text-gray-300 hover:bg-[var(--color-border)] hover:text-white transition-colors flex items-center gap-3">
 										<svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
 											<path d="M19.5 3h-15A1.5 1.5 0 003 4.5v15A1.5 1.5 0 004.5 21h15a1.5 1.5 0 001.5-1.5v-15A1.5 1.5 0 0019.5 3zm-6 13.5h-3v-3h3v3zm0-4.5h-3V9h3v3z"/>
 										</svg>
 										Google Calendar
 									</button>
-									<button type="button" onclick={() => downloadAppleCalendar(event)} class="w-full px-4 py-3 text-left text-gray-300 hover:bg-[var(--color-border)] hover:text-white transition-colors flex items-center gap-3">
+									<button type="button" onclick={() => downloadAppleCalendar(event)} class="cursor-pointer w-full px-4 py-3 text-left text-gray-300 hover:bg-[var(--color-border)] hover:text-white transition-colors flex items-center gap-3">
 										<svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
 											<path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83z"/>
 										</svg>
@@ -285,7 +285,7 @@ END:VCALENDAR`;
 						<p class="text-gray-400 text-sm mb-4">Can't make it to an open house?</p>
 						<button
 							onclick={openCalendlyModal}
-							class="inline-flex items-center gap-2 px-8 py-3 bg-[var(--color-primary)] text-[var(--color-on-primary)] hover:bg-[var(--color-secondary)] transition-colors duration-300 text-sm tracking-wider uppercase"
+							class="cursor-pointer inline-flex items-center gap-2 px-8 py-3 bg-[var(--color-primary)] text-[var(--color-on-primary)] hover:bg-[var(--color-secondary)] transition-colors duration-300 text-sm tracking-wider uppercase"
 						>
 							<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 								<rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>

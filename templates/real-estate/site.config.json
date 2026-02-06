@@ -1,300 +1,396 @@
 {
   "$schema": "../../site.config.schema.json",
   "site": {
-    "name": "Villa Meridian",
-    "description": "An exceptional architectural masterpiece offering refined luxury living.",
+    "name": "Lacrosse Business Center",
+    "description": "Premium coworking and private office space in South Naperville.",
     "url": "https://example.com",
-    "author": "Meridian Properties"
+    "author": "Collier Group"
   },
   "navbar": {
-    "siteTitle": "Villa Meridian",
+    "siteTitle": "Lacrosse Business Center",
     "logo": null,
     "hiddenFromNav": ["legal"],
     "defaultNavItems": [
       { "title": "Home", "url": "/" },
+      { "title": "Spaces", "url": "#spaces" },
       { "title": "Gallery", "url": "#gallery" },
-      { "title": "Property", "url": "#property" },
       { "title": "Location", "url": "#location" },
       { "title": "Contact", "url": "#contact" }
     ]
   },
   "property": {
-    "badge": "An Exceptional Architectural Masterpiece",
-    "title": "Villa Meridian",
-    "heroImage": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2075",
-    "description": "Experience unparalleled luxury in this architectural masterpiece, where timeless elegance meets modern sophistication.",
+    "type": "multi",
+    "badge": "Coworking Space Available",
+    "title": "3420 Lacrosse Ln",
+    "heroImage": "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069",
+    "description": "Coworking Space Available in Naperville, IL 60564. Modern updates throughout, designed specifically for professionals seeking privacy, sophistication, and convenience.",
     "primaryCta": {
-      "text": "Inquire Now",
+      "text": "Schedule Tour",
       "url": "#contact"
     },
     "secondaryCta": {
-      "text": "View Gallery",
-      "url": "#gallery"
+      "text": "View Spaces",
+      "url": "#spaces"
     },
-    "overview": {
-      "subtitle": "Property Overview",
-      "title": "Timeless Elegance in the Heart of the City",
-      "image": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053",
-      "paragraphs": [
-        "This extraordinary residence represents the pinnacle of luxury living. Meticulously crafted with the finest materials and attention to detail, every aspect of this home has been designed to exceed the expectations of the most discerning homeowner.",
-        "Featuring soaring ceilings, expansive windows, and seamless indoor-outdoor living spaces, this estate offers a lifestyle of unparalleled sophistication and comfort."
+    "highlights": {
+      "subtitle": "Highlights",
+      "title": "Key Features",
+      "items": [
+        {
+          "title": "Prime South Naperville Location",
+          "description": "Just off Route 59 & 95th St. near downtown Naperville, offering easy access to dining, shopping, and major roadways."
+        },
+        {
+          "title": "Spacious Private Offices",
+          "description": "Large, impressive offices tailored for business professionals, psychologists, and therapists."
+        },
+        {
+          "title": "Abundant Natural Light",
+          "description": "Each office features a sprawling window line flooding the space with natural light for a bright, productive environment."
+        },
+        {
+          "title": "Move-in Ready & Flexible Terms",
+          "description": "Immediate availability with leasing options designed to fit your business needs."
+        }
+      ]
+    },
+    "availableSpaces": {
+      "subtitle": "Available Now",
+      "title": "All Available Spaces",
+      "showCapacity": true,
+      "spaces": [
+        {
+          "name": "Ste 117",
+          "floor": "1st Floor",
+          "capacity": "-",
+          "size": "1,133",
+          "sizeUnit": "SF",
+          "rentalRate": "$4,600",
+          "rateUnit": "/MO",
+          "spaceUse": "Office",
+          "available": true
+        },
+        {
+          "name": "Ste 118",
+          "floor": "1st Floor",
+          "capacity": "-",
+          "size": "205",
+          "sizeUnit": "SF",
+          "rentalRate": "$1,200",
+          "rateUnit": "/MO",
+          "spaceUse": "Office",
+          "available": true
+        },
+        {
+          "name": "Ste 06",
+          "floor": "1st Floor",
+          "capacity": "4",
+          "size": "545",
+          "sizeUnit": "SF",
+          "rentalRate": "$2,075",
+          "rateUnit": "/MO",
+          "spaceUse": "Office",
+          "available": true
+        },
+        {
+          "name": "Ste 106",
+          "floor": "1st Floor",
+          "capacity": "-",
+          "size": "389",
+          "sizeUnit": "SF",
+          "rentalRate": "$1,285",
+          "rateUnit": "/MO",
+          "spaceUse": "Office",
+          "available": true
+        },
+        {
+          "name": "Ste 07",
+          "floor": "1st Floor",
+          "capacity": "-",
+          "size": "240",
+          "sizeUnit": "SF",
+          "rentalRate": "$2,400",
+          "rateUnit": "/MO",
+          "spaceUse": "Office/Medical",
+          "available": true
+        }
       ]
     },
     "stats": [
-      { "value": "8,500", "label": "Square Feet" },
-      { "value": "5", "label": "Bedrooms" },
-      { "value": "6.5", "label": "Bathrooms" },
-      { "value": "3", "label": "Car Garage" }
+      { "value": "5", "label": "Available Spaces" },
+      { "value": "2,512", "label": "Total SF" },
+      { "value": "$1,200", "label": "Starting From" },
+      { "value": "2024", "label": "Renovated" }
     ],
     "gallery": {
-      "title": "Exceptional Spaces",
+      "title": "Modern Workspaces",
       "subtitle": "Gallery",
       "images": [
-        { "url": "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?q=80&w=2070", "caption": "Living Room" },
-        { "url": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070", "caption": "Gourmet Kitchen" },
-        { "url": "https://images.unsplash.com/photo-1600573472592-401b489a3cdc?q=80&w=2074", "caption": "Master Suite" },
-        { "url": "https://images.unsplash.com/photo-1600566752355-35792bedcfea?q=80&w=2070", "caption": "Spa Bathroom" },
-        { "url": "https://images.unsplash.com/photo-1600585154526-990dced4db0d?q=80&w=2070", "caption": "Infinity Pool" },
-        { "url": "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?q=80&w=2084", "caption": "Landscaped Gardens" }
+        { "url": "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069", "caption": "Reception Area" },
+        { "url": "https://images.unsplash.com/photo-1497366811353-6870744d04b2?q=80&w=2069", "caption": "Private Office" },
+        { "url": "https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=2070", "caption": "Conference Room" },
+        { "url": "https://images.unsplash.com/photo-1497215842964-222b430dc094?q=80&w=2070", "caption": "Open Workspace" },
+        { "url": "https://images.unsplash.com/photo-1564069114553-7215e1ff1890?q=80&w=2232", "caption": "Break Room" },
+        { "url": "https://images.unsplash.com/photo-1517502884422-41eaead166d4?q=80&w=2025", "caption": "Meeting Room" }
       ]
     },
     "floorPlan": {
-      "enabled": true,
-      "subtitle": "Explore the Layout",
-      "title": "Floor Plan",
-      "levels": [
-        {
-          "title": "Main Level",
-          "image": "https://images.unsplash.com/photo-1721244653652-268631ec049a?q=80&w=1362",
-          "description": "3,200 sq ft - Living areas, kitchen, dining, and guest suite"
-        },
-        {
-          "title": "Upper Level",
-          "image": "https://images.unsplash.com/photo-1721244653652-268631ec049a?q=80&w=1362",
-          "description": "2,800 sq ft - Master suite, bedrooms, and family room"
-        }
-      ]
+      "enabled": false
     },
     "features": {
-      "title": "Exceptional Amenities",
+      "title": "Shared Amenities",
       "subtitle": "Features",
       "items": [
         {
-          "title": "Smart Home System",
-          "description": "Complete home automation with climate, lighting, and security control at your fingertips.",
+          "title": "Multipurpose Room",
+          "description": "Sleek multipurpose room for meetings, workshops, and events.",
           "icon": "✦"
         },
         {
-          "title": "Wine Cellar",
-          "description": "Climate-controlled wine cellar with capacity for over 500 bottles with tasting area.",
+          "title": "Break Room",
+          "description": "Well-appointed break room with modern appliances and comfortable seating.",
           "icon": "✦"
         },
         {
-          "title": "Home Theater",
-          "description": "Professional-grade theater room with 4K projection and immersive surround sound.",
+          "title": "Waiting Areas",
+          "description": "Inviting waiting lounges for clients with contemporary design.",
           "icon": "✦"
         },
         {
-          "title": "Infinity Pool",
-          "description": "Lap pool with infinity edge, integrated spa, and stunning city views.",
+          "title": "Modern Restrooms",
+          "description": "All designed with warmth and professionalism in mind.",
           "icon": "✦"
         },
         {
-          "title": "Private Gym",
-          "description": "State-of-the-art fitness center with premium equipment and yoga studio.",
+          "title": "High-Speed Internet",
+          "description": "Enterprise-grade fiber internet included in all office spaces.",
           "icon": "✦"
         },
         {
-          "title": "Chef's Kitchen",
-          "description": "Gourmet kitchen with commercial-grade appliances and custom stone finishes.",
+          "title": "24/7 Access",
+          "description": "Secure building access around the clock for tenants.",
           "icon": "✦"
         }
       ]
     },
+    "brochure": {
+      "enabled": true,
+      "subtitle": "Download",
+      "title": "Marketing Brochure",
+      "description": "View or download our comprehensive property brochure with floor plans, pricing, and amenity details.",
+      "pdfUrl": "/sample.pdf",
+      "downloadText": "Download Brochure (PDF)",
+      "showDownload": true,
+      "height": "600px"
+    },
     "location": {
-      "title": "Prestigious Address",
+      "title": "Prime Business Location",
       "subtitle": "Location",
-      "image": "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?q=80&w=2069",
-      "description": "Nestled in one of the city's most coveted neighborhoods, this property offers the perfect blend of privacy and convenience. World-class dining, shopping, and cultural venues are just moments away.",
+      "image": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070",
+      "description": "Situated just off Route 59 and 95th Street in South Naperville, this property is in the heart of one of the area's most vibrant commercial districts. Easy access to major roadways, dining, shopping, and fitness centers.",
       "highlights": [
         {
-          "title": "Prime Location",
-          "description": "Prestigious neighborhood with exclusive access"
+          "title": "Easy Highway Access",
+          "description": "Quick access to I-88 and Route 59"
         },
         {
-          "title": "City Views",
-          "description": "Panoramic views of the city skyline"
+          "title": "Dining & Retail",
+          "description": "Walking distance to restaurants and shops"
         },
         {
-          "title": "Exclusive Access",
-          "description": "Private community with 24/7 security"
+          "title": "Public Transit",
+          "description": "Near Metra stations and bus routes"
+        }
+      ]
+    },
+    "nearby": {
+      "subtitle": "Neighborhood",
+      "title": "Nearby",
+      "transportationEnabled": true,
+      "transportationTitle": "Transportation",
+      "transportation": [
+        { "name": "Route 59 Station", "type": "rail", "distance": "13 min drive", "duration": "6.0 mi" },
+        { "name": "Naperville Station", "type": "rail", "distance": "17 min drive", "duration": "8.5 mi" },
+        { "name": "Aurora Station", "type": "rail", "distance": "18 min drive", "duration": "9.8 mi" },
+        { "name": "Lisle Station", "type": "rail", "distance": "25 min drive", "duration": "12.8 mi" },
+        { "name": "Chicago Midway International", "type": "airport", "distance": "45 min drive", "duration": "30.4 mi" },
+        { "name": "Chicago O'Hare International", "type": "airport", "distance": "54 min drive", "duration": "36.0 mi" }
+      ],
+      "amenitiesEnabled": true,
+      "amenitiesTitle": "Nearby Amenities",
+      "amenities": [
+        {
+          "name": "Restaurants",
+          "icon": "restaurant",
+          "places": [
+            { "name": "Jet's Pizza", "category": "Fast Food", "priceLevel": "$", "distance": "3 min walk" },
+            { "name": "Jimmy Johns", "category": "Sandwiches", "priceLevel": "$", "distance": "3 min walk" },
+            { "name": "Wild Tuna Contemporary Sushi", "category": "Sushi", "priceLevel": "$$$", "distance": "3 min walk" },
+            { "name": "McDonald's", "category": "Fast Food", "priceLevel": "$", "distance": "5 min walk" },
+            { "name": "Portillo's", "category": "American", "priceLevel": "$$", "distance": "5 min walk" },
+            { "name": "Noodles Pho U", "category": "Vietnamese", "priceLevel": "$", "distance": "7 min walk" }
+          ]
+        },
+        {
+          "name": "Retail & Services",
+          "icon": "retail",
+          "places": [
+            { "name": "State Farm", "category": "Insurance", "distance": "In Building" },
+            { "name": "Trek Bicycle Dealer", "category": "Bike Shop", "distance": "2 min walk" },
+            { "name": "LA Fitness", "category": "Fitness", "distance": "7 min walk" },
+            { "name": "Starbucks", "category": "Coffee", "distance": "7 min walk" },
+            { "name": "Amazon Fresh", "category": "Supermarket", "distance": "7 min walk" },
+            { "name": "The UPS Store", "category": "Business/Copy/Postal", "distance": "10 min walk" }
+          ]
         }
       ]
     },
     "details": {
       "subtitle": "Property Information",
-      "title": "Facts & Features",
+      "title": "Building Details",
       "interior": {
-        "bedrooms": 5,
-        "bathrooms": 6,
-        "fullBathrooms": 5,
-        "halfBathrooms": 1,
-        "hasFireplace": true,
-        "livableArea": "6,200 sqft",
-        "totalArea": "8,500 sqft",
+        "totalArea": "15,000 sqft",
+        "availableArea": "2,512 sqft",
         "rooms": [
-          { "name": "Primary Bedroom", "dimensions": "24 x 18", "area": "432 sqft" },
-          { "name": "Bedroom 2", "dimensions": "16 x 14", "area": "224 sqft" },
-          { "name": "Bedroom 3", "dimensions": "16 x 14", "area": "224 sqft" },
-          { "name": "Bedroom 4", "dimensions": "14 x 12", "area": "168 sqft" },
-          { "name": "Bedroom 5", "dimensions": "14 x 12", "area": "168 sqft" },
-          { "name": "Living Room", "dimensions": "28 x 22", "area": "616 sqft" },
-          { "name": "Kitchen", "dimensions": "20 x 18", "area": "360 sqft" },
-          { "name": "Dining Room", "dimensions": "18 x 14", "area": "252 sqft" },
-          { "name": "Family Room", "dimensions": "22 x 16", "area": "352 sqft" },
-          { "name": "Home Theater", "dimensions": "20 x 16", "area": "320 sqft" },
-          { "name": "Home Office", "dimensions": "14 x 12", "area": "168 sqft" },
-          { "name": "Wine Cellar", "dimensions": "16 x 10", "area": "160 sqft" }
+          { "name": "Multipurpose Room", "area": "800 sqft" },
+          { "name": "Break Room", "area": "400 sqft" },
+          { "name": "Waiting Area", "area": "300 sqft" }
         ]
       },
       "parking": {
-        "totalSpaces": 3,
-        "features": ["Attached Garage", "Electric Vehicle Charging", "Heated"]
+        "totalSpaces": 50,
+        "features": ["Surface Lot", "Free Parking", "Visitor Parking"]
       },
       "lot": {
-        "size": "0.75 Acres",
-        "parcelNumber": "SF-2024-78543"
+        "size": "1.2 Acres",
+        "parcelNumber": "NP-2024-34567"
       },
       "construction": {
-        "homeType": "Single Family",
-        "propertySubtype": "Luxury Estate",
-        "yearBuilt": 2022,
+        "homeType": "Office",
+        "propertySubtype": "Coworking Space",
+        "yearBuilt": 1997,
+        "yearRenovated": 2024,
         "newConstruction": false,
         "condition": "Excellent"
       },
-      "hoa": {
-        "hasHoa": true,
-        "fee": "$850",
-        "frequency": "monthly"
-      },
       "financial": {
-        "pricePerSqft": "$1,290/sqft",
-        "taxAssessedValue": "$7,200,000",
-        "annualTax": "$86,400",
-        "daysOnMarket": 14,
-        "dateOnMarket": "1/16/2025"
+        "pricePerSqft": "$3.80/SF",
+        "daysOnMarket": 45,
+        "dateOnMarket": "12/15/2024"
       }
     },
     "agent": {
-      "subtitle": "Your Expert Guide",
-      "title": "Meet Your Real Estate Agent",
-      "name": "Sarah Mitchell",
-      "role": "Luxury Real Estate Specialist",
-      "image": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=400&h=400&fit=crop",
-      "bio": "With over 15 years of experience in luxury real estate, Sarah specializes in helping discerning clients find their dream properties. Her expertise, market knowledge, and dedication to exceptional service have earned her recognition as one of the top agents in the region.",
-      "phone": "+1 (555) 987-6543",
-      "email": "sarah.mitchell@example.com",
+      "subtitle": "Your Leasing Contact",
+      "title": "Connect With Us",
+      "name": "Charlie Caine",
+      "role": "Commercial Leasing Specialist",
+      "image": "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=400&h=400&fit=crop",
+      "bio": "Charlie specializes in commercial office leasing in the Naperville area. With deep knowledge of the local market and a commitment to finding the right fit for every business, he's helped dozens of companies find their ideal workspace.",
+      "phone": "+1 (331) 575-1168",
+      "email": "charlie.caine@colliergroup.com",
       "specialties": [
-        "Luxury Properties",
-        "Investment Advisory",
-        "Market Analysis",
-        "Private Showings"
+        "Commercial Leasing",
+        "Office Space",
+        "Tenant Representation",
+        "Market Analysis"
       ],
       "social": {
-        "linkedin": "https://linkedin.com/in/sarahmitchell",
-        "instagram": "https://instagram.com/sarahmitchell",
-        "facebook": "https://facebook.com/sarahmitchell"
+        "linkedin": "https://linkedin.com/in/charliecaine"
       },
       "cta": {
-        "text": "Schedule Consultation",
+        "text": "Schedule Tour",
         "url": "#contact"
       }
     },
     "openHouse": {
       "enabled": true,
       "subtitle": "Schedule a Visit",
-      "title": "Open House",
+      "title": "Property Tours",
       "events": [
         {
           "date": "2025-02-15",
-          "startTime": "11:00",
-          "endTime": "13:00"
+          "startTime": "10:00",
+          "endTime": "12:00"
         },
         {
           "date": "2025-02-22",
           "startTime": "14:00",
           "endTime": "16:00"
-        },
-        {
-          "date": "2025-03-01",
-          "startTime": "10:00",
-          "endTime": "12:00"
-        },
-        {
-          "date": "2025-03-08",
-          "startTime": "15:00",
-          "endTime": "17:00"
         }
       ],
-      "location": "123 Luxury Lane, San Francisco, CA 94102",
-      "description": "Open House - Villa Meridian",
-      "calendlyUrl": "https://calendly.com/sfic54/property-showing"
+      "location": "3420 Lacrosse Ln, Naperville, IL 60564",
+      "description": "Property Tour - Lacrosse Business Center",
+      "calendlyUrl": "https://calendly.com/colliergroup/office-tour"
     },
     "map": {
       "enabled": true,
-      "title": "Visit Our Property",
+      "title": "Find Us",
       "subtitle": "Location Map",
-      "description": "Explore the exact location of this exclusive estate on the map.",
+      "description": "Located in the heart of South Naperville's commercial district.",
       "zoom": 15
     },
+    "rentCalculator": {
+      "enabled": true,
+      "subtitle": "Estimate Your Cost",
+      "title": "Net Effective Rent Calculator",
+      "description": "Calculate your monthly effective rent factoring in free rent, tenant improvements, and annual escalations.",
+      "baseRentPerSf": 25,
+      "totalSf": 2500,
+      "defaultTerm": 5,
+      "defaultFreeRent": 1,
+      "defaultTi": 10,
+      "defaultEscalation": 3
+    },
+    "leaseTimeline": {
+      "enabled": true,
+      "subtitle": "The Process",
+      "title": "Your Journey to a New Office",
+      "description": "From your first tour to moving day, we make every step simple and transparent."
+    },
     "contact": {
-      "title": "Private Showing",
+      "title": "Lease Inquiry",
       "subtitle": "Contact",
-      "description": "To schedule a private viewing or request additional information, please contact our estate team.",
-      "email": "inquiry@example.com",
-      "phone": "+1 (555) 123-4567",
+      "description": "Ready to find your perfect office space? Contact us to schedule a tour or request more information.",
+      "email": "leasing@colliergroup.com",
+      "phone": "+1 (331) 575-1168",
       "address": {
-        "street": "123 Luxury Lane",
-        "city": "San Francisco",
-        "state": "CA",
-        "zipCode": "94102",
+        "street": "3420 Lacrosse Ln",
+        "city": "Naperville",
+        "state": "IL",
+        "zipCode": "60564",
         "country": "United States",
-        "latitude": 37.7749,
-        "longitude": -122.4194
+        "latitude": 41.7136,
+        "longitude": -88.2034
       },
       "social": {
-        "instagram": "https://instagram.com/example",
-        "linkedin": "https://linkedin.com/company/example",
-        "facebook": "https://facebook.com/example"
+        "linkedin": "https://linkedin.com/company/colliergroup"
       }
     }
   },
   "contact": {
-    "email": "inquiry@example.com",
-    "phone": "+1 (555) 123-4567",
+    "email": "leasing@colliergroup.com",
+    "phone": "+1 (331) 575-1168",
     "address": {
-      "street": "123 Luxury Lane",
-      "city": "San Francisco",
-      "state": "CA",
-      "zipCode": "94102",
+      "street": "3420 Lacrosse Ln",
+      "city": "Naperville",
+      "state": "IL",
+      "zipCode": "60564",
       "country": "United States"
     }
   },
   "social": {
-    "instagram": "https://instagram.com/example",
-    "linkedin": "https://linkedin.com/company/example",
-    "facebook": "https://facebook.com/example"
+    "linkedin": "https://linkedin.com/company/colliergroup"
   },
   "seo": {
-    "defaultTitle": "Luxury Estate",
-    "titleTemplate": "%s | Luxury Estate",
-    "defaultDescription": "A rare international estate offering exceptional luxury living.",
-    "keywords": ["luxury real estate", "estate", "luxury home", "premium property"],
+    "defaultTitle": "Lacrosse Business Center - Office Space for Lease",
+    "titleTemplate": "%s | Lacrosse Business Center",
+    "defaultDescription": "Premium coworking and private office space available in South Naperville. Modern updates, flexible terms, move-in ready.",
+    "keywords": ["office space", "coworking", "naperville", "commercial lease", "office for rent"],
     "ogImage": "/images/og-image.png"
   },
   "footer": {
-    "brand": "Luxury Estate",
-    "tagline": "A rare international estate offering exceptional luxury living",
+    "brand": "Lacrosse Business Center",
+    "tagline": "Premium Office Space in South Naperville",
     "copyrightText": "All rights reserved."
   }
 }

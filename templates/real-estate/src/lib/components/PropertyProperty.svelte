@@ -103,7 +103,7 @@
 				<div class="animate-on-scroll animate-fade-up">
 					<button
 						onclick={toggleSpecs}
-						class="mx-auto flex items-center gap-3 text-white text-lg font-light hover:text-[var(--color-primary)] transition-colors"
+						class="cursor-pointer mx-auto flex items-center gap-3 text-white text-lg font-light hover:text-[var(--color-primary)] transition-colors"
 					>
 						<span>{showSpecs ? 'Hide' : 'View'} Full Specifications</span>
 						<svg
