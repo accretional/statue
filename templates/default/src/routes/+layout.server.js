@@ -1,10 +1,13 @@
-import { getContentDirectories, getContentByDirectory } from 'statue-ssg/cms/content-processor';
+import { getContentDirectories, getContentByDirectory, getRootLevelContent } from 'statue-ssg/cms/content-processor';
 import siteConfig from '../../site.config.json';
 
 /** @type {import('./$types').LayoutServerLoad} */
 export async function load() {
   // Get content directories
   const directories = getContentDirectories();
+
+  // Get root-level content files
+  const rootContent = getRootLevelContent();
 
   // Enhance directories with subpages data for consistent footer
   const enhancedDirectories = await Promise.all(
@@ -28,6 +31,7 @@ export async function load() {
 
   return {
     globalDirectories: enhancedDirectories,
+    rootContent,
     searchConfig: siteConfig.search || null,
     navbarConfig: siteConfig.navbar || null,
     rssEnabled: siteConfig.rss?.enabled ?? false,
