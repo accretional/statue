@@ -77,7 +77,10 @@
       {/if}
       <div class="lp-iframe-wrap">
         {#if !iframeLoaded}<span class="lp-loading">Loading...</span>{/if}
-        <iframe bind:this={iframeRef} src={fullUrl} title="Preview" class:loaded={iframeLoaded} sandbox="allow-scripts allow-same-origin" loading="lazy" onload={() => { iframeLoaded = true; extractMetadata(); }}></iframe>
+        <iframe bind:this={iframeRef} src={fullUrl} title="Preview" scrolling="no"
+        class:loaded={iframeLoaded} sandbox="allow-scripts allow-same-origin"
+        loading="lazy" onload={() => { iframeLoaded = true; extractMetadata(); }}>
+        </iframe>
       </div>
       <div class="lp-footer">
         <a href={fullUrl} class="lp-url" target="_blank" rel="noopener noreferrer" onclick={(e) => e.stopPropagation()}>{fullUrl}</a>
@@ -156,6 +159,7 @@
     width: 100%;
     aspect-ratio: 16/10;
     background: var(--color-background);
+    overflow: hidden;
   }
 
   .lp-loading {
@@ -168,6 +172,7 @@
   }
 
   iframe {
+    display: block;
     width: 100%;
     height: 100%;
     border: none;
