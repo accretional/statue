@@ -6,4 +6,47 @@
 @source "../";
 @source "../../node_modules/statue-ssg/src/**/*.{svelte,js,ts}";
 
-:root { color-scheme: dark; }
+:root {
+   color-scheme: dark;
+}
+
+/* ===============================
+   Styled Markdown Blocks
+   =============================== */
+
+.statue-callout {
+   padding: 1rem;
+   margin: 1.5rem 0;
+   border-left: 4px solid var(--color-primary);
+   background: var(--color-card);
+   border-radius: 0.5rem;
+}
+
+.statue-callout-info {
+   border-color: var(--color-primary);
+}
+
+.statue-callout-warning {
+   border-color: var(--color-warning, orange);
+}
+
+.statue-callout-success {
+   border-color: var(--color-success, green);
+}
+
+.statue-callout-error {
+   border-color: var(--color-error, red);
+}
+
+.statue-info-box {
+   padding: 1rem;
+   margin: 1.5rem 0;
+   background: var(--color-muted);
+   border-radius: 0.5rem;
+}
+
+.statue-highlight {
+   background: var(--color-accent);
+   padding: 0.15rem 0.35rem;
+   border-radius: 0.25rem;
+}

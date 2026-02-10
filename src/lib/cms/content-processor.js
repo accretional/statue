@@ -35,13 +35,42 @@ const mdsvexOptions = {
   layout: null // We'll handle layout in Svelte components
 };
 
+const transformStyledBlocks = (content) => {
+  return content
+    // Callout block
+    .replace(
+      /:::callout\s*(.*?)\n([\s\S]*?)\n:::/g,
+      (_, attrs, body) =>
+        `<div class="statue-callout statue-callout-${attrs.replace('type=', '').trim()}">${body}</div>`
+    )
+
+    // Info box
+    .replace(
+      /:::info\n([\s\S]*?)\n:::/g,
+      (_, body) =>
+        `<div class="statue-info-box">${body}</div>`
+    )
+
+    // Inline highlight
+    .replace(
+      /:::highlight\s+([\s\S]*?)\s+:::highlight/g,
+      (_, body) =>
+        `<span class="statue-highlight">${body}</span>`
+    );
+};
+
+
+
+
 /**
  * Process markdown with mdsvex and extract HTML content
  * Since mdsvex produces Svelte component code, we need to extract just the HTML part
  */
 const processMarkdownWithMDSvex = async (markdown) => {
   try {
-    const { code } = await compile(markdown, mdsvexOptions);
+    const transformedMarkdown = transformStyledBlocks(markdown);
+    const { code } = await compile(transformedMarkdown, mdsvexOptions);
+
 
     // Extract HTML from mdsvex output
     let html = code;
@@ -51,16 +80,18 @@ const processMarkdownWithMDSvex = async (markdown) => {
 
     // Remove Svelte {@html `...`} wrappers and keep just the inner HTML
     // mdsvex wraps code blocks in {@html `...`} which we need to unwrap
-    html = html.replace(/\{@html\s+`([^`]*(?:`[^`]*`)*)`\}/g, '$1');
+    // html = html.replace(/\{@html\s+`([^`]*(?:`[^`]*`)*)`\}/g, '$1');
 
     // Remove remaining Svelte-specific wrappers
-    html = html.replace(/\{[\s\S]*?\}/g, (match) => {
+    /**
+      html = html.replace(/\{[\s\S]*?\}/g, (match) => {
       // Keep if it's not a Svelte directive (like {@html} already handled)
       if (match.startsWith('{@') || match.includes('=>')) {
         return '';
       }
       return match;
     });
+    */
 
     html = html.trim();
 
