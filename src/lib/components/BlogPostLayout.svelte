@@ -1,17 +1,21 @@
-<script>
-  // BlogPostLayout component - Linear-style blog post layout wrapper
+<script lang="ts">
+  // BlogPostLayout component - Full blog post page layout
   import BlogPostHeader from './BlogPostHeader.svelte';
   import BlogPostContent from './BlogPostContent.svelte';
 
-  export let title = '';
-  export let description = '';
-  export let date = '';
-  export let author = '';
-  export let authorAvatar = '';
-  export let thumbnail = '';
-  export let content = '';
-  export let backLink = '/blog';
-  export let backLinkText = 'Blog';
+  export interface BlogPostLayoutProps {
+    title?: string;
+    description?: string;
+    date?: string;
+    author?: string;
+    authorAvatar?: string;
+    thumbnail?: string;
+    content?: string;
+    backLink?: string;
+    backLinkText?: string;
+  }
+
+  let { title = '', description = '', date = '', author = '', authorAvatar = '', thumbnail = '', content = '', backLink = '/blog', backLinkText = 'Blog' }: BlogPostLayoutProps = $props();
 </script>
 
 <div class="blog-post-layout">

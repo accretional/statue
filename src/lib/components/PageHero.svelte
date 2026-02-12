@@ -1,7 +1,15 @@
-<script>
+<script lang="ts">
+  export interface PageHeroProps {
+    title: string;
+    description?: string;
+    backgroundImage?: string;
+  }
+
   // PageHero component - Page header section (for about, docs, etc.)
-  export let title = '';
-  export let description = '';
+  let {
+    title = '',
+    description = ''
+  }: PageHeroProps = $props();
 </script>
 
 <div class="container mx-auto px-4 pt-12 pb-4 md:pt-20 md:pb-4">
@@ -16,4 +24,3 @@
     {/if}
   </div>
 </div>
-

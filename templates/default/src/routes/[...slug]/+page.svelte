@@ -1,5 +1,6 @@
 <script>
 	import { page } from '$app/stores';
+	import { tick } from 'svelte';
 	import {
 		Warning,
 		ContentHeader,
@@ -9,16 +10,53 @@
 		BlogPostLayout
 	} from 'statue-ssg';
 
+	// Import all MDX files at build time
+	const mdxModules = import.meta.glob('/content/**/*.mdx', { eager: true });
+
 	let { data } = $props();
 
-	let isDocsContent = $derived(data.content?.directory?.startsWith('docs'));
-	let isBlogContent = $derived(
-		data.content?.directory === 'blog' || data.content?.directory?.startsWith('blog/')
-	);
+	// Helper function to find MDX component
+	function findMdxComponent(pathname) {
+		// Remove trailing slash
+		const url = pathname.endsWith('/') ? pathname.slice(0, -1) : pathname;
+
+		// Try different path patterns
+		const patterns = [`/content${url}.mdx`, `/content${url}/index.mdx`];
+
+		for (const pattern of patterns) {
+			const module = mdxModules[pattern];
+			if (module?.default) {
+				return module.default;
+			}
+		}
+		return null;
+	}
+
+	// Reactive values
+	let mdxComponent = $derived(findMdxComponent($page.url.pathname));
+	let isMdxContent = $derived(mdxComponent !== null);
 	let activePath = $derived($page.url.pathname);
 	let title = $derived(data.content ? data.content.metadata.title : 'Content Not Found');
+	let layoutType = $derived(data.layoutType || 'default');
 
 	let headings = $state([]);
+	let mdxContainer = $state(null);
+
+	// Extract headings from MDX content after render
+	$effect(() => {
+		mdxComponent;
+		if (isMdxContent && mdxContainer) {
+			tick().then(() => {
+				const h2s = mdxContainer.querySelectorAll('h2[id], h3[id]');
+				const extracted = Array.from(h2s).map((el) => ({
+					id: el.id,
+					text: el.textContent,
+					level: el.tagName === 'H2' ? 2 : 3
+				}));
+				headings = extracted;
+			});
+		}
+	});
 
 	function getBackLink(directory) {
 		if (directory === 'root') return '/';
@@ -38,33 +76,48 @@
 	{/if}
 </svelte:head>
 
-{#if data.notFound}
-	{#if isDocsContent || activePath.startsWith('/docs')}
-		<DocsLayout
-			sidebarItems={data.sidebarItems || []}
-			{activePath}
-			sidebarTitle="Docs"
-			showToc={false}
-			headings={[]}
-		>
-			<div class="text-center py-12">
-				<h1 class="text-2xl font-bold text-(--color-foreground) mb-4">Page Not Found</h1>
-				<p class="text-(--color-muted)">The documentation page you're looking for doesn't exist.</p>
-				<a href="/docs" class="mt-4 inline-block text-(--color-primary) hover:underline">
-					Back to Documentation
-				</a>
+{#if isMdxContent}
+	<!-- MDX Content - Layout determined by layoutType -->
+	{#if layoutType === 'docs'}
+		<DocsLayout sidebarItems={data.sidebarItems || []} {headings} {activePath} sidebarTitle="Docs">
+			<div bind:this={mdxContainer}>
+				{#if data.content?.metadata?.title}
+					<header class="mb-8 pb-8 border-(--color-border)">
+						<h1 class="text-3xl sm:text-4xl font-bold text-(--color-foreground) mb-4">
+							{data.content.metadata.title}
+						</h1>
+						{#if data.content?.metadata?.description}
+							<p class="text-lg text-muted leading-relaxed">
+								{data.content.metadata.description}
+							</p>
+						{/if}
+					</header>
+				{/if}
+				<div class="prose prose-docs max-w-none pb-16">
+					{@render mdxComponent?.()}
+				</div>
 			</div>
 		</DocsLayout>
+	{:else if layoutType === 'blog'}
+		<div class="min-h-screen bg-(--color-background)">
+			<div class="container mx-auto px-4 py-16">
+				<div class="max-w-4xl mx-auto prose prose-invert">
+					{@render mdxComponent?.()}
+				</div>
+			</div>
+		</div>
 	{:else}
-		<div class="bg-red-100 p-4 rounded-md my-8 max-w-prose mx-auto">
-			<h2 class="text-xl font-bold text-red-700">DEBUG: Content not found</h2>
-			<p class="my-2">URL: {$page.url.pathname}</p>
-			<p class="my-2">Params: {JSON.stringify($page.params)}</p>
-			<p class="my-2">Data: {JSON.stringify(data)}</p>
+		<div class="min-h-screen text-white bg-linear-to-b from-(--color-hero-from) via-(--color-hero-via) to-(--color-hero-to)">
+			<div class="container mx-auto px-4 py-16">
+				<div class="max-w-6xl mx-auto prose prose-invert">
+					{@render mdxComponent?.()}
+				</div>
+			</div>
 		</div>
 	{/if}
 {:else if data.content}
-	{#if isDocsContent}
+	<!-- Markdown Content - Layout determined by layoutType -->
+	{#if layoutType === 'docs'}
 		<DocsLayout sidebarItems={data.sidebarItems || []} {headings} {activePath} sidebarTitle="Docs">
 			{#if data.content.metadata.warning}
 				<div class="mb-6">
@@ -80,7 +133,7 @@
 				bind:headings
 			/>
 		</DocsLayout>
-	{:else if isBlogContent}
+	{:else if layoutType === 'blog'}
 		<BlogPostLayout
 			title={data.content.metadata.title}
 			description={data.content.metadata.description}

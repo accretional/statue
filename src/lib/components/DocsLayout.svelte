@@ -29,16 +29,35 @@
   - showToc: Show table of contents (default: true)
 -->
 
-<script>
+<script lang="ts">
   import DocsSidebar from './DocsSidebar.svelte';
   import TableOfContents from './TableOfContents.svelte';
 
-  export let sidebarItems = [];
-  export let headings = [];
-  export let activePath = '';
-  export let sidebarTitle = 'Documentation';
-  export let showSearch = true;
-  export let showToc = true;
+  export interface DocsLayoutProps {
+    sidebarItems?: Array<{
+      title: string;
+      url?: string;
+      children?: Array<{
+        title: string;
+        url?: string;
+        children?: Array<{
+          title: string;
+          url: string;
+        }>;
+      }>;
+    }>;
+    headings?: Array<{
+      id: string;
+      text: string;
+      level: number;
+    }>;
+    activePath?: string;
+    sidebarTitle?: string;
+    showSearch?: boolean;
+    showToc?: boolean;
+  }
+
+  let { sidebarItems = [], headings = [], activePath = '', sidebarTitle = 'Documentation', showSearch = true, showToc = true }: DocsLayoutProps = $props();
 
   let isMobileSidebarOpen = false;
 

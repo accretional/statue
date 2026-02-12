@@ -39,17 +39,33 @@
   - document: Default document icon
 -->
 
-<script>
-  export let title = '';
-  export let description = 'Guides, resources, and references to help you build with Statue.';
-  export let content = [];
-  export let subDirectories = [];
+<script lang="ts">
+  export interface DocsDirectoryListProps {
+    title?: string;
+    description?: string;
+    content?: Array<{
+      url: string;
+      metadata?: {
+        title?: string;
+        description?: string;
+        icon?: string;
+        order?: number;
+      };
+      title?: string;
+      slug?: string;
+    }>;
+    subDirectories?: Array<{
+      name: string;
+      url: string;
+      description?: string;
+    }>;
+    primaryButtonText?: string;
+    primaryButtonUrl?: string;
+    secondaryButtonText?: string;
+    secondaryButtonUrl?: string;
+  }
 
-  // CTA Button props (optional - defaults to first two sorted items)
-  export let primaryButtonText = '';
-  export let primaryButtonUrl = '';
-  export let secondaryButtonText = '';
-  export let secondaryButtonUrl = '';
+  let { title = '', description = 'Guides, resources, and references to help you build with Statue.', content = [], subDirectories = [], primaryButtonText = '', primaryButtonUrl = '', secondaryButtonText = '', secondaryButtonUrl = '' }: DocsDirectoryListProps = $props();
 
   // Icon SVG paths map - users can set icon in markdown frontmatter
   const iconPaths = {
@@ -78,20 +94,20 @@
   }
 
   // Sort content by order (items with order come first, then by order value)
-  $: sortedContent = [...content].sort((a, b) => {
+  let sortedContent = $derived([...content].sort((a, b) => {
     const orderA = a.metadata?.order ?? 999;
     const orderB = b.metadata?.order ?? 999;
     return orderA - orderB;
-  });
+  }));
 
   // Featured content is first 2 items after sorting
-  $: featuredContent = sortedContent.slice(0, 2);
+  let featuredContent = $derived(sortedContent.slice(0, 2));
 
   // Resolved button values (props override defaults from content)
-  $: resolvedPrimaryText = primaryButtonText || featuredContent[0]?.metadata?.title || 'Get Started';
-  $: resolvedPrimaryUrl = primaryButtonUrl || featuredContent[0]?.url || '/docs';
-  $: resolvedSecondaryText = secondaryButtonText || featuredContent[1]?.metadata?.title || '';
-  $: resolvedSecondaryUrl = secondaryButtonUrl || featuredContent[1]?.url || '';
+  let resolvedPrimaryText = $derived(primaryButtonText || featuredContent[0]?.metadata?.title || 'Get Started');
+  let resolvedPrimaryUrl = $derived(primaryButtonUrl || featuredContent[0]?.url || '/docs');
+  let resolvedSecondaryText = $derived(secondaryButtonText || featuredContent[1]?.metadata?.title || '');
+  let resolvedSecondaryUrl = $derived(secondaryButtonUrl || featuredContent[1]?.url || '');
 </script>
 
 <article class="docs-directory relative">
@@ -138,7 +154,7 @@
   {#if sortedContent && sortedContent.length > 0}
     <section class="mb-12 relative z-10">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {#each sortedContent as item, index}
+        {#each sortedContent as item}
           <a
             href={item.url}
             class="group relative p-6 rounded-xl border border-[var(--color-border)] bg-gradient-to-br from-[var(--color-card)]/50 to-transparent hover:border-[var(--color-primary)]/50 hover:from-[var(--color-card)] transition-all"

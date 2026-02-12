@@ -26,7 +26,7 @@ This guide provides a systematic approach to transforming a statue-ssg installat
 - `src/routes/about/+page.svelte` - About page (exists)
 - `src/lib/components/` - Custom components (create directory)
 - `static/assets/` - Images and media (create directory)
-- `site.config.js` - Site configuration
+- `site.config.json` - Site configuration
 - `svelte.config.js` - Build configuration
 
 ---
@@ -97,7 +97,7 @@ import ComponentName from '$lib/components/ComponentName.svelte';
 
 ## Phase 3: Site Configuration
 
-Update `site.config.js` with your site's information:
+Update `site.config.json` with your site's information:
 
 **Required sections to customize:**
 - `site.*` - Site name, description, URL, author
@@ -106,26 +106,28 @@ Update `site.config.js` with your site's information:
 - `seo.*` - SEO defaults, title templates, keywords, OG images
 
 **Example:**
-```javascript
-site: {
-  name: "Your Site Name",
-  description: "Your site description",
-  url: "https://yoursite.com",
-  author: "Your Name"
-},
-seo: {
-  defaultTitle: "Your Site Title",
-  titleTemplate: "%s | Your Site",
-  defaultDescription: "Your site description",
-  keywords: ["keyword1", "keyword2"],
-  ogImage: "/assets/your-image.jpg",
-  twitterCard: "summary_large_image"
+```json
+{
+  "site": {
+    "name": "Your Site Name",
+    "description": "Your site description",
+    "url": "https://yoursite.com",
+    "author": "Your Name"
+  },
+  "seo": {
+    "defaultTitle": "Your Site Title",
+    "titleTemplate": "%s | Your Site",
+    "defaultDescription": "Your site description",
+    "keywords": ["keyword1", "keyword2"],
+    "ogImage": "/assets/your-image.jpg",
+    "twitterCard": "summary_large_image"
+  }
 }
 ```
 
 You can access config values in pages with:
 ```svelte
-import siteConfig from '../../site.config.js';
+import siteConfig from '../../site.config.json';
 // Use: {siteConfig.site.name}
 ```
 
@@ -276,7 +278,7 @@ Best for portfolios, landing pages, and unique designs:
 **Remove all statue-ssg component imports:**
 ```svelte
 <script>
-  import siteConfig from '../../site.config.js';
+  import siteConfig from '../../site.config.json';
   export let data;
 </script>
 
@@ -318,7 +320,7 @@ Best for blogs, docs, and content-driven sites:
 ```svelte
 <script>
   import { Hero, Stats, Categories, LatestContent } from 'statue-ssg';
-  import siteConfig from '../../site.config.js';
+  import siteConfig from '../../site.config.json';
 
   export let data;
   $: directories = data.directories;
@@ -345,7 +347,7 @@ Combine statue-ssg components with your own:
 <script>
   import { Hero } from 'statue-ssg';
   import CustomGallery from '$lib/components/CustomGallery.svelte';
-  import siteConfig from '../../site.config.js';
+  import siteConfig from '../../site.config.json';
 
   export let data;
 </script>
@@ -367,7 +369,7 @@ Combine statue-ssg components with your own:
 #### Option A: Fully Custom About Page
 ```svelte
 <script>
-  import siteConfig from '../../../site.config.js';
+  import siteConfig from '../../../site.config.json';
   export let data;
 </script>
 
@@ -570,7 +572,7 @@ The `build/` directory contains your complete static site. Deploy to any static 
 
 ### Essential Workflow (Fully Custom Site):
 1. **Assets** - Download images to `static/assets/`
-2. **Config** - Update `site.config.js` and `svelte.config.js`
+2. **Config** - Update `site.config.json` and `svelte.config.js`
 3. **Content** - Delete unwanted content directories
 4. **Components** - Create custom components in `src/lib/components/`
 5. **Layout** - Update layout with custom footer (remove or keep NavigationBar)
@@ -582,7 +584,7 @@ The `build/` directory contains your complete static site. Deploy to any static 
 
 ### Essential Workflow (Blog/Docs Site):
 1. **Assets** - Add images to `static/assets/`
-2. **Config** - Update `site.config.js` with your info
+2. **Config** - Update `site.config.json` with your info
 3. **Content** - Delete placeholder markdown, add your own content
 4. **Components** - Create custom footer (optional: keep NavigationBar)
 5. **Layout** - Update layout with custom footer
@@ -599,7 +601,7 @@ The `build/` directory contains your complete static site. Deploy to any static 
 - **Config:** Add `handleUnseenRoutes: 'ignore'` to `svelte.config.js`
 - **Routes:** Add all custom pages to `prerender.entries` array
 - **Components:** Import custom with `$lib/components/ComponentName.svelte`
-- **Site Config:** Import with `import siteConfig from '../../site.config.js'`
+- **Site Config:** Import with `import siteConfig from '../../site.config.json'`
 - **Markdown Content:** Use dual access pattern: `item.metadata?.title || item.title`
 
 ### Common Issues:
@@ -619,7 +621,7 @@ A successful statue-ssg customization requires understanding your project type a
 
 ### For Fully Custom Sites (Portfolio/Landing/Gallery):
 1. **Assets first** - Place images in `static/assets/`
-2. **Config early** - Update `site.config.js` and add `handleUnseenRoutes: 'ignore'` to `svelte.config.js`
+2. **Config early** - Update `site.config.json` and add `handleUnseenRoutes: 'ignore'` to `svelte.config.js`
 3. **Delete content** - Remove unwanted `content/` directories
 4. **Custom components** - Create footer and other components in `src/lib/components/`
 5. **Layout setup** - Remove NavigationBar, add custom footer to layout
@@ -629,7 +631,7 @@ A successful statue-ssg customization requires understanding your project type a
 
 ### For Blog/Docs Sites (Content-Driven):
 1. **Assets** - Add images to `static/assets/`
-2. **Config** - Update `site.config.js` with your info
+2. **Config** - Update `site.config.json` with your info
 3. **Content** - Replace placeholder markdown with your content
 4. **Components** - Create custom footer (keep or customize other components)
 5. **Layout** - Update layout with custom footer, keep NavigationBar

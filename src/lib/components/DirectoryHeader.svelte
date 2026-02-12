@@ -1,6 +1,9 @@
-<script>
-  // DirectoryHeader component - Directory header section
-  export let title = '';
+<script lang="ts">
+  export interface DirectoryHeaderProps {
+    title?: string;
+  }
+
+  let { title = '' }: DirectoryHeaderProps = $props();
 </script>
 
 <div class="max-w-5xl mx-auto">
@@ -8,4 +11,3 @@
     {title}
   </h1>
 </div>
-

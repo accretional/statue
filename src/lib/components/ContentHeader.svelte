@@ -1,10 +1,13 @@
-<script>
-  // ContentHeader component - Content header section
-  export let title = '';
-  export let date = null;
-  export let author = null;
-  export let backLink = '/';
-  export let backLinkText = 'Home';
+<script lang="ts">
+  export interface ContentHeaderProps {
+    title?: string;
+    date?: string | null;
+    author?: string | null;
+    backLink?: string;
+    backLinkText?: string;
+  }
+
+  let { title = '', date = null, author = null, backLink = '/', backLinkText = 'Home' }: ContentHeaderProps = $props();
 </script>
 
 <header class="mb-10">
@@ -34,4 +37,3 @@
     </a>
   </div>
 </header>
-

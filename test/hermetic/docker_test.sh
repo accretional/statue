@@ -26,7 +26,7 @@ echo "Container ID: $CONTAINER_ID"
 echo "Waiting for preview server to start..."
 
 # Step: Keep curling the container to see when npm run preview starts successfully
-MAX_ATTEMPTS=30
+MAX_ATTEMPTS=60
 ATTEMPT=0
 SUCCESS=false
 SERVER_URL="http://localhost:3000"
@@ -101,6 +101,8 @@ echo "Container ID: $CONTAINER_ID"
 docker stop $CONTAINER_ID > /dev/null 2>&1
 docker rm $CONTAINER_ID > /dev/null 2>&1
 echo "✅ Container cleanup completed"
+
+rm $PACKAGE_FILE
 
 # Step: If the curl request succeeds before then, consider the test passed
 if [ "$SUCCESS" = true ]; then

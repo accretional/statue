@@ -1,0 +1,24 @@
+/* Claude Code Theme */
+/* Inspired by Claude Code CLI's warm, earthy aesthetic */
+@theme {
+  /* Core palette - Warm dark theme */
+  --color-background: #262624;    /* Dark warm gray */
+  --color-card: #30302e;          /* Slightly lighter for cards */
+  --color-border: #3e3e38;        /* Warm gray border */
+  --color-foreground: #faf9f5;    /* Cream white text */
+  --color-muted: #b7b5a9;         /* Muted warm gray */
+
+  /* Brand colors - Anthropic coral/orange */
+  --color-primary: #d97757;       /* Claude orange/coral */
+  --color-secondary: #e8956f;     /* Lighter coral */
+  --color-accent: #b05730;        /* Darker burnt orange */
+
+  /* Text colors for different surfaces */
+  --color-on-primary: #ffffff;    /* White text on primary */
+  --color-on-background: #262624; /* Dark text for contrast */
+
+  /* Hero gradients - Subtle warm transitions */
+  --color-hero-from: #262624;
+  --color-hero-via: #30302e;
+  --color-hero-to: #262624;
+}

@@ -1,5 +1,5 @@
 <script lang="ts">
-  interface Props {
+  export interface ScrollingLogosProps {
     class?: string;
     reverse?: boolean;
     pauseOnHover?: boolean;
@@ -15,7 +15,7 @@
     children,
     vertical = false,
     repeat = 4
-  }: Props = $props();
+  }: ScrollingLogosProps = $props();
 
   // Helper function to combine classes
   function classNames(...classes: (string | Record<string, boolean> | undefined)[]): string {

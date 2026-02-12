@@ -1,36 +1,62 @@
 <script lang="ts">
-	const currentYear = new Date().getFullYear();
+export interface FooterProps {
+  siteName?: string;
+  description?: string;
+  links?: Array<{
+    title: string;
+    items: Array<{
+      label: string;
+      url: string;
+    }>;
+  }>;
+  directories?: Array<{
+    name: string;
+    path: string;
+    title: string;
+    url: string;
+    subpages?: Array<{
+      title: string;
+      url: string;
+    }>;
+  }>;
+  currentPath?: string;
+  mainPagesTitle?: string;
+  homePageText?: string;
+  copyrightText?: string;
+  legalLinks?: Array<{
+    title: string;
+    url: string;
+  }>;
+  socialLinks?: Array<{
+    name: string;
+    url: string;
+    iconPath: string;
+  }>;
+  rssEnabled?: boolean;
+  siteUrl?: string;
+}
 
-	interface Directory {
-		name: string;
-		path: string;
-		title: string;
-		url: string;
-		subpages?: {
-			title: string;
-			url: string;
-		}[];
-	}
+const currentYear = new Date().getFullYear();
 
-	export let directories: Directory[] = [];
-	export let currentPath: string = '';
-  
-  export let mainPagesTitle = 'Main Pages';
-  export let homePageText = 'Home Page';
-  
-  export let copyrightText = `© ${currentYear} Statue SSG. Static site generator developed with SvelteKit.`;
-  
-  export let legalLinks = [
+let {
+  siteName: _siteName = 'Statue SSG',
+  description: _description = 'Static site generator developed with SvelteKit.',
+  links: _links = [],
+  directories = [],
+  currentPath = '',
+  mainPagesTitle = 'Main Pages',
+  homePageText = 'Home Page',
+  copyrightText = `© ${currentYear} Statue SSG. Static site generator developed with SvelteKit.`,
+  legalLinks = [
     { title: 'Privacy Policy', url: '/legal/privacy-policy' },
     { title: 'Do Not Sell My Information', url: '/legal/do-not-sell' },
     { title: 'Terms of Use', url: '/legal/terms' }
-  ];
-
-  export let socialLinks = [
-    { 
-      name: 'LinkedIn', 
-      url: 'https://linkedin.com', 
-      iconPath: 'M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z' 
+  ],
+  socialLinks = [
+    {
+      name: 'LinkedIn',
+      url: 'https://linkedin.com',
+      iconPath: 'M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z'
     },
     {
       name: 'X (Twitter)',
@@ -47,7 +73,10 @@
       url: 'https://instagram.com',
       iconPath: 'M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z'
     }
-  ];
+  ],
+  rssEnabled = false,
+  siteUrl = '',
+}: FooterProps = $props();
 </script>
 
 <footer class="bg-[var(--color-card)] text-[var(--color-muted)] py-10 border-t border-[var(--color-border)]">
@@ -58,8 +87,8 @@
           <h4 class="text-lg font-medium mb-2 text-[var(--color-foreground)]">{mainPagesTitle}</h4>
           <ul class="ml-2 space-y-1">
             <li>
-              <a 
-                href="/" 
+              <a
+                href="/"
                 class="{currentPath === '/' ? 'text-[var(--color-primary)]' : 'text-[var(--color-muted)]'} hover:text-[var(--color-primary)] text-sm"
               >
                 {homePageText}
@@ -69,7 +98,7 @@
               {#each directories as directory}
                 {#if directory.name !== 'legal'}
                   <li>
-                    <a 
+                    <a
                       href={directory.url}
                       class="{currentPath === directory.url ? 'text-[var(--color-primary)]' : 'text-[var(--color-muted)]'} hover:text-[var(--color-primary)] text-sm"
                     >
@@ -81,26 +110,26 @@
             {/if}
           </ul>
         </div>
-        
+
         {#if directories && directories.length > 0}
           {#each directories as directory}
             {#if directory.name !== 'legal'}
               <div class="sitemap-category">
                 <h4 class="text-lg font-medium mb-2 text-[var(--color-foreground)]">
-                  <a 
-                    href={directory.url} 
+                  <a
+                    href={directory.url}
                     class="{currentPath.startsWith(directory.url) ? 'text-[var(--color-primary)]' : 'text-[var(--color-foreground)]'} hover:text-[var(--color-primary)]"
                   >
                     {directory.title}
                   </a>
                 </h4>
-                
+
                 {#if directory.subpages && directory.subpages.length > 0}
                   <ul class="ml-2 space-y-1">
                     {#each directory.subpages as subpage}
                       <li>
-                        <a 
-                          href={subpage.url} 
+                        <a
+                          href={subpage.url}
                           class="{currentPath === subpage.url ? 'text-[var(--color-primary)]' : 'text-[var(--color-muted)]'} hover:text-[var(--color-primary)] text-sm"
                         >
                           {subpage.title}
@@ -123,7 +152,7 @@
           <a href={link.url} class="text-[var(--color-muted)] hover:text-[var(--color-primary)]">{link.title}</a>
         {/each}
       </div>
-      
+
       <div class="mt-6 flex justify-center space-x-8">
         {#each socialLinks as social}
           <a href={social.url} target="_blank" rel="noopener noreferrer" class="text-[var(--color-muted)] hover:text-[var(--color-primary)]" aria-label={social.name}>
@@ -132,6 +161,13 @@
             </svg>
           </a>
         {/each}
+        {#if rssEnabled && siteUrl}
+          <a href="{siteUrl}/rss.xml" class="text-[var(--color-muted)] hover:text-[var(--color-primary)]" aria-label="RSS Feed">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M6.503 20.752c0 1.794-1.456 3.248-3.251 3.248-1.796 0-3.252-1.454-3.252-3.248 0-1.794 1.456-3.248 3.252-3.248 1.795.001 3.251 1.454 3.251 3.248zm-6.503-12.572v4.811c6.05.062 10.96 4.966 11.022 11.009h4.817c-.062-8.71-7.118-15.758-15.839-15.82zm0-3.368c10.58.046 19.152 8.594 19.183 19.188h4.817c-.03-13.231-10.755-23.954-24-24v4.812z"/>
+            </svg>
+          </a>
+        {/if}
       </div>
     </div>
   </div>
@@ -141,8 +177,8 @@
   .sitemap-grid {
     margin-bottom: 1rem;
   }
-  
+
   .sitemap-category {
     margin-bottom: 1rem;
   }
-</style> 
+</style>

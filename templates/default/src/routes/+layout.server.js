@@ -1,5 +1,5 @@
 import { getContentDirectories, getContentByDirectory } from 'statue-ssg/cms/content-processor';
-import { siteConfig } from '../../site.config.js';
+import siteConfig from '../../site.config.json';
 
 /** @type {import('./$types').LayoutServerLoad} */
 export async function load() {
@@ -29,6 +29,8 @@ export async function load() {
   return {
     globalDirectories: enhancedDirectories,
     searchConfig: siteConfig.search || null,
-    navbarConfig: siteConfig.navbar || null
+    navbarConfig: siteConfig.navbar || null,
+    rssEnabled: siteConfig.rss?.enabled ?? false,
+    siteUrl: siteConfig.site?.url || ''
   };
 }

@@ -1,0 +1,67 @@
+{
+  "site": {
+    "name": "Statue SSG",
+    "description": "A simple static site generator for markdown content with SvelteKit",
+    "url": "https://statuessg.com",
+    "author": "Statue Team"
+  },
+  "navbar": {
+    "siteTitle": "Statue SSG",
+    "logo": null,
+    "defaultNavItems": [
+      { "title": "Home", "url": "/" },
+      { "title": "About", "url": "/about" }
+    ],
+    "hiddenFromNav": ["legal"]
+  },
+  "contact": {
+    "email": "your-email@example.com",
+    "privacyEmail": "your-privacy@example.com",
+    "supportEmail": "your-support@example.com",
+    "phone": "+1 (555) 123-4567",
+    "address": {
+      "street": "123 Statue Street",
+      "city": "San Francisco",
+      "state": "CA",
+      "zipCode": "94103",
+      "country": "United States"
+    }
+  },
+  "social": {
+    "twitter": "https://twitter.com/statuessg",
+    "github": "https://github.com/accretional/statue",
+    "linkedin": "https://linkedin.com/company/statuessg",
+    "facebook": "https://facebook.com/statuessg",
+    "instagram": "https://instagram.com/statuessg",
+    "youtube": "https://youtube.com/@statuessg"
+  },
+  "legal": {
+    "privacyPolicyLastUpdated": "2024-01-15",
+    "termsLastUpdated": "2024-01-15",
+    "isCaliforniaCompliant": true,
+    "doNotSell": {
+      "processingTime": "15 business days",
+      "confirmationRequired": true
+    }
+  },
+  "search": {
+    "enabled": true,
+    "placeholder": "Search...",
+    "noResultsText": "No results found",
+    "debounceMs": 300,
+    "minQueryLength": 2,
+    "maxResults": 10,
+    "showCategories": true,
+    "showDates": true,
+    "showExcerpts": true,
+    "excerptLength": 30
+  },
+  "seo": {
+    "defaultTitle": "Statue SSG - Static Site Generator",
+    "titleTemplate": "%s | Statue SSG",
+    "defaultDescription": "A simple static site generator for markdown content with SvelteKit",
+    "keywords": ["static site generator", "markdown", "sveltekit", "ssg"],
+    "ogImage": "/images/og-image.png",
+    "twitterCard": "summary_large_image"
+  }
+}

@@ -1,8 +1,17 @@
-<script>
-  // LatestContent component - Latest content section
-  export let rootContent = [];
-  export let title = 'Latest Content';
-  export let readMoreText = 'Read more';
+<script lang="ts">
+  export interface LatestContentProps {
+    rootContent?: Array<{
+      url: string;
+      metadata?: {
+        title?: string;
+        description?: string;
+      };
+    }>;
+    title?: string;
+    readMoreText?: string;
+  }
+
+  let { rootContent = [], title = 'Latest Content', readMoreText = 'Read more' }: LatestContentProps = $props();
 </script>
 
 {#if rootContent && rootContent.length > 0}
@@ -37,4 +46,3 @@
     </div>
   </div>
 {/if}
-

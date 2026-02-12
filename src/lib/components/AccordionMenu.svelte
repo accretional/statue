@@ -1,16 +1,16 @@
 <script lang="ts">
   import { slide } from 'svelte/transition';
   import { quintOut } from 'svelte/easing';
-  
+
   type AccordionType = 'single' | 'multiple';
-  
-  interface AccordionItem {
+
+  export interface AccordionItem {
     value: string;
     trigger: string;
     content: string;
   }
-  
-  interface Props {
+
+  export interface AccordionMenuProps {
     type?: AccordionType;
     collapsible?: boolean;
     items: AccordionItem[];
@@ -22,7 +22,7 @@
     collapsible = false,
     items = [],
     class: className = ''
-  }: Props = $props();
+  }: AccordionMenuProps = $props();
 
   let openItems = $state(new Set<string>());
   

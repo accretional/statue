@@ -21,11 +21,13 @@ async function setupStatueSSG(options = {}) {
     console.log(chalk.green('✓ shared resources copied'));
   }
 
-  // 3. Copy template (src + site.config.js + static + scripts)
+  // 3. Copy template (src + site.config.json + static + scripts)
   const templateDir = path.join(sourceDir, 'templates', templateName);
 
   // Copy routes
-  fs.copySync(path.join(templateDir, 'src/routes'), path.join(targetDir, 'src/routes'), { overwrite: true });
+  const targetRoutesDir = path.join(targetDir, 'src/routes');
+  fs.emptyDirSync(targetRoutesDir);
+  fs.copySync(path.join(templateDir, 'src/routes'), targetRoutesDir, { overwrite: true });
 
   // Copy template's src/lib if exists (components, assets, etc.)
   const templateLibDir = path.join(templateDir, 'src/lib');
@@ -33,7 +35,7 @@ async function setupStatueSSG(options = {}) {
     fs.copySync(templateLibDir, path.join(targetDir, 'src/lib'), { overwrite: true });
   }
 
-  fs.copySync(path.join(templateDir, 'site.config.js'), path.join(targetDir, 'site.config.js'), { overwrite: true });
+  fs.copySync(path.join(templateDir, 'site.config.json'), path.join(targetDir, 'site.config.json'), { overwrite: true });
 
   // Copy template's static if exists (overlay on shared resources)
   const templateStaticDir = path.join(templateDir, 'static');
@@ -47,6 +49,15 @@ async function setupStatueSSG(options = {}) {
     fs.copySync(templateScriptsDir, path.join(targetDir, 'scripts'), { overwrite: true });
   }
 
+  // Copy template's config files if exists (orval.config.ts, etc.)
+  for (const config of ['orval.config.ts', 'orval.config.js']) {
+    const src = path.join(templateDir, config);
+    if (fs.existsSync(src)) {
+      fs.copySync(src, path.join(targetDir, config), { overwrite: true });
+      console.log(chalk.green(`✓ ${config} copied`));
+    }
+  }
+
   console.log(chalk.green(`✓ ${templateName} template copied`));
 
   // Copy template's content if exists, otherwise use default content as fallback
@@ -56,7 +67,9 @@ async function setupStatueSSG(options = {}) {
     : path.join(sourceDir, 'templates', 'default', 'content');
 
   if (fs.existsSync(contentSource)) {
-    fs.copySync(contentSource, path.join(targetDir, 'content'), { overwrite: true });
+    const targetContentDir = path.join(targetDir, 'content');
+    fs.emptyDirSync(targetContentDir);
+    fs.copySync(contentSource, targetContentDir, { overwrite: true });
     console.log(chalk.green(`✓ content copied (${fs.existsSync(templateContentDir) ? templateName : 'default'})`));
   }
 
@@ -72,7 +85,7 @@ async function setupStatueSSG(options = {}) {
   // 5. Copy required scripts
   const scriptsDir = path.join(targetDir, 'scripts');
   fs.ensureDirSync(scriptsDir);
-  for (const script of ['generate-seo-files.js', 'run-pagefind.js']) {
+  for (const script of ['generate-exports.js', 'generate-seo-files.js', 'run-pagefind.js', 'run-orval.js', 'generate-rss-feed.js']) {
     fs.copySync(path.join(sourceDir, 'scripts', script), path.join(scriptsDir, script), { overwrite: true });
   }
   console.log(chalk.green('✓ scripts copied'));
@@ -84,8 +97,19 @@ async function setupStatueSSG(options = {}) {
     const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
     const sourcePkg = JSON.parse(fs.readFileSync(sourcePkgPath, 'utf8'));
 
-    pkg.scripts = { ...pkg.scripts, ...sourcePkg.scripts };
-    pkg.devDependencies = { ...pkg.devDependencies, ...sourcePkg.devDependencies };
+    let scriptsToInclude = ['preview', 'postbuild', 'setup'];
+
+    // For swagger template, include Orval-related scripts
+    if (templateName === 'swagger') {
+      scriptsToInclude = ['preview', 'postbuild', 'setup', 'prebuild', 'predev', 'dev', 'generate-api', 'generate:exports'];
+    }
+
+    const productionScripts = Object.fromEntries(
+      Object.entries(sourcePkg.scripts).filter(([name]) => scriptsToInclude.includes(name))
+    );
+
+    pkg.scripts = { ...pkg.scripts, ...productionScripts };
+    pkg.devDependencies = { ...sourcePkg.devDependencies, ...pkg.devDependencies };
 
     fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
     console.log(chalk.green('✓ package.json updated'));

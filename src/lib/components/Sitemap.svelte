@@ -1,18 +1,34 @@
 <script lang="ts">
-    interface Directory {
+  export interface SitemapProps {
+    directories?: Array<{
       name: string;
       path: string;
       title: string;
       url: string;
-      subpages?: {
+      subpages?: Array<{
         title: string;
         url: string;
-      }[];
-    }
-  
-    export let directories: Directory[] = [];
-    export let currentPath: string = '';
-  </script>
+      }>;
+    }>;
+    currentPath?: string;
+  }
+
+  interface Directory {
+    name: string;
+    path: string;
+    title: string;
+    url: string;
+    subpages?: {
+      title: string;
+      url: string;
+    }[];
+  }
+
+  let {
+    directories = [],
+    currentPath = ''
+  }: SitemapProps = $props();
+</script>
   
   <div class="sitemap mt-6 pt-4">
   
@@ -105,4 +121,4 @@
     .sitemap-category {
       margin-bottom: 1rem;
     }
-  </style> 
+  </style>

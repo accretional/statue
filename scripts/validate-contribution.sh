@@ -92,17 +92,17 @@ validate_component() {
         log_warn "Component has no exported props (may be intentional)"
     fi
 
-    # Check if exported in index.ts
+    # Auto-generate exports and verify
     local component_name=$(basename "$component_file" .svelte)
-    if [[ -f "src/lib/index.ts" ]]; then
-        if grep -q "export.*${component_name}" "src/lib/index.ts"; then
-            log_success "Component is exported in src/lib/index.ts"
+    log_info "Auto-generating exports..."
+    if node scripts/generate-exports.js >/dev/null 2>&1; then
+        if [[ -f "src/lib/index.ts" ]] && grep -q "export.*${component_name}" "src/lib/index.ts"; then
+            log_success "Component auto-exported in src/lib/index.ts"
         else
-            log_error "Component not exported in src/lib/index.ts"
-            log_error "  Add: export { default as ${component_name} } from './components/${component_name}.svelte';"
+            log_warn "Component not found after auto-generation - may need manual verification"
         fi
     else
-        log_warn "src/lib/index.ts not found - cannot verify export"
+        log_warn "Could not auto-generate exports - run 'npm run generate:exports' manually"
     fi
 
     # Check for documentation (warning only)
@@ -261,11 +261,11 @@ validate_template() {
         log_warn "No content directory (recommended but not required)"
     fi
 
-    # Check for site.config.js
-    if [[ -f "$template_dir/site.config.js" ]]; then
-        log_success "Found site.config.js"
+    # Check for site.config.json
+    if [[ -f "$template_dir/site.config.json" ]]; then
+        log_success "Found site.config.json"
     else
-        log_warn "No site.config.js (recommended but not required)"
+        log_warn "No site.config.json (recommended but not required)"
     fi
 
     return 0

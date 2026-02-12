@@ -1,4 +1,4 @@
-import { siteConfig } from '../../../site.config.js';
+import siteConfig from '../../../site.config.json';
 import fs from 'fs';
 import path from 'path';
 

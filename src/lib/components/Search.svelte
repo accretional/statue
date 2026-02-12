@@ -23,32 +23,48 @@
   - resultsClass: Additional classes for results dropdown
 -->
 
-<script>
+<script lang="ts">
   import { browser } from '$app/environment';
   import { onMount, onDestroy } from 'svelte';
 
+  export interface SearchProps {
+    placeholder?: string;
+    searchEndpoint?: string;
+    debounceMs?: number;
+    minQueryLength?: number;
+    maxResults?: number;
+    showCategories?: boolean;
+    showDates?: boolean;
+    showExcerpts?: boolean;
+    containerClass?: string;
+    inputClass?: string;
+    resultsClass?: string;
+  }
+
   // Props
-  export let placeholder = 'Search...';
-  export let debounceMs = 300;
-  export let minQueryLength = 2;
-  export let maxResults = 10;
-  export let showCategories = true;
-  export let showDates = true;
-  export let showExcerpts = true;
-  export let containerClass = '';
-  export let inputClass = '';
-  export let resultsClass = '';
+  let {
+    placeholder = 'Search...',
+    debounceMs = 300,
+    minQueryLength = 2,
+    maxResults = 10,
+    showCategories = true,
+    showDates = true,
+    showExcerpts = true,
+    containerClass = '',
+    inputClass = '',
+    resultsClass = ''
+  }: SearchProps = $props();
 
   // State
-  let query = '';
-  let results = [];
-  let isOpen = false;
-  let isLoading = false;
-  let pagefind = null;
-  let selectedIndex = -1;
-  let searchTimeout;
-  let containerRef;
-  let inputRef;
+  let query = $state('');
+  let results = $state([]);
+  let isOpen = $state(false);
+  let isLoading = $state(false);
+  let pagefind = $state(null);
+  let selectedIndex = $state(-1);
+  let searchTimeout = $state(undefined);
+  let containerRef = $state(undefined);
+  let inputRef = $state(undefined);
 
   // Debounced search function
   async function handleInput() {
@@ -356,7 +372,7 @@
           <div class="flex items-center gap-2 text-xs {selectedIndex === index ? 'opacity-80' : 'text-[var(--color-muted)]'}">
             <span>{result.url}</span>
             {#if showDates && result.meta?.date}
-              <span>•</span>
+              <span>-</span>
               <span>{formatDate(result.meta.date)}</span>
             {/if}
           </div>

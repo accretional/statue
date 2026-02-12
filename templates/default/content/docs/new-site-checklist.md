@@ -14,7 +14,7 @@ Follow this checklist to replace placeholder content and make the site your own.
 
 ### ✅ 1. Update Site Configuration
 
-**File:** `site.config.js`
+**File:** `site.config.json`
 
 - [ ] Change `site.name`, `site.description`, `site.url`, `site.author`
 - [ ] Update all `contact` emails and address
@@ -116,7 +116,7 @@ Available: `blue`, `red`, `orange`, `green`, `purple`, `cyan`, `pink`, `black-wh
 
 ### ✅ 9. Update SEO
 
-**File:** `site.config.js`
+**File:** `site.config.json`
 
 - [ ] Set `seo.defaultTitle`, `seo.titleTemplate`
 - [ ] Set `seo.defaultDescription`, `seo.keywords`
@@ -124,9 +124,25 @@ Available: `blue`, `red`, `orange`, `green`, `purple`, `cyan`, `pink`, `black-wh
 
 ---
 
+### ✅ 10. Configure RSS Feed (Optional)
+
+**File:** `site.config.js`
+
+- [ ] Review `rss.enabled` (enabled by default)
+- [ ] Set `rss.title` and `rss.description` (or use defaults)
+- [ ] Configure `rss.includeDirectories` (defaults to `['blog']`)
+- [ ] Choose `rss.contentMode`: `'summary'` or `'full'`
+- [ ] Set `rss.maxItems` if you want a different limit
+
+**Why:** Your RSS feed will be automatically generated at `/rss.xml` for feed readers.
+
+**[Full RSS config guide →](./site-config.md#rss-feed-configuration)**
+
+---
+
 ## 🚀 Before Going Live
 
-### ✅ 10. Test Locally
+### ✅ 11. Test Locally
 
 ```bash
 npm run build
@@ -136,10 +152,11 @@ npm run preview
 - [ ] Visit all pages, check for broken links
 - [ ] Test on mobile and desktop
 - [ ] Verify images load correctly
+- [ ] Check that `/rss.xml` is generated (if RSS enabled)
 
 ---
 
-### ✅ 11. Deploy
+### ✅ 12. Deploy
 
 ```bash
 npm run build
@@ -155,7 +172,8 @@ npx wrangler pages deploy build --project-name=your-project
 ## 📚 Post-Launch
 
 - [ ] Set up analytics (optional)
-- [ ] Submit sitemap to search engines
+- [ ] Submit sitemap to search engines (`/sitemap.xml`)
+- [ ] Promote your RSS feed (`/rss.xml`) - add to site footer/header
 - [ ] Share on social media
 
 ---

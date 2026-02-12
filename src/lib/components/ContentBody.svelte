@@ -1,6 +1,9 @@
-<script>
-  // ContentBody component - Content body section
-  export let content = '';
+<script lang="ts">
+  export interface ContentBodyProps {
+    content?: string;
+  }
+
+  let { content = '' }: ContentBodyProps = $props();
 </script>
 
 <main class="prose prose-invert max-w-none">
@@ -32,4 +35,3 @@
   :global(main.prose > div > ul > li > *), :global(.prose ul > li > *) { margin-top: 0.25rem; margin-bottom: 0.25rem; }
   :global(main.prose > div > ol > li > *), :global(.prose ol > li > *) { margin-top: 0.25rem; margin-bottom: 0.25rem; }
 </style>
-

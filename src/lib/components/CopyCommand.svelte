@@ -2,18 +2,28 @@
   CopyCommand Component - Copy-to-clipboard command display with horizontal scrolling
 -->
 
-<script>
+<script lang="ts">
   import { browser } from '$app/environment';
-  
-  // Command to display and copy
-  export let command = '';
 
-  // Style customization
-  export let maxWidth = '800px';
-  export let copiedText = 'Copied!';
-  export let copiedDuration = 1000;
-  export let wrapperClass = '';
-  export let commandClass = '';
+  export interface CopyCommandProps {
+    command: string;
+    language?: string;
+    maxWidth?: string;
+    copiedText?: string;
+    copiedDuration?: number;
+    wrapperClass?: string;
+    commandClass?: string;
+  }
+
+  // Command to display and copy
+  let {
+    command = '',
+    maxWidth = '800px',
+    copiedText = 'Copied!',
+    copiedDuration = 1000,
+    wrapperClass = '',
+    commandClass = ''
+  }: CopyCommandProps = $props();
 
   // State for showing copied indicator
   let showCopied = false;

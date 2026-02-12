@@ -1,0 +1,474 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Statue SSG Site Configuration",
+  "description": "Configuration schema for Statue SSG sites. This file documents all available options.",
+  "type": "object",
+  "properties": {
+    "profile": {
+      "type": "object",
+      "description": "Developer profile settings (used in developer-portfolio template)",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Your full name"
+        },
+        "username": {
+          "type": "string",
+          "description": "GitHub username"
+        },
+        "avatarUrl": {
+          "type": "string",
+          "description": "Path to avatar image (e.g., '/avatar.jpg')"
+        },
+        "bio": {
+          "type": "string",
+          "description": "Short biography or tagline"
+        },
+        "followers": {
+          "type": "integer",
+          "description": "GitHub followers count"
+        },
+        "following": {
+          "type": "integer",
+          "description": "GitHub following count"
+        },
+        "location": {
+          "type": "string",
+          "description": "Your city or location"
+        },
+        "website": {
+          "type": "string",
+          "description": "Personal website URL"
+        },
+        "linkedin": {
+          "type": "string",
+          "description": "LinkedIn profile URL"
+        },
+        "company": {
+          "type": "string",
+          "description": "Current company or organization"
+        },
+        "email": {
+          "type": "string",
+          "description": "Contact email address"
+        }
+      }
+    },
+    "blog": {
+      "type": "object",
+      "description": "Blog-specific settings",
+      "properties": {
+        "defaultAuthorAvatar": {
+          "type": "string",
+          "description": "Default avatar for blog posts when authorAvatar is not specified in frontmatter"
+        }
+      }
+    },
+    "features": {
+      "type": "object",
+      "description": "Feature toggles for portfolio template",
+      "properties": {
+        "showExperience": {
+          "type": "boolean",
+          "description": "Show experience/timeline widget instead of left repos"
+        },
+        "showMacScreen": {
+          "type": "boolean",
+          "description": "Show Mac desktop button in bottom right corner"
+        }
+      }
+    },
+    "site": {
+      "type": "object",
+      "description": "General site information",
+      "required": ["name", "url"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Site name displayed in browser title and metadata"
+        },
+        "description": {
+          "type": "string",
+          "description": "Site description for SEO and social sharing"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Production URL of the site (used for sitemap, canonical URLs)"
+        },
+        "author": {
+          "type": "string",
+          "description": "Default author name for content"
+        }
+      }
+    },
+    "navbar": {
+      "type": "object",
+      "description": "Navigation bar configuration",
+      "properties": {
+        "siteTitle": {
+          "type": ["string", "null"],
+          "description": "Title displayed in navbar. Set to null to hide"
+        },
+        "logo": {
+          "type": ["string", "null"],
+          "description": "Logo image URL. Set to null for no logo"
+        },
+        "defaultNavItems": {
+          "type": "array",
+          "description": "Navigation menu items",
+          "items": {
+            "type": "object",
+            "required": ["title", "url"],
+            "properties": {
+              "title": {
+                "type": "string",
+                "description": "Link text"
+              },
+              "url": {
+                "type": "string",
+                "description": "Link URL"
+              },
+              "cta": {
+                "type": "boolean",
+                "description": "Style as call-to-action button"
+              }
+            }
+          }
+        },
+        "hiddenFromNav": {
+          "type": "array",
+          "description": "Directory names to hide from auto-generated navigation",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "contact": {
+      "type": "object",
+      "description": "Contact information (used in legal pages and footer)",
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Main contact email"
+        },
+        "privacyEmail": {
+          "type": "string",
+          "format": "email",
+          "description": "Privacy-related inquiries email"
+        },
+        "supportEmail": {
+          "type": "string",
+          "format": "email",
+          "description": "Support email address"
+        },
+        "phone": {
+          "type": "string",
+          "description": "Phone number (optional)"
+        },
+        "address": {
+          "type": "object",
+          "description": "Mailing address",
+          "properties": {
+            "street": {
+              "type": "string",
+              "description": "Street address"
+            },
+            "city": {
+              "type": "string",
+              "description": "City name"
+            },
+            "state": {
+              "type": "string",
+              "description": "State or province"
+            },
+            "zipCode": {
+              "type": "string",
+              "description": "ZIP or postal code"
+            },
+            "country": {
+              "type": "string",
+              "description": "Country name"
+            }
+          }
+        }
+      }
+    },
+    "social": {
+      "type": "object",
+      "description": "Social media links",
+      "properties": {
+        "twitter": {
+          "type": "string",
+          "format": "uri",
+          "description": "Twitter/X profile URL"
+        },
+        "github": {
+          "type": "string",
+          "format": "uri",
+          "description": "GitHub profile or organization URL"
+        },
+        "linkedin": {
+          "type": "string",
+          "format": "uri",
+          "description": "LinkedIn profile or company URL"
+        },
+        "facebook": {
+          "type": "string",
+          "format": "uri",
+          "description": "Facebook page URL"
+        },
+        "instagram": {
+          "type": "string",
+          "format": "uri",
+          "description": "Instagram profile URL"
+        },
+        "youtube": {
+          "type": "string",
+          "format": "uri",
+          "description": "YouTube channel URL"
+        },
+        "discord": {
+          "type": "string",
+          "format": "uri",
+          "description": "Discord server invite URL"
+        },
+        "reddit": {
+          "type": "string",
+          "format": "uri",
+          "description": "Reddit profile or subreddit URL"
+        },
+        "socialLinks": {
+          "type": "array",
+          "description": "Additional social links (populated by github-sync.sh)",
+          "items": {
+            "type": "object",
+            "properties": {
+              "provider": {
+                "type": "string",
+                "description": "Social provider name (e.g., 'linkedin', 'generic')"
+              },
+              "url": {
+                "type": "string",
+                "format": "uri",
+                "description": "Profile URL"
+              }
+            }
+          }
+        }
+      }
+    },
+    "legal": {
+      "type": "object",
+      "description": "Legal pages configuration",
+      "properties": {
+        "privacyPolicyLastUpdated": {
+          "type": "string",
+          "format": "date",
+          "description": "Privacy policy last updated date (YYYY-MM-DD)"
+        },
+        "termsLastUpdated": {
+          "type": "string",
+          "format": "date",
+          "description": "Terms of service last updated date (YYYY-MM-DD)"
+        },
+        "isCaliforniaCompliant": {
+          "type": "boolean",
+          "description": "Enable CCPA/CPRA compliance features"
+        },
+        "doNotSell": {
+          "type": "object",
+          "description": "Do Not Sell My Info page settings",
+          "properties": {
+            "processingTime": {
+              "type": "string",
+              "description": "Expected processing time (e.g., '15 business days')"
+            },
+            "confirmationRequired": {
+              "type": "boolean",
+              "description": "Require email confirmation for requests"
+            }
+          }
+        }
+      }
+    },
+    "search": {
+      "type": "object",
+      "description": "Search functionality configuration",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enable/disable search feature"
+        },
+        "placeholder": {
+          "type": "string",
+          "description": "Search input placeholder text"
+        },
+        "noResultsText": {
+          "type": "string",
+          "description": "Message shown when no results found"
+        },
+        "debounceMs": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Debounce delay in milliseconds for search input"
+        },
+        "minQueryLength": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Minimum characters required to trigger search"
+        },
+        "maxResults": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Maximum number of search results to display"
+        },
+        "showCategories": {
+          "type": "boolean",
+          "description": "Show category labels in search results"
+        },
+        "showDates": {
+          "type": "boolean",
+          "description": "Show dates in search results"
+        },
+        "showExcerpts": {
+          "type": "boolean",
+          "description": "Show content excerpts in search results"
+        },
+        "excerptLength": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Number of words to show in excerpts"
+        }
+      }
+    },
+    "seo": {
+      "type": "object",
+      "description": "SEO and meta information",
+      "properties": {
+        "defaultTitle": {
+          "type": "string",
+          "description": "Default page title when none specified"
+        },
+        "titleTemplate": {
+          "type": "string",
+          "description": "Title template with %s placeholder (e.g., '%s | Site Name')"
+        },
+        "defaultDescription": {
+          "type": "string",
+          "description": "Default meta description"
+        },
+        "keywords": {
+          "type": "array",
+          "description": "Default meta keywords",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ogImage": {
+          "type": "string",
+          "description": "Default Open Graph image path"
+        },
+        "twitterCard": {
+          "type": "string",
+          "enum": ["summary", "summary_large_image", "app", "player"],
+          "description": "Twitter card type"
+        }
+      }
+    },
+    "rss": {
+      "type": "object",
+      "description": "RSS feed generation configuration",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable/disable RSS feed generation"
+        },
+        "title": {
+          "type": ["string", "null"],
+          "description": "Feed title (defaults to site.name if not specified)"
+        },
+        "description": {
+          "type": ["string", "null"],
+          "description": "Feed description (defaults to site.description if not specified)"
+        },
+        "language": {
+          "type": "string",
+          "default": "en-us",
+          "description": "RSS language code (e.g., 'en-us', 'en-gb', 'es', 'fr')"
+        },
+        "copyright": {
+          "type": ["string", "null"],
+          "description": "Copyright notice (auto-generated if not specified)"
+        },
+        "includeDirectories": {
+          "type": "array",
+          "default": ["*"],
+          "description": "Content directories to include in feed (use ['*'] for all)",
+          "items": {
+            "type": "string"
+          }
+        },
+        "excludeDirectories": {
+          "type": "array",
+          "default": [],
+          "description": "Content directories to exclude from feed",
+          "items": {
+            "type": "string"
+          }
+        },
+        "maxItems": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 50,
+          "description": "Maximum number of items in feed"
+        },
+        "contentMode": {
+          "type": "string",
+          "enum": ["summary", "full", "none"],
+          "default": "summary",
+          "description": "How to include content: 'summary' (excerpt), 'full' (complete HTML), or 'none' (title/description only)"
+        },
+        "summaryLength": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 280,
+          "description": "Character limit for summaries when contentMode is 'summary'"
+        },
+        "includeAuthor": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include author metadata from frontmatter"
+        },
+        "includeThumbnail": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include thumbnail images as media enclosures"
+        },
+        "includeCategories": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include category tags from frontmatter"
+        },
+        "pubDateField": {
+          "type": "string",
+          "default": "date",
+          "description": "Frontmatter field to use for publication date"
+        },
+        "itemGuidUsesUrl": {
+          "type": "boolean",
+          "default": true,
+          "description": "Use item URL as GUID (globally unique identifier)"
+        },
+        "baseUrl": {
+          "type": ["string", "null"],
+          "format": "uri",
+          "description": "Override site.url for feed URLs (rarely needed)"
+        }
+      }
+    }
+  }
+}
