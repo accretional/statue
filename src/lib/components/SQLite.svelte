@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import initSqlJs from 'sql.js';
+  import initSqlJs from 'sql.js/dist/sql-wasm.js';
 
   export let dbPath: string; // e.g. '/demo.db'
   export let query: string; // e.g. 'SELECT * FROM users'
@@ -13,7 +13,7 @@
   onMount(async () => {
     try {
       const SQL = await initSqlJs({
-        locateFile: file => `https://sql.js.org/dist/${file}`
+        locateFile: file => `https://cdn.jsdelivr.net/npm/sql.js@1.13.0/dist/${file}`
       });
 
       const res = await fetch(dbPath);
