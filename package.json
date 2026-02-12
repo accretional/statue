@@ -96,11 +96,18 @@
 		"vitest-browser-svelte": "^2.0.1"
 	},
 	"dependencies": {
+		"@floating-ui/dom": "^1.6.12",
+		"@fortawesome/fontawesome-common-types": "^6.7.1",
+		"@layerstack/svelte-actions": "^1.0.1",
+		"@layerstack/svelte-stores": "^1.0.2",
+		"@layerstack/utils": "^2.0.0-next.18",
+		"@mdi/js": "^7.4.47",
 		"@types/three": "^0.182.0",
 		"chalk": "^5.4.1",
 		"commander": "^13.1.0",
 		"fs-extra": "^11.3.0",
 		"gray-matter": "^4.0.3",
+		"lodash-es": "^4.17.21",
 		"lottie-web": "^5.13.0",
 		"lucide-svelte": "^0.561.0",
 		"mdsvex": "^0.12.6",
