@@ -29,7 +29,7 @@ try {
 
 // Configure mdsvex options
 const mdsvexOptions = {
-  extensions: ['.md'],
+  extensions: ['.md', '.txt'],
   remarkPlugins: [remarkGfm],
   rehypePlugins: [rehypeSlug],
   layout: null // We'll handle layout in Svelte components
@@ -69,6 +69,83 @@ const processMarkdownWithMDSvex = async (markdown) => {
     console.error('MDSvex processing error:', error);
     return `<p>Error processing markdown: ${error.message}</p>`;
   }
+};
+
+/**
+ * Process plain text content and convert to HTML paragraphs
+ * Supports markdown-style images and links while keeping everything else as plain text
+ * Treats double line breaks as paragraph boundaries
+ */
+const processPlainText = (text) => {
+  // Escape HTML characters for safety
+  const escapeHtml = (str) => {
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  };
+
+  // Step 1: Extract markdown images and links before escaping
+  const placeholders = [];
+  let textWithPlaceholders = text;
+
+  // Extract images: ![alt](src)
+  const imageRegex = /!\[([^\]]*)\]\(([^)]+)\)/g;
+  textWithPlaceholders = textWithPlaceholders.replace(imageRegex, (match, alt, src) => {
+    const id = `__IMG_PLACEHOLDER_${placeholders.length}__`;
+    placeholders.push({
+      type: 'img',
+      alt: alt || '',
+      src: src.trim(),
+      id
+    });
+    return id;
+  });
+
+  // Extract links: [text](url)
+  const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+  textWithPlaceholders = textWithPlaceholders.replace(linkRegex, (match, text, href) => {
+    const id = `__LINK_PLACEHOLDER_${placeholders.length}__`;
+    placeholders.push({
+      type: 'link',
+      text: text,
+      href: href.trim(),
+      id
+    });
+    return id;
+  });
+
+  // Step 2: Split on double newlines to get paragraphs
+  const paragraphs = textWithPlaceholders
+    .split(/\n\s*\n/)
+    .map(para => para.trim())
+    .filter(para => para.length > 0);
+
+  // Step 3: Wrap each paragraph in <p> tags, preserving single line breaks as <br>
+  const html = paragraphs
+    .map(para => {
+      const escapedPara = escapeHtml(para);
+      // Convert single line breaks to <br> tags
+      const withBreaks = escapedPara.replace(/\n/g, '<br>');
+      return `<p>${withBreaks}</p>`;
+    })
+    .join('\n');
+
+  // Step 4: Replace placeholders with actual HTML tags
+  let finalHtml = html;
+  placeholders.forEach(item => {
+    if (item.type === 'img') {
+      const imgTag = `<img src="${escapeHtml(item.src)}" alt="${escapeHtml(item.alt)}" class="max-w-full h-auto my-4" />`;
+      finalHtml = finalHtml.replace(item.id, imgTag);
+    } else if (item.type === 'link') {
+      const linkTag = `<a href="${escapeHtml(item.href)}" class="text-blue-400 hover:text-blue-300 underline">${escapeHtml(item.text)}</a>`;
+      finalHtml = finalHtml.replace(item.id, linkTag);
+    }
+  });
+
+  return finalHtml;
 };
 
 // Function to remove the first h1 heading from HTML content
@@ -128,47 +205,88 @@ const scanContentDirectory = async () => {
       if (stats.isDirectory()) {
         // If it's a folder, scan its contents
         await scanDir(fullPath, entryRelativePath);
-      } else if (stats.isFile() && (entry.endsWith('.md') || entry.endsWith('.mdx'))) {
-        // Add markdown and mdx files to the list
+      } else if (stats.isFile() && (entry.endsWith('.md') || entry.endsWith('.mdx') || entry.endsWith('.txt'))) {
+        // Check if this is a gallery metadata .txt file (paired with an image)
+        const isGalleryMetadata = entry.endsWith('.txt') && (() => {
+          const basename = entry.slice(0, -4); // Remove .txt
+          const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
+          const dirEntries = fs.readdirSync(dirPath);
+          return imageExtensions.some(ext => dirEntries.includes(basename + ext));
+        })();
+
+        // Skip gallery metadata .txt files
+        if (isGalleryMetadata) {
+          continue;
+        }
+
+        // Add markdown, mdx, and text files to the list
         const isMdx = entry.endsWith('.mdx');
-        const slug = entry.replace(/\.mdx?$/, '');
+        const isTxtFile = entry.endsWith('.txt');
+        const slug = entry.replace(/\.(mdx?|txt)$/, '');
         const url = relativePath
           ? `/${relativePath}/${slug}`.replace(/\\/g, '/')
           : `/${slug}`;
 
-        const content = fs.readFileSync(fullPath, 'utf-8');
-        const { data, content: markdownContent } = matter(content);
+        const fileContent = fs.readFileSync(fullPath, 'utf-8');
 
-        // Process template variables (both in markdown content and metadata)
-        const processedMarkdownContent = processTemplateVariables(markdownContent);
-        const processedMetadata = {};
+        let html;
+        let finalMetadata;
 
-        // Process string values in metadata through template processing
-        for (const [key, value] of Object.entries(data)) {
-          if (typeof value === 'string') {
-            processedMetadata[key] = processTemplateVariables(value);
-          } else {
-            processedMetadata[key] = value;
+        if (isTxtFile) {
+          // For .txt files: no frontmatter, pure plain text
+          const processedContent = processTemplateVariables(fileContent);
+          html = processPlainText(processedContent);
+
+          // Extract first image from content as thumbnail
+          const imageRegex = /!\[([^\]]*)\]\(([^)]+)\)/;
+          const imageMatch = processedContent.match(imageRegex);
+          const thumbnail = imageMatch ? imageMatch[2].trim() : null;
+
+          finalMetadata = {
+            title: formatTitle(slug),
+            description: '',
+            date: null,
+            author: null,
+            thumbnail: thumbnail
+          };
+        } else {
+          // For .md and .mdx files: extract frontmatter and process markdown
+          const { data, content: markdownContent } = matter(fileContent);
+
+          // Process template variables (both in markdown content and metadata)
+          const processedMarkdownContent = processTemplateVariables(markdownContent);
+          const processedMetadata = {};
+
+          // Process string values in metadata through template processing
+          for (const [key, value] of Object.entries(data)) {
+            if (typeof value === 'string') {
+              processedMetadata[key] = processTemplateVariables(value);
+            } else {
+              processedMetadata[key] = value;
+            }
+          }
+
+          // Add default values and process them through template processing
+          finalMetadata = {
+            title: processedMetadata.title || formatTitle(slug),
+            description: processedMetadata.description || '',
+            date: processedMetadata.date || null,
+            author: processedMetadata.author || null,
+            ...processedMetadata
+          };
+
+          // Process content: MDX files are rendered as Svelte components, MD files as HTML
+          if (!isMdx) {
+            html = await processMarkdownWithMDSvex(processedMarkdownContent);
+            html = removeFirstH1(html);
           }
         }
-
-        // Add default values and process them through template processing
-        const finalMetadata = {
-          title: processedMetadata.title || formatTitle(slug),
-          description: processedMetadata.description || '',
-          date: processedMetadata.date || null,
-          author: processedMetadata.author || null,
-          ...processedMetadata
-        };
 
         // Fix directory - use full path
         let directory = relativePath.replace(/\\/g, '/');
 
-        // Process content: MDX files are rendered as Svelte components, MD files as HTML
-        let html = '';
+        // Transform links for .md and .txt files (not MDX)
         if (!isMdx) {
-          html = await processMarkdownWithMDSvex(processedMarkdownContent);
-          html = removeFirstH1(html);
           html = transformLinks(html, directory);
         }
 
@@ -221,6 +339,54 @@ const getContentDirectories = () => {
   }
 
   return directories;
+};
+
+/**
+ * Get root-level content files (not in subdirectories)
+ * Returns array of content objects with name, path, title, and url properties
+ * Excludes gallery metadata .txt files (those paired with an image file)
+ */
+const getRootLevelContent = () => {
+  const contentPath = path.resolve('content');
+  const rootFiles = [];
+
+  if (!fs.existsSync(contentPath)) {
+    console.warn('Content folder not found!');
+    return rootFiles;
+  }
+
+  const entries = fs.readdirSync(contentPath);
+
+  for (const entry of entries) {
+    const fullPath = path.join(contentPath, entry);
+    const stats = fs.statSync(fullPath);
+
+    // Only process files (not directories) with .md or .txt extension
+    if (stats.isFile() && (entry.endsWith('.md') || entry.endsWith('.txt'))) {
+      // Check if this is a gallery metadata .txt file (paired with an image)
+      const isGalleryMetadata = entry.endsWith('.txt') && (() => {
+        const basename = entry.slice(0, -4); // Remove .txt
+        const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
+        return imageExtensions.some(ext => entries.includes(basename + ext));
+      })();
+
+      // Skip gallery metadata files
+      if (isGalleryMetadata) {
+        continue;
+      }
+
+      const slug = entry.replace(/\.(md|txt)$/, '');
+
+      rootFiles.push({
+        name: slug,
+        path: `content/${entry}`,
+        title: formatTitle(slug),
+        url: `/${slug}`
+      });
+    }
+  }
+
+  return rootFiles;
 };
 
 // Function to create a title from a slug
@@ -479,10 +645,110 @@ const getAllDirectoriesSidebar = async () => {
   return result;
 };
 
+/**
+ * Detect naming conflicts between directories and files
+ * Returns array of conflicts found
+ */
+const detectNamingConflicts = async () => {
+  const directories = getContentDirectories();
+  const allContent = await getAllContent();
+  const conflicts = [];
+
+  // Check 1: Directory vs File conflicts
+  for (const dir of directories) {
+    // Check if there's a root-level file with same name as directory
+    const conflictingFiles = allContent.filter(content => {
+      // Only check root-level files (no slash in directory property or directory is empty)
+      const isRootLevel = !content.directory || content.directory === 'root';
+
+      // Extract filename without extension from the path
+      const fileName = content.path.split('/').pop().replace(/\.(md|txt)$/, '');
+
+      return isRootLevel && fileName === dir.name;
+    });
+
+    if (conflictingFiles.length > 0) {
+      conflicts.push({
+        type: 'directory-file',
+        name: dir.name,
+        directory: `content/${dir.name}/`,
+        files: conflictingFiles.map(f => f.path)
+      });
+    }
+  }
+
+  // Check 2: File vs File conflicts (same name, different extensions)
+  const rootLevelFiles = allContent.filter(content => {
+    const isRootLevel = !content.directory || content.directory === 'root';
+    return isRootLevel;
+  });
+
+  // Group files by their slug (name without extension)
+  const filesBySlug = {};
+  rootLevelFiles.forEach(content => {
+    const fileName = content.path.split('/').pop().replace(/\.(md|txt)$/, '');
+    if (!filesBySlug[fileName]) {
+      filesBySlug[fileName] = [];
+    }
+    filesBySlug[fileName].push(content.path);
+  });
+
+  // Find slugs with multiple files
+  Object.entries(filesBySlug).forEach(([slug, files]) => {
+    if (files.length > 1) {
+      conflicts.push({
+        type: 'file-file',
+        name: slug,
+        files: files
+      });
+    }
+  });
+
+  return conflicts;
+};
+
+/**
+ * Check for conflicts and handle based on environment
+ * - Development: Log warning, allow server to continue
+ * - Production build: Throw error, block build
+ */
+const checkNamingConflicts = async () => {
+  const conflicts = await detectNamingConflicts();
+
+  if (conflicts.length === 0) {
+    return { hasConflicts: false, conflicts: [] };
+  }
+
+  // Check if we're in production build mode
+  const isProduction = process.env.NODE_ENV === 'production';
+
+  conflicts.forEach(conflict => {
+    const fileList = conflict.files.map(f => `   - ${f}`).join('\n');
+
+    const directoryLine = conflict.type === 'directory-file' ? `   - ${conflict.directory} (directory)\n` : '';
+    const message = `⚠️  WARNING: Naming conflict detected for "${conflict.name}"\n   Found multiple items with the same name:\n${directoryLine}${fileList}\n\n   Only one can be accessible at /${conflict.name}/\n   Please rename one to resolve this conflict.\n`;
+
+    if (isProduction) {
+      // In production, throw error to block build
+      console.error(`❌ ${message}`);
+    } else {
+      // In development, just warn
+      console.warn(message);
+    }
+  });
+
+  if (isProduction) {
+    throw new Error(`Build failed: ${conflicts.length} naming conflict(s) detected. Fix conflicts before building for production.`);
+  }
+
+  return { hasConflicts: true, conflicts };
+};
+
 // Export functions
 export {
   scanContentDirectory,
   getContentDirectories,
+  getRootLevelContent,
   formatTitle,
   getAllContent,
   getContentByUrl,
@@ -491,5 +757,7 @@ export {
   getSubDirectories,
   processTemplateVariables,
   getSidebarTree,
-  getAllDirectoriesSidebar
+  getAllDirectoriesSidebar,
+  detectNamingConflicts,
+  checkNamingConflicts
 };
