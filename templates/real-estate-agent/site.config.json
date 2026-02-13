@@ -1,0 +1,248 @@
+{
+  "$schema": "../../site.config.schema.json",
+  "site": {
+    "name": "Sarah Mitchell - Real Estate Agent",
+    "description": "Experienced Bay Area real estate agent specializing in luxury homes, first-time buyers, and investment properties.",
+    "url": "https://example.com",
+    "author": "Sarah Mitchell",
+    "footer": {
+      "brand": "Sarah Mitchell",
+      "tagline": "Your Trusted Bay Area Real Estate Partner",
+      "copyrightText": "All rights reserved"
+    }
+  },
+  "agent": {
+    "name": "Sarah Mitchell",
+    "title": "Licensed Real Estate Agent",
+    "tagline": "Helping you find your perfect home in the Bay Area",
+    "image": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=800",
+    "phone": "+1 (650) 555-0123",
+    "email": "sarah@sarahmitchellrealty.com",
+    "license": "DRE 01234567",
+    "primaryCta": {
+      "text": "Schedule Consultation",
+      "url": "#contact"
+    },
+    "secondaryCta": {
+      "text": "View Listings",
+      "url": "#listings"
+    },
+    "about": {
+      "subtitle": "About Me",
+      "title": "Your Real Estate Partner",
+      "bio": "With over 10 years of experience in the Bay Area real estate market, I've helped hundreds of families find their dream homes. My approach combines deep local knowledge with a commitment to exceptional service. Whether you're buying your first home or selling a luxury property, I'm here to guide you through every step of the process.",
+      "stats": [
+        { "value": "150+", "label": "Homes Sold" },
+        { "value": "$85M", "label": "Total Sales Volume" },
+        { "value": "98%", "label": "Client Satisfaction" },
+        { "value": "10+", "label": "Years Experience" }
+      ],
+      "specialties": [
+        {
+          "title": "Local Market Expert",
+          "description": "Deep knowledge of Bay Area neighborhoods, schools, and market trends",
+          "icon": "✦"
+        },
+        {
+          "title": "Luxury Properties",
+          "description": "Specialized experience in high-end residential real estate",
+          "icon": "✦"
+        },
+        {
+          "title": "First-Time Buyers",
+          "description": "Patient guidance for buyers navigating their first home purchase",
+          "icon": "✦"
+        }
+      ]
+    },
+    "listings": {
+      "subtitle": "Properties",
+      "title": "Featured Listings",
+      "description": "Browse my current properties available for sale",
+      "properties": [
+        {
+          "id": "1",
+          "title": "Modern Family Home",
+          "address": "123 Oak Street, Palo Alto, CA 94301",
+          "price": "$2,450,000",
+          "image": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=800",
+          "beds": "4",
+          "baths": "3.5",
+          "sqft": "3,200",
+          "status": "active",
+          "url": "#"
+        },
+        {
+          "id": "2",
+          "title": "Downtown Condo",
+          "address": "456 Market Street, San Francisco, CA 94102",
+          "price": "$1,350,000",
+          "image": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=800",
+          "beds": "2",
+          "baths": "2",
+          "sqft": "1,400",
+          "status": "pending",
+          "url": "#"
+        },
+        {
+          "id": "3",
+          "title": "Luxury Estate",
+          "address": "789 Hillside Drive, Atherton, CA 94027",
+          "price": "$8,900,000",
+          "image": "https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=800",
+          "beds": "6",
+          "baths": "5.5",
+          "sqft": "6,800",
+          "status": "active",
+          "url": "#"
+        }
+      ]
+    },
+    "sold": {
+      "subtitle": "Recent Sales",
+      "title": "Recently Sold",
+      "description": "Properties I've successfully helped my clients buy and sell",
+      "properties": [
+        {
+          "title": "Craftsman Home",
+          "address": "321 Maple Ave, Mountain View",
+          "soldPrice": "$2,100,000",
+          "soldDate": "Nov 2024",
+          "image": "https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?q=80&w=600"
+        },
+        {
+          "title": "Modern Townhouse",
+          "address": "654 Pine St, Menlo Park",
+          "soldPrice": "$1,850,000",
+          "soldDate": "Oct 2024",
+          "image": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=600"
+        },
+        {
+          "title": "Victorian Home",
+          "address": "987 Elm Rd, San Jose",
+          "soldPrice": "$1,425,000",
+          "soldDate": "Sep 2024",
+          "image": "https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=600"
+        },
+        {
+          "title": "Ranch Style",
+          "address": "147 Cedar Ln, Sunnyvale",
+          "soldPrice": "$2,300,000",
+          "soldDate": "Aug 2024",
+          "image": "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?q=80&w=600"
+        }
+      ]
+    },
+    "services": {
+      "subtitle": "What I Do",
+      "title": "My Services",
+      "description": "Comprehensive real estate services tailored to your needs",
+      "items": [
+        {
+          "title": "Buyer Representation",
+          "description": "I'll guide you through every step of finding and purchasing your dream home, from initial search to closing. Expert negotiation and market knowledge ensure you get the best deal.",
+          "icon": "✦"
+        },
+        {
+          "title": "Seller Representation",
+          "description": "Get top dollar for your property with my proven marketing strategies, professional photography, staging consultation, and expert negotiation skills.",
+          "icon": "✦"
+        },
+        {
+          "title": "Market Analysis",
+          "description": "Comprehensive comparative market analysis (CMA) to help you make informed decisions about pricing, whether you're buying or selling a property.",
+          "icon": "✦"
+        },
+        {
+          "title": "Investment Consulting",
+          "description": "Expert advice on real estate investments, rental properties, and building wealth through strategic property acquisition and management.",
+          "icon": "✦"
+        }
+      ]
+    },
+    "testimonials": {
+      "subtitle": "Testimonials",
+      "title": "What Clients Say",
+      "items": [
+        {
+          "name": "Jennifer & Mike Thompson",
+          "location": "Palo Alto, CA",
+          "text": "Sarah made our home buying experience seamless. Her knowledge of the local market was invaluable, and she negotiated a great deal for us. We couldn't be happier!",
+          "deal": "Purchased $2.1M Home",
+          "rating": 5
+        },
+        {
+          "name": "Robert Chen",
+          "location": "Mountain View, CA",
+          "text": "Working with Sarah to sell our home was fantastic. She handled everything professionally, from staging to closing. We sold above asking price in just 10 days!",
+          "deal": "Sold $1.8M Home",
+          "rating": 5
+        },
+        {
+          "name": "Emily Rodriguez",
+          "location": "San Francisco, CA",
+          "text": "As a first-time homebuyer, I was nervous about the process. Sarah was patient, informative, and always available to answer my questions. Highly recommend!",
+          "deal": "Purchased $1.2M Condo",
+          "rating": 5
+        },
+        {
+          "name": "David & Lisa Kim",
+          "location": "Atherton, CA",
+          "text": "Sarah's expertise in luxury properties is unmatched. She understood our needs perfectly and found us our dream estate. True professional!",
+          "deal": "Purchased $6.5M Estate",
+          "rating": 5
+        },
+        {
+          "name": "Amanda Foster",
+          "location": "Menlo Park, CA",
+          "text": "Sarah's market knowledge and negotiation skills saved us $150K on our purchase. She's our real estate agent for life!",
+          "deal": "Purchased $2.4M Home",
+          "rating": 5
+        },
+        {
+          "name": "James Wilson",
+          "location": "Sunnyvale, CA",
+          "text": "I've worked with several agents over the years, but Sarah stands out. Her dedication and communication are exceptional.",
+          "deal": "Sold $1.6M Home",
+          "rating": 5
+        }
+      ]
+    },
+    "contact": {
+      "subtitle": "Get In Touch",
+      "title": "Let's Work Together",
+      "description": "Ready to buy or sell? I'm here to help you every step of the way.",
+      "address": {
+        "street": "1234 University Ave, Suite 200",
+        "city": "Palo Alto",
+        "state": "CA",
+        "zipCode": "94301"
+      },
+      "social": {
+        "linkedin": "https://linkedin.com/in/sarahmitchell",
+        "facebook": "https://facebook.com/sarahmitchellrealty",
+        "instagram": "https://instagram.com/sarahmitchellrealty"
+      },
+      "calendlyUrl": "https://calendly.com/sarahmitchell/consultation"
+    }
+  },
+  "navbarConfig": {
+    "siteTitle": "Sarah Mitchell",
+    "logo": null,
+    "defaultNavItems": [
+      { "title": "Home", "url": "#hero" },
+      { "title": "About", "url": "#about" },
+      { "title": "Listings", "url": "#listings" },
+      { "title": "Services", "url": "#services" },
+      { "title": "Testimonials", "url": "#testimonials" },
+      { "title": "Contact", "url": "#contact", "cta": true }
+    ],
+    "hiddenFromNav": []
+  },
+  "seo": {
+    "title": "Sarah Mitchell - Bay Area Real Estate Agent",
+    "description": "Experienced Bay Area real estate agent specializing in luxury homes, first-time buyers, and investment properties. 10+ years helping clients buy and sell homes.",
+    "keywords": ["real estate agent", "bay area realtor", "palo alto homes", "luxury real estate", "buy home bay area"],
+    "ogImage": "/images/og-agent.jpg"
+  }
+}
