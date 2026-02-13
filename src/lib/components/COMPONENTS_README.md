@@ -24,6 +24,7 @@ This folder contains ready-to-use UI components for Statue SSG (built with Svelt
 		ContentHeader,
 		ContentBody,
 		NavigationBar,
+		VertivalNav,
 		Footer,
 		Sitemap,
 		Warning,
@@ -61,6 +62,35 @@ Components use CSS variables like `--color-primary`, `--color-secondary`, `--col
 
 <NavigationBar {navbarItems} {activePath} />
 ```
+
+- **VerticalNav**: Fixed left-side vertical navigation with scroll-based active section highlighting.
+  - Props: 
+    - `sections: { id: string; label: string }[]` - Array of section IDs and labels to navigate
+  - Features:
+    - Fixed position on left side of viewport
+    - Vertical text orientation (rotated 180°)
+    - Smooth scrolling to sections on click
+    - Updates URL hash as you scroll
+    - Responsive: Hidden on screens below 1100px
+    - Uses theme CSS variables for colors
+  - Example:
+```svelte
+<script>
+  import { VerticalNav } from 'statue-ssg';
+  const sections = [
+    { id: 'intro', label: 'Introduction' },
+    { id: 'features', label: 'Features' },
+    { id: 'pricing', label: 'Pricing' },
+    { id: 'contact', label: 'Contact' }
+  ];
+</script>
+
+<VerticalNav {sections} />
+```
+  - **Usage Notes**: 
+    - Each section ID should match an element's `id` attribute on the page
+    - Works best with single-page layouts with distinct sections
+    - Automatically adjusts position on larger screens (>1600px)
 
 - **Hero**: Landing hero section.
     - Example:
