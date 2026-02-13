@@ -109,6 +109,12 @@
 		"vitest": "^3.2.0"
 	},
 	"dependencies": {
+		"@floating-ui/dom": "^1.6.12",
+		"@fortawesome/fontawesome-common-types": "^6.7.1",
+		"@layerstack/svelte-actions": "^1.0.1",
+		"@layerstack/svelte-stores": "^1.0.2",
+		"@layerstack/utils": "^2.0.0-next.18",
+		"@mdi/js": "^7.4.47",
 		"@fontsource/fraunces": "^5.2.9",
 		"@fontsource/ibm-plex-sans": "^5.2.8",
 		"@types/three": "^0.182.0",
@@ -117,6 +123,7 @@
 		"commander": "^13.1.0",
 		"fs-extra": "^11.3.0",
 		"gray-matter": "^4.0.3",
+		"lodash-es": "^4.17.21",
 		"sql.js": "^1.13.0",
 		"lottie-web": "^5.13.0",
 		"lucide-svelte": "^0.561.0",
