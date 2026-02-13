@@ -487,6 +487,125 @@ Components use CSS variables like `--color-primary`, `--color-secondary`, `--col
 
 - **Note**: Search requires Pagefind to be installed (`npm install -D pagefind`) and runs automatically during build via the postbuild script.
 
+- **BackgroundAudio**: Fixed-position audio player with visualizer.
+    - Props:
+        - `src: string` - Audio file path (required)
+        - `loop?: boolean` - Whether to loop the audio (default: true)
+        - `volume?: number` - Volume level 0-1 (default: 0.3)
+        - `startPlaying?: boolean` - Auto-play on mount (default: false)
+    - Features:
+        - Fixed bottom-left position
+        - Animated visualizer bars when playing
+        - Speaker icon with pulse animation
+        - Toggle play/pause on click
+        - Respects browser autoplay policies
+    - Example:
+
+```svelte
+<script>
+	import { BackgroundAudio } from 'statue-ssg';
+</script>
+
+<BackgroundAudio src="/audio/background-music.mp3" volume={0.5} loop={true} startPlaying={false} />
+```
+
+- **MusicPlayer**: Full-featured music player with playlist support and playback persistence.
+    - Props:
+        - `tracks: Track[]` - Array of tracks (required)
+            - Track type: `{ src: string; title: string; artist?: string; type?: string; cover?: string }`
+        - `initialIndex?: number` - Starting track index (default: 0)
+        - `storageKey?: string` - LocalStorage key for persistence (default: 'statue-music-player')
+        - `autoResume?: boolean` - Resume from last position (default: true)
+        - `enableScroll?: boolean` - Enable playlist scrolling (default: true)
+        - `scrollThreshold?: number` - Tracks before scroll activates (default: 5)
+        - `maxPlaylistHeight?: string` - Max height when scrolling (default: '300px')
+        - `enablePagination?: boolean` - Use pagination instead of scroll (default: false)
+        - `itemsPerPage?: number` - Tracks per page (default: 10)
+    - Features:
+        - Full playback controls (play, pause, next, previous)
+        - Seek timeline with time display
+        - Playlist view with current track highlighting
+        - Album art or vinyl placeholder
+        - Animated visualizer bars
+        - Keyboard shortcuts (Space, Arrow keys)
+        - Auto-advance to next track
+        - Persistent playback state in localStorage
+        - Scrollable or paginated playlists
+    - Example:
+
+```svelte
+<script>
+	import { MusicPlayer } from 'statue-ssg';
+
+	const tracks = [
+		{
+			src: '/audio/song1.mp3',
+			title: 'First Song',
+			artist: 'Artist Name',
+			cover: '/images/album1.jpg'
+		},
+		{
+			src: '/audio/song2.mp3',
+			title: 'Second Song',
+			artist: 'Another Artist'
+		}
+	];
+</script>
+
+<MusicPlayer {tracks} autoResume={true} enableScroll={true} />
+```
+
+- **VideoPlayer**: Versatile video player supporting YouTube, Vimeo, and direct video files.
+    - Props:
+        - `src: string` - Video URL (YouTube, Vimeo, or direct file) (required)
+        - `title?: string` - Video title displayed in header
+        - `muted?: boolean` - Start muted (default: true)
+        - `autoplay?: boolean` - Auto-play on mount (default: false)
+        - `loop?: boolean` - Loop playback (default: false)
+        - `controls?: boolean` - Show custom controls (default: true)
+        - `onRemove?: () => void` - Callback for remove button
+        - `globalPlayState?: string` - External play/pause control
+        - `globalMuteState?: string` - External mute control
+    - Features:
+        - Auto-detects video type (YouTube, Vimeo, or direct file)
+        - YouTube IFrame API integration
+        - Custom controls for direct videos (play/pause, seek, volume, fullscreen)
+        - Auto-hiding controls on mouse inactivity
+        - Play overlay for direct videos
+        - Error handling with user-friendly messages
+        - Responsive design
+        - Optional remove button
+        - External playback control support
+    - Example:
+
+```svelte
+<script>
+	import { VideoPlayer } from 'statue-ssg';
+</script>
+
+<!-- YouTube video -->
+<VideoPlayer
+	src="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+	title="YouTube Video"
+	muted={false}
+	autoplay={false}
+/>
+
+<!-- Vimeo video -->
+<VideoPlayer
+	src="https://vimeo.com/123456789"
+	title="Vimeo Video"
+/>
+
+<!-- Direct video file -->
+<VideoPlayer
+	src="/videos/my-video.mp4"
+	title="Local Video"
+	controls={true}
+	loop={false}
+/>
+```
+
 ### Notes
 
 - All components are SSR-friendly and work in SvelteKit routes and layouts.
