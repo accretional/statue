@@ -7,6 +7,15 @@
 	let { data, children } = $props();
 
 	let navbarConfig = $derived(data.navbarConfig);
+	let currentPath = $derived($page.url.pathname);
+	let defaultNavItems = $derived(
+		navbarConfig?.defaultNavItems?.map((item) => {
+			if (currentPath !== '/' && typeof item?.url === 'string' && item.url.startsWith('#')) {
+				return { ...item, url: `/${item.url}` };
+			}
+			return item;
+		}) ?? []
+	);
 
 	// Disable view transitions for smoother scroll animations
 	onNavigate(() => {
@@ -20,7 +29,7 @@
 	siteTitle={navbarConfig?.siteTitle ?? null}
 	logo={navbarConfig?.logo ?? null}
 	hiddenFromNav={navbarConfig?.hiddenFromNav ?? []}
-	{...(navbarConfig?.defaultNavItems && { defaultNavItems: navbarConfig.defaultNavItems })}
+	{...(defaultNavItems.length && { defaultNavItems })}
 />
 
 <main>

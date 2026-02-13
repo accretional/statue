@@ -56,80 +56,73 @@
       ]
     },
     "listings": {
-      "subtitle": "Properties",
-      "title": "Featured Listings",
-      "description": "Browse my current properties available for sale",
-      "properties": [
+      "featured": {
+        "subtitle": "Properties",
+        "title": "Featured Listings",
+        "description": "Browse my current properties available for sale",
+        "limit": 3,
+        "status": ["active", "pending"]
+      },
+      "sold": {
+        "subtitle": "Recent Sales",
+        "title": "Recently Sold",
+        "description": "Properties I've successfully helped my clients buy and sell",
+        "limit": 4
+      },
+      "items": [
         {
-          "id": "1",
-          "title": "Modern Family Home",
-          "address": "123 Oak Street, Palo Alto, CA 94301",
-          "price": "$2,450,000",
-          "image": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=800",
-          "beds": "4",
-          "baths": "3.5",
-          "sqft": "3,200",
+          "id": "villa-meridian-1",
+          "remoteUrl": " https://0842855b.real-estate-agent.pages.dev",
+          "price": "$10.96M",
+          "type": "Single Family",
           "status": "active",
-          "url": "#"
+          "title": "Villa Meridian"
         },
         {
-          "id": "2",
-          "title": "Downtown Condo",
-          "address": "456 Market Street, San Francisco, CA 94102",
-          "price": "$1,350,000",
-          "image": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=800",
-          "beds": "2",
-          "baths": "2",
-          "sqft": "1,400",
+          "id": "villa-meridian-2",
+          "remoteUrl": " https://0842855b.real-estate-agent.pages.dev",
+          "price": "$9.80M",
+          "type": "Estate",
           "status": "pending",
-          "url": "#"
+          "title": "Villa Meridian"
         },
         {
-          "id": "3",
-          "title": "Luxury Estate",
-          "address": "789 Hillside Drive, Atherton, CA 94027",
-          "price": "$8,900,000",
-          "image": "https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=800",
-          "beds": "6",
-          "baths": "5.5",
-          "sqft": "6,800",
+          "id": "villa-meridian-3",
+          "remoteUrl": " https://0842855b.real-estate-agent.pages.dev",
+          "price": "$8.75M",
+          "type": "Modern",
           "status": "active",
-          "url": "#"
-        }
-      ]
-    },
-    "sold": {
-      "subtitle": "Recent Sales",
-      "title": "Recently Sold",
-      "description": "Properties I've successfully helped my clients buy and sell",
-      "properties": [
-        {
-          "title": "Craftsman Home",
-          "address": "321 Maple Ave, Mountain View",
-          "soldPrice": "$2,100,000",
-          "soldDate": "Nov 2024",
-          "image": "https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?q=80&w=600"
+          "title": "Villa Meridian"
         },
         {
-          "title": "Modern Townhouse",
-          "address": "654 Pine St, Menlo Park",
-          "soldPrice": "$1,850,000",
-          "soldDate": "Oct 2024",
-          "image": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=600"
+          "id": "villa-meridian-4",
+          "remoteUrl": " https://0842855b.real-estate-agent.pages.dev",
+          "price": "$7.95M",
+          "soldPrice": "$7.95M",
+          "soldDate": "Nov 2025",
+          "type": "Luxury Home",
+          "status": "sold",
+          "title": "Villa Meridian"
         },
         {
-          "title": "Victorian Home",
-          "address": "987 Elm Rd, San Jose",
-          "soldPrice": "$1,425,000",
-          "soldDate": "Sep 2024",
-          "image": "https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=600"
+          "id": "villa-meridian-5",
+          "remoteUrl": " https://0842855b.real-estate-agent.pages.dev",
+          "price": "$11.20M",
+          "soldPrice": "$11.20M",
+          "soldDate": "Oct 2025",
+          "type": "Single Family",
+          "status": "sold",
+          "title": "Villa Meridian"
         },
         {
-          "title": "Ranch Style",
-          "address": "147 Cedar Ln, Sunnyvale",
-          "soldPrice": "$2,300,000",
-          "soldDate": "Aug 2024",
-          "image": "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?q=80&w=600"
+          "id": "villa-meridian-6",
+          "remoteUrl": " https://0842855b.real-estate-agent.pages.dev",
+          "price": "$9.35M",
+          "soldPrice": "$9.35M",
+          "soldDate": "Sep 2025",
+          "type": "Waterfront",
+          "status": "sold",
+          "title": "Villa Meridian"
         }
       ]
     },
@@ -237,12 +230,20 @@
       { "title": "Testimonials", "url": "#testimonials" },
       { "title": "Contact", "url": "#contact", "cta": true }
     ],
-    "hiddenFromNav": []
+    "hiddenFromNav": ["blog", "docs", "legal"]
   },
   "seo": {
     "title": "Sarah Mitchell - Bay Area Real Estate Agent",
     "description": "Experienced Bay Area real estate agent specializing in luxury homes, first-time buyers, and investment properties. 10+ years helping clients buy and sell homes.",
     "keywords": ["real estate agent", "bay area realtor", "palo alto homes", "luxury real estate", "buy home bay area"],
     "ogImage": "/images/og-agent.jpg"
+  },
+  "rss": {
+    "enabled": true,
+    "title": "Sarah Mitchell Real Estate Blog",
+    "description": "Market updates, tips, and real estate insights from Sarah Mitchell.",
+    "includeDirectories": ["blog"],
+    "maxItems": 50,
+    "contentMode": "summary"
   }
 }

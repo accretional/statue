@@ -71,17 +71,20 @@
 />
 
 <AgentListings
-	subtitle={agent.listings?.subtitle}
-	title={agent.listings?.title}
-	description={agent.listings?.description}
-	listings={agent.listings?.properties}
+	subtitle={agent.listings?.featured?.subtitle}
+	title={agent.listings?.featured?.title}
+	description={agent.listings?.featured?.description}
+	limit={agent.listings?.featured?.limit}
+	status={agent.listings?.featured?.status}
+	listings={agent.listings?.items}
 />
 
 <AgentSold
-	subtitle={agent.sold?.subtitle}
-	title={agent.sold?.title}
-	description={agent.sold?.description}
-	soldListings={agent.sold?.properties}
+	subtitle={agent.listings?.sold?.subtitle}
+	title={agent.listings?.sold?.title}
+	description={agent.listings?.sold?.description}
+	limit={agent.listings?.sold?.limit}
+	listings={agent.listings?.items}
 />
 
 <AgentServices
