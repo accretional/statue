@@ -4,7 +4,7 @@
 
   Usage:
   <script>
-    import { SwaggerUI } from 'statue-ssg';
+    import SwaggerUI from 'statue-ssg/components/SwaggerUI.svelte';
   </script>
 
   <SwaggerUI url="/openapi.json" />

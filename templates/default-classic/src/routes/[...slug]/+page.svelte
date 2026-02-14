@@ -1,12 +1,10 @@
 <script>
 	import { page } from '$app/stores';
-	import {
-		Warning,
-		ContentHeader,
-		ContentBody,
-		DocsLayout,
-		DocsContent
-	} from 'statue-ssg';
+	import Warning from 'statue-ssg/components/Warning.svelte'
+import ContentHeader from 'statue-ssg/components/ContentHeader.svelte'
+import ContentBody from 'statue-ssg/components/ContentBody.svelte'
+import DocsLayout from 'statue-ssg/components/DocsLayout.svelte'
+import DocsContent from 'statue-ssg/components/DocsContent.svelte';
 	import BlogPostHeader from '$lib/components/BlogPostHeader.svelte';
 	import BlogPostContent from '$lib/components/BlogPostContent.svelte';
 

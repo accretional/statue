@@ -1,5 +1,5 @@
 <script>
-	import { NavigationBar } from 'statue-ssg';
+	import NavigationBar from 'statue-ssg/components/NavigationBar.svelte';
 	import { page } from '$app/stores';
 	import { onNavigate } from '$app/navigation';
 	import '$lib/index.css';

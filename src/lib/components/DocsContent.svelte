@@ -4,7 +4,7 @@
   Usage:
   ```svelte
   <script>
-    import { DocsContent } from 'statue-ssg';
+    import DocsContent from 'statue-ssg/components/DocsContent.svelte';
 
     let headings = [];
   </script>

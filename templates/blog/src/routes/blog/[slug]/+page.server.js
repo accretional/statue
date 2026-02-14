@@ -1,4 +1,4 @@
-import { getContentByUrl, getAllContent } from 'statue-ssg/cms/content-processor';
+import { getContentByUrl, getAllContent } from 'statue-ssg/cms/content-processor.js';
 import { error } from '@sveltejs/kit';
 
 export const entries = async () => {

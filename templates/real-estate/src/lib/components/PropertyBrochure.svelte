@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { PdfViewer } from 'statue-ssg';
+	import PdfViewer from 'statue-ssg/components/PdfViewer.svelte';
 
 	export interface PropertyBrochureProps {
 		subtitle?: string;

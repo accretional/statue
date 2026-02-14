@@ -4,7 +4,7 @@
   Usage:
   ```svelte
   <script>
-    import { TableOfContents } from 'statue-ssg';
+    import TableOfContents from 'statue-ssg/components/TableOfContents.svelte';
 
     const headings = [
       { id: 'overview', text: 'Overview', level: 2 },
