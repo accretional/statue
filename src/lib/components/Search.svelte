@@ -4,7 +4,7 @@
   Usage:
   ```svelte
   <script>
-    import { Search } from 'statue-ssg';
+    import Search from 'statue-ssg/components/Search.svelte';
   </script>
 
   <Search />

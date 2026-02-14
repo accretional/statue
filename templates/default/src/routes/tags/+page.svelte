@@ -1,5 +1,6 @@
 <script>
-	import { PageHero, TagList } from 'statue-ssg';
+	import PageHero from 'statue-ssg/components/PageHero.svelte';
+import TagList from 'statue-ssg/components/TagList.svelte';
 
 	const { data } = $props();
 	const tags = $derived(data.tags || []);

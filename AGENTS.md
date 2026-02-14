@@ -219,7 +219,7 @@ Best for fully custom designs where navigation differs per page:
 Best for blog/docs sites where default navbar works well:
 ```svelte
 <script>
-  import { NavigationBar } from 'statue-ssg';
+  import NavigationBar from 'statue-ssg/components/NavigationBar.svelte';
   import Footer from '$lib/components/Footer.svelte';
   import { page } from '$app/stores';
   import { onNavigate } from '$app/navigation';
@@ -251,7 +251,8 @@ Best for blog/docs sites where default navbar works well:
 Keep both default NavigationBar and Footer:
 ```svelte
 <script>
-  import { NavigationBar, Footer } from 'statue-ssg';
+  import NavigationBar from 'statue-ssg/components/NavigationBar.svelte';
+import Footer from 'statue-ssg/components/Footer.svelte';
   // ... keep existing setup
 </script>
 
@@ -319,7 +320,10 @@ Best for blogs, docs, and content-driven sites:
 **Keep or modify statue-ssg components:**
 ```svelte
 <script>
-  import { Hero, Stats, Categories, LatestContent } from 'statue-ssg';
+  import Hero from 'statue-ssg/components/Hero.svelte';
+import Stats from 'statue-ssg/components/Stats.svelte';
+import Categories from 'statue-ssg/components/Categories.svelte';
+import LatestContent from 'statue-ssg/components/LatestContent.svelte';
   import siteConfig from '../../site.config.json';
 
   export let data;
@@ -345,7 +349,7 @@ Best for blogs, docs, and content-driven sites:
 Combine statue-ssg components with your own:
 ```svelte
 <script>
-  import { Hero } from 'statue-ssg';
+  import Hero from 'statue-ssg/components/Hero.svelte';
   import CustomGallery from '$lib/components/CustomGallery.svelte';
   import siteConfig from '../../site.config.json';
 
@@ -392,7 +396,9 @@ Combine statue-ssg components with your own:
 #### Option B: Use Default Components
 ```svelte
 <script>
-  import { PageHero, Mission, Team } from 'statue-ssg';
+  import PageHero from 'statue-ssg/components/PageHero.svelte';
+import Mission from 'statue-ssg/components/Mission.svelte';
+import Team from 'statue-ssg/components/Team.svelte';
   export let data;
 </script>
 

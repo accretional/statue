@@ -1,5 +1,9 @@
 <script>
-	import { Hero, Stats, Categories, LatestContent, BuiltBy } from 'statue-ssg';
+	import Hero from 'statue-ssg/components/Hero.svelte'
+import Stats from 'statue-ssg/components/Stats.svelte'
+import Categories from 'statue-ssg/components/Categories.svelte'
+import LatestContent from 'statue-ssg/components/LatestContent.svelte'
+import BuiltBy from 'statue-ssg/components/BuiltBy.svelte';
 
 	const { data } = $props();
 </script>

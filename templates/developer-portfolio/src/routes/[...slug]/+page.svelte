@@ -1,11 +1,11 @@
 <script>
   import { page } from '$app/stores';
-  import { Warning } from 'statue-ssg';
-  import { ContentHeader } from 'statue-ssg';
-  import { ContentBody } from 'statue-ssg';
-  import { DocsLayout } from 'statue-ssg';
-  import { DocsContent } from 'statue-ssg';
-  import { BlogPostLayout } from 'statue-ssg';
+  import Warning from 'statue-ssg/components/Warning.svelte';
+  import ContentHeader from 'statue-ssg/components/ContentHeader.svelte';
+  import ContentBody from 'statue-ssg/components/ContentBody.svelte';
+  import DocsLayout from 'statue-ssg/components/DocsLayout.svelte';
+  import DocsContent from 'statue-ssg/components/DocsContent.svelte';
+  import BlogPostLayout from 'statue-ssg/components/BlogPostLayout.svelte';
 
   // Loaded content
   export let data;
