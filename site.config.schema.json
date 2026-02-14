@@ -61,16 +61,6 @@
         "defaultAuthorAvatar": {
           "type": "string",
           "description": "Default avatar for blog posts when authorAvatar is not specified in frontmatter"
-        },
-        "blogTag": {
-          "type": "object",
-          "description": "Blog tag settings",
-          "properties": {
-            "enabled": {
-              "type": "boolean",
-              "description": "Enable tag pages and tag lists for blog content"
-            }
-          }
         }
       }
     },

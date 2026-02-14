@@ -11,7 +11,6 @@
 		BlogLayout,
 		PageHero
 	} from 'statue-ssg';
-	import siteConfig from '../../../site.config.json';
 
 	// Import all MDX files at build time - use non-eager import to avoid build errors
 	const mdxModules = import.meta.glob('/content/**/*.mdx');
@@ -83,9 +82,6 @@
 		if (directory === 'root') return 'Home';
 		return directory.charAt(0).toUpperCase() + directory.slice(1);
 	}
-
-	const enableTags = $derived(siteConfig.blog?.blogTag?.enabled ?? true);
-	const isTagPageEnabled = $derived(enableTags && (data.isTagPage || false));
 </script>
 
 <svelte:head>
@@ -97,7 +93,7 @@
 	{/if}
 </svelte:head>
 
-{#if isTagPageEnabled}
+{#if isTagPage}
 	<!-- Tag Page - Show posts for a specific tag -->
 	<div class="container mx-auto px-4 pt-20">
 		<div class="flex items-center gap-2 text-sm text-[var(--color-muted)] mb-4">
@@ -105,7 +101,7 @@
 			<span>/</span>
 			<a href="/blog" class="hover:text-[var(--color-primary)]">Blog</a>
 			<span>/</span>
-			<span><a href="/tags" class="hover:text-[var(--color-primary)]">Tag</a>: {data.tag}</span>
+			<span>Tag: {data.tag}</span>
 		</div>
 	</div>
 
@@ -114,7 +110,7 @@
 		description={`Found ${data.posts.length} ${data.posts.length === 1 ? 'post' : 'posts'}`}
 	/>
 
-	<BlogLayout title="" posts={data.posts} {enableTags} />
+	<BlogLayout title="" posts={data.posts} />
 {:else if isMdxContent}
 	<!-- MDX Content - Layout determined by layoutType -->
 	{#if layoutType === 'docs'}
@@ -183,8 +179,6 @@
 			content={data.content.content}
 			backLink={getBackLink(data.content.directory)}
 			backLinkText={getBackLinkText(data.content.directory)}
-			tags={data.content.metadata.tags}
-			{enableTags}
 		/>
 	{:else}
 		<div
