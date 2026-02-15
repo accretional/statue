@@ -4,6 +4,10 @@ import { mdsvex } from 'mdsvex';
 import path from 'path';
 import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
+import { getTagRoutes } from './scripts/get-tag-routes.js';
+
+// Get dynamic tag routes
+const tagRoutes = getTagRoutes();
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -28,20 +32,22 @@ const config = {
       precompress: false,
       strict: true
     }),
-    
+
     // Custom alias defined to handle the content folder
     alias: {
       $content: path.resolve('./content'),
       $lib: path.resolve('./src/lib')
     },
-    
+
     // Static site pre-processing options
     prerender: {
       crawl: true,
-      entries: ['*'],
+      entries: ['*',
+        ...tagRoutes
+      ],
       handleHttpError: 'warn'
     }
   }
 };
 
-export default config; 
+export default config;

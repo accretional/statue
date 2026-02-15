@@ -479,6 +479,33 @@ const getAllDirectoriesSidebar = async () => {
   return result;
 };
 
+// Get all unique tags from all content
+const getAllTags = async () => {
+  const allContent = await getAllContent();
+  const tagsSet = new Set();
+
+  allContent.forEach(entry => {
+    if (entry.metadata.tags && Array.isArray(entry.metadata.tags)) {
+      entry.metadata.tags.forEach(tag => tagsSet.add(tag.toLowerCase()));
+    }
+  });
+
+  return Array.from(tagsSet).sort();
+};
+
+// Get all posts that have a specific tag
+const getPostsByTag = async (tag) => {
+  const allContent = await getAllContent();
+  const normalizedTag = tag.toLowerCase();
+
+  return allContent.filter(entry => {
+    if (!entry.metadata.tags || !Array.isArray(entry.metadata.tags)) {
+      return false;
+    }
+    return entry.metadata.tags.some(t => t.toLowerCase() === normalizedTag);
+  });
+};
+
 // Export functions
 export {
   scanContentDirectory,
@@ -491,5 +518,7 @@ export {
   getSubDirectories,
   processTemplateVariables,
   getSidebarTree,
-  getAllDirectoriesSidebar
+  getAllDirectoriesSidebar,
+  getAllTags,
+  getPostsByTag
 };
