@@ -1,4 +1,4 @@
-import { getContentByUrl, getContentDirectories, getSidebarTree, getPostsByTag } from 'statue-ssg/cms/content-processor';
+import { getContentByUrl, getContentDirectories, getSidebarTree } from 'statue-ssg/cms/content-processor';
 
 // Make this page pre-rendered as a static page
 export const prerender = true;
@@ -27,63 +27,6 @@ export async function load({ params }) {
   // DEBUG: Log URL parameter and generated URL to console
   console.log('Params slug:', params.slug);
   console.log('Generated URL:', url);
-
-  // Check if this is a tag page (e.g., /tags/javascript)
-  if (params.slug.startsWith('tags/')) {
-    const tagSlug = params.slug.replace('tags/', '').replace(/\/$/, ''); // Remove trailing slash
-
-    try {
-      // First try to find posts with the slug as-is (for single-word tags)
-      let posts = await getPostsByTag(tagSlug);
-
-      // If no posts found, try converting hyphenated slug back to spaced tag name
-      if (posts.length === 0) {
-        const tagWithSpaces = tagSlug.replace(/-/g, ' ');
-        posts = await getPostsByTag(tagWithSpaces);
-      }
-
-      // If still no posts, try finding any tag that matches when both are slugified
-      if (posts.length === 0) {
-        const allTags = await import('statue-ssg/cms/content-processor').then(m => m.getAllTags());
-        const matchingTag = (await allTags).find(tag =>
-          tag.toLowerCase().replace(/\s+/g, '-') === tagSlug
-        );
-        if (matchingTag) {
-          posts = await getPostsByTag(matchingTag);
-        }
-      }
-
-      if (posts.length === 0) {
-        throw new Error(`No posts found for tag "${tagSlug}"`);
-      }
-
-      // Use the original tag name for display (find it from the posts)
-      const displayTagName = posts[0]?.metadata?.tags?.find(tag =>
-        tag.toLowerCase().replace(/\s+/g, '-') === tagSlug
-      ) || tagSlug;
-
-      // Sort posts by date (newest first)
-      const sortedPosts = posts.sort((a, b) => {
-        const dateA = new Date(a.metadata.date || 0);
-        const dateB = new Date(b.metadata.date || 0);
-        return dateB - dateA;
-      });
-
-      return {
-        isTagPage: true,
-        tag: displayTagName,
-        posts: sortedPosts,
-        pageTitle: `Posts tagged "${displayTagName}"`,
-        directories: getContentDirectories(),
-        sidebarItems: [],
-        layoutConfig: LAYOUT_CONFIG.default,
-        layoutType: 'tag'
-      };
-    } catch (err) {
-      console.error('Tag not found:', err);
-      throw new Error(`Tag "${tagSlug}" not found`);
-    }
-  }
 
   // Disable problematic routes
   if (url.includes('/blog/[slug]') || url.includes('/docs/[slug]')) {
@@ -131,8 +74,7 @@ export async function load({ params }) {
       notFound: true,
       directories,
       sidebarItems,
-      layoutConfig: LAYOUT_CONFIG.default,
-      isTagPage: false
+      layoutConfig: LAYOUT_CONFIG.default
     };
   }
 
@@ -142,7 +84,6 @@ export async function load({ params }) {
     directories,
     sidebarItems,
     layoutConfig,
-    layoutType,
-    isTagPage: false
+    layoutType
   };
 }

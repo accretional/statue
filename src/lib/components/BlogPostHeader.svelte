@@ -2,6 +2,7 @@
   // BlogPostHeader component - Linear-style blog post header with thumbnail
   import { page } from '$app/stores';
   import AuthorAvatar from './AuthorAvatar.svelte';
+  import TagList from './TagList.svelte';
 
   export interface BlogPostHeaderProps {
     title: string;
@@ -25,6 +26,7 @@
     thumbnail = '',
     backLink = '/blog',
     backLinkText = 'Blog',
+    tags = [],
   }: BlogPostHeaderProps = $props();
 
   // Date parsing without confusion due to timezone
@@ -97,6 +99,13 @@
     {#if author && formattedDate}<span class="separator">·</span>{/if}
     {#if formattedDate}<span class="date">{formattedDate}</span>{/if}
   </div>
+
+  <!-- Tags -->
+  {#if tags && tags.length > 0}
+    <div class="tags-wrapper">
+      <TagList {tags} />
+    </div>
+  {/if}
 </header>
 
 <style>
@@ -152,6 +161,12 @@
     width: 100%;
     height: auto;
     display: block;
+  }
+
+  .tags-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 24px;
   }
 
   .meta {

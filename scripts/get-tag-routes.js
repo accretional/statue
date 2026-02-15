@@ -4,6 +4,11 @@ import matter from 'gray-matter';
 
 // Get all tag routes for prerendering
 export function getTagRoutes() {
+  const tagsRouteDir = path.resolve('./src/routes/tags');
+  if (!fs.existsSync(tagsRouteDir)) {
+    return [];
+  }
+
   const contentDir = path.resolve('./content');
   const tagRoutes = new Set();
 

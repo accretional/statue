@@ -1,4 +1,4 @@
-import { getContentDirectories, getContentByDirectory, getSubDirectories, getSidebarTree, getAllTags } from 'statue-ssg/cms/content-processor';
+import { getContentDirectories, getContentByDirectory, getSubDirectories, getSidebarTree } from 'statue-ssg/cms/content-processor';
 
 // Make this page prerendered as a static page
 export const prerender = true;
@@ -7,24 +7,6 @@ export const prerender = true;
 export async function load({ params }) {
   // Get directory name
   const directoryName = params.directory;
-
-  // Special handling for tags directory
-  if (directoryName === 'tags') {
-    const tags = await getAllTags();
-    return {
-      directories: getContentDirectories(),
-      currentDirectory: {
-        name: 'tags',
-        title: 'All Tags',
-        url: '/tags'
-      },
-      tags,
-      isTagsDirectory: true,
-      directoryContent: [],
-      subDirectories: [],
-      sidebarItems: []
-    };
-  }
 
   // Get all directories
   const directories = getContentDirectories();
@@ -49,7 +31,6 @@ export async function load({ params }) {
     directoryContent,
     subDirectories,
     currentDirectory,
-    sidebarItems,
-    isTagsDirectory: false
+    sidebarItems
   };
 }

@@ -481,6 +481,25 @@ Recursive tree view for nested data.
 
 ---
 
+### TagList
+
+Display clickable tag badges for blog posts.
+
+```svelte
+<script>
+  import { TagList } from 'statue-ssg';
+</script>
+
+<TagList tags={['svelte', 'tutorial', 'web dev']} />
+```
+
+**Props:**
+- `tags` (string[]) - Array of tag names
+
+Tags link to `/tags/tag-name` pages automatically.
+
+---
+
 ## Creating Custom Components
 
 Create your own components in `src/lib/components/`:

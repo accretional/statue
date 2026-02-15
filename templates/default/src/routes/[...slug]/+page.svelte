@@ -7,9 +7,7 @@
 		ContentBody,
 		DocsLayout,
 		DocsContent,
-		BlogPostLayout,
-		BlogLayout,
-		PageHero
+		BlogPostLayout
 	} from 'statue-ssg';
 
 	// Import all MDX files at build time - use non-eager import to avoid build errors
@@ -50,9 +48,8 @@
 		mdxComponent = await findMdxComponent($page.url.pathname);
 	});
 	let activePath = $derived($page.url.pathname);
-	let title = $derived(data.content ? data.content.metadata.title : (data.isTagPage ? data.pageTitle : 'Content Not Found'));
+	let title = $derived(data.content ? data.content.metadata.title : 'Content Not Found');
 	let layoutType = $derived(data.layoutType || 'default');
-	let isTagPage = $derived(data.isTagPage || false);
 
 	let headings = $state([]);
 	let mdxContainer = $state(null);
@@ -88,30 +85,10 @@
 	<title>{title}</title>
 	{#if data.content?.metadata?.description}
 		<meta name="description" content={data.content.metadata.description} />
-	{:else if isTagPage}
-		<meta name="description" content="Posts tagged with {data.tag}" />
 	{/if}
 </svelte:head>
 
-{#if isTagPage}
-	<!-- Tag Page - Show posts for a specific tag -->
-	<div class="container mx-auto px-4 pt-20">
-		<div class="flex items-center gap-2 text-sm text-[var(--color-muted)] mb-4">
-			<a href="/" class="hover:text-[var(--color-primary)]">Home</a>
-			<span>/</span>
-			<a href="/blog" class="hover:text-[var(--color-primary)]">Blog</a>
-			<span>/</span>
-			<span>Tag: {data.tag}</span>
-		</div>
-	</div>
-
-	<PageHero
-		title={`Posts tagged "${data.tag}"`}
-		description={`Found ${data.posts.length} ${data.posts.length === 1 ? 'post' : 'posts'}`}
-	/>
-
-	<BlogLayout title="" posts={data.posts} />
-{:else if isMdxContent}
+{#if isMdxContent}
 	<!-- MDX Content - Layout determined by layoutType -->
 	{#if layoutType === 'docs'}
 		<DocsLayout sidebarItems={data.sidebarItems || []} {headings} {activePath} sidebarTitle="Docs">
@@ -176,6 +153,7 @@
 			author={data.content.metadata.author}
 			authorAvatar={data.content.metadata.authorAvatar}
 			thumbnail={data.content.metadata.thumbnail}
+			tags={data.content.metadata.tags}
 			content={data.content.content}
 			backLink={getBackLink(data.content.directory)}
 			backLinkText={getBackLinkText(data.content.directory)}
