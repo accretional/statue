@@ -21,5 +21,10 @@
   "social": {},
   "legal": {
     "doNotSell": {}
+  },
+  "rss": {
+    "enabled": true,
+    "contentMode": "full",
+    "maxItems": 100
   }
 }

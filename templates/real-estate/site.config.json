@@ -1,0 +1,396 @@
+{
+  "$schema": "../../site.config.schema.json",
+  "site": {
+    "name": "Lacrosse Business Center",
+    "description": "Premium coworking and private office space in South Naperville.",
+    "url": "https://example.com",
+    "author": "Collier Group"
+  },
+  "navbar": {
+    "siteTitle": "Lacrosse Business Center",
+    "logo": null,
+    "hiddenFromNav": ["legal"],
+    "defaultNavItems": [
+      { "title": "Home", "url": "/" },
+      { "title": "Spaces", "url": "#spaces" },
+      { "title": "Gallery", "url": "#gallery" },
+      { "title": "Location", "url": "#location" },
+      { "title": "Contact", "url": "#contact" }
+    ]
+  },
+  "property": {
+    "type": "multi",
+    "badge": "Coworking Space Available",
+    "title": "3420 Lacrosse Ln",
+    "heroImage": "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069",
+    "description": "Coworking Space Available in Naperville, IL 60564. Modern updates throughout, designed specifically for professionals seeking privacy, sophistication, and convenience.",
+    "primaryCta": {
+      "text": "Schedule Tour",
+      "url": "#contact"
+    },
+    "secondaryCta": {
+      "text": "View Spaces",
+      "url": "#spaces"
+    },
+    "highlights": {
+      "subtitle": "Highlights",
+      "title": "Key Features",
+      "items": [
+        {
+          "title": "Prime South Naperville Location",
+          "description": "Just off Route 59 & 95th St. near downtown Naperville, offering easy access to dining, shopping, and major roadways."
+        },
+        {
+          "title": "Spacious Private Offices",
+          "description": "Large, impressive offices tailored for business professionals, psychologists, and therapists."
+        },
+        {
+          "title": "Abundant Natural Light",
+          "description": "Each office features a sprawling window line flooding the space with natural light for a bright, productive environment."
+        },
+        {
+          "title": "Move-in Ready & Flexible Terms",
+          "description": "Immediate availability with leasing options designed to fit your business needs."
+        }
+      ]
+    },
+    "availableSpaces": {
+      "subtitle": "Available Now",
+      "title": "All Available Spaces",
+      "showCapacity": true,
+      "spaces": [
+        {
+          "name": "Ste 117",
+          "floor": "1st Floor",
+          "capacity": "-",
+          "size": "1,133",
+          "sizeUnit": "SF",
+          "rentalRate": "$4,600",
+          "rateUnit": "/MO",
+          "spaceUse": "Office",
+          "available": true
+        },
+        {
+          "name": "Ste 118",
+          "floor": "1st Floor",
+          "capacity": "-",
+          "size": "205",
+          "sizeUnit": "SF",
+          "rentalRate": "$1,200",
+          "rateUnit": "/MO",
+          "spaceUse": "Office",
+          "available": true
+        },
+        {
+          "name": "Ste 06",
+          "floor": "1st Floor",
+          "capacity": "4",
+          "size": "545",
+          "sizeUnit": "SF",
+          "rentalRate": "$2,075",
+          "rateUnit": "/MO",
+          "spaceUse": "Office",
+          "available": true
+        },
+        {
+          "name": "Ste 106",
+          "floor": "1st Floor",
+          "capacity": "-",
+          "size": "389",
+          "sizeUnit": "SF",
+          "rentalRate": "$1,285",
+          "rateUnit": "/MO",
+          "spaceUse": "Office",
+          "available": true
+        },
+        {
+          "name": "Ste 07",
+          "floor": "1st Floor",
+          "capacity": "-",
+          "size": "240",
+          "sizeUnit": "SF",
+          "rentalRate": "$2,400",
+          "rateUnit": "/MO",
+          "spaceUse": "Office/Medical",
+          "available": true
+        }
+      ]
+    },
+    "stats": [
+      { "value": "5", "label": "Available Spaces" },
+      { "value": "2,512", "label": "Total SF" },
+      { "value": "$1,200", "label": "Starting From" },
+      { "value": "2024", "label": "Renovated" }
+    ],
+    "gallery": {
+      "title": "Modern Workspaces",
+      "subtitle": "Gallery",
+      "images": [
+        { "url": "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069", "caption": "Reception Area" },
+        { "url": "https://images.unsplash.com/photo-1497366811353-6870744d04b2?q=80&w=2069", "caption": "Private Office" },
+        { "url": "https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=2070", "caption": "Conference Room" },
+        { "url": "https://images.unsplash.com/photo-1497215842964-222b430dc094?q=80&w=2070", "caption": "Open Workspace" },
+        { "url": "https://images.unsplash.com/photo-1564069114553-7215e1ff1890?q=80&w=2232", "caption": "Break Room" },
+        { "url": "https://images.unsplash.com/photo-1517502884422-41eaead166d4?q=80&w=2025", "caption": "Meeting Room" }
+      ]
+    },
+    "floorPlan": {
+      "enabled": false
+    },
+    "features": {
+      "title": "Shared Amenities",
+      "subtitle": "Features",
+      "items": [
+        {
+          "title": "Multipurpose Room",
+          "description": "Sleek multipurpose room for meetings, workshops, and events.",
+          "icon": "✦"
+        },
+        {
+          "title": "Break Room",
+          "description": "Well-appointed break room with modern appliances and comfortable seating.",
+          "icon": "✦"
+        },
+        {
+          "title": "Waiting Areas",
+          "description": "Inviting waiting lounges for clients with contemporary design.",
+          "icon": "✦"
+        },
+        {
+          "title": "Modern Restrooms",
+          "description": "All designed with warmth and professionalism in mind.",
+          "icon": "✦"
+        },
+        {
+          "title": "High-Speed Internet",
+          "description": "Enterprise-grade fiber internet included in all office spaces.",
+          "icon": "✦"
+        },
+        {
+          "title": "24/7 Access",
+          "description": "Secure building access around the clock for tenants.",
+          "icon": "✦"
+        }
+      ]
+    },
+    "brochure": {
+      "enabled": true,
+      "subtitle": "Download",
+      "title": "Marketing Brochure",
+      "description": "View or download our comprehensive property brochure with floor plans, pricing, and amenity details.",
+      "pdfUrl": "/sample.pdf",
+      "downloadText": "Download Brochure (PDF)",
+      "showDownload": true,
+      "height": "600px"
+    },
+    "location": {
+      "title": "Prime Business Location",
+      "subtitle": "Location",
+      "image": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070",
+      "description": "Situated just off Route 59 and 95th Street in South Naperville, this property is in the heart of one of the area's most vibrant commercial districts. Easy access to major roadways, dining, shopping, and fitness centers.",
+      "highlights": [
+        {
+          "title": "Easy Highway Access",
+          "description": "Quick access to I-88 and Route 59"
+        },
+        {
+          "title": "Dining & Retail",
+          "description": "Walking distance to restaurants and shops"
+        },
+        {
+          "title": "Public Transit",
+          "description": "Near Metra stations and bus routes"
+        }
+      ]
+    },
+    "nearby": {
+      "subtitle": "Neighborhood",
+      "title": "Nearby",
+      "transportationEnabled": true,
+      "transportationTitle": "Transportation",
+      "transportation": [
+        { "name": "Route 59 Station", "type": "rail", "distance": "13 min drive", "duration": "6.0 mi" },
+        { "name": "Naperville Station", "type": "rail", "distance": "17 min drive", "duration": "8.5 mi" },
+        { "name": "Aurora Station", "type": "rail", "distance": "18 min drive", "duration": "9.8 mi" },
+        { "name": "Lisle Station", "type": "rail", "distance": "25 min drive", "duration": "12.8 mi" },
+        { "name": "Chicago Midway International", "type": "airport", "distance": "45 min drive", "duration": "30.4 mi" },
+        { "name": "Chicago O'Hare International", "type": "airport", "distance": "54 min drive", "duration": "36.0 mi" }
+      ],
+      "amenitiesEnabled": true,
+      "amenitiesTitle": "Nearby Amenities",
+      "amenities": [
+        {
+          "name": "Restaurants",
+          "icon": "restaurant",
+          "places": [
+            { "name": "Jet's Pizza", "category": "Fast Food", "priceLevel": "$", "distance": "3 min walk" },
+            { "name": "Jimmy Johns", "category": "Sandwiches", "priceLevel": "$", "distance": "3 min walk" },
+            { "name": "Wild Tuna Contemporary Sushi", "category": "Sushi", "priceLevel": "$$$", "distance": "3 min walk" },
+            { "name": "McDonald's", "category": "Fast Food", "priceLevel": "$", "distance": "5 min walk" },
+            { "name": "Portillo's", "category": "American", "priceLevel": "$$", "distance": "5 min walk" },
+            { "name": "Noodles Pho U", "category": "Vietnamese", "priceLevel": "$", "distance": "7 min walk" }
+          ]
+        },
+        {
+          "name": "Retail & Services",
+          "icon": "retail",
+          "places": [
+            { "name": "State Farm", "category": "Insurance", "distance": "In Building" },
+            { "name": "Trek Bicycle Dealer", "category": "Bike Shop", "distance": "2 min walk" },
+            { "name": "LA Fitness", "category": "Fitness", "distance": "7 min walk" },
+            { "name": "Starbucks", "category": "Coffee", "distance": "7 min walk" },
+            { "name": "Amazon Fresh", "category": "Supermarket", "distance": "7 min walk" },
+            { "name": "The UPS Store", "category": "Business/Copy/Postal", "distance": "10 min walk" }
+          ]
+        }
+      ]
+    },
+    "details": {
+      "subtitle": "Property Information",
+      "title": "Building Details",
+      "interior": {
+        "totalArea": "15,000 sqft",
+        "availableArea": "2,512 sqft",
+        "rooms": [
+          { "name": "Multipurpose Room", "area": "800 sqft" },
+          { "name": "Break Room", "area": "400 sqft" },
+          { "name": "Waiting Area", "area": "300 sqft" }
+        ]
+      },
+      "parking": {
+        "totalSpaces": 50,
+        "features": ["Surface Lot", "Free Parking", "Visitor Parking"]
+      },
+      "lot": {
+        "size": "1.2 Acres",
+        "parcelNumber": "NP-2024-34567"
+      },
+      "construction": {
+        "homeType": "Office",
+        "propertySubtype": "Coworking Space",
+        "yearBuilt": 1997,
+        "yearRenovated": 2024,
+        "newConstruction": false,
+        "condition": "Excellent"
+      },
+      "financial": {
+        "pricePerSqft": "$3.80/SF",
+        "daysOnMarket": 45,
+        "dateOnMarket": "12/15/2024"
+      }
+    },
+    "agent": {
+      "subtitle": "Your Leasing Contact",
+      "title": "Connect With Us",
+      "name": "Charlie Caine",
+      "role": "Commercial Leasing Specialist",
+      "image": "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=400&h=400&fit=crop",
+      "bio": "Charlie specializes in commercial office leasing in the Naperville area. With deep knowledge of the local market and a commitment to finding the right fit for every business, he's helped dozens of companies find their ideal workspace.",
+      "phone": "+1 (331) 575-1168",
+      "email": "charlie.caine@colliergroup.com",
+      "specialties": [
+        "Commercial Leasing",
+        "Office Space",
+        "Tenant Representation",
+        "Market Analysis"
+      ],
+      "social": {
+        "linkedin": "https://linkedin.com/in/charliecaine"
+      },
+      "cta": {
+        "text": "Schedule Tour",
+        "url": "#contact"
+      }
+    },
+    "openHouse": {
+      "enabled": true,
+      "subtitle": "Schedule a Visit",
+      "title": "Property Tours",
+      "events": [
+        {
+          "date": "2025-02-15",
+          "startTime": "10:00",
+          "endTime": "12:00"
+        },
+        {
+          "date": "2025-02-22",
+          "startTime": "14:00",
+          "endTime": "16:00"
+        }
+      ],
+      "location": "3420 Lacrosse Ln, Naperville, IL 60564",
+      "description": "Property Tour - Lacrosse Business Center",
+      "calendlyUrl": "https://calendly.com/colliergroup/office-tour"
+    },
+    "map": {
+      "enabled": true,
+      "title": "Find Us",
+      "subtitle": "Location Map",
+      "description": "Located in the heart of South Naperville's commercial district.",
+      "zoom": 15
+    },
+    "rentCalculator": {
+      "enabled": true,
+      "subtitle": "Estimate Your Cost",
+      "title": "Net Effective Rent Calculator",
+      "description": "Calculate your monthly effective rent factoring in free rent, tenant improvements, and annual escalations.",
+      "baseRentPerSf": 25,
+      "totalSf": 2500,
+      "defaultTerm": 5,
+      "defaultFreeRent": 1,
+      "defaultTi": 10,
+      "defaultEscalation": 3
+    },
+    "leaseTimeline": {
+      "enabled": true,
+      "subtitle": "The Process",
+      "title": "Your Journey to a New Office",
+      "description": "From your first tour to moving day, we make every step simple and transparent."
+    },
+    "contact": {
+      "title": "Lease Inquiry",
+      "subtitle": "Contact",
+      "description": "Ready to find your perfect office space? Contact us to schedule a tour or request more information.",
+      "email": "leasing@colliergroup.com",
+      "phone": "+1 (331) 575-1168",
+      "address": {
+        "street": "3420 Lacrosse Ln",
+        "city": "Naperville",
+        "state": "IL",
+        "zipCode": "60564",
+        "country": "United States",
+        "latitude": 41.7136,
+        "longitude": -88.2034
+      },
+      "social": {
+        "linkedin": "https://linkedin.com/company/colliergroup"
+      }
+    }
+  },
+  "contact": {
+    "email": "leasing@colliergroup.com",
+    "phone": "+1 (331) 575-1168",
+    "address": {
+      "street": "3420 Lacrosse Ln",
+      "city": "Naperville",
+      "state": "IL",
+      "zipCode": "60564",
+      "country": "United States"
+    }
+  },
+  "social": {
+    "linkedin": "https://linkedin.com/company/colliergroup"
+  },
+  "seo": {
+    "defaultTitle": "Lacrosse Business Center - Office Space for Lease",
+    "titleTemplate": "%s | Lacrosse Business Center",
+    "defaultDescription": "Premium coworking and private office space available in South Naperville. Modern updates, flexible terms, move-in ready.",
+    "keywords": ["office space", "coworking", "naperville", "commercial lease", "office for rent"],
+    "ogImage": "/images/og-image.png"
+  },
+  "footer": {
+    "brand": "Lacrosse Business Center",
+    "tagline": "Premium Office Space in South Naperville",
+    "copyrightText": "All rights reserved."
+  }
+}
