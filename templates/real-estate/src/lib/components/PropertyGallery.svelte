@@ -20,12 +20,12 @@
 	}
 
 	let {
-		title = 'Exceptional Spaces',
-		subtitle = 'Gallery',
-		images = [],
-		floorPlanEnabled = false,
-		floorPlanLevels = [],
-		variant = 'grid'
+		title,
+		subtitle,
+		images,
+		floorPlanEnabled,
+		floorPlanLevels,
+		variant
 	}: PropertyGalleryProps = $props();
 
 	// Carousel state
