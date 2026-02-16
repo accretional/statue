@@ -198,6 +198,26 @@ Components use CSS variables like `--color-primary`, `--color-secondary`, `--col
 </script>
 
 <CTA
+  title="Ready to get started?"
+  description="Join the growing community of creators using Statue SSG"
+  primaryButtonText="Explore Features"
+  primaryButtonLink="/"
+  secondaryButtonText="Read Documentation"
+  secondaryButtonLink="/docs"
+/>
+```
+
+- **LinkPreview**: Hover preview for links showing live iframe content.
+  - Props: `href: string` (required), `delay?: number` (default: 300).
+  - Features: Purely frontend, iframe rendering, smart positioning, theme-aware styling.
+  - Note: Some external sites block iframe embedding. Internal links always work.
+  - Example:
+```svelte
+<script>
+  import { LinkPreview } from 'statue-ssg';
+</script>
+
+<LinkPreview href="/docs/get-started">Getting Started</LinkPreview>
 	title="Ready to get started?"
 	description="Join the growing community of creators using Statue SSG"
 	primaryButtonText="Explore Features"
