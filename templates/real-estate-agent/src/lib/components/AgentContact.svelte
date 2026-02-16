@@ -35,14 +35,16 @@
 		calendlyUrl = ''
 	}: AgentContactProps = $props();
 
+	let trimmedCalendlyUrl = $derived((calendlyUrl || '').trim());
+
 	function openCalendlyModal() {
-		if (calendlyUrl && typeof window !== 'undefined' && (window as any).Calendly) {
-			(window as any).Calendly.initPopupWidget({ url: calendlyUrl });
+		if (trimmedCalendlyUrl && typeof window !== 'undefined' && (window as any).Calendly) {
+			(window as any).Calendly.initPopupWidget({ url: trimmedCalendlyUrl });
 		}
 	}
 
 	onMount(() => {
-		if (calendlyUrl && typeof window !== 'undefined') {
+		if (trimmedCalendlyUrl && typeof window !== 'undefined') {
 			const script = document.createElement('script');
 			script.src = 'https://assets.calendly.com/assets/external/widget.js';
 			script.async = true;
@@ -163,10 +165,10 @@
 						Let's discuss your real estate goals. Book a free consultation to get started.
 					</p>
 
-					{#if calendlyUrl}
-						<button
-							onclick={openCalendlyModal}
-							class="cursor-pointer w-full px-6 py-4 bg-[var(--color-primary)] text-[var(--color-on-primary)] hover:bg-[var(--color-secondary)] transition-colors duration-300 text-sm tracking-wider uppercase mb-4"
+						{#if trimmedCalendlyUrl}
+							<button
+								onclick={openCalendlyModal}
+								class="cursor-pointer w-full px-6 py-4 bg-[var(--color-primary)] text-[var(--color-on-primary)] hover:bg-[var(--color-secondary)] transition-colors duration-300 text-sm tracking-wider uppercase mb-4"
 						>
 							Schedule Now
 						</button>

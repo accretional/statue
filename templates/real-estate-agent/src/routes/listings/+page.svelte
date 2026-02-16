@@ -13,7 +13,7 @@
 		type?: string;
 		yearBuilt?: number;
 		lotSize?: string | null;
-		status: 'active' | 'pending' | 'sold';
+		status?: 'active' | 'pending' | 'sold';
 		image: string;
 		images?: string[];
 		description?: string;
@@ -111,11 +111,19 @@
 	}
 
 	function getListingRemoteUrl(listing: Property): string | null {
-		return listing.externalUrl || listing.remoteUrl || null;
+		const url = listing.externalUrl || listing.remoteUrl;
+		const normalized = typeof url === 'string' ? url.trim() : '';
+		return normalized || null;
 	}
 
 	function isRemoteListing(listing: Property): boolean {
 		return Boolean(getListingRemoteUrl(listing) || listing.isRemote);
+	}
+
+	function getListingStatus(listing: Property): 'active' | 'pending' | 'sold' {
+		const status = listing.status || 'active';
+		if (status === 'pending' || status === 'sold') return status;
+		return 'active';
 	}
 
 	let selectedStatus = $state<string>('');
@@ -132,7 +140,7 @@
 
 		if (selectedStatus) {
 			let normalizedStatus = selectedStatus.toLowerCase();
-			result = result.filter((l) => (l.status || '').toLowerCase() === normalizedStatus);
+			result = result.filter((l) => getListingStatus(l) === normalizedStatus);
 		}
 
 		if (selectedType) {
@@ -168,9 +176,13 @@
 		}
 
 		if (sortBy === 'price-low') {
-			result = [...result].sort((a, b) => parsePrice(a.price || a.soldPrice) - parsePrice(b.price || b.soldPrice));
+			result = [...result].sort(
+				(a, b) => parsePrice(a.price || a.soldPrice) - parsePrice(b.price || b.soldPrice)
+			);
 		} else if (sortBy === 'price-high') {
-			result = [...result].sort((a, b) => parsePrice(b.price || b.soldPrice) - parsePrice(a.price || a.soldPrice));
+			result = [...result].sort(
+				(a, b) => parsePrice(b.price || b.soldPrice) - parsePrice(a.price || a.soldPrice)
+			);
 		} else if (sortBy === 'sqft-high') {
 			result = [...result].sort((a, b) => (b.sqft || 0) - (a.sqft || 0));
 		}
@@ -178,9 +190,9 @@
 		return result;
 	});
 
-	let allTypes = $derived.by(() =>
-		[...new Set(allListings.map((l) => l.type).filter((type): type is string => Boolean(type)))]
-	);
+	let allTypes = $derived.by(() => [
+		...new Set(allListings.map((l) => l.type).filter((type): type is string => Boolean(type)))
+	]);
 
 	let selectedListing = $state<Property | null>(null);
 	let selectedImageIndex = $state(0);
@@ -291,7 +303,8 @@
 		<div class="max-w-7xl mx-auto">
 			<h1 class="text-2xl md:text-4xl font-light text-white mb-2">Property Listings</h1>
 			<p class="text-gray-400">
-				{filteredListings.length} {filteredListings.length === 1 ? 'property' : 'properties'} found
+				{filteredListings.length}
+				{filteredListings.length === 1 ? 'property' : 'properties'} found
 			</p>
 		</div>
 	</div>
@@ -317,12 +330,20 @@
 						<button
 							type="button"
 							onclick={() => (viewMode = 'list')}
-							class="h-9 px-3 inline-flex items-center gap-1 text-xs rounded-full cursor-pointer transition-colors {viewMode === 'list'
+							class="h-9 px-3 inline-flex items-center gap-1 text-xs rounded-full cursor-pointer transition-colors {viewMode ===
+							'list'
 								? 'bg-[var(--color-primary)] text-[var(--color-on-primary)]'
 								: 'text-gray-300 hover:text-white'}"
 							aria-label="List view"
 						>
-							<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<svg
+								width="14"
+								height="14"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+							>
 								<line x1="8" y1="6" x2="21" y2="6"></line>
 								<line x1="8" y1="12" x2="21" y2="12"></line>
 								<line x1="8" y1="18" x2="21" y2="18"></line>
@@ -335,12 +356,20 @@
 						<button
 							type="button"
 							onclick={() => (viewMode = 'grid')}
-							class="h-9 px-3 inline-flex items-center gap-1 text-xs rounded-full cursor-pointer transition-colors {viewMode === 'grid'
+							class="h-9 px-3 inline-flex items-center gap-1 text-xs rounded-full cursor-pointer transition-colors {viewMode ===
+							'grid'
 								? 'bg-[var(--color-primary)] text-[var(--color-on-primary)]'
 								: 'text-gray-300 hover:text-white'}"
 							aria-label="Grid view"
 						>
-							<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<svg
+								width="14"
+								height="14"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+							>
 								<rect x="3" y="3" width="7" height="7"></rect>
 								<rect x="14" y="3" width="7" height="7"></rect>
 								<rect x="3" y="14" width="7" height="7"></rect>
@@ -442,76 +471,92 @@
 		{#if filteredListings.length > 0}
 			{#if viewMode === 'grid'}
 				<ListingsGrid listings={filteredListings} onSelect={openListingDetails} />
-				{:else}
-						<div class="space-y-4">
-							{#each filteredListings as listing}
-								{@const remoteUrl = getListingRemoteUrl(listing)}
-								{#if isRemoteListing(listing)}
-									<a
-										href={getRemoteBaseUrl(remoteUrl || undefined)}
-										target="_blank"
-										rel="noopener noreferrer"
-										class="block w-full text-left border border-[var(--color-border)] bg-[var(--color-card)] rounded-lg overflow-hidden hover:border-[var(--color-primary)] transition-colors duration-200 cursor-pointer"
-									>
-										<div class="relative aspect-[16/9] sm:aspect-[21/8] lg:aspect-[24/5] bg-black overflow-hidden">
-											<iframe
-												src={getRemotePreviewUrl(remoteUrl || undefined, REMOTE_LIST_PREVIEW_FRAGMENT)}
-												title={`${listing.title} list preview`}
-												class="absolute inset-0 w-full h-full border-0 bg-black remote-list-frame pointer-events-none"
-											loading="lazy"
-											scrolling="no"
-											sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-popups-to-escape-sandbox"
-										></iframe>
-									</div>
-								</a>
-							{:else}
-								<button
-									type="button"
-									onclick={() => openListingDetails(listing)}
-									class="w-full text-left border border-[var(--color-border)] bg-[var(--color-card)] rounded-lg overflow-hidden hover:border-[var(--color-primary)] transition-colors duration-200 cursor-pointer"
+			{:else}
+				<div class="space-y-4">
+					{#each filteredListings as listing}
+						{@const remoteUrl = getListingRemoteUrl(listing)}
+						{#if isRemoteListing(listing)}
+							<a
+								href={getRemoteBaseUrl(remoteUrl || undefined)}
+								target="_blank"
+								rel="noopener noreferrer"
+								class="block w-full text-left border border-[var(--color-border)] bg-[var(--color-card)] rounded-lg overflow-hidden hover:border-[var(--color-primary)] transition-colors duration-200 cursor-pointer"
+							>
+								<div
+									class="relative aspect-[16/9] sm:aspect-[21/8] lg:aspect-[24/5] bg-black overflow-hidden"
 								>
-									<div class="grid md:grid-cols-[320px_1fr]">
-										<div class="relative aspect-[4/3] md:aspect-[4/3] bg-gray-900 overflow-hidden">
-											<img src={listing.image} alt={listing.title} class="w-full h-full object-cover absolute inset-0" />
-											{#if listing.status === 'sold'}
-												<div class="absolute inset-0 bg-black/28"></div>
-											{/if}
-											<div class="absolute top-3 right-3">
-												<span class="px-3 py-1 text-xs font-medium border rounded-full uppercase bg-black/45 text-white border-white/20">
-													{listing.status}
-												</span>
-											</div>
-										</div>
-										<div class="p-5">
-											<div class="flex flex-wrap items-start justify-between gap-3">
-												<div>
-													<h3 class="text-white text-lg md:text-xl font-light">{listing.title}</h3>
-													<p class="text-gray-400 text-sm mt-1">{listing.address}</p>
-												</div>
-												<p class="text-[var(--color-primary)] text-xl font-light">{listing.price}</p>
-											</div>
-											<div class="mt-4 flex flex-wrap gap-4 text-gray-300 text-sm">
-												<span>{listing.beds || '-'} bd</span>
-												<span>{listing.baths || '-'} ba</span>
-												<span>{listing.sqft ? listing.sqft.toLocaleString() : '-'} sqft</span>
-												<span>{listing.type || '-'}</span>
-											</div>
-											{#if listing.description}
-												<p class="mt-3 text-sm text-gray-400 line-clamp-2">{listing.description}</p>
-											{/if}
+									<iframe
+										src={getRemotePreviewUrl(remoteUrl || undefined, REMOTE_LIST_PREVIEW_FRAGMENT)}
+										title={`${listing.title || 'Listing'} list preview`}
+										class="absolute inset-0 w-full h-full border-0 bg-black remote-list-frame pointer-events-none"
+										loading="lazy"
+										scrolling="no"
+										sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-popups-to-escape-sandbox"
+									></iframe>
+								</div>
+							</a>
+						{:else}
+							<button
+								type="button"
+								onclick={() => openListingDetails(listing)}
+								class="w-full text-left border border-[var(--color-border)] bg-[var(--color-card)] rounded-lg overflow-hidden hover:border-[var(--color-primary)] transition-colors duration-200 cursor-pointer"
+							>
+								<div class="grid md:grid-cols-[320px_1fr]">
+									<div class="relative aspect-[4/3] md:aspect-[4/3] bg-gray-900 overflow-hidden">
+										<img
+											src={listing.image}
+											alt={listing.title}
+											class="w-full h-full object-cover absolute inset-0"
+										/>
+										{#if getListingStatus(listing) === 'sold'}
+											<div class="absolute inset-0 bg-black/28"></div>
+										{/if}
+										<div class="absolute top-3 right-3">
+											<span
+												class="px-3 py-1 text-xs font-medium border rounded-full uppercase bg-black/45 text-white border-white/20"
+											>
+												{getListingStatus(listing)}
+											</span>
 										</div>
 									</div>
-								</button>
-							{/if}
-						{/each}
-					</div>
-				{/if}
+									<div class="p-5">
+										<div class="flex flex-wrap items-start justify-between gap-3">
+											<div>
+												<h3 class="text-white text-lg md:text-xl font-light">{listing.title}</h3>
+												<p class="text-gray-400 text-sm mt-1">{listing.address}</p>
+											</div>
+											<p class="text-[var(--color-primary)] text-xl font-light">{listing.price}</p>
+										</div>
+										<div class="mt-4 flex flex-wrap gap-4 text-gray-300 text-sm">
+											<span>{listing.beds || '-'} bd</span>
+											<span>{listing.baths || '-'} ba</span>
+											<span>{listing.sqft ? listing.sqft.toLocaleString() : '-'} sqft</span>
+											<span>{listing.type || '-'}</span>
+										</div>
+										{#if listing.description}
+											<p class="mt-3 text-sm text-gray-400 line-clamp-2">{listing.description}</p>
+										{/if}
+									</div>
+								</div>
+							</button>
+						{/if}
+					{/each}
+				</div>
+			{/if}
 		{:else}
 			<div class="text-center py-16">
 				<div class="mb-4 text-gray-600">
-					<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="mx-auto">
-						<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-						<polyline points="9 22 9 12 15 12 15 22"/>
+					<svg
+						width="64"
+						height="64"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="1.5"
+						class="mx-auto"
+					>
+						<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+						<polyline points="9 22 9 12 15 12 15 22" />
 					</svg>
 				</div>
 				<p class="text-gray-400 text-lg">No properties match your criteria</p>
@@ -526,24 +571,30 @@
 	</div>
 
 	{#if selectedListing}
-		<div
-			class="fixed inset-0 z-[120] bg-black"
-			onclick={closeListingDetails}
-		>
+		<div class="fixed inset-0 z-[120] bg-black" onclick={closeListingDetails}>
 			<!-- Top bar with buttons -->
-			<div class="fixed top-0 left-0 right-0 z-[130] h-16 bg-black/80 backdrop-blur border-b border-white/10 flex items-center justify-between px-4">
-					<div class="text-white text-sm">
-						{selectedListing.title}
-					</div>
-					<div class="flex items-center gap-2">
-						{#if isRemoteListing(selectedListing)}
-							<a
-								href={getRemoteBaseUrl(getListingRemoteUrl(selectedListing) || undefined)}
-								target="_blank"
-								rel="noopener noreferrer"
-								class="px-4 py-2 text-sm bg-white/10 hover:bg-white/20 text-white rounded-lg flex items-center gap-2 cursor-pointer border border-white/20"
+			<div
+				class="fixed top-0 left-0 right-0 z-[130] h-16 bg-black/80 backdrop-blur border-b border-white/10 flex items-center justify-between px-4"
+			>
+				<div class="text-white text-sm">
+					{selectedListing.title}
+				</div>
+				<div class="flex items-center gap-2">
+					{#if isRemoteListing(selectedListing)}
+						<a
+							href={getRemoteBaseUrl(getListingRemoteUrl(selectedListing) || undefined)}
+							target="_blank"
+							rel="noopener noreferrer"
+							class="px-4 py-2 text-sm bg-white/10 hover:bg-white/20 text-white rounded-lg flex items-center gap-2 cursor-pointer border border-white/20"
 						>
-							<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<svg
+								width="14"
+								height="14"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+							>
 								<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
 								<polyline points="15 3 21 3 21 9"></polyline>
 								<line x1="10" y1="14" x2="21" y2="3"></line>
@@ -562,11 +613,8 @@
 				</div>
 			</div>
 
-			<div
-				class="w-full h-full pt-16"
-				onclick={(event) => event.stopPropagation()}
-			>
-			{#if isRemoteListing(selectedListing)}
+			<div class="w-full h-full pt-16" onclick={(event) => event.stopPropagation()}>
+				{#if isRemoteListing(selectedListing)}
 					<!-- Remote listing: fullscreen iframe -->
 					<iframe
 						src={getRemotePreviewUrl(getListingRemoteUrl(selectedListing) || undefined)}
@@ -576,9 +624,13 @@
 					></iframe>
 				{:else}
 					<!-- Local listing: centered container -->
-					<div class="max-w-6xl mx-auto bg-[var(--color-card)] border border-[var(--color-border)] rounded-xl overflow-hidden my-4">
+					<div
+						class="max-w-6xl mx-auto bg-[var(--color-card)] border border-[var(--color-border)] rounded-xl overflow-hidden my-4"
+					>
 						<!-- Header -->
-						<div class="flex items-center justify-between px-5 py-4 border-b border-[var(--color-border)]">
+						<div
+							class="flex items-center justify-between px-5 py-4 border-b border-[var(--color-border)]"
+						>
 							<div>
 								<h2 class="text-xl md:text-2xl font-light text-white">{selectedListing.title}</h2>
 								<p class="text-sm text-gray-400 mt-1">{selectedListing.address}</p>
@@ -586,110 +638,123 @@
 						</div>
 						<!-- Details -->
 						<div class="grid lg:grid-cols-[1.3fr_1fr]">
-							<div class="p-4 md:p-5 border-b lg:border-b-0 lg:border-r border-[var(--color-border)]">
+							<div
+								class="p-4 md:p-5 border-b lg:border-b-0 lg:border-r border-[var(--color-border)]"
+							>
 								<div class="relative aspect-[16/10] bg-black/20 rounded-lg overflow-hidden">
-								<img
-									src={selectedListingImages[selectedImageIndex] || selectedListing.image}
-									alt={selectedListing.title}
-									class="w-full h-full object-cover"
-								/>
+									<img
+										src={selectedListingImages[selectedImageIndex] || selectedListing.image}
+										alt={selectedListing.title}
+										class="w-full h-full object-cover"
+									/>
+									{#if selectedListingImages.length > 1}
+										<button
+											type="button"
+											onclick={prevImage}
+											class="absolute left-3 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-black/45 text-white cursor-pointer"
+											aria-label="Previous image"
+										>
+											‹
+										</button>
+										<button
+											type="button"
+											onclick={nextImage}
+											class="absolute right-3 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-black/45 text-white cursor-pointer"
+											aria-label="Next image"
+										>
+											›
+										</button>
+									{/if}
+								</div>
+
 								{#if selectedListingImages.length > 1}
-									<button
-										type="button"
-										onclick={prevImage}
-										class="absolute left-3 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-black/45 text-white cursor-pointer"
-										aria-label="Previous image"
-									>
-										‹
-									</button>
-									<button
-										type="button"
-										onclick={nextImage}
-										class="absolute right-3 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-black/45 text-white cursor-pointer"
-										aria-label="Next image"
-									>
-										›
-									</button>
+									<div class="mt-3 grid grid-cols-4 sm:grid-cols-6 gap-2">
+										{#each selectedListingImages as image, index}
+											<button
+												type="button"
+												onclick={() => (selectedImageIndex = index)}
+												class="aspect-[4/3] rounded overflow-hidden border cursor-pointer {index ===
+												selectedImageIndex
+													? 'border-[var(--color-primary)]'
+													: 'border-[var(--color-border)]'}"
+												aria-label={`Open image ${index + 1}`}
+											>
+												<img
+													src={image}
+													alt={`${selectedListing.title} image ${index + 1}`}
+													class="w-full h-full object-cover"
+												/>
+											</button>
+										{/each}
+									</div>
 								{/if}
 							</div>
 
-							{#if selectedListingImages.length > 1}
-								<div class="mt-3 grid grid-cols-4 sm:grid-cols-6 gap-2">
-									{#each selectedListingImages as image, index}
-										<button
-											type="button"
-											onclick={() => (selectedImageIndex = index)}
-											class="aspect-[4/3] rounded overflow-hidden border cursor-pointer {index === selectedImageIndex
-												? 'border-[var(--color-primary)]'
-												: 'border-[var(--color-border)]'}"
-											aria-label={`Open image ${index + 1}`}
-										>
-											<img src={image} alt={`${selectedListing.title} image ${index + 1}`} class="w-full h-full object-cover" />
-										</button>
-									{/each}
-								</div>
-							{/if}
-						</div>
+							<div class="p-5 md:p-6">
+								<p class="text-2xl md:text-3xl text-[var(--color-primary)] font-light mb-4">
+									{getListingStatus(selectedListing) === 'sold' && selectedListing.soldPrice
+										? selectedListing.soldPrice
+										: selectedListing.price}
+								</p>
 
-						<div class="p-5 md:p-6">
-							<p class="text-2xl md:text-3xl text-[var(--color-primary)] font-light mb-4">
-								{selectedListing.status === 'sold' && selectedListing.soldPrice
-									? selectedListing.soldPrice
-									: selectedListing.price}
-							</p>
-
-							<div class="grid grid-cols-2 gap-3 text-sm mb-5">
-								<div class="bg-black/15 rounded p-3">
-									<p class="text-gray-400">Beds</p>
-									<p class="text-white text-lg">{selectedListing.beds || '-'}</p>
-								</div>
-								<div class="bg-black/15 rounded p-3">
-									<p class="text-gray-400">Baths</p>
-									<p class="text-white text-lg">{selectedListing.baths || '-'}</p>
-								</div>
-								<div class="bg-black/15 rounded p-3">
-									<p class="text-gray-400">Sqft</p>
-									<p class="text-white text-lg">{selectedListing.sqft ? selectedListing.sqft.toLocaleString() : '-'}</p>
-								</div>
-								<div class="bg-black/15 rounded p-3">
-									<p class="text-gray-400">Type</p>
-									<p class="text-white text-lg">{selectedListing.type || '-'}</p>
-								</div>
-								<div class="bg-black/15 rounded p-3">
-									<p class="text-gray-400">Year Built</p>
-									<p class="text-white text-lg">{selectedListing.yearBuilt || '-'}</p>
-								</div>
-								<div class="bg-black/15 rounded p-3">
-									<p class="text-gray-400">Lot Size</p>
-									<p class="text-white text-lg">{selectedListing.lotSize || '-'}</p>
-								</div>
-							</div>
-
-							{#if selectedListing.description}
-								<div class="mb-5">
-									<h3 class="text-white text-base mb-2">Overview</h3>
-									<p class="text-gray-300 leading-relaxed text-sm">{selectedListing.description}</p>
-								</div>
-							{/if}
-
-							{#if selectedListing.features?.length}
-								<div class="mb-5">
-									<h3 class="text-white text-base mb-2">Features</h3>
-									<div class="flex flex-wrap gap-2">
-										{#each selectedListing.features as feature}
-											<span class="px-3 py-1 rounded-full bg-black/20 border border-[var(--color-border)] text-gray-200 text-xs">
-												{feature}
-											</span>
-										{/each}
+								<div class="grid grid-cols-2 gap-3 text-sm mb-5">
+									<div class="bg-black/15 rounded p-3">
+										<p class="text-gray-400">Beds</p>
+										<p class="text-white text-lg">{selectedListing.beds || '-'}</p>
+									</div>
+									<div class="bg-black/15 rounded p-3">
+										<p class="text-gray-400">Baths</p>
+										<p class="text-white text-lg">{selectedListing.baths || '-'}</p>
+									</div>
+									<div class="bg-black/15 rounded p-3">
+										<p class="text-gray-400">Sqft</p>
+										<p class="text-white text-lg">
+											{selectedListing.sqft ? selectedListing.sqft.toLocaleString() : '-'}
+										</p>
+									</div>
+									<div class="bg-black/15 rounded p-3">
+										<p class="text-gray-400">Type</p>
+										<p class="text-white text-lg">{selectedListing.type || '-'}</p>
+									</div>
+									<div class="bg-black/15 rounded p-3">
+										<p class="text-gray-400">Year Built</p>
+										<p class="text-white text-lg">{selectedListing.yearBuilt || '-'}</p>
+									</div>
+									<div class="bg-black/15 rounded p-3">
+										<p class="text-gray-400">Lot Size</p>
+										<p class="text-white text-lg">{selectedListing.lotSize || '-'}</p>
 									</div>
 								</div>
-							{/if}
 
-							{#if selectedListing.status === 'sold' && selectedListing.soldDate}
-								<p class="text-sm text-gray-400">Sold date: {selectedListing.soldDate}</p>
-							{/if}
+								{#if selectedListing.description}
+									<div class="mb-5">
+										<h3 class="text-white text-base mb-2">Overview</h3>
+										<p class="text-gray-300 leading-relaxed text-sm">
+											{selectedListing.description}
+										</p>
+									</div>
+								{/if}
+
+								{#if selectedListing.features?.length}
+									<div class="mb-5">
+										<h3 class="text-white text-base mb-2">Features</h3>
+										<div class="flex flex-wrap gap-2">
+											{#each selectedListing.features as feature}
+												<span
+													class="px-3 py-1 rounded-full bg-black/20 border border-[var(--color-border)] text-gray-200 text-xs"
+												>
+													{feature}
+												</span>
+											{/each}
+										</div>
+									</div>
+								{/if}
+
+								{#if getListingStatus(selectedListing) === 'sold' && selectedListing.soldDate}
+									<p class="text-sm text-gray-400">Sold date: {selectedListing.soldDate}</p>
+								{/if}
+							</div>
 						</div>
-					</div>
 					</div>
 				{/if}
 			</div>

@@ -1,5 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
+	import siteConfig from '../../site.config.json';
 	import {
 		AgentHero,
 		AgentAbout,
@@ -12,8 +13,8 @@
 	} from '$lib/components';
 
 	const { data } = $props();
-	let site = $derived(data.site || {});
-	let agent = $derived(data.agent || {});
+	let site = $derived(data.site || siteConfig.site || {});
+	let agent = $derived(data.agent || siteConfig.agent || {});
 
 	// Quick links for footer
 	let quickLinks = $derived([
@@ -119,5 +120,5 @@
 	agentName={agent.name}
 	license={agent.license}
 	social={agent.contact?.social}
-	quickLinks={quickLinks}
+	{quickLinks}
 />

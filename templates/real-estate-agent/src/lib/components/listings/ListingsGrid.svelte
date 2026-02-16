@@ -8,7 +8,7 @@
 		baths?: number;
 		sqft?: number;
 		type?: string;
-		status: 'active' | 'pending' | 'sold';
+		status?: 'active' | 'pending' | 'sold';
 		image: string;
 		images?: string[];
 		description?: string;
@@ -53,7 +53,15 @@
 	}
 
 	function getListingRemoteUrl(listing: Property): string | null {
-		return listing.externalUrl || listing.remoteUrl || null;
+		const url = listing.externalUrl || listing.remoteUrl;
+		const normalized = typeof url === 'string' ? url.trim() : '';
+		return normalized || null;
+	}
+
+	function getListingStatus(listing: Property): 'active' | 'pending' | 'sold' {
+		const status = listing.status || 'active';
+		if (status === 'pending' || status === 'sold') return status;
+		return 'active';
 	}
 
 	function getRemoteBaseUrl(url?: string): string {
@@ -92,7 +100,7 @@
 				<div class="relative aspect-[4/5] overflow-hidden bg-black leading-none">
 					<iframe
 						src={getRemotePreviewUrl(remoteUrl || undefined)}
-						title={`${listing.title} preview`}
+						title={`${listing.title || 'Listing'} preview`}
 						class="absolute inset-0 w-full h-full border-0 bg-black remote-frame pointer-events-none"
 						loading="lazy"
 						scrolling="no"
@@ -107,7 +115,9 @@
 					>
 						<span class="sr-only">Open in new tab</span>
 					</a>
-					<div class="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/60 to-transparent"></div>
+					<div
+						class="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/60 to-transparent"
+					></div>
 				</div>
 			</article>
 		{:else}
@@ -123,17 +133,17 @@
 						alt={listing.title}
 						class="absolute inset-0 block w-full h-full min-h-full object-cover object-center transition-transform duration-500 pointer-events-none group-hover:scale-105"
 					/>
-					{#if listing.status === 'sold'}
+					{#if getListingStatus(listing) === 'sold'}
 						<div class="absolute inset-0 bg-black/28 pointer-events-none"></div>
 					{/if}
 					<!-- Status Badge -->
 					<div class="absolute top-3 right-3">
 						<span
 							class="px-3 py-1 text-xs font-medium border rounded-full uppercase {getStatusBadge(
-								listing.status
+								getListingStatus(listing)
 							)}"
 						>
-							{listing.status}
+							{getListingStatus(listing)}
 						</span>
 					</div>
 					<!-- Type Badge -->
@@ -159,23 +169,26 @@
 						<div class="flex flex-wrap gap-3 text-gray-400 text-sm">
 							{#if listing.beds}
 								<span class="flex items-center gap-1">
-									<span class="text-[var(--color-primary)]">✦</span> {listing.beds} bd
+									<span class="text-[var(--color-primary)]">✦</span>
+									{listing.beds} bd
 								</span>
 							{/if}
 							{#if listing.baths}
 								<span class="flex items-center gap-1">
-									<span class="text-[var(--color-primary)]">✦</span> {listing.baths} ba
+									<span class="text-[var(--color-primary)]">✦</span>
+									{listing.baths} ba
 								</span>
 							{/if}
 							{#if listing.sqft}
 								<span class="flex items-center gap-1">
-									<span class="text-[var(--color-primary)]">✦</span> {listing.sqft.toLocaleString()} sqft
+									<span class="text-[var(--color-primary)]">✦</span>
+									{listing.sqft.toLocaleString()} sqft
 								</span>
 							{/if}
 						</div>
 					{/if}
 
-					{#if listing.status === 'sold' && listing.soldDate}
+					{#if getListingStatus(listing) === 'sold' && listing.soldDate}
 						<p class="text-gray-500 text-xs mt-2">Sold {listing.soldDate}</p>
 					{/if}
 				</div>

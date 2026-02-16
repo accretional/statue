@@ -17,7 +17,7 @@
 			remoteUrl?: string;
 			externalUrl?: string;
 			isRemote?: boolean;
-			status: 'active' | 'pending' | 'sold';
+			status?: 'active' | 'pending' | 'sold';
 			url?: string;
 		}>;
 	}
@@ -25,7 +25,7 @@
 	let {
 		subtitle = 'Recent Sales',
 		title = 'Recently Sold',
-		description = 'Properties I\'ve successfully helped my clients buy and sell',
+		description = "Properties I've successfully helped my clients buy and sell",
 		limit = 4,
 		showSeeAll = false,
 		seeAllUrl = '/listings?status=sold',
@@ -34,7 +34,7 @@
 
 	// Filter sold listings
 	let soldListings = $derived(
-		listings.filter((l) => l.status === 'sold').slice(0, limit)
+		listings.filter((l) => (l.status || 'active') === 'sold').slice(0, limit)
 	);
 
 	const REMOTE_GRID_PREVIEW_FRAGMENT = '#listing-preview-mobile-card';
@@ -44,7 +44,9 @@
 		externalUrl?: string;
 		isRemote?: boolean;
 	}): string | null {
-		return listing.externalUrl || listing.remoteUrl || null;
+		const url = listing.externalUrl || listing.remoteUrl;
+		const normalized = typeof url === 'string' ? url.trim() : '';
+		return normalized || null;
 	}
 
 	function getRemotePreviewUrl(url?: string | null): string {
@@ -106,7 +108,9 @@
 									class="absolute inset-0 z-10"
 									aria-label={`Open ${listing.title || 'sold listing'} in new tab`}
 								></a>
-								<div class="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/60 to-transparent"></div>
+								<div
+									class="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/60 to-transparent"
+								></div>
 							</div>
 						</article>
 					{:else}
@@ -120,7 +124,9 @@
 									alt={listing.title}
 									class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
 								/>
-								<div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+								<div
+									class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+								>
 									<span class="text-white text-lg font-light tracking-wider">SOLD</span>
 								</div>
 							</div>
@@ -128,7 +134,9 @@
 							{#if listing.address}
 								<p class="text-gray-400 text-sm mb-2">{listing.address}</p>
 							{/if}
-							<p class="text-[var(--color-primary)] font-medium">{listing.soldPrice || listing.price || 'Contact for Price'}</p>
+							<p class="text-[var(--color-primary)] font-medium">
+								{listing.soldPrice || listing.price || 'Contact for Price'}
+							</p>
 							{#if listing.soldDate}
 								<p class="text-gray-500 text-xs mt-1">Sold {listing.soldDate}</p>
 							{/if}
@@ -138,7 +146,7 @@
 			</div>
 
 			<!-- See All Button -->
-			{#if showSeeAll && listings.filter((l) => l.status === 'sold').length > limit}
+			{#if showSeeAll && listings.filter((l) => (l.status || 'active') === 'sold').length > limit}
 				<div class="text-center mt-12 animate-on-scroll animate-fade-up">
 					<a
 						href={seeAllUrl}

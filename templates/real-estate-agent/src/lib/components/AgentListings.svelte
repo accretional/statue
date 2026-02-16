@@ -20,7 +20,7 @@
 			baths?: number;
 			sqft?: number;
 			type?: string;
-			status: 'active' | 'pending' | 'sold';
+			status?: 'active' | 'pending' | 'sold';
 			url?: string;
 		}>;
 	}
@@ -38,7 +38,7 @@
 
 	// Filter listings by status
 	let filteredListings = $derived(
-		listings.filter((l) => status.includes(l.status)).slice(0, limit)
+		listings.filter((l) => status.includes((l.status || 'active').toLowerCase())).slice(0, limit)
 	);
 
 	const REMOTE_GRID_PREVIEW_FRAGMENT = '#listing-preview-mobile-card';
@@ -48,7 +48,9 @@
 		externalUrl?: string;
 		isRemote?: boolean;
 	}): string | null {
-		return listing.externalUrl || listing.remoteUrl || null;
+		const url = listing.externalUrl || listing.remoteUrl;
+		const normalized = typeof url === 'string' ? url.trim() : '';
+		return normalized || null;
 	}
 
 	function getRemotePreviewUrl(url?: string | null): string {
@@ -88,6 +90,10 @@
 				return 'bg-gray-500/20 text-gray-400 border-gray-500/50';
 		}
 	}
+
+	function getListingStatus(listing: { status?: string }): string {
+		return (listing.status || 'active').toLowerCase();
+	}
 </script>
 
 <section id="listings" class="py-24 px-4 bg-[var(--color-background)]">
@@ -123,7 +129,9 @@
 									class="absolute inset-0 z-10"
 									aria-label={`Open ${listing.title || 'listing'} in new tab`}
 								></a>
-								<div class="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/60 to-transparent"></div>
+								<div
+									class="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/60 to-transparent"
+								></div>
 							</div>
 						</article>
 					{:else}
@@ -140,19 +148,23 @@
 								<div class="absolute top-4 right-4">
 									<span
 										class="px-3 py-1 text-xs font-medium border rounded-full uppercase {getStatusBadge(
-											listing.status
+											getListingStatus(listing)
 										)}"
 									>
-										{listing.status}
+										{getListingStatus(listing)}
 									</span>
 								</div>
 							</div>
 							<div class="p-6">
-								<h3 class="text-white text-xl font-light mb-2">{listing.title || 'Luxury Property'}</h3>
+								<h3 class="text-white text-xl font-light mb-2">
+									{listing.title || 'Luxury Property'}
+								</h3>
 								{#if listing.address}
 									<p class="text-gray-400 text-sm mb-4">{listing.address}</p>
 								{/if}
-								<p class="text-[var(--color-primary)] text-2xl font-light mb-4">{listing.price || 'Contact for Price'}</p>
+								<p class="text-[var(--color-primary)] text-2xl font-light mb-4">
+									{listing.price || 'Contact for Price'}
+								</p>
 								{#if listing.beds || listing.baths || listing.sqft}
 									<div class="flex flex-wrap gap-4 text-gray-400 text-sm mb-4">
 										{#if listing.beds}
