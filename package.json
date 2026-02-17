@@ -110,6 +110,11 @@
 	},
 	"dependencies": {
 		"@fontsource/fraunces": "^5.2.9",
+		"@lucide/svelte": "^0.563.1",
+		"bits-ui": "^2.15.5",
+		"clsx": "^2.1.1",
+		"dotted-map": "^2.2.3",
+		"swiper": "^12.1.0",
 		"@fontsource/ibm-plex-sans": "^5.2.8",
 		"@types/three": "^0.182.0",
 		"chalk": "^5.4.1",
