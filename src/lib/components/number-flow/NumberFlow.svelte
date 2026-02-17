@@ -1,3 +1,12 @@
+<!--
+This is a Svelte component from NumberFlow:
+
+Demo Site: [number-flow.barvian.me](https://number-flow.barvian.me/)
+GitHub Repository: [barvian/number-flow](https://github.com/barvian/number-flow)
+
+All components in this directory are sourced from the NumberFlow project by barvian. Please refer to the original repository for documentation, examples, and additional components.
+-->
+
 <script lang="ts" context="module">
 	import NumberFlowLite, { define, type Data } from 'number-flow/lite'
 	// Svelte only supports setters, but Svelte 4 didn't pick up inherited ones:
