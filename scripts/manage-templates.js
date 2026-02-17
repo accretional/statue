@@ -52,6 +52,15 @@ program
       console.log(chalk.gray('  ✓ Copied src/'));
     }
 
+    // Apply canonical SSG layout config from _shared
+    const sharedLayoutPath = path.join(rootDir, 'templates', '_shared', 'src', 'routes', '+layout.js');
+    const destLayoutPath = path.join(rootDir, 'src', 'routes', '+layout.js');
+    if (fs.existsSync(sharedLayoutPath)) {
+      fs.ensureDirSync(path.dirname(destLayoutPath));
+      fs.copySync(sharedLayoutPath, destLayoutPath, { overwrite: true });
+      console.log(chalk.gray('  ✓ Applied canonical +layout.js'));
+    }
+
     // Copy site.config.json
     const sourceConfig = path.join(templateDir, 'site.config.json');
     if (fs.existsSync(sourceConfig)) {
@@ -78,10 +87,14 @@ program
 
     console.log(chalk.blue(`💾 Saving template '${templateName}'...`));
 
-    // Save src
+    // Save src (exclude root +layout.js - it comes from _shared, not templates)
     const sourceSrc = path.join(rootDir, 'src');
+    const rootLayoutPath = path.join(rootDir, 'src', 'routes', '+layout.js');
     if (fs.existsSync(sourceSrc)) {
-      fs.copySync(sourceSrc, path.join(templateDir, 'src'), { overwrite: true });
+      fs.copySync(sourceSrc, path.join(templateDir, 'src'), {
+        overwrite: true,
+        filter: (src) => src !== rootLayoutPath
+      });
       console.log(chalk.gray('  ✓ Saved src/'));
     }
 
@@ -105,7 +118,7 @@ program
 
     if (fs.existsSync(templatesDir)) {
       const templates = fs.readdirSync(templatesDir)
-        .filter(t => fs.statSync(path.join(templatesDir, t)).isDirectory());
+        .filter(t => fs.statSync(path.join(templatesDir, t)).isDirectory() && t !== '_shared');
       templates.forEach(t => console.log(` - ${t}`));
     }
   });
