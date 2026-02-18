@@ -1,4 +1,4 @@
-import { 
+import {
   scanContentDirectory,
   getContentDirectories,
   truncateContent,
@@ -7,7 +7,9 @@ import {
   getContentByUrl,
   getContentByDirectory,
   clearContentCache,
-  getSubDirectories
+  getSubDirectories,
+  getAllTags,
+  getPostsByTag
 } from './lib/cms/content-processor.js';
 
 export {
@@ -19,5 +21,7 @@ export {
   getContentByUrl,
   getContentByDirectory,
   clearContentCache,
-  getSubDirectories
+  getSubDirectories,
+  getAllTags,
+  getPostsByTag
 };

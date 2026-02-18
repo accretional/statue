@@ -3,6 +3,7 @@
   import { onMount, onDestroy } from 'svelte';
   import { browser } from '$app/environment';
   import AuthorAvatar from './AuthorAvatar.svelte';
+  import TagList from './TagList.svelte';
 
   export interface BlogCardProps {
     title: string;
@@ -12,6 +13,7 @@
     authorAvatar?: string;
     thumbnail?: string;
     url: string;
+    tags?: string[];
     enableScrollAnimation?: boolean;
     nextHasThumbnail?: boolean;
     isLast?: boolean;
@@ -25,6 +27,7 @@
     authorAvatar = '',
     thumbnail = '',
     url = '',
+    tags = [],
     enableScrollAnimation = false,
     nextHasThumbnail = false,
     isLast = false,
@@ -130,6 +133,8 @@
       {#if description}
         <p class="description">{description}</p>
       {/if}
+
+      <TagList {tags} />
     </div>
   </a>
 {:else}
@@ -151,6 +156,8 @@
     {#if description}
       <p class="description">{description}</p>
     {/if}
+
+    <TagList {tags} />
   </a>
 {/if}
 
