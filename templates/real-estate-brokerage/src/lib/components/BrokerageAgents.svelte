@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { Mail, Phone } from 'lucide-svelte';
+
 	export interface BrokerageAgentsProps {
 		subtitle?: string;
 		title?: string;
@@ -52,6 +54,11 @@
 		} catch {
 			return url.split('#')[0];
 		}
+	}
+
+	function getTelephoneHref(phone?: string): string {
+		if (!phone) return '';
+		return `tel:${phone.replace(/[^\d+]/g, '')}`;
 	}
 </script>
 
@@ -111,12 +118,26 @@
 										{/each}
 									</div>
 								{/if}
-								<div class="flex gap-4 text-sm">
+								<div class="flex flex-col gap-2 text-sm">
 									{#if agent.email}
-										<a href="mailto:{agent.email}" class="text-gray-400 hover:text-[var(--color-primary)] transition-colors">Email</a>
+										<a
+											href="mailto:{agent.email}"
+											class="inline-flex items-center gap-2 text-gray-400 hover:text-[var(--color-primary)] transition-colors"
+											aria-label={`Email ${agent.name}`}
+										>
+											<Mail size={14} strokeWidth={1.75} />
+											<span>{agent.email}</span>
+										</a>
 									{/if}
 									{#if agent.phone}
-										<a href="tel:{agent.phone}" class="text-gray-400 hover:text-[var(--color-primary)] transition-colors">Call</a>
+										<a
+											href={getTelephoneHref(agent.phone)}
+											class="inline-flex items-center gap-2 text-gray-400 hover:text-[var(--color-primary)] transition-colors"
+											aria-label={`Call ${agent.name}`}
+										>
+											<Phone size={14} strokeWidth={1.75} />
+											<span>{agent.phone}</span>
+										</a>
 									{/if}
 								</div>
 							</div>
