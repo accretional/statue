@@ -112,6 +112,7 @@
 	"dependencies": {
 		"@fontsource/fraunces": "^5.2.9",
 		"@fontsource/ibm-plex-sans": "^5.2.8",
+		"@neodrag/svelte": "^2.0.0",
 		"@types/three": "^0.182.0",
 		"chalk": "^5.4.1",
 		"cobe": "^0.6.5",
