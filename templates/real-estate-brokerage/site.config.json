@@ -1,0 +1,360 @@
+{
+	"site": {
+		"name": "Prestige Realty Group",
+		"description": "Excellence in Real Estate Since 1985. Premier brokerage serving the Bay Area's most discerning buyers and sellers.",
+		"url": "https://example.com",
+		"author": "Prestige Realty Group",
+		"footer": {
+			"brand": "Prestige Realty Group",
+			"tagline": "Excellence in Real Estate Since 1985",
+			"copyrightText": "All rights reserved"
+		}
+	},
+	"brokerage": {
+		"name": "Prestige Realty Group",
+		"tagline": "Excellence in Real Estate Since 1985",
+		"description": "We connect discerning buyers with exceptional properties, delivering unparalleled service across the Bay Area's premier markets.",
+		"heroImage": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2000",
+		"license": "DRE 01234567",
+		"primaryCta": {
+			"text": "Browse Properties",
+			"url": "#listings"
+		},
+		"secondaryCta": {
+			"text": "Meet Our Team",
+			"url": "#agents"
+		},
+		"stats": [
+			{ "value": "$2.5B+", "label": "Total Sales Volume" },
+			{ "value": "45+", "label": "Expert Agents" },
+			{ "value": "3,500+", "label": "Properties Sold" },
+			{ "value": "38", "label": "Years of Excellence" }
+		],
+		"about": {
+			"subtitle": "About Us",
+			"title": "A Legacy of Excellence",
+			"description": "Founded in 1985, Prestige Realty Group has built an unmatched reputation for delivering exceptional real estate services. Our team of dedicated professionals combines deep market expertise with a client-first philosophy, ensuring every transaction exceeds expectations.",
+			"image": "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1200",
+			"highlights": [
+				{
+					"title": "Client-Centered Approach",
+					"description": "Every decision we make is guided by what is best for our clients."
+				},
+				{
+					"title": "Market Leadership",
+					"description": "Recognized as the top brokerage in our primary markets for over a decade."
+				},
+				{
+					"title": "Innovation & Technology",
+					"description": "Leveraging cutting-edge tools to provide superior service and insights."
+				}
+			]
+		},
+		"services": {
+			"subtitle": "Our Services",
+			"title": "Comprehensive Real Estate Solutions",
+			"description": "From residential to commercial, we offer a full spectrum of real estate services tailored to your needs.",
+			"items": [
+				{
+					"title": "Residential Sales",
+					"description": "Expert guidance for buying or selling luxury homes, condos, and estates in premier neighborhoods.",
+					"icon": "01"
+				},
+				{
+					"title": "Commercial Real Estate",
+					"description": "Strategic advisory for office spaces, retail properties, and industrial real estate investments.",
+					"icon": "02"
+				},
+				{
+					"title": "Property Management",
+					"description": "Full-service property management ensuring your investments are maintained and profitable.",
+					"icon": "03"
+				},
+				{
+					"title": "Investment Advisory",
+					"description": "Data-driven insights and strategies to build and optimize your real estate portfolio.",
+					"icon": "04"
+				},
+				{
+					"title": "Relocation Services",
+					"description": "Seamless transition support for corporate relocations and international moves.",
+					"icon": "05"
+				},
+				{
+					"title": "Market Analysis",
+					"description": "Comprehensive market research and valuation reports for informed decision-making.",
+					"icon": "06"
+				}
+			]
+		},
+		"markets": {
+			"subtitle": "Our Markets",
+			"title": "Premier Locations We Serve",
+			"description": "Deep expertise across the most desirable real estate markets.",
+			"items": [
+				{
+					"name": "San Francisco",
+					"description": "Iconic city living with world-class amenities",
+					"image": "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?q=80&w=800",
+					"stats": "450+ Active Listings"
+				},
+				{
+					"name": "Palo Alto",
+					"description": "Heart of Silicon Valley innovation",
+					"image": "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=800",
+					"stats": "320+ Active Listings"
+				},
+				{
+					"name": "Atherton",
+					"description": "Exclusive estates and unmatched privacy",
+					"image": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=800",
+					"stats": "85+ Active Listings"
+				},
+				{
+					"name": "Menlo Park",
+					"description": "Tech hub with family-friendly neighborhoods",
+					"image": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800",
+					"stats": "210+ Active Listings"
+				}
+			]
+		},
+		"agents": {
+			"subtitle": "Our Team",
+			"title": "Meet Our Expert Agents",
+			"description": "Industry-leading professionals dedicated to your success.",
+			"limit": 6,
+			"showSeeAll": true,
+			"seeAllUrl": "/agents",
+			"items": [
+				{
+					"name": "Sarah Mitchell",
+					"title": "Managing Partner",
+					"image": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=600",
+					"email": "sarah@prestigerealty.com",
+					"phone": "+1 (650) 555-0101",
+					"specialties": ["Luxury Homes", "Executive Relocation"]
+				},
+				{
+					"name": "Michael Chen",
+					"title": "Senior Agent",
+					"image": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=600",
+					"email": "michael@prestigerealty.com",
+					"phone": "+1 (650) 555-0102",
+					"specialties": ["Commercial", "Investment Properties"]
+				},
+				{
+					"name": "Emily Rodriguez",
+					"title": "Residential Specialist",
+					"image": "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=600",
+					"email": "emily@prestigerealty.com",
+					"phone": "+1 (650) 555-0103",
+					"specialties": ["First-Time Buyers", "Family Homes"]
+				},
+				{
+					"name": "David Kim",
+					"title": "Luxury Home Specialist",
+					"image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600",
+					"email": "david@prestigerealty.com",
+					"phone": "+1 (650) 555-0104",
+					"specialties": ["Estates", "High-Net-Worth Clients"]
+				},
+				{
+					"name": "Amanda Foster",
+					"title": "Market Analyst",
+					"image": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=600",
+					"email": "amanda@prestigerealty.com",
+					"phone": "+1 (650) 555-0105",
+					"specialties": ["Market Research", "Investment Analysis"]
+				},
+				{
+					"name": "James Wilson",
+					"title": "Commercial Specialist",
+					"image": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=600",
+					"email": "james@prestigerealty.com",
+					"phone": "+1 (650) 555-0106",
+					"specialties": ["Office Space", "Retail Properties"]
+				}
+			]
+		},
+		"listings": {
+			"subtitle": "Properties",
+			"title": "Featured Listings",
+			"description": "Discover exceptional properties curated by our expert team.",
+			"limit": 6,
+			"showSeeAll": true,
+			"seeAllUrl": "/listings",
+			"items": [
+				{
+					"title": "Modern Estate in Atherton",
+					"address": "123 Oak Lane, Atherton, CA 94027",
+					"price": "$12,500,000",
+					"image": "https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=800",
+					"beds": 6,
+					"baths": 8,
+					"sqft": 9500,
+					"type": "Single Family",
+					"status": "active"
+				},
+				{
+					"title": "Palo Alto Contemporary",
+					"address": "456 University Ave, Palo Alto, CA 94301",
+					"price": "$6,950,000",
+					"image": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=800",
+					"beds": 5,
+					"baths": 5,
+					"sqft": 5200,
+					"type": "Single Family",
+					"status": "active"
+				},
+				{
+					"title": "San Francisco Penthouse",
+					"address": "789 Market St, San Francisco, CA 94103",
+					"price": "$4,200,000",
+					"image": "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?q=80&w=800",
+					"beds": 3,
+					"baths": 3,
+					"sqft": 3100,
+					"type": "Penthouse",
+					"status": "pending"
+				},
+				{
+					"title": "Menlo Park Craftsman",
+					"address": "234 Oak Grove Ave, Menlo Park, CA 94025",
+					"price": "$3,850,000",
+					"image": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800",
+					"beds": 4,
+					"baths": 3,
+					"sqft": 3400,
+					"type": "Single Family",
+					"status": "active"
+				},
+				{
+					"title": "Los Altos Hills Retreat",
+					"address": "567 Summit Rd, Los Altos Hills, CA 94022",
+					"price": "$8,750,000",
+					"image": "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=800",
+					"beds": 5,
+					"baths": 6,
+					"sqft": 7200,
+					"type": "Estate",
+					"status": "active"
+				},
+				{
+					"title": "Downtown Loft",
+					"address": "890 Howard St, San Francisco, CA 94103",
+					"price": "$1,650,000",
+					"image": "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=800",
+					"beds": 2,
+					"baths": 2,
+					"sqft": 1800,
+					"type": "Loft",
+					"status": "active"
+				}
+			]
+		},
+		"testimonials": {
+			"subtitle": "Testimonials",
+			"title": "What Our Clients Say",
+			"items": [
+				{
+					"name": "Jennifer & Mike Thompson",
+					"location": "Palo Alto, CA",
+					"text": "Prestige Realty exceeded all our expectations. Their team's professionalism and market knowledge helped us find our dream home in a competitive market.",
+					"deal": "Purchased $6.5M Estate",
+					"agent": "Sarah Mitchell",
+					"rating": 5
+				},
+				{
+					"name": "Robert Chen",
+					"location": "Atherton, CA",
+					"text": "Working with Prestige to sell our property was a seamless experience. They handled everything from staging to closing with exceptional attention to detail.",
+					"deal": "Sold $12M Estate",
+					"agent": "David Kim",
+					"rating": 5
+				},
+				{
+					"name": "Lisa Park",
+					"location": "San Francisco, CA",
+					"text": "As a first-time luxury buyer, I was nervous about the process. The team at Prestige guided me every step of the way with patience and expertise.",
+					"deal": "Purchased $3.2M Condo",
+					"agent": "Emily Rodriguez",
+					"rating": 5
+				},
+				{
+					"name": "Tech Ventures Inc.",
+					"location": "Mountain View, CA",
+					"text": "Their commercial real estate team found us the perfect headquarters. Their understanding of the tech industry's unique needs was invaluable.",
+					"deal": "Leased 50,000 SF Office",
+					"agent": "James Wilson",
+					"rating": 5
+				},
+				{
+					"name": "The Anderson Family",
+					"location": "Menlo Park, CA",
+					"text": "After relocating from New York, Prestige made our transition to the Bay Area smooth and stress-free. We couldn't be happier with our new home.",
+					"deal": "Purchased $4.1M Home",
+					"agent": "Sarah Mitchell",
+					"rating": 5
+				},
+				{
+					"name": "Marcus Johnson",
+					"location": "Los Altos, CA",
+					"text": "The investment advisory team helped me build a diversified real estate portfolio. Their market analysis is second to none.",
+					"deal": "Multi-Property Investment",
+					"agent": "Amanda Foster",
+					"rating": 5
+				}
+			]
+		},
+		"contact": {
+			"subtitle": "Contact Us",
+			"title": "Get In Touch",
+			"description": "Ready to start your real estate journey? Our team is here to help.",
+			"phone": "+1 (650) 555-0100",
+			"email": "info@prestigerealty.com",
+			"address": {
+				"street": "100 University Avenue, Suite 500",
+				"city": "Palo Alto",
+				"state": "CA",
+				"zipCode": "94301"
+			},
+			"hours": [
+				{ "days": "Monday - Friday", "time": "9:00 AM - 6:00 PM" },
+				{ "days": "Saturday", "time": "10:00 AM - 4:00 PM" },
+				{ "days": "Sunday", "time": "By Appointment" }
+			],
+			"social": {
+				"linkedin": "https://linkedin.com/company/prestigerealty",
+				"facebook": "https://facebook.com/prestigerealty",
+				"instagram": "https://instagram.com/prestigerealty"
+			}
+		}
+	},
+	"navbarConfig": {
+		"siteTitle": "Prestige Realty",
+		"logo": null,
+		"defaultNavItems": [
+			{ "title": "Home", "url": "#hero" },
+			{ "title": "About", "url": "#about" },
+			{ "title": "Services", "url": "#services" },
+			{ "title": "Markets", "url": "#markets" },
+			{ "title": "Listings", "url": "#listings" },
+			{ "title": "Team", "url": "#agents" },
+			{ "title": "Contact", "url": "#contact", "cta": true }
+		],
+		"hiddenFromNav": ["blog", "docs", "legal"]
+	},
+	"seo": {
+		"title": "Prestige Realty Group - Bay Area Luxury Real Estate",
+		"description": "Premier real estate brokerage serving the Bay Area since 1985. Expert agents, exceptional properties, and unparalleled service for buyers and sellers.",
+		"keywords": [
+			"bay area real estate",
+			"luxury homes",
+			"palo alto realtor",
+			"atherton homes",
+			"silicon valley real estate",
+			"real estate brokerage"
+		],
+		"ogImage": "/images/og-brokerage.jpg"
+	}
+}
