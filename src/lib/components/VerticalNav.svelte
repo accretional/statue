@@ -4,7 +4,7 @@
   Usage:
   ```svelte
   <script>
-    import { VerticalNav } from 'statue-ssg';
+    import VerticalNav from 'statue-ssg/components/VerticalNav.svelte';
 
     const sections = [
       { id: 'intro', label: 'Introduction' },

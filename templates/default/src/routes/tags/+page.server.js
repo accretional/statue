@@ -1,4 +1,4 @@
-import { getContentDirectories, getAllTags } from 'statue-ssg/cms/content-processor';
+import { getContentDirectories, getAllTags } from 'statue-ssg/cms/content-processor.js';
 import { getTagRoutes } from '../../../scripts/get-tag-routes.js';
 
 // Only prerender if tags exist in content

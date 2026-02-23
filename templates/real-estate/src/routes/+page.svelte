@@ -1,20 +1,18 @@
 <script>
 	import { onMount } from 'svelte';
-	import {
-		PropertyHero,
-		PropertyOverview,
-		PropertyHighlights,
-		PropertyAvailableSpaces,
-		PropertyStats,
-		PropertyGallery,
-		PropertyProperty,
-		PropertyLocationSection,
-		PropertyNearby,
-		PropertyBrochure,
-		PropertyRentCalculator,
-		PropertyLeaseTimeline,
-		PropertyContactSection
-	} from '$lib/components';
+	import PropertyHero from '$lib/components/PropertyHero.svelte';
+	import PropertyOverview from '$lib/components/PropertyOverview.svelte';
+	import PropertyHighlights from '$lib/components/PropertyHighlights.svelte';
+	import PropertyAvailableSpaces from '$lib/components/PropertyAvailableSpaces.svelte';
+	import PropertyStats from '$lib/components/PropertyStats.svelte';
+	import PropertyGallery from '$lib/components/PropertyGallery.svelte';
+	import PropertyProperty from '$lib/components/PropertyProperty.svelte';
+	import PropertyLocationSection from '$lib/components/PropertyLocationSection.svelte';
+	import PropertyNearby from '$lib/components/PropertyNearby.svelte';
+	import PropertyBrochure from '$lib/components/PropertyBrochure.svelte';
+	import PropertyRentCalculator from '$lib/components/PropertyRentCalculator.svelte';
+	import PropertyLeaseTimeline from '$lib/components/PropertyLeaseTimeline.svelte';
+	import PropertyContactSection from '$lib/components/PropertyContactSection.svelte';
 
 	const { data } = $props();
 	let site = $derived(data.site || {});
@@ -121,7 +119,9 @@
 
 	<PropertyProperty
 		title={property.features?.title || property.details?.title || 'Property Details'}
-		subtitle={property.features?.subtitle || property.details?.subtitle || 'Features & Information'}
+		subtitle={property.features?.subtitle ||
+			property.details?.subtitle ||
+			'Features & Information'}
 		features={property.features?.items || []}
 		details={property.details}
 	/>
@@ -298,7 +298,8 @@
 			</p>
 			<p class="text-gray-500 text-sm mb-6">{footer.tagline ?? site.description}</p>
 			<p class="text-gray-600 text-xs">
-				© {year} {footer.brand ?? site.name}. {footer.copyrightText}
+				© {year}
+				{footer.brand ?? site.name}. {footer.copyrightText}
 			</p>
 		</div>
 	</footer>

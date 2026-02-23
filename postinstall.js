@@ -6,128 +6,151 @@ import { fileURLToPath } from 'url';
 import chalk from 'chalk';
 
 async function setupStatueSSG(options = {}) {
-  const templateName = options.template || 'default';
+	const templateName = options.template || 'default';
 
-  const __filename = fileURLToPath(import.meta.url);
-  const sourceDir = path.dirname(__filename);
-  const targetDir = process.cwd();
+	const __filename = fileURLToPath(import.meta.url);
+	const sourceDir = path.dirname(__filename);
+	const targetDir = process.cwd();
 
-  console.log(chalk.blue(`🗿 Statue SSG - Initializing '${templateName}' template...`));
+	console.log(chalk.blue(`🗿 Statue SSG - Initializing '${templateName}' template...`));
 
-  // 1. Copy shared resources (favicon, robots.txt, etc.) - base layer
-  const sharedDir = path.join(sourceDir, 'resources');
-  if (fs.existsSync(sharedDir)) {
-    fs.copySync(sharedDir, path.join(targetDir, 'static'), { overwrite: true });
-    console.log(chalk.green('✓ shared resources copied'));
-  }
+	// 1. Copy shared resources (favicon, robots.txt, etc.) - base layer
+	const sharedDir = path.join(sourceDir, 'resources');
+	if (fs.existsSync(sharedDir)) {
+		fs.copySync(sharedDir, path.join(targetDir, 'static'), { overwrite: true });
+		console.log(chalk.green('✓ shared resources copied'));
+	}
 
-  // 3. Copy template (src + site.config.json + static + scripts)
-  const templateDir = path.join(sourceDir, 'templates', templateName);
+	// 2. Copy core library (cms, base components, etc.)
+	const coreLibDir = path.join(sourceDir, 'src/lib');
+	if (fs.existsSync(coreLibDir)) {
+		fs.copySync(coreLibDir, path.join(targetDir, 'src/lib'), { overwrite: true });
+		console.log(chalk.green('✓ core library copied'));
+	}
 
-  // Copy routes
-  const targetRoutesDir = path.join(targetDir, 'src/routes');
-  fs.emptyDirSync(targetRoutesDir);
-  fs.copySync(path.join(templateDir, 'src/routes'), targetRoutesDir, { overwrite: true });
+	// 3. Copy template (src + site.config.json + static + scripts)
+	const templateDir = path.join(sourceDir, 'templates', templateName);
 
-  // Copy template's src/lib if exists (components, assets, etc.)
-  const templateLibDir = path.join(templateDir, 'src/lib');
-  if (fs.existsSync(templateLibDir)) {
-    fs.copySync(templateLibDir, path.join(targetDir, 'src/lib'), { overwrite: true });
-  }
+	// Copy routes
+	const targetRoutesDir = path.join(targetDir, 'src/routes');
+	fs.emptyDirSync(targetRoutesDir);
+	fs.copySync(path.join(templateDir, 'src/routes'), targetRoutesDir, { overwrite: true });
 
-  fs.copySync(path.join(templateDir, 'site.config.json'), path.join(targetDir, 'site.config.json'), { overwrite: true });
+	// Copy template's src/lib if exists (components, assets, etc.)
+	const templateLibDir = path.join(templateDir, 'src/lib');
+	if (fs.existsSync(templateLibDir)) {
+		fs.copySync(templateLibDir, path.join(targetDir, 'src/lib'), { overwrite: true });
+	}
 
-  // Copy template's static if exists (overlay on shared resources)
-  const templateStaticDir = path.join(templateDir, 'static');
-  if (fs.existsSync(templateStaticDir)) {
-    fs.copySync(templateStaticDir, path.join(targetDir, 'static'), { overwrite: true });
-  }
+	fs.copySync(
+		path.join(templateDir, 'site.config.json'),
+		path.join(targetDir, 'site.config.json'),
+		{ overwrite: true }
+	);
 
-  // Copy template's scripts if exists
-  const templateScriptsDir = path.join(templateDir, 'scripts');
-  if (fs.existsSync(templateScriptsDir)) {
-    fs.copySync(templateScriptsDir, path.join(targetDir, 'scripts'), { overwrite: true });
-  }
+	// Copy template's static if exists (overlay on shared resources)
+	const templateStaticDir = path.join(templateDir, 'static');
+	if (fs.existsSync(templateStaticDir)) {
+		fs.copySync(templateStaticDir, path.join(targetDir, 'static'), { overwrite: true });
+	}
 
-  // Copy template's config files if exists (orval.config.ts, etc.)
-  for (const config of ['orval.config.ts', 'orval.config.js']) {
-    const src = path.join(templateDir, config);
-    if (fs.existsSync(src)) {
-      fs.copySync(src, path.join(targetDir, config), { overwrite: true });
-      console.log(chalk.green(`✓ ${config} copied`));
-    }
-  }
+	// Copy template's scripts if exists
+	const templateScriptsDir = path.join(templateDir, 'scripts');
+	if (fs.existsSync(templateScriptsDir)) {
+		fs.copySync(templateScriptsDir, path.join(targetDir, 'scripts'), { overwrite: true });
+	}
 
-  console.log(chalk.green(`✓ ${templateName} template copied`));
+	// Copy template's config files if exists (orval.config.ts, etc.)
+	for (const config of ['orval.config.ts', 'orval.config.js']) {
+		const src = path.join(templateDir, config);
+		if (fs.existsSync(src)) {
+			fs.copySync(src, path.join(targetDir, config), { overwrite: true });
+			console.log(chalk.green(`✓ ${config} copied`));
+		}
+	}
 
-  // Copy template's content if exists, otherwise use default content as fallback
-  const templateContentDir = path.join(templateDir, 'content');
-  const contentSource = fs.existsSync(templateContentDir)
-    ? templateContentDir
-    : path.join(sourceDir, 'templates', 'default', 'content');
+	console.log(chalk.green(`✓ ${templateName} template copied`));
 
-  if (fs.existsSync(contentSource)) {
-    const targetContentDir = path.join(targetDir, 'content');
-    fs.emptyDirSync(targetContentDir);
-    fs.copySync(contentSource, targetContentDir, { overwrite: true });
-    console.log(chalk.green(`✓ content copied (${fs.existsSync(templateContentDir) ? templateName : 'default'})`));
-  }
+	// Copy template's content if exists, otherwise use default content as fallback
+	const templateContentDir = path.join(templateDir, 'content');
+	const contentSource = fs.existsSync(templateContentDir)
+		? templateContentDir
+		: path.join(sourceDir, 'templates', 'default', 'content');
 
-  // 4. Copy build configs (svelte, vite, postcss) - always from root
-  for (const config of ['svelte.config.js', 'vite.config.js', 'postcss.config.js']) {
-    const src = path.join(sourceDir, config);
-    if (fs.existsSync(src)) {
-      fs.copySync(src, path.join(targetDir, config), { overwrite: true });
-    }
-  }
-  console.log(chalk.green('✓ build configs copied'));
+	if (fs.existsSync(contentSource)) {
+		const targetContentDir = path.join(targetDir, 'content');
+		fs.emptyDirSync(targetContentDir);
+		fs.copySync(contentSource, targetContentDir, { overwrite: true });
+		console.log(
+			chalk.green(
+				`✓ content copied (${fs.existsSync(templateContentDir) ? templateName : 'default'})`
+			)
+		);
+	}
 
-  // 5. Copy required scripts
-  const scriptsDir = path.join(targetDir, 'scripts');
-  fs.ensureDirSync(scriptsDir);
-  for (const script of ['generate-exports.js', 'generate-seo-files.js', 'run-pagefind.js', 'run-orval.js', 'get-tag-routes.js', 'generate-rss-feed.js']) {
-    fs.copySync(path.join(sourceDir, 'scripts', script), path.join(scriptsDir, script), { overwrite: true });
-  }
-  console.log(chalk.green('✓ scripts copied'));
+	// 4. Copy build configs (svelte, vite, postcss) - always from root
+	for (const config of ['svelte.config.js', 'vite.config.js', 'postcss.config.js']) {
+		const src = path.join(sourceDir, config);
+		if (fs.existsSync(src)) {
+			fs.copySync(src, path.join(targetDir, config), { overwrite: true });
+		}
+	}
+	console.log(chalk.green('✓ build configs copied'));
 
-  // 6. Update package.json - merge scripts and devDependencies from statue-ssg
-  const pkgPath = path.join(targetDir, 'package.json');
-  const sourcePkgPath = path.join(sourceDir, 'package.json');
-  if (fs.existsSync(pkgPath) && fs.existsSync(sourcePkgPath)) {
-    const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
-    const sourcePkg = JSON.parse(fs.readFileSync(sourcePkgPath, 'utf8'));
+	// 5. Copy required scripts
+	const scriptsDir = path.join(targetDir, 'scripts');
+	fs.ensureDirSync(scriptsDir);
+	for (const script of [
+		'generate-seo-files.js',
+		'run-pagefind.js',
+		'run-orval.js',
+		'get-tag-routes.js',
+		'generate-rss-feed.js'
+	]) {
+		fs.copySync(path.join(sourceDir, 'scripts', script), path.join(scriptsDir, script), {
+			overwrite: true
+		});
+	}
+	console.log(chalk.green('✓ scripts copied'));
 
-    let scriptsToInclude = ['preview', 'postbuild', 'setup'];
+	// 6. Update package.json - merge scripts and devDependencies from statue-ssg
+	const pkgPath = path.join(targetDir, 'package.json');
+	const sourcePkgPath = path.join(sourceDir, 'package.json');
+	if (fs.existsSync(pkgPath) && fs.existsSync(sourcePkgPath)) {
+		const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+		const sourcePkg = JSON.parse(fs.readFileSync(sourcePkgPath, 'utf8'));
 
-    // For swagger template, include Orval-related scripts
-    if (templateName === 'swagger') {
-      scriptsToInclude = ['preview', 'postbuild', 'setup', 'prebuild', 'predev', 'dev', 'generate-api', 'generate:exports'];
-    }
+		let scriptsToInclude = ['preview', 'postbuild', 'setup'];
 
-    const productionScripts = Object.fromEntries(
-      Object.entries(sourcePkg.scripts).filter(([name]) => scriptsToInclude.includes(name))
-    );
+		// For swagger template, include Orval-related scripts
+		if (templateName === 'swagger') {
+			scriptsToInclude = ['preview', 'postbuild', 'setup', 'dev', 'generate-api'];
+		}
 
-    pkg.scripts = { ...pkg.scripts, ...productionScripts };
-    pkg.devDependencies = { ...sourcePkg.devDependencies, ...pkg.devDependencies };
+		const productionScripts = Object.fromEntries(
+			Object.entries(sourcePkg.scripts).filter(([name]) => scriptsToInclude.includes(name))
+		);
 
-    fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
-    console.log(chalk.green('✓ package.json updated'));
-  }
+		pkg.scripts = { ...pkg.scripts, ...productionScripts };
+		pkg.devDependencies = { ...sourcePkg.devDependencies, ...pkg.devDependencies };
 
-  console.log(chalk.green.bold('✨ Setup completed!'));
-  return true;
+		fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
+		console.log(chalk.green('✓ package.json updated'));
+	}
+
+	console.log(chalk.green.bold('✨ Setup completed!'));
+	return true;
 }
 
 // CLI
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const args = process.argv.slice(2);
-  const idx = args.indexOf('--template');
-  const template = idx !== -1 ? args[idx + 1] : 'default';
-  setupStatueSSG({ template }).catch(err => {
-    console.error(chalk.red('Setup failed:'), err);
-    process.exit(1);
-  });
+	const args = process.argv.slice(2);
+	const idx = args.indexOf('--template');
+	const template = idx !== -1 ? args[idx + 1] : 'default';
+	setupStatueSSG({ template }).catch((err) => {
+		console.error(chalk.red('Setup failed:'), err);
+		process.exit(1);
+	});
 }
 
 export default setupStatueSSG;

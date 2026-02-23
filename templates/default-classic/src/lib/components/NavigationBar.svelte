@@ -1,6 +1,6 @@
 <script>
 	import { page } from '$app/state';
-	import { Search } from 'statue-ssg';
+	import Search from 'statue-ssg/components/Search.svelte';
 
 	let {
 		navbarItems = [],

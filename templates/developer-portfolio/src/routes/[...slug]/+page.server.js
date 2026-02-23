@@ -1,4 +1,4 @@
-import { getContentByUrl, getContentDirectories, getSidebarTree } from 'statue-ssg/cms/content-processor';
+import { getContentByUrl, getContentDirectories, getSidebarTree } from 'statue-ssg/cms/content-processor.js';
 import siteConfig from '../../../site.config.json';
 
 // Make this page pre-rendered as a static page

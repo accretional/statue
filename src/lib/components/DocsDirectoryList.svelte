@@ -4,7 +4,7 @@
   Usage:
   ```svelte
   <script>
-    import { DocsDirectoryList } from 'statue-ssg';
+    import DocsDirectoryList from 'statue-ssg/components/DocsDirectoryList.svelte';
   </script>
 
   <DocsDirectoryList

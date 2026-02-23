@@ -86,7 +86,7 @@ Brief description of what this component does.
 
 \`\`\`svelte
 <script>
-  import { YourComponent } from 'statue-ssg';
+  import YourComponent from 'statue-ssg/components/YourComponent.svelte';
 </script>
 
 <YourComponent
@@ -386,7 +386,8 @@ Change all imports in your template files:
 ```svelte
 <!-- ❌ Bad -->
 <script>
-  import { Hero, Footer } from 'statue-ssg';
+  import Hero from 'statue-ssg/components/Hero.svelte';
+import Footer from 'statue-ssg/components/Footer.svelte';
 </script>
 
 <!-- ✅ Good -->

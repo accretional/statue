@@ -1,5 +1,6 @@
 <script>
-	import { PageHero, BlogLayout } from 'statue-ssg';
+	import PageHero from 'statue-ssg/components/PageHero.svelte';
+import BlogLayout from 'statue-ssg/components/BlogLayout.svelte';
 
 	let { data } = $props();
 </script>

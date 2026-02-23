@@ -34,7 +34,7 @@ The NavigationBar automatically shows search when `search.enabled` is true in yo
 
 ```svelte
 <script>
-  import { NavigationBar } from 'statue-ssg';
+  import NavigationBar from 'statue-ssg/components/NavigationBar.svelte';
   export let data;
 </script>
 
@@ -57,7 +57,8 @@ Place the Search component anywhere in your layout:
 
 ```svelte
 <script>
-  import { Search, NavigationBar } from 'statue-ssg';
+  import Search from 'statue-ssg/components/Search.svelte'
+import NavigationBar from 'statue-ssg/components/NavigationBar.svelte';
   export let data;
 </script>
 
@@ -330,7 +331,7 @@ Track search queries by adding an event listener:
 
 ```svelte
 <script>
-  import { Search } from 'statue-ssg';
+  import Search from 'statue-ssg/components/Search.svelte';
   import { browser } from '$app/environment';
 
   function handleSearch(query) {
@@ -350,7 +351,9 @@ Track search queries by adding an event listener:
 ```svelte
 <!-- src/routes/+layout.svelte -->
 <script>
-  import { NavigationBar, Footer, Search } from 'statue-ssg';
+  import NavigationBar from 'statue-ssg/components/NavigationBar.svelte'
+import Footer from 'statue-ssg/components/Footer.svelte'
+import Search from 'statue-ssg/components/Search.svelte';
   export let data;
 </script>
 
@@ -372,7 +375,8 @@ Track search queries by adding an event listener:
 ```svelte
 <!-- src/routes/docs/+layout.svelte -->
 <script>
-  import { DocsLayout, Search } from 'statue-ssg';
+  import DocsLayout from 'statue-ssg/components/DocsLayout.svelte'
+import Search from 'statue-ssg/components/Search.svelte';
   export let data;
 </script>
 

@@ -1,4 +1,4 @@
-import { getAllContent } from 'statue-ssg/cms/content-processor';
+import { getAllContent } from 'statue-ssg/cms/content-processor.js';
 
 export const load = async () => {
   // Get all content and filter for blog posts

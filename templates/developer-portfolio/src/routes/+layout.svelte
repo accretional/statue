@@ -4,7 +4,7 @@
 </svelte:head>
 
 <script>
-  import { NavigationBar } from 'statue-ssg';
+  import NavigationBar from 'statue-ssg/components/NavigationBar.svelte';
   import { onNavigate } from '$app/navigation';
   import { page } from '$app/stores';
   import '$lib/index.css';

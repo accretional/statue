@@ -3,24 +3,24 @@
 	"version": "0.2.15",
 	"description": "A simple static site generator for markdown content with SvelteKit",
 	"type": "module",
-	"main": "src/index.js",
 	"svelte": "src/lib/index.ts",
 	"exports": {
 		".": {
 			"types": "./src/lib/index.ts",
-			"svelte": "./src/lib/index.ts",
-			"default": "./src/index.js"
-		},
-		"./cms/*": "./src/lib/cms/*",
-		"./components": {
-			"types": "./src/lib/index.ts",
 			"svelte": "./src/lib/index.ts"
 		},
+		"./cms/*": "./src/lib/cms/*",
 		"./components/*": "./src/lib/components/*",
 		"./themes/*": "./src/lib/themes/*",
 		"./styles.css": "./src/lib/index.css",
 		"./resources/*": "./resources/*",
-		"./package.json": "./package.json"
+		"./package.json": "./package.json",
+		"./blog/*": "./templates/blog/src/lib/components/*",
+		"./default/*": "./templates/default/src/lib/components/*",
+		"./default-classic/*": "./templates/default-classic/src/lib/components/*",
+		"./developer-portfolio/*": "./templates/developer-portfolio/src/lib/components/*",
+		"./real-estate/*": "./templates/real-estate/src/lib/components/*",
+		"./swagger/*": "./templates/swagger/src/lib/components/*"
 	},
 	"bin": {
 		"statue-setup": "./postinstall.js",
@@ -32,7 +32,7 @@
 		"resources",
 		"templates",
 		"static",
-		"scripts/generate-exports.js",
+		"scripts/migrate-to-subpaths.js",
 		"scripts/statue-cli.js",
 		"scripts/generate-seo-files.js",
 		"scripts/run-pagefind.js",
@@ -51,16 +51,14 @@
 		"README.md"
 	],
 	"scripts": {
-		"prepack": "npm run generate:exports",
-		"dev": "npm run generate:exports && vite dev",
-		"predev": "npm run generate:exports",
-		"prebuild": "npm run generate:exports && node scripts/run-orval.js",
+		"prepack": "npm run build",
+		"dev": "vite dev",
+		"prebuild": "node scripts/run-orval.js",
 		"build": "vite build",
 		"postbuild": "node scripts/generate-seo-files.js && node scripts/run-pagefind.js && node scripts/generate-rss-feed.js",
-		"generate:exports": "node scripts/generate-exports.js",
 		"preview": "npx -y serve build",
 		"preview:vite": "vite preview",
-		"prepublishOnly": "npm run generate:exports && npm run build",
+		"prepublishOnly": "npm run build",
 		"setup": "node postinstall.js",
 		"test": "vitest run && npm run test:unit -- --run",
 		"test:watch": "vitest",
@@ -117,19 +115,20 @@
 		"cobe": "^0.6.5",
 		"commander": "^13.1.0",
 		"fs-extra": "^11.3.0",
+		"globby": "^16.1.0",
 		"gray-matter": "^4.0.3",
-		"sql.js": "^1.13.0",
 		"lottie-web": "^5.13.0",
 		"lucide-svelte": "^0.561.0",
 		"mdsvex": "^0.12.6",
 		"rehype-slug": "^6.0.0",
 		"remark-gfm": "^4.0.1",
-		"swagger-ui-dist": "^5.31.0",
+		"sql.js": "^1.13.0",
 		"svelte-inview": "^4.0.4",
 		"svelte-motion": "^0.12.2",
-		"three": "^0.182.0",
+		"swagger-ui-dist": "^5.31.0",
 		"tailwind-merge": "^3.4.0",
-    	"tailwind-variants": "^3.2.2"
+		"tailwind-variants": "^3.2.2",
+		"three": "^0.182.0"
 	},
 	"keywords": [
 		"static-site-generator",

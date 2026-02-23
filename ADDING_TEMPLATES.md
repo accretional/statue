@@ -497,7 +497,8 @@ Import components from `$lib`, not `statue-ssg`:
 import { Hero, Categories } from '$lib';
 
 <!-- ❌ Bad -->
-import { Hero, Categories } from 'statue-ssg';
+import Hero from 'statue-ssg/components/Hero.svelte';
+import Categories from 'statue-ssg/components/Categories.svelte';
 ```
 
 **Why:** The init script automatically transforms `$lib` to `statue-ssg` when users initialize.

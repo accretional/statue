@@ -4,7 +4,7 @@
   Usage:
   ```svelte
   <script>
-    import { DocsSidebar } from 'statue-ssg';
+    import DocsSidebar from 'statue-ssg/components/DocsSidebar.svelte';
 
     const items = [
       {

@@ -111,7 +111,8 @@ You can customize how markdown content is displayed by editing Statue's route te
 **Typical customization:**
 ```svelte
 <script>
-  import { ContentHeader, ContentBody } from 'statue-ssg';
+  import ContentHeader from 'statue-ssg/components/ContentHeader.svelte'
+import ContentBody from 'statue-ssg/components/ContentBody.svelte';
   export let data;
 
   $: content = data.content;  // Access the markdown content
@@ -145,7 +146,8 @@ You can customize how markdown content is displayed by editing Statue's route te
 **Typical customization:**
 ```svelte
 <script>
-  import { DirectoryHeader, DirectoryContent } from 'statue-ssg';
+  import DirectoryHeader from 'statue-ssg/components/DirectoryHeader.svelte'
+import DirectoryContent from 'statue-ssg/components/DirectoryContent.svelte';
   export let data;
 
   // Add search/filter functionality

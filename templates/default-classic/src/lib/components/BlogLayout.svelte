@@ -1,6 +1,6 @@
 <script>
 	import BlogHeader from './BlogHeader.svelte';
-	import { BlogGrid } from 'statue-ssg';
+	import BlogGrid from 'statue-ssg/components/BlogGrid.svelte';
 
 	const { title = 'Blog', posts } = $props();
 </script>
