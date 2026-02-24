@@ -4,6 +4,7 @@
 		title?: string;
 		description?: string;
 		image?: string;
+		imageAlt?: string;
 		highlights?: Array<{
 			title: string;
 			description: string;
@@ -11,24 +12,12 @@
 	}
 
 	let {
-		subtitle = 'About Us',
-		title = 'A Legacy of Excellence',
-		description = 'Founded in 1985, Prestige Realty Group has built an unmatched reputation for delivering exceptional real estate services. Our team of dedicated professionals combines deep market expertise with a client-first philosophy.',
-		image = 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1200',
-		highlights = [
-			{
-				title: 'Client-Centered Approach',
-				description: 'Every decision we make is guided by what is best for our clients.'
-			},
-			{
-				title: 'Market Leadership',
-				description: 'Recognized as the top brokerage in our primary markets for over a decade.'
-			},
-			{
-				title: 'Innovation & Technology',
-				description: 'Leveraging cutting-edge tools to provide superior service and insights.'
-			}
-		]
+		subtitle = '',
+		title = '',
+		description = '',
+		image = '',
+		imageAlt = '',
+		highlights = []
 	}: BrokerageAboutProps = $props();
 </script>
 
@@ -38,10 +27,12 @@
 			<!-- Image -->
 			<div class="animate-on-scroll animate-fade-right">
 				<div class="relative">
-					<div class="absolute inset-0 bg-[var(--color-primary)]/20 transform translate-x-4 translate-y-4"></div>
+					<div
+						class="absolute inset-0 bg-[var(--color-primary)]/20 transform translate-x-4 translate-y-4"
+					></div>
 					<img
 						src={image}
-						alt="Our office"
+						alt={imageAlt || title}
 						class="relative z-10 w-full aspect-[4/3] object-cover"
 					/>
 				</div>
@@ -49,14 +40,18 @@
 
 			<!-- Content -->
 			<div class="animate-on-scroll animate-fade-left">
-				<p class="text-[var(--color-primary)] text-xs tracking-[0.25em] uppercase mb-4">{subtitle}</p>
+				<p class="text-[var(--color-primary)] text-xs tracking-[0.25em] uppercase mb-4">
+					{subtitle}
+				</p>
 				<h2 class="text-3xl md:text-4xl font-light text-white mb-6">{title}</h2>
 				<p class="text-gray-400 text-lg mb-10 leading-relaxed">{description}</p>
 
 				<div class="space-y-6">
 					{#each highlights as highlight, index}
 						<div class="flex gap-4" style="animation-delay: {index * 100}ms">
-							<div class="flex-shrink-0 w-8 h-8 flex items-center justify-center border border-[var(--color-primary)] text-[var(--color-primary)]">
+							<div
+								class="flex-shrink-0 w-8 h-8 flex items-center justify-center border border-[var(--color-primary)] text-[var(--color-primary)]"
+							>
 								<span class="text-sm">0{index + 1}</span>
 							</div>
 							<div>

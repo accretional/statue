@@ -6,6 +6,13 @@
 		limit?: number;
 		showSeeAll?: boolean;
 		seeAllUrl?: string;
+		viewAllText?: string;
+		emptyStateText?: string;
+		fallbackTitle?: string;
+		fallbackPriceText?: string;
+		bedroomLabel?: string;
+		bathroomLabel?: string;
+		sqftLabel?: string;
 		listings?: Array<{
 			id?: string;
 			title: string;
@@ -22,12 +29,19 @@
 	}
 
 	let {
-		subtitle = 'Properties',
-		title = 'Featured Listings',
-		description = 'Discover exceptional properties curated by our expert team.',
+		subtitle = '',
+		title = '',
+		description = '',
 		limit = 6,
 		showSeeAll = true,
-		seeAllUrl = '/listings',
+		seeAllUrl = '#listings',
+		viewAllText = '',
+		emptyStateText = '',
+		fallbackTitle = '',
+		fallbackPriceText = '',
+		bedroomLabel = '',
+		bathroomLabel = '',
+		sqftLabel = '',
 		listings = []
 	}: BrokerageListingsProps = $props();
 
@@ -119,33 +133,41 @@
 								/>
 								{#if listing.status}
 									<div class="absolute top-4 right-4">
-										<span class="px-3 py-1 text-xs font-medium border rounded-full uppercase {getStatusBadge(listing.status)}">
+										<span
+											class="px-3 py-1 text-xs font-medium border rounded-full uppercase {getStatusBadge(
+												listing.status
+											)}"
+										>
 											{listing.status}
 										</span>
 									</div>
 								{/if}
 								{#if listing.type}
 									<div class="absolute top-4 left-4">
-										<span class="px-2 py-1 text-xs bg-black/50 text-white rounded">{listing.type}</span>
+										<span class="px-2 py-1 text-xs bg-black/50 text-white rounded"
+											>{listing.type}</span
+										>
 									</div>
 								{/if}
 							</div>
 							<div class="p-6">
-								<h3 class="text-white text-xl font-light mb-2">{listing.title || 'Luxury Property'}</h3>
+								<h3 class="text-white text-xl font-light mb-2">{listing.title || fallbackTitle}</h3>
 								{#if listing.address}
 									<p class="text-gray-400 text-sm mb-3">{listing.address}</p>
 								{/if}
-								<p class="text-[var(--color-primary)] text-2xl font-light mb-4">{listing.price || 'Contact for Price'}</p>
+								<p class="text-[var(--color-primary)] text-2xl font-light mb-4">
+									{listing.price || fallbackPriceText}
+								</p>
 								{#if listing.beds || listing.baths || listing.sqft}
 									<div class="flex flex-wrap gap-4 text-gray-400 text-sm">
 										{#if listing.beds}
-											<span>{listing.beds} Beds</span>
+											<span>{listing.beds} {bedroomLabel}</span>
 										{/if}
 										{#if listing.baths}
-											<span>{listing.baths} Baths</span>
+											<span>{listing.baths} {bathroomLabel}</span>
 										{/if}
 										{#if listing.sqft}
-											<span>{listing.sqft.toLocaleString()} SF</span>
+											<span>{listing.sqft.toLocaleString()} {sqftLabel}</span>
 										{/if}
 									</div>
 								{/if}
@@ -161,13 +183,13 @@
 						href={seeAllUrl}
 						class="cursor-pointer inline-block px-8 py-3 border border-[var(--color-primary)] text-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-[var(--color-on-primary)] transition-all duration-300 text-sm tracking-wider uppercase"
 					>
-						View All Listings
+						{viewAllText}
 					</a>
 				</div>
 			{/if}
 		{:else}
 			<div class="text-center py-12">
-				<p class="text-gray-500">No listings available at the moment.</p>
+				<p class="text-gray-500">{emptyStateText}</p>
 			</div>
 		{/if}
 	</div>

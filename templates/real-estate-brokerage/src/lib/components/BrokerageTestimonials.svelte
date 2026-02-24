@@ -2,6 +2,8 @@
 	export interface BrokerageTestimonialsProps {
 		subtitle?: string;
 		title?: string;
+		agentLabelPrefix?: string;
+		emptyStateText?: string;
 		testimonials?: Array<{
 			name: string;
 			location?: string;
@@ -13,8 +15,10 @@
 	}
 
 	let {
-		subtitle = 'Testimonials',
-		title = 'What Our Clients Say',
+		subtitle = '',
+		title = '',
+		agentLabelPrefix = '',
+		emptyStateText = '',
 		testimonials = []
 	}: BrokerageTestimonialsProps = $props();
 </script>
@@ -37,8 +41,16 @@
 						{#if testimonial.rating}
 							<div class="flex gap-1 mb-4">
 								{#each Array(testimonial.rating) as _}
-									<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="text-[var(--color-primary)]">
-										<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+									<svg
+										width="16"
+										height="16"
+										viewBox="0 0 24 24"
+										fill="currentColor"
+										class="text-[var(--color-primary)]"
+									>
+										<polygon
+											points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+										></polygon>
 									</svg>
 								{/each}
 							</div>
@@ -57,7 +69,7 @@
 								<p class="text-[var(--color-primary)] text-xs mt-1">{testimonial.deal}</p>
 							{/if}
 							{#if testimonial.agent}
-								<p class="text-gray-600 text-xs mt-1">Agent: {testimonial.agent}</p>
+								<p class="text-gray-600 text-xs mt-1">{agentLabelPrefix}: {testimonial.agent}</p>
 							{/if}
 						</div>
 					</div>
@@ -65,7 +77,7 @@
 			</div>
 		{:else}
 			<div class="text-center py-12">
-				<p class="text-gray-500">Client testimonials coming soon!</p>
+				<p class="text-gray-500">{emptyStateText}</p>
 			</div>
 		{/if}
 	</div>

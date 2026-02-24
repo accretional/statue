@@ -8,6 +8,9 @@
 		limit?: number;
 		showSeeAll?: boolean;
 		seeAllUrl?: string;
+		viewAllText?: string;
+		emptyStateText?: string;
+		remotePreviewFragment?: string;
 		agents?: Array<{
 			name: string;
 			title: string;
@@ -20,28 +23,46 @@
 	}
 
 	let {
-		subtitle = 'Our Team',
-		title = 'Meet Our Expert Agents',
-		description = 'Industry-leading professionals dedicated to your success.',
+		subtitle = '',
+		title = '',
+		description = '',
 		limit = 6,
 		showSeeAll = true,
-		seeAllUrl = '/agents',
+		seeAllUrl = '#agents',
+		viewAllText = '',
+		emptyStateText = '',
+		remotePreviewFragment = '#agent-preview-mobile-card',
 		agents = []
 	}: BrokerageAgentsProps = $props();
 
 	let displayedAgents = $derived(agents.slice(0, limit));
 
-	const REMOTE_PREVIEW_FRAGMENT = '#listing-preview-mobile-card';
+	function getAgentRemoteUrl(agent: { remoteUrl?: string }): string | null {
+		const normalized = typeof agent?.remoteUrl === 'string' ? agent.remoteUrl.trim() : '';
+		return normalized || null;
+	}
 
-	function getRemotePreviewUrl(url?: string | null): string {
+	function normalizeFragment(fragment?: string): string {
+		const value = typeof fragment === 'string' ? fragment.trim() : '';
+		if (!value) return '';
+		return value.startsWith('#') ? value : `#${value}`;
+	}
+
+	function getRemotePreviewUrl(url?: string | null, fragment?: string): string {
 		if (!url) return 'about:blank';
+		const normalizedFragment = normalizeFragment(fragment);
+
+		if (!normalizedFragment) {
+			return getRemoteBaseUrl(url);
+		}
+
 		try {
 			const parsed = new URL(url);
-			parsed.hash = REMOTE_PREVIEW_FRAGMENT;
+			parsed.hash = normalizedFragment;
 			return parsed.toString();
 		} catch {
 			const baseUrl = url.split('#')[0];
-			return `${baseUrl.replace(/\/$/, '')}${REMOTE_PREVIEW_FRAGMENT}`;
+			return `${baseUrl.replace(/\/$/, '')}${normalizedFragment}`;
 		}
 	}
 
@@ -73,14 +94,15 @@
 		{#if displayedAgents.length > 0}
 			<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
 				{#each displayedAgents as agent, index}
-					{#if agent.remoteUrl}
+					{@const agentRemoteUrl = getAgentRemoteUrl(agent)}
+					{#if agentRemoteUrl}
 						<article
-							class="group relative overflow-hidden animate-on-scroll animate-fade-up"
+							class="group relative h-full border border-[var(--color-border)] bg-[var(--color-background)] overflow-hidden hover:border-[var(--color-primary)]/50 transition-all duration-300 animate-on-scroll animate-fade-up"
 							style="animation-delay: {index * 100}ms"
 						>
-							<div class="relative aspect-[4/5] overflow-hidden bg-black">
+							<div class="relative h-full min-h-[24rem] overflow-hidden bg-black">
 								<iframe
-									src={getRemotePreviewUrl(agent.remoteUrl)}
+									src={getRemotePreviewUrl(agentRemoteUrl, remotePreviewFragment)}
 									title={`${agent.name} preview`}
 									class="absolute inset-0 w-full h-full border-0 bg-black pointer-events-none remote-agent-frame"
 									loading="lazy"
@@ -88,7 +110,7 @@
 									sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-popups-to-escape-sandbox"
 								></iframe>
 								<a
-									href={getRemoteBaseUrl(agent.remoteUrl)}
+									href={getRemoteBaseUrl(agentRemoteUrl)}
 									target="_blank"
 									rel="noopener noreferrer"
 									class="absolute inset-0 z-10"
@@ -114,7 +136,10 @@
 								{#if agent.specialties && agent.specialties.length > 0}
 									<div class="flex flex-wrap gap-2 mb-4">
 										{#each agent.specialties.slice(0, 3) as specialty}
-											<span class="text-xs text-gray-400 px-2 py-1 border border-[var(--color-border)]">{specialty}</span>
+											<span
+												class="text-xs text-gray-400 px-2 py-1 border border-[var(--color-border)]"
+												>{specialty}</span
+											>
 										{/each}
 									</div>
 								{/if}
@@ -152,13 +177,13 @@
 						href={seeAllUrl}
 						class="cursor-pointer inline-block px-8 py-3 border border-[var(--color-primary)] text-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-[var(--color-on-primary)] transition-all duration-300 text-sm tracking-wider uppercase"
 					>
-						View All Agents
+						{viewAllText}
 					</a>
 				</div>
 			{/if}
 		{:else}
 			<div class="text-center py-12">
-				<p class="text-gray-500">Our team information is being updated.</p>
+				<p class="text-gray-500">{emptyStateText}</p>
 			</div>
 		{/if}
 	</div>

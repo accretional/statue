@@ -1,4 +1,5 @@
 <script>
+	import { onMount } from 'svelte';
 	import {
 		BrokerageHero,
 		BrokerageStats,
@@ -16,16 +17,37 @@
 	let site = $derived(data.site || {});
 	let seo = $derived(data.seo || {});
 	let brokerage = $derived(data.brokerage || {});
+	let navbarConfig = $derived(data.navbarConfig || {});
 
-	// Quick links for footer
-	let quickLinks = $derived([
-		{ title: 'Home', url: '#hero' },
-		{ title: 'About', url: '#about' },
-		{ title: 'Services', url: '#services' },
-		{ title: 'Markets', url: '#markets' },
-		{ title: 'Listings', url: '#listings' },
-		{ title: 'Contact', url: '#contact' }
-	]);
+	let quickLinks = $derived(
+		site.footer?.quickLinks?.length ? site.footer.quickLinks : (navbarConfig.defaultNavItems ?? [])
+	);
+	let legalLinks = $derived(site.footer?.legalLinks ?? []);
+
+	// Intersection Observer for scroll animations
+	let observer;
+
+	onMount(() => {
+		observer = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						entry.target.classList.add('visible');
+					}
+				});
+			},
+			{
+				threshold: 0.1,
+				rootMargin: '0px 0px -50px 0px'
+			}
+		);
+
+		document.querySelectorAll('.animate-on-scroll').forEach((el) => {
+			observer.observe(el);
+		});
+
+		return () => observer.disconnect();
+	});
 </script>
 
 <svelte:head>
@@ -38,6 +60,7 @@
 	tagline={brokerage.tagline}
 	description={brokerage.description}
 	heroImage={brokerage.heroImage}
+	eyebrow={brokerage.heroEyebrow}
 	primaryCta={brokerage.primaryCta}
 	secondaryCta={brokerage.secondaryCta}
 />
@@ -49,6 +72,7 @@
 	title={brokerage.about?.title}
 	description={brokerage.about?.description}
 	image={brokerage.about?.image}
+	imageAlt={brokerage.about?.imageAlt}
 	highlights={brokerage.about?.highlights}
 />
 
@@ -70,9 +94,12 @@
 	subtitle={brokerage.agents?.subtitle}
 	title={brokerage.agents?.title}
 	description={brokerage.agents?.description}
-	limit={brokerage.agents?.limit}
-	showSeeAll={brokerage.agents?.showSeeAll}
+	limit={brokerage.agents?.items?.length ?? 0}
+	showSeeAll={false}
 	seeAllUrl={brokerage.agents?.seeAllUrl}
+	viewAllText={brokerage.agents?.viewAllText}
+	emptyStateText={brokerage.agents?.emptyStateText}
+	remotePreviewFragment={brokerage.agents?.remotePreviewFragment}
 	agents={brokerage.agents?.items}
 />
 
@@ -80,15 +107,24 @@
 	subtitle={brokerage.listings?.subtitle}
 	title={brokerage.listings?.title}
 	description={brokerage.listings?.description}
-	limit={brokerage.listings?.limit}
-	showSeeAll={brokerage.listings?.showSeeAll}
+	limit={brokerage.listings?.items?.length ?? 0}
+	showSeeAll={false}
 	seeAllUrl={brokerage.listings?.seeAllUrl}
+	viewAllText={brokerage.listings?.viewAllText}
+	emptyStateText={brokerage.listings?.emptyStateText}
+	fallbackTitle={brokerage.listings?.fallbackTitle}
+	fallbackPriceText={brokerage.listings?.fallbackPriceText}
+	bedroomLabel={brokerage.listings?.bedroomLabel}
+	bathroomLabel={brokerage.listings?.bathroomLabel}
+	sqftLabel={brokerage.listings?.sqftLabel}
 	listings={brokerage.listings?.items}
 />
 
 <BrokerageTestimonials
 	subtitle={brokerage.testimonials?.subtitle}
 	title={brokerage.testimonials?.title}
+	agentLabelPrefix={brokerage.testimonials?.agentLabelPrefix}
+	emptyStateText={brokerage.testimonials?.emptyStateText}
 	testimonials={brokerage.testimonials?.items}
 />
 
@@ -101,6 +137,10 @@
 	address={brokerage.contact?.address}
 	hours={brokerage.contact?.hours}
 	social={brokerage.contact?.social}
+	contactHeading={brokerage.contact?.contactHeading}
+	hoursHeading={brokerage.contact?.hoursHeading}
+	socialHeading={brokerage.contact?.socialHeading}
+	messageButtonText={brokerage.contact?.messageButtonText}
 />
 
 <BrokerageFooter
@@ -108,6 +148,10 @@
 	tagline={site.footer?.tagline ?? brokerage.tagline}
 	copyrightText={site.footer?.copyrightText}
 	license={brokerage.license}
+	quickLinksTitle={site.footer?.quickLinksTitle}
 	{quickLinks}
+	{legalLinks}
+	legalTitle={site.footer?.legalTitle}
+	equalHousingText={site.footer?.equalHousingText}
 	social={brokerage.contact?.social}
 />

@@ -7,14 +7,32 @@
 		"footer": {
 			"brand": "Prestige Realty Group",
 			"tagline": "Excellence in Real Estate Since 1985",
-			"copyrightText": "All rights reserved"
+			"copyrightText": "All rights reserved",
+			"quickLinksTitle": "Quick Links",
+			"legalTitle": "Legal",
+			"equalHousingText": "Equal Housing Opportunity",
+			"quickLinks": [
+				{ "title": "Home", "url": "#hero" },
+				{ "title": "About", "url": "#about" },
+				{ "title": "Services", "url": "#services" },
+				{ "title": "Markets", "url": "#markets" },
+				{ "title": "Listings", "url": "#listings" },
+				{ "title": "Team", "url": "#agents" },
+				{ "title": "Contact", "url": "#contact" }
+			],
+			"legalLinks": [
+				{ "title": "Privacy Policy", "url": "/privacy" },
+				{ "title": "Terms of Service", "url": "/terms" },
+				{ "title": "Fair Housing", "url": "/fair-housing" }
+			]
 		}
 	},
 	"brokerage": {
 		"name": "Prestige Realty Group",
 		"tagline": "Excellence in Real Estate Since 1985",
+		"heroEyebrow": "Welcome to",
 		"description": "We connect discerning buyers with exceptional properties, delivering unparalleled service across the Bay Area's premier markets.",
-		"heroImage": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2000",
+		"heroImage": "https://images.unsplash.com/photo-1645036633830-f1942a99bc02?q=80&w=2000&auto=format&fit=crop",
 		"license": "DRE 01234567",
 		"primaryCta": {
 			"text": "Browse Properties",
@@ -35,6 +53,7 @@
 			"title": "A Legacy of Excellence",
 			"description": "Founded in 1985, Prestige Realty Group has built an unmatched reputation for delivering exceptional real estate services. Our team of dedicated professionals combines deep market expertise with a client-first philosophy, ensuring every transaction exceeds expectations.",
 			"image": "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1200",
+			"imageAlt": "Prestige Realty Group office interior",
 			"highlights": [
 				{
 					"title": "Client-Centered Approach",
@@ -125,6 +144,9 @@
 			"limit": 6,
 			"showSeeAll": true,
 			"seeAllUrl": "/agents",
+			"remotePreviewFragment": "#agent-preview-mobile-card",
+			"viewAllText": "View All Agents",
+			"emptyStateText": "Our team information is being updated.",
 			"items": [
 				{
 					"name": "Sarah Mitchell",
@@ -133,6 +155,11 @@
 					"email": "sarah@prestigerealty.com",
 					"phone": "+1 (650) 555-0101",
 					"specialties": ["Luxury Homes", "Executive Relocation"]
+				},
+								{
+					"name": "Sarah Mitchell",
+					"title": "Managing Partner",
+					"remoteUrl": " https://e122ab59.real-estate-site-355.pages.dev"
 				},
 				{
 					"name": "Michael Chen",
@@ -165,14 +192,6 @@
 					"email": "amanda@prestigerealty.com",
 					"phone": "+1 (650) 555-0105",
 					"specialties": ["Market Research", "Investment Analysis"]
-				},
-				{
-					"name": "James Wilson",
-					"title": "Commercial Specialist",
-					"image": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=600",
-					"email": "james@prestigerealty.com",
-					"phone": "+1 (650) 555-0106",
-					"specialties": ["Office Space", "Retail Properties"]
 				}
 			]
 		},
@@ -183,6 +202,13 @@
 			"limit": 6,
 			"showSeeAll": true,
 			"seeAllUrl": "/listings",
+			"viewAllText": "View All Listings",
+			"emptyStateText": "No listings available at the moment.",
+			"fallbackTitle": "Luxury Property",
+			"fallbackPriceText": "Contact for Price",
+			"bedroomLabel": "Beds",
+			"bathroomLabel": "Baths",
+			"sqftLabel": "SF",
 			"items": [
 				{
 					"title": "Modern Estate in Atherton",
@@ -255,6 +281,8 @@
 		"testimonials": {
 			"subtitle": "Testimonials",
 			"title": "What Our Clients Say",
+			"agentLabelPrefix": "Agent",
+			"emptyStateText": "Client testimonials coming soon!",
 			"items": [
 				{
 					"name": "Jennifer & Mike Thompson",
@@ -310,6 +338,10 @@
 			"subtitle": "Contact Us",
 			"title": "Get In Touch",
 			"description": "Ready to start your real estate journey? Our team is here to help.",
+			"contactHeading": "Contact Information",
+			"hoursHeading": "Office Hours",
+			"socialHeading": "Connect With Us",
+			"messageButtonText": "Send Us a Message",
 			"phone": "+1 (650) 555-0100",
 			"email": "info@prestigerealty.com",
 			"address": {
