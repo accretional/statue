@@ -18,6 +18,7 @@ A luxury dark-themed real estate brokerage website template with gold accents.
 ## Customization
 
 Edit `site.config.json` to customize:
+
 - Company name, tagline, and description
 - Stats and metrics
 - Services offered
@@ -27,9 +28,29 @@ Edit `site.config.json` to customize:
 - Testimonials
 - Contact information
 
+### Optional Remote Agent Cards
+
+`brokerage.agents.items[]` supports two modes:
+
+1. Local card mode: provide `name`, `title`, `image`, `email`, `phone`, etc.
+2. Remote iframe mode: provide `remoteUrl` only (or together with local fields).
+
+When `remoteUrl` is present, the card is rendered from the remote site via `<iframe>`.
+
+By default, brokerage appends `#agent-preview-mobile-card` to the `remoteUrl`.
+You can override this with:
+
+- `brokerage.agents.remotePreviewFragment`
+
+If your remote URL points to the `real-estate-agent` template, use:
+
+- `http://localhost:3000` during local development
+- `#agent-preview-mobile-card` (default) for portrait card preview
+
 ## Theme
 
 Uses `theme-luxury.css` with:
+
 - Dark background (#0a0a0a)
 - Gold accent color (#c9a962)
 - Smooth scroll animations
@@ -38,6 +59,7 @@ Uses `theme-luxury.css` with:
 ## Images
 
 Default images from Unsplash. Replace with your own high-quality photos for:
+
 - Hero background
 - About section
 - Market locations
