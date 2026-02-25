@@ -114,6 +114,7 @@
 		"chalk": "^5.4.1",
 		"cobe": "^0.6.5",
 		"commander": "^13.1.0",
+		"docx-preview": "^0.3.7",
 		"fs-extra": "^11.3.0",
 		"globby": "^16.1.0",
 		"gray-matter": "^4.0.3",
