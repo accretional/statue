@@ -79,7 +79,7 @@ import FileTreeItem from 'statue-ssg/components/FileTreeItem.svelte';
   <!-- Statistics -->
   <SQLiteMultiDB
     databases={[{ name: 'files', path: '/project-files.db' }]}
-    queries={statsQuery}
+    query={statsQuery}
     let:data
   >
     {#if data && data[0]}
@@ -123,7 +123,7 @@ import FileTreeItem from 'statue-ssg/components/FileTreeItem.svelte';
     <h2>File Categories</h2>
     <SQLiteMultiDB
       databases={[{ name: 'files', path: '/project-files.db' }]}
-      queries={categoryQuery}
+      query={categoryQuery}
       let:data
     >
       <div class="category-grid">
@@ -145,7 +145,7 @@ import FileTreeItem from 'statue-ssg/components/FileTreeItem.svelte';
     <h2>All Files</h2>
     <SQLiteMultiDB
       databases={[{ name: 'files', path: '/project-files.db' }]}
-      queries={query}
+      query={query}
       let:data
     >
       <div class="file-list">

@@ -1,6 +1,6 @@
 # SQLite Dynamic Components for Statue
 
-SQLite-powered dynamic component rendering with JavaScript-based joins for multi-database queries. Use this template to build data-driven static sites that query SQLite databases and render Svelte components dynamically.
+SQLite-powered dynamic component rendering with native SQL JOINs and OPFS caching. Use this template to build data-driven static sites that query SQLite databases and render Svelte components dynamically.
 
 ## Quick Start
 
@@ -41,12 +41,8 @@ interface DatabaseSource {
 
 interface SQLiteMultiDBProps {
   databases: DatabaseSource[];
-  queries: Record<string, string> | string;
-  joinConfig?: {
-    type: 'LEFT' | 'INNER';
-    left: { db: string; key: string };
-    right: { db: string; key: string };
-  };
+  query: string;         // Single SQL query; multi-DB tables accessed via schema prefix
+  persist?: boolean;     // Enable OPFS caching (default: true)
   transform?: (data: any[]) => any[];
 }
 ```
@@ -59,7 +55,7 @@ interface SQLiteMultiDBProps {
 
 <SQLiteMultiDB
   databases={[{ name: 'products', path: '/products.db' }]}
-  queries="SELECT * FROM items WHERE featured = 1"
+  query="SELECT * FROM items WHERE featured = 1"
   let:data
 >
   {#each data as item}
@@ -75,15 +71,10 @@ interface SQLiteMultiDBProps {
     { name: 'products', path: '/products.db' },
     { name: 'promotions', path: '/promotions.db' }
   ]}
-  queries={{
-    products: "SELECT * FROM items",
-    promotions: "SELECT * FROM deals WHERE active = 1"
-  }}
-  joinConfig={{
-    type: 'LEFT',
-    left: { db: 'products', key: 'id' },
-    right: { db: 'promotions', key: 'product_id' }
-  }}
+  query="SELECT p.*, d.discount, d.badge
+         FROM items p
+         LEFT JOIN promotions.deals d ON p.id = d.product_id
+         WHERE d.active = 1 OR d.product_id IS NULL"
   let:data
 >
   {#each data as item}
@@ -91,6 +82,9 @@ interface SQLiteMultiDBProps {
   {/each}
 </SQLiteMultiDB>
 ```
+
+The first database in `databases` is the `main` connection (tables accessible without prefix).
+Subsequent databases are ATTACHed under their `name` as a schema prefix.
 
 ### 2. SQLiteRenderer - Dynamic Component Renderer
 
@@ -100,12 +94,8 @@ Opinionated wrapper that renders a Svelte component for each row with prop mappi
 ```typescript
 interface SQLiteRendererProps {
   databases: DatabaseSource[];
-  queries: Record<string, string> | string;
-  joinConfig?: {
-    type: 'LEFT' | 'INNER';
-    left: { db: string; key: string };
-    right: { db: string; key: string };
-  };
+  query: string;
+  persist?: boolean;
   component: ComponentType;
   propMapping?: Record<string, string | ((row: any) => any)>;
   containerProps?: { columns?: number; gap?: string };
@@ -125,15 +115,10 @@ interface SQLiteRendererProps {
     { name: 'products', path: '/products.db' },
     { name: 'promotions', path: '/promotions.db' }
   ]}
-  queries={{
-    products: "SELECT * FROM items",
-    promotions: "SELECT * FROM deals WHERE active = 1"
-  }}
-  joinConfig={{
-    type: 'LEFT',
-    left: { db: 'products', key: 'id' },
-    right: { db: 'promotions', key: 'product_id' }
-  }}
+  query="SELECT p.*, d.discount, d.badge
+         FROM items p
+         LEFT JOIN promotions.deals d ON p.id = d.product_id
+         WHERE d.active = 1 OR d.product_id IS NULL"
   component={ProductCard}
   propMapping={{
     name: 'title',
@@ -155,12 +140,8 @@ Maximum flexibility with slot-based rendering.
 ```typescript
 interface SQLiteGridProps {
   databases: DatabaseSource[];
-  queries: Record<string, string> | string;
-  joinConfig?: {
-    type: 'LEFT' | 'INNER';
-    left: { db: string; key: string };
-    right: { db: string; key: string };
-  };
+  query: string;
+  persist?: boolean;
   transform?: (data: any[]) => any[];
   columns?: number;
   gap?: string;
@@ -179,15 +160,10 @@ interface SQLiteGridProps {
     { name: 'products', path: '/products.db' },
     { name: 'reviews', path: '/reviews.db' }
   ]}
-  queries={{
-    products: "SELECT * FROM items",
-    reviews: "SELECT product_id, AVG(rating) as avg_rating FROM ratings GROUP BY product_id"
-  }}
-  joinConfig={{
-    type: 'LEFT',
-    left: { db: 'products', key: 'id' },
-    right: { db: 'reviews', key: 'product_id' }
-  }}
+  query="SELECT p.*, AVG(r.rating) as avg_rating
+         FROM items p
+         LEFT JOIN reviews.ratings r ON p.id = r.product_id
+         GROUP BY p.id"
   columns={3}
   gap="32px"
   let:items
@@ -202,33 +178,22 @@ interface SQLiteGridProps {
 </SQLiteGrid>
 ```
 
-## Join Types
+## OPFS Caching
 
-### LEFT JOIN
-Returns all rows from the left database, with matching rows from the right database (or null if no match).
+SQLite databases are cached in the browser's [Origin Private File System](https://developer.mozilla.org/en-US/docs/Web/API/File_System_API/Origin_private_file_system) after the first load, so subsequent visits skip the network fetch entirely.
 
-```javascript
-joinConfig: {
-  type: 'LEFT',
-  left: { db: 'products', key: 'id' },
-  right: { db: 'promotions', key: 'product_id' }
-}
-```
+SQLite always runs **in-memory** — OPFS is used only to cache the raw `.db` bytes across page loads. This approach uses the async OPFS API (`navigator.storage.getDirectory()`), which works in Web Workers without requiring `Cross-Origin-Opener-Policy` / `Cross-Origin-Embedder-Policy` headers or `SharedArrayBuffer`.
 
-**Use case:** Show all products, with promotion data if available.
+| Scenario | Behavior |
+|----------|----------|
+| First visit | Fetch `.db` from `path`, write bytes to OPFS, deserialize into memory |
+| Subsequent visits | Read bytes from OPFS, deserialize into memory (no network request) |
+| `persist={false}` | Always fetch from network, skip OPFS |
+| OPFS unavailable | Fetch from network every time, log a warning |
 
-### INNER JOIN
-Returns only rows that have matches in both databases.
+To clear the cache: DevTools → Application → Storage → Clear site data.
 
-```javascript
-joinConfig: {
-  type: 'INNER',
-  left: { db: 'products', key: 'id' },
-  right: { db: 'promotions', key: 'product_id' }
-}
-```
-
-**Use case:** Show only products that have active promotions.
+> **Note on large databases:** The entire `.db` file is loaded into memory before queries run. For databases larger than ~10 MB, consider the `opfs-sahpool` VFS from `@sqlite.org/sqlite-wasm`, which reads only the B-tree pages accessed by each query rather than the full file.
 
 ## Remote Databases
 
@@ -243,7 +208,7 @@ Load databases from remote URLs with CORS support:
       remote: true
     }
   ]}
-  queries="SELECT * FROM products"
+  query="SELECT * FROM products"
   component={ProductCard}
 />
 ```
@@ -262,15 +227,11 @@ Combine a static product catalog with a remote promotions database that updates 
     { name: 'products', path: '/products.db' },
     { name: 'promotions', path: 'https://api.store.com/promotions.db', remote: true }
   ]}
-  queries={{
-    products: "SELECT * FROM items WHERE in_stock = 1",
-    promotions: "SELECT * FROM deals WHERE active = 1 AND end_date > date('now')"
-  }}
-  joinConfig={{
-    type: 'LEFT',
-    left: { db: 'products', key: 'id' },
-    right: { db: 'promotions', key: 'product_id' }
-  }}
+  query="SELECT p.*, d.discount, d.badge
+         FROM items p
+         LEFT JOIN promotions.deals d ON p.id = d.product_id
+         WHERE (d.active = 1 AND d.end_date > date('now')) OR d.product_id IS NULL
+           AND p.in_stock = 1"
   component={ProductCard}
   propMapping={{
     name: 'title',
@@ -292,15 +253,9 @@ Show blog posts enriched with view counts from a remote analytics database:
     { name: 'posts', path: '/posts.db' },
     { name: 'stats', path: 'https://analytics.mysite.com/stats.db', remote: true }
   ]}
-  queries={{
-    posts: "SELECT id, title, slug FROM articles",
-    stats: "SELECT post_id, views, shares FROM analytics"
-  }}
-  joinConfig={{
-    type: 'LEFT',
-    left: { db: 'posts', key: 'id' },
-    right: { db: 'stats', key: 'post_id' }
-  }}
+  query="SELECT a.id, a.title, a.slug, s.views, s.shares
+         FROM articles a
+         LEFT JOIN stats.analytics s ON a.id = s.post_id"
   let:items
 >
   {#each items as post}
@@ -314,18 +269,13 @@ Show blog posts enriched with view counts from a remote analytics database:
 
 ## Setup Requirements
 
-### WebAssembly File
+### WebAssembly
 
-The SQLite components load `sql-wasm.wasm` from jsDelivr CDN automatically:
-```
-https://cdn.jsdelivr.net/npm/sql.js@1.13.0/dist/sql-wasm.wasm
-```
-
-**No manual setup required** - the WASM file is loaded when components mount.
+The SQLite components use `@sqlite.org/sqlite-wasm` — the official SQLite WASM build — loaded automatically at runtime. No manual setup required.
 
 ### Page Configuration
 
-SQLite components use browser APIs and must disable SSR. Add this to any route using SQLite:
+SQLite components use browser APIs (Web Workers, OPFS) and must disable SSR. Add this to any route using SQLite:
 
 ```javascript
 // +page.js
@@ -388,9 +338,9 @@ npm run generate:project-files-db
 
 ```
 SQLiteMultiDB (Core)
-├── Loads multiple databases in parallel
-├── Executes queries on each database
-├── Performs JavaScript-based joins
+├── Spawns a Web Worker for SQLite/OPFS operations
+├── Worker fetches + caches DBs in OPFS
+├── Worker executes SQL (with ATTACH for multi-DB)
 └── Exposes data via slots
 
 SQLiteRenderer (Opinionated wrapper)
@@ -407,36 +357,7 @@ SQLiteGrid (Headless wrapper)
 
 ## Creating Your Own Databases
 
-### Using Node.js (like our sample generator)
-
-```javascript
-import initSqlJs from 'sql.js';
-import fs from 'fs/promises';
-
-const SQL = await initSqlJs();
-const db = new SQL.Database();
-
-// Create schema
-db.run(`
-  CREATE TABLE products (
-    id INTEGER PRIMARY KEY,
-    name TEXT NOT NULL,
-    price REAL NOT NULL
-  )
-`);
-
-// Insert data
-const stmt = db.prepare('INSERT INTO products (id, name, price) VALUES (?, ?, ?)');
-stmt.run([1, 'Widget', 29.99]);
-stmt.free();
-
-// Export to file
-const data = db.export();
-await fs.writeFile('static/products.db', data);
-db.close();
-```
-
-### Using SQLite CLI
+### Using the SQLite CLI
 
 ```bash
 # Create database
@@ -478,7 +399,7 @@ To use SQLite components in any Statue project:
 
 3. Add your database files to `static/`
 
-4. Create your queries and component mappings
+4. Write a SQL query (use schema prefix for multi-DB joins)
 
 5. Add `+page.js` with SSR disabled:
    ```javascript
@@ -489,5 +410,6 @@ To use SQLite components in any Statue project:
 ## Learn More
 
 - [Statue Documentation](https://github.com/accretional/statue)
-- [sql.js Documentation](https://sql.js.org/)
+- [@sqlite.org/sqlite-wasm](https://sqlite.org/wasm/doc/trunk/index.md)
+- [Origin Private File System (OPFS)](https://developer.mozilla.org/en-US/docs/Web/API/File_System_API/Origin_private_file_system)
 - [SvelteKit Static Adapter](https://kit.svelte.dev/docs/adapter-static)

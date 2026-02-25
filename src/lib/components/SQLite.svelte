@@ -1,36 +1,49 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import initSqlJs from 'sql.js/dist/sql-wasm.js';
+  import { onMount, onDestroy } from 'svelte';
 
   export let dbPath: string; // e.g. '/demo.db'
   export let query: string; // e.g. 'SELECT * FROM users'
+  export let persist = true;
 
   let columns: string[] = [];
-  let rows: any[][] = [];
+  let rows: any[] = [];
   let loading = true;
   let error: string | null = null;
+  let worker: Worker;
 
-  onMount(async () => {
-    try {
-      const SQL = await initSqlJs({
-        locateFile: file => `https://cdn.jsdelivr.net/npm/sql.js@1.13.0/dist/${file}`
-      });
+  onMount(() => {
+    worker = new Worker(new URL('../workers/sqlite-worker.ts', import.meta.url), {
+      type: 'module'
+    });
 
-      const res = await fetch(dbPath);
-      const buffer = await res.arrayBuffer();
-      const db = new SQL.Database(new Uint8Array(buffer));
-
-      const result = db.exec(query);
-      if (result.length > 0) {
-        columns = result[0].columns;
-        rows = result[0].values;
+    worker.onmessage = (e: MessageEvent) => {
+      const msg = e.data;
+      if (msg.type === 'result') {
+        columns = msg.columns;
+        rows = msg.rows;
+      } else {
+        error = msg.message;
+        console.error('SQLite worker error:', msg.message);
       }
-    } catch (e) {
-      error = 'Failed to load database';
-      console.error(e);
-    } finally {
       loading = false;
-    }
+    };
+
+    worker.onerror = (e: ErrorEvent) => {
+      error = e.message ?? 'Worker error';
+      console.error('SQLite worker uncaught error:', e);
+      loading = false;
+    };
+
+    worker.postMessage({
+      type: 'query',
+      databases: [{ name: 'main', path: dbPath }],
+      query,
+      persist
+    });
+  });
+
+  onDestroy(() => {
+    worker?.terminate();
   });
 </script>
 

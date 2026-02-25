@@ -1,7 +1,7 @@
 <script lang="ts">
   import SQLiteMultiDB from 'statue-ssg/components/SQLiteMultiDB.svelte';
-import SQLiteRenderer from 'statue-ssg/components/SQLiteRenderer.svelte';
-import SQLiteGrid from 'statue-ssg/components/SQLiteGrid.svelte';
+  import SQLiteRenderer from 'statue-ssg/components/SQLiteRenderer.svelte';
+  import SQLiteGrid from 'statue-ssg/components/SQLiteGrid.svelte';
   import ProductCard from '$lib/components/ProductCard.svelte';
 
   // Database sources for multi-database testing
@@ -9,48 +9,37 @@ import SQLiteGrid from 'statue-ssg/components/SQLiteGrid.svelte';
     { name: 'products', path: '/products.db' },
     { name: 'promotions', path: '/promotions.db' }
   ];
-
-  // Queries for each database
-  const productQuery = "SELECT * FROM items";
-  const promotionQuery = "SELECT * FROM deals WHERE active = 1";
-
-  // Simple single-database query for featured products
-  const featuredQuery = "SELECT * FROM items WHERE featured = 1";
 </script>
 
 <svelte:head>
   <title>SQLite Dynamic Components Demo</title>
-  <meta name="description" content="Demonstration of Statue's SQLite dynamic component rendering with JavaScript-based joins" />
+  <meta name="description" content="Demonstration of Statue's SQLite dynamic component rendering with OPFS caching and native SQL JOINs" />
 </svelte:head>
 
 <div class="demo-page">
   <header>
     <h1>SQLite Dynamic Components</h1>
-    <p class="subtitle">Multi-database queries with JavaScript-based joins for remote data sources</p>
+    <p class="subtitle">Multi-database queries with native SQL JOINs and OPFS caching</p>
     <nav class="header-nav">
       <a href="/components" class="nav-link nav-link-secondary">Component Registry →</a>
       <a href="/project-files" class="nav-link nav-link-secondary">Project Files →</a>
     </nav>
   </header>
 
-  <!-- Demo 1: SQLiteRenderer with JavaScript LEFT JOIN -->
+  <!-- Demo 1: SQLiteRenderer with SQL LEFT JOIN -->
   <section>
     <h2>1. SQLiteRenderer - Cross-Database LEFT JOIN</h2>
     <p class="description">
-      Queries products.db and promotions.db separately, then performs a JavaScript LEFT JOIN on product_id.
+      Queries products.db and promotions.db using a native SQL LEFT JOIN via ATTACH DATABASE.
+      Results are cached in OPFS after the first load.
     </p>
 
     <SQLiteRenderer
       {databases}
-      queries={{
-        products: productQuery,
-        promotions: promotionQuery
-      }}
-      joinConfig={{
-        type: 'LEFT',
-        left: { db: 'products', key: 'id' },
-        right: { db: 'promotions', key: 'product_id' }
-      }}
+      query="SELECT p.*, d.discount, d.badge
+             FROM items p
+             LEFT JOIN promotions.deals d ON p.id = d.product_id
+             WHERE d.active = 1 OR d.product_id IS NULL"
       component={ProductCard}
       propMapping={{
         name: 'name',
@@ -70,20 +59,15 @@ import SQLiteGrid from 'statue-ssg/components/SQLiteGrid.svelte';
   <section>
     <h2>2. SQLiteMultiDB - INNER JOIN (Only Promoted Products)</h2>
     <p class="description">
-      JavaScript INNER JOIN returns only products that have active promotions.
+      SQL INNER JOIN returns only products that have active promotions.
     </p>
 
     <SQLiteMultiDB
       {databases}
-      queries={{
-        products: productQuery,
-        promotions: promotionQuery
-      }}
-      joinConfig={{
-        type: 'INNER',
-        left: { db: 'products', key: 'id' },
-        right: { db: 'promotions', key: 'product_id' }
-      }}
+      query="SELECT p.*, d.discount, d.badge
+             FROM items p
+             INNER JOIN promotions.deals d ON p.id = d.product_id
+             WHERE d.active = 1"
       let:data
     >
       <div class="data-table">
@@ -122,7 +106,7 @@ import SQLiteGrid from 'statue-ssg/components/SQLiteGrid.svelte';
 
     <SQLiteRenderer
       databases={[{ name: 'main', path: '/products.db' }]}
-      queries="SELECT * FROM items"
+      query="SELECT * FROM items"
       component={ProductCard}
       propMapping={{
         name: 'name',

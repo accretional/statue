@@ -4,12 +4,8 @@
 
   export interface SQLiteRendererProps {
     databases: DatabaseSource[];
-    queries: Record<string, string> | string;
-    joinConfig?: {
-      type: 'LEFT' | 'INNER';
-      left: { db: string; key: string };
-      right: { db: string; key: string };
-    };
+    query: string;
+    persist?: boolean;
     component: ComponentType;
     propMapping?: Record<string, string | ((row: any) => any)>;
     containerProps?: { columns?: number; gap?: string };
@@ -17,8 +13,8 @@
   }
 
   export let databases: DatabaseSource[];
-  export let queries: Record<string, string> | string;
-  export let joinConfig: { type: 'LEFT' | 'INNER'; left: { db: string; key: string }; right: { db: string; key: string } } | undefined = undefined;
+  export let query: string;
+  export let persist = true;
   export let component: ComponentType;
   export let propMapping: Record<string, string | ((row: any) => any)> | undefined = undefined;
   export let containerProps: { columns?: number; gap?: string } | undefined = undefined;
@@ -44,7 +40,7 @@
   }
 </script>
 
-<SQLiteMultiDB {databases} {queries} {joinConfig} transform={transformData} let:data>
+<SQLiteMultiDB {databases} {query} {persist} transform={transformData} let:data>
   {#if data && data.length > 0}
     <div
       class="sqlite-renderer-grid"

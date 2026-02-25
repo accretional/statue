@@ -3,26 +3,22 @@
 
   export interface SQLiteGridProps {
     databases: DatabaseSource[];
-    queries: Record<string, string> | string;
-    joinConfig?: {
-      type: 'LEFT' | 'INNER';
-      left: { db: string; key: string };
-      right: { db: string; key: string };
-    };
+    query: string;
+    persist?: boolean;
     transform?: (data: any[]) => any[];
     columns?: number;
     gap?: string;
   }
 
   export let databases: DatabaseSource[];
-  export let queries: Record<string, string> | string;
-  export let joinConfig: { type: 'LEFT' | 'INNER'; left: { db: string; key: string }; right: { db: string; key: string } } | undefined = undefined;
+  export let query: string;
+  export let persist = true;
   export let transform: ((data: any[]) => any[]) | undefined = undefined;
   export let columns = 3;
   export let gap = '24px';
 </script>
 
-<SQLiteMultiDB {databases} {queries} {joinConfig} {transform} let:data let:columns={dbColumns}>
+<SQLiteMultiDB {databases} {query} {persist} {transform} let:data let:columns={dbColumns}>
   <div
     class="sqlite-grid"
     style="--grid-columns: {columns}; --grid-gap: {gap};"

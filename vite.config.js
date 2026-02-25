@@ -22,6 +22,10 @@ const serveResources = () => ({
 export default defineConfig({
 	plugins: [sveltekit(), serveResources()],
 
+	optimizeDeps: {
+		exclude: ['@sqlite.org/sqlite-wasm']
+	},
+
 	resolve: {
 		alias: {
 			$content: path.resolve(__dirname, 'content'),

@@ -127,7 +127,7 @@
 		"mdsvex": "^0.12.6",
 		"rehype-slug": "^6.0.0",
 		"remark-gfm": "^4.0.1",
-		"sql.js": "^1.13.0",
+		"@sqlite.org/sqlite-wasm": "^3.46.1-build5",
 		"svelte-inview": "^4.0.4",
 		"svelte-motion": "^0.12.2",
 		"swagger-ui-dist": "^5.31.0",

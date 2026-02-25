@@ -40,7 +40,7 @@ import ComponentInfo from 'statue-ssg/components/ComponentInfo.svelte';
 
   <SQLiteRenderer
     databases={[{ name: 'components', path: '/components.db' }]}
-    queries={query}
+    query={query}
     component={ComponentInfo}
     propMapping={{
       name: 'name',
