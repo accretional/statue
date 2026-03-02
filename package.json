@@ -132,7 +132,7 @@
 		"svelte-motion": "^0.12.2",
 		"swagger-ui-dist": "^5.31.0",
 		"tailwind-merge": "^3.4.0",
-		"number-flow": "^0.5.9"
+		"number-flow": "^0.5.9",
 		"tailwind-variants": "^3.2.2",
 		"three": "^0.182.0"
 	},
