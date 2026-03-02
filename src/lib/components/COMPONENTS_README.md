@@ -28,7 +28,9 @@ This folder contains ready-to-use UI components for Statue SSG (built with Svelt
 		Footer,
 		Sitemap,
 		Warning,
-		BuiltBy
+		BuiltBy,
+		DocxViewer,
+		PdfViewer
 	} from 'statue-ssg';
 </script>
 ```
@@ -623,6 +625,88 @@ Components use CSS variables like `--color-primary`, `--color-secondary`, `--col
 	title="Local Video"
 	controls={true}
 	loop={false}
+/>
+```
+
+- **DocxViewer**: Document viewer for rendering DOCX (Microsoft Word) files.
+    - Props:
+        - `src?: string | null` - URL/path to fetch DOCX file (default: null)
+        - `file?: Blob | File | null` - File/Blob object to render directly (default: null)
+        - `className?: string` - CSS class for the document (default: 'docx')
+        - `breakPages?: boolean` - Whether to break pages (default: true)
+    - Features:
+        - Renders DOCX files using docx-preview library
+        - Supports both URL/path fetching and direct File/Blob input
+        - Loading spinner with status message
+        - Error handling with user-friendly messages
+        - Theme-aware styling via CSS variables
+        - Page breaking and proper formatting
+        - Headers, footers, footnotes, and endnotes support
+    - Example:
+
+```svelte
+<script>
+	import { DocxViewer } from 'statue-ssg';
+</script>
+
+<!-- Load from URL -->
+<DocxViewer src="/documents/report.docx" />
+
+<!-- Load from File object -->
+<script>
+	let fileInput;
+	let selectedFile = null;
+
+	function handleFileChange(event) {
+		selectedFile = event.target.files[0];
+	}
+</script>
+
+<input type="file" accept=".docx" on:change={handleFileChange} />
+{#if selectedFile}
+	<DocxViewer file={selectedFile} breakPages={true} />
+{/if}
+```
+
+- **PdfViewer**: Simple PDF viewer using browser's native PDF renderer with optional toolbar controls.
+    - Props:
+        - `src: string` - URL/path to PDF file (required)
+        - `height?: string` - Container height (default: '600px')
+        - `width?: string` - Container width (default: '100%')
+        - `showToolbar?: boolean` - Show floating toolbar (default: true)
+        - `showDownload?: boolean` - Show download button (default: false)
+        - `showFullscreen?: boolean` - Show fullscreen button (default: true)
+    - Features:
+        - Uses browser's built-in PDF viewer via iframe
+        - Floating toolbar that appears on hover
+        - Download PDF functionality
+        - Fullscreen mode with Fullscreen API
+        - Theme-aware styling via CSS variables
+        - Automatically hides browser's default PDF toolbar
+        - Responsive container sizing
+    - Example:
+
+```svelte
+<script>
+	import { PdfViewer } from 'statue-ssg';
+</script>
+
+<!-- Basic usage -->
+<PdfViewer src="/documents/guide.pdf" />
+
+<!-- Custom size with download button -->
+<PdfViewer
+	src="/documents/report.pdf"
+	height="800px"
+	width="100%"
+	showDownload={true}
+	showFullscreen={true}
+/>
+
+<!-- Minimal viewer without toolbar -->
+<PdfViewer
+	src="/documents/contract.pdf"
+	showToolbar={false}
 />
 ```
 
