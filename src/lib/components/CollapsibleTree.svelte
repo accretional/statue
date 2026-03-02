@@ -4,7 +4,7 @@
   Usage:
   ```svelte
   <script>
-    import { CollapsibleTree } from 'statue-ssg';
+    import CollapsibleTree from 'statue-ssg/components/CollapsibleTree.svelte';
     
     const items = [
       {

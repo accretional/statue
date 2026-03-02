@@ -1,22 +1,20 @@
 <script>
 	import { page } from '$app/stores';
 	import { tick } from 'svelte';
-	import {
-		Warning,
-		ContentHeader,
-		ContentBody,
-		DocsLayout,
-		DocsContent,
-		BlogPostLayout
-	} from 'statue-ssg';
+	import Warning from 'statue-ssg/components/Warning.svelte'
+import ContentHeader from 'statue-ssg/components/ContentHeader.svelte'
+import ContentBody from 'statue-ssg/components/ContentBody.svelte'
+import DocsLayout from 'statue-ssg/components/DocsLayout.svelte'
+import DocsContent from 'statue-ssg/components/DocsContent.svelte'
+import BlogPostLayout from 'statue-ssg/components/BlogPostLayout.svelte';
 
-	// Import all MDX files at build time
-	const mdxModules = import.meta.glob('/content/**/*.mdx', { eager: true });
+	// Import all MDX files at build time - use non-eager import to avoid build errors
+	const mdxModules = import.meta.glob('/content/**/*.mdx');
 
 	let { data } = $props();
 
 	// Helper function to find MDX component
-	function findMdxComponent(pathname) {
+	async function findMdxComponent(pathname) {
 		// Remove trailing slash
 		const url = pathname.endsWith('/') ? pathname.slice(0, -1) : pathname;
 
@@ -24,17 +22,29 @@
 		const patterns = [`/content${url}.mdx`, `/content${url}/index.mdx`];
 
 		for (const pattern of patterns) {
-			const module = mdxModules[pattern];
-			if (module?.default) {
-				return module.default;
+			const moduleLoader = mdxModules[pattern];
+			if (moduleLoader) {
+				try {
+					const module = await moduleLoader();
+					if (module?.default) {
+						return module.default;
+					}
+				} catch (error) {
+					console.warn(`Failed to load MDX module: ${pattern}`, error);
+				}
 			}
 		}
 		return null;
 	}
 
 	// Reactive values
-	let mdxComponent = $derived(findMdxComponent($page.url.pathname));
+	let mdxComponent = $state(null);
 	let isMdxContent = $derived(mdxComponent !== null);
+
+	// Load MDX component when page changes
+	$effect(async () => {
+		mdxComponent = await findMdxComponent($page.url.pathname);
+	});
 	let activePath = $derived($page.url.pathname);
 	let title = $derived(data.content ? data.content.metadata.title : 'Content Not Found');
 	let layoutType = $derived(data.layoutType || 'default');
@@ -141,6 +151,7 @@
 			author={data.content.metadata.author}
 			authorAvatar={data.content.metadata.authorAvatar}
 			thumbnail={data.content.metadata.thumbnail}
+			tags={data.content.metadata.tags}
 			content={data.content.content}
 			backLink={getBackLink(data.content.directory)}
 			backLinkText={getBackLinkText(data.content.directory)}

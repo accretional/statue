@@ -1,12 +1,10 @@
 <script>
-	import {
-		DirectoryHeader,
-		SubDirectories,
-		DirectoryContent,
-		DocsLayout,
-		DocsDirectoryList,
-		BlogLayout
-	} from 'statue-ssg';
+	import DirectoryHeader from 'statue-ssg/components/DirectoryHeader.svelte'
+import SubDirectories from 'statue-ssg/components/SubDirectories.svelte'
+import DirectoryContent from 'statue-ssg/components/DirectoryContent.svelte'
+import DocsLayout from 'statue-ssg/components/DocsLayout.svelte'
+import DocsDirectoryList from 'statue-ssg/components/DocsDirectoryList.svelte'
+import BlogLayout from 'statue-ssg/components/BlogLayout.svelte';
 
 	const { data } = $props();
 

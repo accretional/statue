@@ -1,9 +1,9 @@
 <script>
-  import { PageHero } from 'statue-ssg';
-  import { Mission } from 'statue-ssg';
-  import { Team } from 'statue-ssg';
-  import { WhyChooseUs } from 'statue-ssg';
-  import { CTA } from 'statue-ssg';
+  import PageHero from 'statue-ssg/components/PageHero.svelte';
+  import Mission from 'statue-ssg/components/Mission.svelte';
+  import Team from 'statue-ssg/components/Team.svelte';
+  import WhyChooseUs from 'statue-ssg/components/WhyChooseUs.svelte';
+  import CTA from 'statue-ssg/components/CTA.svelte';
 
   export let data;
 

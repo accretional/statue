@@ -12,7 +12,7 @@
 		c: '#include <stdio.h>\n\nint main() {\n    printf("Hello from C!\\n");\n    return 0;\n}',
 		java: 'public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello from Java!");\n    }\n}',
 		bash: 'echo "Hello Bash!"\nls -la',
-		ocaml: 'print_endline "Hello OCaml!";;'
+		ocaml: 'print_endline "Hello OCaml!";'
 	};
 
 	function changeLanguage(e: Event) {

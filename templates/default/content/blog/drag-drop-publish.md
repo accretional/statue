@@ -5,6 +5,10 @@ date: 2025-12-11
 author: Accretional Team
 category: tutorial
 thumbnail: /blog_thumbnail1.jpg
+tags:
+  - markdown
+  - static-site-generator
+  - web-publishing
 order: 1
 ---
 

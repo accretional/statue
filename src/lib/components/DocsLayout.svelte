@@ -4,7 +4,7 @@
   Usage:
   ```svelte
   <script>
-    import { DocsLayout } from 'statue-ssg';
+    import DocsLayout from 'statue-ssg/components/DocsLayout.svelte';
 
     const sidebarItems = [...];
     const headings = [...];

@@ -86,7 +86,7 @@ Brief description of what it does.
 
 ```svelte
 <script>
-  import { YourComponent } from 'statue-ssg';
+  import YourComponent from 'statue-ssg/components/YourComponent.svelte';
 
   const items = [
     { name: 'Item 1', value: 'Value 1' }
@@ -161,7 +161,7 @@ Description.
 
 ```svelte
 <script>
-  import { YourComponent } from 'statue-ssg';
+  import YourComponent from 'statue-ssg/components/YourComponent.svelte';
 </script>
 
 <YourComponent title="Hello" />
