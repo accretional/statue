@@ -1,0 +1,280 @@
+<!--
+This is a Svelte component from LayerChart:
+
+Demo Site: [layerchart.com](https://www.layerchart.com/)
+GitHub Repository: [techniq/layerchart](https://github.com/techniq/layerchart)
+
+All components in this directory are sourced from the LayerChart project. Please refer to the original repository for documentation, examples, and additional components.
+-->
+
+<script lang="ts">
+  import { fade } from 'svelte/transition';
+  import { cls } from '@layerstack/tailwind';
+  import { writable } from 'svelte/store';
+  import { spring, tweened } from 'svelte/motion';
+  import type { ScaleBand } from 'd3-scale';
+
+  import { chartContext } from './../ChartContext.svelte';
+  import { tooltipContext } from './TooltipContext.svelte';
+
+  // Inlined from ../../stores/motionStore.js
+  type SpringOptions = Parameters<typeof spring<any>>[1];
+  type TweenedOptions = Parameters<typeof tweened<any>>[1];
+  type MotionOptions = {
+    spring?: boolean | SpringOptions;
+    tweened?: boolean | TweenedOptions;
+  };
+
+  function motionStore<T = any>(value: T, options: MotionOptions) {
+    if (options.spring) {
+      return spring<T>(value, options.spring === true ? undefined : options.spring);
+    } else if (options.tweened) {
+      return tweened<T>(value, options.tweened === true ? undefined : options.tweened);
+    } else {
+      return writable<T>(value);
+    }
+  }
+
+  // Inlined from ../../utils/scales.js
+  interface AnyScale<Domain = any, Range = any, Input = Domain, Output = any> {
+    (value: Input): Output;
+    bandwidth?: Function;
+  }
+
+  function isScaleBand(scale: AnyScale<any, any>): scale is ScaleBand<any> {
+    return typeof scale.bandwidth === 'function';
+  }
+
+  /** `x` position of tooltip.  By default uses the pointer/mouse, can also snap to data or an explicit fixed position. */
+  export let x: 'pointer' | 'data' | number = 'pointer';
+  /** `y` position of tooltip.  By default uses the pointer/mouse, can also snap to data or an explicit fixed position. */
+  export let y: 'pointer' | 'data' | number = 'pointer';
+
+  /** Offset added to `x` position */
+  export let xOffset = x === 'pointer' ? 10 : 0;
+
+  /** Offset added to `y` position */
+  export let yOffset = y === 'pointer' ? 10 : 0;
+
+  /** Align based on edge of tooltip */
+  type Placement =
+    | 'top-left'
+    | 'top'
+    | 'top-right'
+    | 'left'
+    | 'center'
+    | 'right'
+    | 'bottom-left'
+    | 'bottom'
+    | 'bottom-right';
+  export let anchor: Placement = 'top-left';
+
+  export let contained: 'container' | 'window' | false = 'container';
+  export let variant: 'default' | 'invert' | 'none' = 'default';
+
+  /** Set to `false` to disable spring transitions */
+  export let motion = true;
+
+  /** Allow pointer events.  Disabled by default to reduce accidental selection, but useful to enable to allow interactdive tooltips (using `locked`) */
+  export let pointerEvents = false;
+
+  export let classes: {
+    root?: string;
+    container?: string;
+    header?: string;
+    content?: string;
+  } = {};
+
+  const { padding, xScale, xGet, yScale, yGet, containerWidth, containerHeight } = chartContext();
+  const tooltip = tooltipContext();
+
+  let tooltipWidth = 0;
+  let tooltipHeight = 0;
+
+  const xPos = motionStore($tooltip.x, { spring: motion });
+  const yPos = motionStore($tooltip.y, { spring: motion });
+
+  type Align = 'start' | 'center' | 'end';
+
+  function alignValue(value: number, align: Align, addlOffset: number, tooltipSize: number) {
+    const alignOffset = align === 'center' ? tooltipSize / 2 : align === 'end' ? tooltipSize : 0;
+    return value + (align === 'end' ? -addlOffset : addlOffset) - alignOffset;
+  }
+
+  $: if ($tooltip?.data) {
+    const xBandOffset = isScaleBand($xScale)
+      ? $xScale.step() / 2 - ($xScale.padding() * $xScale.step()) / 2
+      : 0;
+
+    const xValue: number =
+      typeof x === 'number'
+        ? x
+        : x === 'data'
+          ? $xGet($tooltip.data) + $padding.left + xBandOffset
+          : $tooltip.x;
+
+    let xAlign: Align = 'start';
+    switch (anchor) {
+      case 'top-left':
+      case 'left':
+      case 'bottom-left':
+        xAlign = 'start';
+        break;
+
+      case 'top':
+      case 'center':
+      case 'bottom':
+        xAlign = 'center';
+        break;
+
+      case 'top-right':
+      case 'right':
+      case 'bottom-right':
+        xAlign = 'end';
+        break;
+    }
+
+    const yBandOffset = isScaleBand($yScale)
+      ? $yScale.step() / 2 - ($yScale.padding() * $yScale.step()) / 2
+      : 0;
+    const yValue: number =
+      typeof y === 'number'
+        ? y
+        : y === 'data'
+          ? $yGet($tooltip.data) + $padding.top + yBandOffset
+          : $tooltip.y;
+
+    let yAlign: Align = 'start';
+    switch (anchor) {
+      case 'top-left':
+      case 'top':
+      case 'top-right':
+        yAlign = 'start';
+        break;
+
+      case 'left':
+      case 'center':
+      case 'right':
+        yAlign = 'center';
+        break;
+
+      case 'bottom-left':
+      case 'bottom':
+      case 'bottom-right':
+        yAlign = 'end';
+        break;
+    }
+
+    const rect = {
+      top: alignValue(yValue, yAlign, yOffset, tooltipHeight),
+      left: alignValue(xValue, xAlign, xOffset, tooltipWidth),
+      // set below
+      bottom: 0,
+      right: 0,
+    };
+    rect.bottom = rect.top + tooltipHeight;
+    rect.right = rect.left + tooltipWidth;
+
+    if (contained === 'container') {
+      // Only attempt repositiong if not fixed (ie. `pointer`/`data`)
+      if (typeof x !== 'number') {
+        // Check if outside of container and swap align side accordingly
+        if ((xAlign === 'start' || xAlign === 'center') && rect.right > $containerWidth) {
+          rect.left = alignValue(xValue, 'end', xOffset, tooltipWidth);
+        }
+        if ((xAlign === 'end' || xAlign === 'center') && rect.left < $padding.left) {
+          rect.left = alignValue(xValue, 'start', xOffset, tooltipWidth);
+        }
+      }
+      rect.right = rect.left + tooltipWidth;
+
+      if (typeof y !== 'number') {
+        if ((yAlign === 'start' || yAlign === 'center') && rect.bottom > $containerHeight) {
+          rect.top = alignValue(yValue, 'end', yOffset, tooltipHeight);
+        }
+        if ((yAlign === 'end' || yAlign === 'center') && rect.top < $padding.top) {
+          rect.top = alignValue(yValue, 'start', yOffset, tooltipHeight);
+        }
+      }
+      rect.bottom = rect.top + tooltipHeight;
+    } else if (contained === 'window') {
+      // Check if outside of window / viewport and swap align side accordingly
+      // Root <div> won't be available on initial mount
+      if (rootEl?.parentElement) {
+        const parentViewportRect = rootEl.parentElement.getBoundingClientRect();
+
+        // Only attempt repositiong if not fixed (ie. `pointer`/`data`)
+        if (typeof x !== 'number') {
+          if (
+            (xAlign === 'start' || xAlign === 'center') &&
+            parentViewportRect.left + rect.right > window.innerWidth
+          ) {
+            rect.left = alignValue(xValue, 'end', xOffset, tooltipWidth);
+          }
+          if (
+            (xAlign === 'end' || xAlign === 'center') &&
+            parentViewportRect.left + rect.left < 0
+          ) {
+            rect.left = alignValue(xValue, 'start', xOffset, tooltipWidth);
+          }
+        }
+        rect.right = rect.left + tooltipWidth;
+
+        if (typeof y !== 'number') {
+          if (
+            (yAlign === 'start' || yAlign === 'center') &&
+            parentViewportRect.top + rect.bottom > window.innerHeight
+          ) {
+            rect.top = alignValue(yValue, 'end', yOffset, tooltipHeight);
+          }
+          if ((yAlign === 'end' || yAlign === 'center') && parentViewportRect.top + rect.top < 0) {
+            rect.top = alignValue(yValue, 'start', yOffset, tooltipHeight);
+          }
+        }
+        rect.bottom = rect.top + tooltipHeight;
+      }
+    }
+
+    $yPos = rect.top;
+    $xPos = rect.left;
+  }
+
+  let rootEl: HTMLDivElement;
+</script>
+
+{#if $tooltip.data}
+  <div
+    class={cls('absolute z-50 select-none', !pointerEvents && 'pointer-events-none', classes.root)}
+    style:top="{$yPos}px"
+    style:left="{$xPos}px"
+    transition:fade={{ duration: 100 }}
+    bind:clientWidth={tooltipWidth}
+    bind:clientHeight={tooltipHeight}
+    bind:this={rootEl}
+  >
+    <div
+      class={cls(
+        variant !== 'none' && ['text-sm py-1 px-2 h-full rounded elevation-1'],
+        {
+          default: [
+            'bg-surface-100/90 dark:bg-surface-300/90 backdrop-filter backdrop-blur-[2px] text-surface-content',
+            '[&_.label]:text-surface-content/75',
+          ],
+          invert: [
+            'bg-surface-content/90 backdrop-filter backdrop-blur-[2px] text-surface-100 border border-surface-content',
+            '[&_.label]:text-surface-100/50',
+          ],
+          none: '',
+        }[variant],
+        classes.container,
+        $$props.class
+      )}
+    >
+      {#if $$slots.default}
+        <div class={cls(classes.content)}>
+          <slot data={$tooltip.data} />
+        </div>
+      {/if}
+    </div>
+  </div>
+{/if}

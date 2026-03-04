@@ -1,0 +1,45 @@
+<!--
+This is a Svelte component from LayerChart:
+
+Demo Site: [layerchart.com](https://www.layerchart.com/)
+GitHub Repository: [techniq/layerchart](https://github.com/techniq/layerchart)
+
+All components in this directory are sourced from the LayerChart project. Please refer to the original repository for documentation, examples, and additional components.
+-->
+
+<script lang="ts">
+  import { curveNatural, type CurveFactory, type CurveFactoryLineOnly } from 'd3-shape';
+  import { geoOrthographic, geoInterpolate } from 'd3-geo';
+
+  import { geoContext } from './GeoContext.svelte';
+  import Spline from './Spline.svelte';
+
+  export let link: { source: [number, number]; target: [number, number] };
+
+  /** Amount of loft to apply to the midle of the curve */
+  export let loft = 1.0;
+
+  /**
+   * Curve of spline drawn. Imported via d3-shape.
+   *
+   * @example
+   * import { curveNatural } from 'd3-shape';
+   * <GeoSpline curve={curveNatrual} />
+   *
+   * @type {CurveFactory | CurveFactoryLineOnly | undefined}
+   */
+  export let curve: CurveFactory | CurveFactoryLineOnly | undefined = curveNatural;
+
+  const geo = geoContext();
+
+  $: loftedProjection = geoOrthographic()
+    .translate($geo.translate())
+    .rotate($geo.rotate())
+    .scale($geo.scale() * loft);
+
+  $: source = $geo(link.source);
+  $: target = $geo(link.target);
+  $: middle = loftedProjection(geoInterpolate(link.source, link.target)(0.5));
+</script>
+
+<Spline data={[source, middle, target]} x={(d) => d[0]} y={(d) => d[1]} {curve} {...$$restProps} />
