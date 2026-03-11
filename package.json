@@ -112,6 +112,7 @@
 		"vitest-browser-svelte": "^2.0.1"
 	},
 	"dependencies": {
+		"@stripe/stripe-js": "^8.9.0",
 		"@lucide/svelte": "^0.563.1",
 		"bits-ui": "^2.15.5",
 		"clsx": "^2.1.1",
