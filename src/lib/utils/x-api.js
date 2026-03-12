@@ -211,6 +211,17 @@ export function processEntities(text, entities, mediaEntities) {
 		}
 	}
 
+	// Media placeholder URLs
+	if (entities.media) {
+		for (const media of entities.media) {
+			items.push({
+				start: media.indices[0],
+				end: media.indices[1],
+				render: () => ''
+			});
+		}
+	}
+
 	// User mentions
 	if (entities.user_mentions) {
 		for (const m of entities.user_mentions) {
