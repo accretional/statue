@@ -276,6 +276,189 @@ export function processEntities(text, entities, mediaEntities) {
 	return html;
 }
 
+/**
+ * Extract playable video sources from the syndication payload.
+ * Prefers HLS plus a high-quality MP4 fallback when available.
+ *
+ * @param {object|null} rawVideo
+ * @param {object[]} mediaEntities
+ * @returns {{ src: string, type: string, bitrate: number }[]}
+ */
+function extractVideoSources(rawVideo, mediaEntities) {
+	const candidates = [];
+
+	if (rawVideo && Array.isArray(rawVideo.variants)) {
+		for (const variant of rawVideo.variants) {
+			if (!variant?.src || !variant?.type) continue;
+			candidates.push({
+				src: variant.src,
+				type: variant.type,
+				bitrate: variant.bitrate ?? 0
+			});
+		}
+	}
+
+	for (const media of mediaEntities || []) {
+		if (!Array.isArray(media?.video_info?.variants)) continue;
+		for (const variant of media.video_info.variants) {
+			if (!variant?.url || !variant?.content_type) continue;
+			candidates.push({
+				src: variant.url,
+				type: variant.content_type,
+				bitrate: variant.bitrate ?? 0
+			});
+		}
+	}
+
+	const unique = [];
+	const seen = new Set();
+	for (const candidate of candidates) {
+		if (seen.has(candidate.src)) continue;
+		seen.add(candidate.src);
+		unique.push(candidate);
+	}
+
+	const hls = unique.find((variant) => variant.type === 'application/x-mpegURL');
+	const bestMp4 = unique
+		.filter((variant) => variant.type === 'video/mp4')
+		.sort((a, b) => b.bitrate - a.bitrate)[0];
+	const fallback = unique.filter(
+		(variant) => variant.type !== 'application/x-mpegURL' && variant.type !== 'video/mp4'
+	);
+
+	return [hls, bestMp4, ...fallback].filter(Boolean);
+}
+
+/**
+ * Upgrade XCard video placeholders into playable videos on demand.
+ * We fetch the MP4 ourselves because direct <video src="video.twimg.com/...">
+ * requests can be rejected when the browser sends a page referrer.
+ *
+ * @param {ParentNode} [root=document]
+ */
+export function enhanceXCardVideos(root = document) {
+	if (typeof document === 'undefined' || !root?.querySelectorAll) return;
+
+	const placeholders = root.querySelectorAll(
+		'[data-x-card-video-src]:not([data-x-card-video-enhanced])'
+	);
+
+	for (const placeholder of placeholders) {
+		if (!(placeholder instanceof HTMLElement)) continue;
+
+		placeholder.setAttribute('data-x-card-video-enhanced', 'true');
+		placeholder.setAttribute('data-x-card-video-state', 'idle');
+
+		const toggle = placeholder.querySelector('.x-card-video-toggle');
+		if (!(toggle instanceof HTMLButtonElement)) continue;
+
+		const label = toggle.querySelector('.x-card-video-toggle-label');
+		let video = null;
+		let loadingPromise = null;
+
+		const setState = (state) => {
+			placeholder.setAttribute('data-x-card-video-state', state);
+			toggle.disabled = state === 'loading';
+
+			const copy =
+				state === 'playing'
+					? 'Pause video'
+					: state === 'loading'
+						? 'Loading video'
+						: state === 'error'
+							? 'Video unavailable'
+							: 'Play video';
+
+			toggle.setAttribute('aria-label', copy);
+			if (label) label.textContent = copy;
+		};
+
+		const bindVideoEvents = (element) => {
+			element.addEventListener('play', () => setState('playing'));
+			element.addEventListener('pause', () => setState(element.ended ? 'idle' : 'paused'));
+			element.addEventListener('ended', () => setState('idle'));
+		};
+
+		const ensureVideo = async () => {
+			if (video) return video;
+			if (loadingPromise) return loadingPromise;
+
+			const src = placeholder.getAttribute('data-x-card-video-src');
+			if (!src) throw new Error('Missing XCard video source');
+
+			loadingPromise = (async () => {
+				setState('loading');
+
+				const response = await fetch(src, { referrerPolicy: 'no-referrer' });
+				if (!response.ok) {
+					throw new Error(`Video request failed with ${response.status}`);
+				}
+
+				const blob = await response.blob();
+				const objectUrl = URL.createObjectURL(blob);
+				const nextVideo = document.createElement('video');
+				nextVideo.className = 'x-card-media-video';
+				nextVideo.controls = true;
+				nextVideo.playsInline = true;
+				nextVideo.preload = 'metadata';
+
+				const poster = placeholder.getAttribute('data-x-card-video-poster');
+				if (poster) nextVideo.poster = poster;
+
+				bindVideoEvents(nextVideo);
+
+				const ready = new Promise((resolve, reject) => {
+					nextVideo.addEventListener('loadeddata', () => resolve(nextVideo), { once: true });
+					nextVideo.addEventListener('error', () => reject(new Error('Video failed to load')), {
+						once: true
+					});
+				});
+
+				const posterElement = placeholder.querySelector('.x-card-video-poster');
+				if (posterElement) {
+					posterElement.replaceWith(nextVideo);
+				} else {
+					placeholder.insertBefore(nextVideo, toggle);
+				}
+				nextVideo.src = objectUrl;
+
+				await ready;
+				video = nextVideo;
+				return nextVideo;
+			})();
+
+			try {
+				return await loadingPromise;
+			} catch (error) {
+				setState('error');
+				console.error('XCard: Failed to load video', error);
+				throw error;
+			} finally {
+				loadingPromise = null;
+			}
+		};
+
+		const togglePlayback = async () => {
+			try {
+				const activeVideo = await ensureVideo();
+				if (activeVideo.paused || activeVideo.ended) {
+					await activeVideo.play();
+				} else {
+					activeVideo.pause();
+				}
+			} catch {
+				// keep error state visible
+			}
+		};
+
+		toggle.addEventListener('click', (event) => {
+			event.preventDefault();
+			event.stopPropagation();
+			void togglePlayback();
+		});
+	}
+}
+
 // ---------------------------------------------------------------------------
 // Normalise raw API response into a consistent shape
 // ---------------------------------------------------------------------------
@@ -307,10 +490,13 @@ export function normaliseTweet(raw) {
 
 	// Video
 	let video = null;
-	if (raw.video) {
+	const videoMedia = mediaEntities.find(
+		(media) => media?.type === 'video' || media?.type === 'animated_gif' || media?.video_info
+	);
+	if (raw.video || videoMedia) {
 		video = {
-			poster: raw.video.poster,
-			variants: raw.video.variants || []
+			poster: raw.video?.poster || videoMedia?.media_url_https || '',
+			sources: extractVideoSources(raw.video, mediaEntities)
 		};
 	}
 
@@ -379,7 +565,14 @@ export function generateTweetCardHtml(tweet) {
 			.join('');
 
 		mediaHtml = `<div class="x-card-media ${gridClass}">${images}</div>`;
-	} else if (tweet.video) {
+	} else if (tweet.video?.sources?.length) {
+		const videoSource =
+			tweet.video.sources.find((source) => source.type === 'video/mp4') || tweet.video.sources[0];
+		const posterAttr = tweet.video.poster
+			? ` data-x-card-video-poster="${escapeHtml(tweet.video.poster)}"`
+			: '';
+		mediaHtml = `<div class="x-card-media x-card-media-single"><div class="x-card-video-frame" data-x-card-video-src="${escapeHtml(videoSource.src)}" data-x-card-video-url="${escapeHtml(tweet.url)}"${posterAttr}>${tweet.video.poster ? `<img src="${escapeHtml(tweet.video.poster)}" alt="Video thumbnail" class="x-card-media-img x-card-video-poster" loading="lazy" />` : '<div class="x-card-video-fallback x-card-video-poster"></div>'}<button type="button" class="x-card-video-toggle" aria-label="Play video"><svg class="x-card-video-icon x-card-video-icon-play" viewBox="0 0 24 24" width="26" height="26" fill="currentColor"><path d="M8 5.14v14l11-7-11-7z"></path></svg><svg class="x-card-video-icon x-card-video-icon-pause" viewBox="0 0 24 24" width="26" height="26" fill="currentColor"><path d="M6 5h4v14H6zm8 0h4v14h-4z"></path></svg><span class="x-card-sr-only x-card-video-toggle-label">Play video</span></button></div></div>`;
+	} else if (tweet.video?.poster) {
 		mediaHtml = `<div class="x-card-media x-card-media-single"><img src="${escapeHtml(tweet.video.poster)}" alt="Video thumbnail" class="x-card-media-img" loading="lazy" /><div class="x-card-video-badge">Video</div></div>`;
 	}
 
@@ -600,6 +793,84 @@ export function getXCardStyles() {
   height: 100%;
   object-fit: cover;
   display: block;
+}
+.x-card-media-video {
+  width: 100%;
+  display: block;
+  background: #000;
+  max-height: 510px;
+}
+.x-card-video-frame {
+  position: relative;
+  background: #000;
+}
+.x-card-video-fallback {
+  min-height: 260px;
+  background: linear-gradient(135deg, #1f2328, #0f1419);
+}
+.x-card-video-toggle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 72px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.72);
+  color: #fff;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.24);
+  transition: opacity 0.2s ease, transform 0.2s ease, background 0.2s ease;
+  backdrop-filter: blur(10px);
+}
+.x-card-video-toggle:hover {
+  transform: translate(-50%, -50%) scale(1.04);
+  background: rgba(0, 0, 0, 0.82);
+}
+.x-card-video-icon-pause {
+  display: none;
+}
+.x-card-video-frame[data-x-card-video-state="playing"] .x-card-video-icon-play {
+  display: none;
+}
+.x-card-video-frame[data-x-card-video-state="playing"] .x-card-video-icon-pause {
+  display: block;
+}
+.x-card-video-frame[data-x-card-video-state="playing"] .x-card-video-toggle {
+  opacity: 0;
+  pointer-events: none;
+}
+.x-card-video-frame[data-x-card-video-state="playing"]:hover .x-card-video-toggle,
+.x-card-video-frame[data-x-card-video-state="playing"]:focus-within .x-card-video-toggle,
+.x-card-video-frame[data-x-card-video-state="paused"] .x-card-video-toggle,
+.x-card-video-frame[data-x-card-video-state="idle"] .x-card-video-toggle,
+.x-card-video-frame[data-x-card-video-state="loading"] .x-card-video-toggle,
+.x-card-video-frame[data-x-card-video-state="error"] .x-card-video-toggle {
+  opacity: 1;
+  pointer-events: auto;
+}
+.x-card-video-frame[data-x-card-video-state="loading"] .x-card-video-toggle {
+  cursor: progress;
+  transform: translate(-50%, -50%) scale(0.98);
+}
+.x-card-video-frame[data-x-card-video-state="error"] .x-card-video-toggle {
+  background: rgba(130, 20, 20, 0.85);
+}
+.x-card-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 .x-card-media-single .x-card-media-img {
   max-height: 510px;

@@ -8,14 +8,13 @@
 -->
 
 <script>
-	import { onMount } from 'svelte';
-	import { browser } from '$app/environment';
+	import { onMount, tick } from 'svelte';
 	import {
 		extractTweetId,
 		fetchTweet,
 		normaliseTweet,
 		generateTweetCardHtml,
-		getXCardStyles
+		enhanceXCardVideos
 	} from '../utils/x-api.js';
 
 	/** X/Twitter status URL */
@@ -31,6 +30,7 @@
 	let loading = true;
 	let error = '';
 	let cardHtml = '';
+	let cardElement;
 
 	onMount(async () => {
 		if (!resolvedId) {
@@ -49,6 +49,10 @@
 			error = err.message || 'Failed to load tweet';
 		} finally {
 			loading = false;
+			await tick();
+			if (cardElement) {
+				enhanceXCardVideos(cardElement);
+			}
 		}
 	});
 
@@ -101,7 +105,9 @@
 	</div>
 {:else}
 	<!-- Rendered tweet card -->
-	{@html cardHtml}
+	<div bind:this={cardElement}>
+		{@html cardHtml}
+	</div>
 {/if}
 
 <style>
@@ -240,6 +246,87 @@
 		height: 100%;
 		object-fit: cover;
 		display: block;
+	}
+	:global(.x-card-media-video) {
+		width: 100%;
+		display: block;
+		background: #000;
+		max-height: 510px;
+	}
+	:global(.x-card-video-frame) {
+		position: relative;
+		background: #000;
+	}
+	:global(.x-card-video-fallback) {
+		min-height: 260px;
+		background: linear-gradient(135deg, #1f2328, #0f1419);
+	}
+	:global(.x-card-video-toggle) {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+		width: 72px;
+		height: 72px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0;
+		border: 1px solid rgba(255, 255, 255, 0.12);
+		background: rgba(0, 0, 0, 0.72);
+		color: #fff;
+		border-radius: 999px;
+		cursor: pointer;
+		box-shadow: 0 12px 24px rgba(0, 0, 0, 0.24);
+		transition:
+			opacity 0.2s ease,
+			transform 0.2s ease,
+			background 0.2s ease;
+		backdrop-filter: blur(10px);
+	}
+	:global(.x-card-video-toggle:hover) {
+		transform: translate(-50%, -50%) scale(1.04);
+		background: rgba(0, 0, 0, 0.82);
+	}
+	:global(.x-card-video-icon-pause) {
+		display: none;
+	}
+	:global(.x-card-video-frame[data-x-card-video-state='playing'] .x-card-video-icon-play) {
+		display: none;
+	}
+	:global(.x-card-video-frame[data-x-card-video-state='playing'] .x-card-video-icon-pause) {
+		display: block;
+	}
+	:global(.x-card-video-frame[data-x-card-video-state='playing'] .x-card-video-toggle) {
+		opacity: 0;
+		pointer-events: none;
+	}
+	:global(.x-card-video-frame[data-x-card-video-state='playing']:hover .x-card-video-toggle),
+	:global(.x-card-video-frame[data-x-card-video-state='playing']:focus-within .x-card-video-toggle),
+	:global(.x-card-video-frame[data-x-card-video-state='paused'] .x-card-video-toggle),
+	:global(.x-card-video-frame[data-x-card-video-state='idle'] .x-card-video-toggle),
+	:global(.x-card-video-frame[data-x-card-video-state='loading'] .x-card-video-toggle),
+	:global(.x-card-video-frame[data-x-card-video-state='error'] .x-card-video-toggle) {
+		opacity: 1;
+		pointer-events: auto;
+	}
+	:global(.x-card-video-frame[data-x-card-video-state='loading'] .x-card-video-toggle) {
+		cursor: progress;
+		transform: translate(-50%, -50%) scale(0.98);
+	}
+	:global(.x-card-video-frame[data-x-card-video-state='error'] .x-card-video-toggle) {
+		background: rgba(130, 20, 20, 0.85);
+	}
+	:global(.x-card-sr-only) {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
 	}
 	:global(.x-card-media-single .x-card-media-img) {
 		max-height: 510px;
