@@ -7,25 +7,29 @@ icon: social
 
 # XCard (Tweet Embeds)
 
-Statue can automatically render rich tweet cards when you paste X/Twitter URLs into your markdown content. No API keys required.
+Statue can turn standalone X/Twitter post URLs into rich tweet cards in markdown, or you can render the same UI directly with the `XCard` Svelte component. No API key is required.
 
 ## Automatic Embeds in Markdown
 
-Paste a bare X/Twitter URL on its own line in any markdown file:
+Paste a bare X/Twitter URL on its own line in any markdown file. Statue replaces that paragraph with a tweet card at build time:
 
 ```markdown
 Check out this announcement:
 
-https://x.com/elonmusk/status/1585341984679469056
+https://x.com/ycombinator/status/2032291152402255892
 
 Pretty cool, right?
 ```
 
-The URL is automatically replaced with a styled tweet card at build time showing the author, tweet text, media, date, and engagement metrics.
+## Live Preview
+
+https://x.com/ycombinator/status/2032291152402255892
+
+This preview is generated from markdown, not a hand-written component example.
 
 ### Detection Rules
 
-- **Standalone URLs become cards** - A paragraph containing ONLY an X/Twitter URL (on its own line) is rendered as a card
+- **Standalone URLs become cards** - A paragraph containing only an X/Twitter URL is rendered as a card
 - **Inline URLs stay as links** - URLs mixed with other text remain regular clickable links
 - **Markdown links stay as links** - `[click here](https://x.com/...)` remains a normal link
 
@@ -51,7 +55,7 @@ https://twitter.com/username/status/1234567890
 
 ## XCard Svelte Component
 
-You can also use the `XCard` component directly in your Svelte pages for more control:
+Use the `XCard` component directly in a Svelte page when you want explicit placement or when the content is not coming from markdown:
 
 ```svelte
 <script>
