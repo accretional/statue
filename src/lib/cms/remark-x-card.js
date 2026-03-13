@@ -10,7 +10,7 @@
  * the card HTML + styles directly into the AST. No client-side JS required.
  */
 
-import { visit } from 'unist-util-visit';
+import visit from 'unist-util-visit';
 import { isXUrl, renderTweetCardFromUrl, getXCardStyles } from '../utils/x-api.js';
 
 // Track whether styles have already been injected for this build pass

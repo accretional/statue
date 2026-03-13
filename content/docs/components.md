@@ -17,7 +17,10 @@ Import components from the `statue-ssg` package:
 
 ```svelte
 <script>
-  import { Hero, Categories, Footer, NavigationBar } from 'statue-ssg';
+  import Hero from 'statue-ssg/components/Hero.svelte'
+import Categories from 'statue-ssg/components/Categories.svelte'
+import Footer from 'statue-ssg/components/Footer.svelte'
+import NavigationBar from 'statue-ssg/components/NavigationBar.svelte';
 </script>
 ```
 
@@ -29,7 +32,7 @@ Top navigation with logo, links, and mobile menu.
 
 ```svelte
 <script>
-  import { NavigationBar } from 'statue-ssg';
+  import NavigationBar from 'statue-ssg/components/NavigationBar.svelte';
 
   const navbarItems = [
     { name: 'blog', title: 'Blog', url: '/blog' },
@@ -55,7 +58,7 @@ Landing page hero section with title and description.
 
 ```svelte
 <script>
-  import { Hero } from 'statue-ssg';
+  import Hero from 'statue-ssg/components/Hero.svelte';
 </script>
 
 <Hero />
@@ -71,7 +74,7 @@ Display content directories as cards.
 
 ```svelte
 <script>
-  import { Categories } from 'statue-ssg';
+  import Categories from 'statue-ssg/components/Categories.svelte';
 
   const directories = [
     { title: 'Blog', url: '/blog', name: 'blog' },
@@ -96,7 +99,7 @@ Shows recent content as cards.
 
 ```svelte
 <script>
-  import { LatestContent } from 'statue-ssg';
+  import LatestContent from 'statue-ssg/components/LatestContent.svelte';
 
   const content = [
     {
@@ -129,7 +132,7 @@ Site footer with sitemap and social links.
 
 ```svelte
 <script>
-  import { Footer } from 'statue-ssg';
+  import Footer from 'statue-ssg/components/Footer.svelte';
 
   const directories = [
     { name: 'docs', title: 'Docs', url: '/docs' }
@@ -160,7 +163,7 @@ Page title section for internal pages.
 
 ```svelte
 <script>
-  import { PageHero } from 'statue-ssg';
+  import PageHero from 'statue-ssg/components/PageHero.svelte';
 </script>
 
 <PageHero
@@ -181,7 +184,7 @@ Title and metadata for content pages.
 
 ```svelte
 <script>
-  import { ContentHeader } from 'statue-ssg';
+  import ContentHeader from 'statue-ssg/components/ContentHeader.svelte';
 </script>
 
 <ContentHeader
@@ -208,7 +211,7 @@ Renders HTML content from markdown.
 
 ```svelte
 <script>
-  import { ContentBody } from 'statue-ssg';
+  import ContentBody from 'statue-ssg/components/ContentBody.svelte';
 
   const html = '<h1>Title</h1><p>Content</p>';
 </script>
@@ -229,7 +232,7 @@ Header for directory listing pages.
 
 ```svelte
 <script>
-  import { DirectoryHeader } from 'statue-ssg';
+  import DirectoryHeader from 'statue-ssg/components/DirectoryHeader.svelte';
 </script>
 
 <DirectoryHeader title="Blog Posts" />
@@ -246,7 +249,7 @@ Grid of subdirectory cards.
 
 ```svelte
 <script>
-  import { SubDirectories } from 'statue-ssg';
+  import SubDirectories from 'statue-ssg/components/SubDirectories.svelte';
 
   const subdirs = [
     { title: 'Tutorials', url: '/docs/tutorials' }
@@ -269,7 +272,7 @@ Content cards for directory pages.
 
 ```svelte
 <script>
-  import { DirectoryContent } from 'statue-ssg';
+  import DirectoryContent from 'statue-ssg/components/DirectoryContent.svelte';
 
   const content = [
     {
@@ -289,84 +292,6 @@ Content cards for directory pages.
 
 ---
 
-### ContentGrid
-
-Responsive grid container for image galleries and content.
-
-```svelte
-<script>
-  import { ContentGrid, ImageGridElement, CaptionedGridElement } from 'statue-ssg';
-</script>
-
-<ContentGrid title="Photo Gallery" columns={3} gap="24px">
-  <ImageGridElement src="/image1.jpg" alt="Image 1" />
-  <CaptionedGridElement
-    src="/image2.jpg"
-    alt="Image 2"
-    title="Featured Photo"
-    caption="A beautiful landscape"
-  />
-</ContentGrid>
-```
-
-**Props:**
-- `title` (string, optional) - Grid section title
-- `columns` (number, optional) - Column count (default: 3)
-- `gap` (string, optional) - Spacing between items (default: '24px')
-
----
-
-### ImageGridElement
-
-Simple image for grids with lightbox.
-
-```svelte
-<script>
-  import { ImageGridElement } from 'statue-ssg';
-</script>
-
-<ImageGridElement
-  src="/photo.jpg"
-  alt="Photo description"
-  aspectRatio="16 / 9"
-/>
-```
-
-**Props:**
-- `src` (string, required) - Image URL
-- `alt` (string, required) - Alt text
-- `aspectRatio` (string, optional) - Aspect ratio (default: '1 / 1')
-- `expandable` (boolean, optional) - Enable lightbox (default: true)
-
----
-
-### CaptionedGridElement
-
-Image with title and caption.
-
-```svelte
-<script>
-  import { CaptionedGridElement } from 'statue-ssg';
-</script>
-
-<CaptionedGridElement
-  src="/photo.jpg"
-  alt="Mountain vista"
-  title="Mountain View"
-  caption="A breathtaking landscape"
-/>
-```
-
-**Props:**
-- `src` (string, required) - Image URL
-- `alt` (string, required) - Alt text
-- `title` (string, optional) - Title text
-- `caption` (string, optional) - Caption text
-- `aspectRatio` (string, optional) - Aspect ratio (default: '1 / 1')
-- `expandable` (boolean, optional) - Enable lightbox (default: true)
-
----
-
 ## Utility Components
 
 ### Warning
@@ -375,7 +300,7 @@ Info/warning/error callout box.
 
 ```svelte
 <script>
-  import { Warning } from 'statue-ssg';
+  import Warning from 'statue-ssg/components/Warning.svelte';
 
   const warning = {
     type: 'info',
@@ -401,7 +326,7 @@ Three-column statistics display.
 
 ```svelte
 <script>
-  import { Stats } from 'statue-ssg';
+  import Stats from 'statue-ssg/components/Stats.svelte';
 </script>
 
 <Stats />
@@ -417,7 +342,7 @@ Call-to-action section with buttons.
 
 ```svelte
 <script>
-  import { CTA } from 'statue-ssg';
+  import CTA from 'statue-ssg/components/CTA.svelte';
 </script>
 
 <CTA
@@ -440,6 +365,26 @@ Call-to-action section with buttons.
 
 ---
 
+### LinkPreview
+
+Hover preview for links showing live iframe content. Purely frontend - no backend required.
+
+```svelte
+<script>
+  import LinkPreview from 'statue-ssg/components/LinkPreview.svelte';
+</script>
+
+<p>
+  Check out the <LinkPreview href="/docs/get-started">Getting Started</LinkPreview> guide.
+</p>
+```
+
+**Props:**
+- `href` (string, required) - URL to link to
+- `delay` (number, default: 300) - Delay in ms before showing
+
+---
+
 ## About Page Components
 
 ### Mission
@@ -448,7 +393,7 @@ Mission statement section.
 
 ```svelte
 <script>
-  import { Mission } from 'statue-ssg';
+  import Mission from 'statue-ssg/components/Mission.svelte';
 </script>
 
 <Mission />
@@ -464,7 +409,7 @@ Team members grid.
 
 ```svelte
 <script>
-  import { Team } from 'statue-ssg';
+  import Team from 'statue-ssg/components/Team.svelte';
 
   const team = [
     { name: 'John Doe', role: 'Founder', initials: 'JD' }
@@ -488,7 +433,7 @@ Features/benefits grid.
 
 ```svelte
 <script>
-  import { WhyChooseUs } from 'statue-ssg';
+  import WhyChooseUs from 'statue-ssg/components/WhyChooseUs.svelte';
 
   const features = [
     { title: 'Fast', description: 'Lightning quick sites' }
@@ -513,7 +458,7 @@ Features/benefits grid.
 
 ```svelte
 <script>
-  import { BuiltBy } from 'statue-ssg';
+  import BuiltBy from 'statue-ssg/components/BuiltBy.svelte';
 </script>
 
 <BuiltBy />
@@ -532,7 +477,7 @@ Recursive tree view for nested data.
 
 ```svelte
 <script>
-  import { CollapsibleTree } from 'statue-ssg';
+  import CollapsibleTree from 'statue-ssg/components/CollapsibleTree.svelte';
 
   const items = [
     {
@@ -556,6 +501,25 @@ Recursive tree view for nested data.
   - `badge` (string, optional) - Badge text
   - `children` (array, optional) - Nested items
 - `title` (string, optional) - Tree title
+
+---
+
+### TagList
+
+Display clickable tag badges for blog posts.
+
+```svelte
+<script>
+  import TagList from 'statue-ssg/components/TagList.svelte';
+</script>
+
+<TagList tags={['svelte', 'tutorial', 'web dev']} />
+```
+
+**Props:**
+- `tags` (string[]) - Array of tag names
+
+Tags link to `/tags/tag-name` pages automatically.
 
 ---
 
