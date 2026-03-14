@@ -1,32 +1,12 @@
 <script lang="ts">
-	import { onMount, tick } from 'svelte';
-	import * as xApi from '../utils/x-api.js';
-
 	export interface ContentBodyProps {
 		content?: string;
 	}
 
 	let { content = '' }: ContentBodyProps = $props();
-	const xCardApi = xApi as unknown as Record<string, (root?: ParentNode) => void>;
-	let contentElement = $state<HTMLElement | null>(null);
-
-	async function upgradeVideos() {
-		if (typeof window === 'undefined' || !contentElement) return;
-		await tick();
-		xCardApi.enhanceXCardVideos?.(contentElement);
-	}
-
-	onMount(() => {
-		upgradeVideos();
-	});
-
-	$effect(() => {
-		content;
-		upgradeVideos();
-	});
 </script>
 
-<main bind:this={contentElement} class="prose prose-invert max-w-none">
+<main class="prose prose-invert max-w-none">
 	{@html content}
 </main>
 

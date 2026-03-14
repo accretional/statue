@@ -608,7 +608,7 @@ export function generateTweetCardHtml(tweet) {
       </span>
     </div>`;
 
-	return `<div class="x-card" data-tweet-id="${escapeHtml(tweet.id)}">
+	return `<div class="x-card" data-embed-provider="x" data-tweet-id="${escapeHtml(tweet.id)}">
   <div class="x-card-header">
     <a href="https://x.com/${escapeHtml(tweet.user.screenName)}" target="_blank" rel="noopener noreferrer" class="x-card-author">
       <img src="${escapeHtml(tweet.user.avatar)}" alt="${escapeHtml(tweet.user.name)}" class="x-card-avatar" loading="lazy" />

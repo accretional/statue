@@ -29,7 +29,6 @@
 <script lang="ts">
 	import { onMount, tick } from 'svelte';
 	import { browser } from '$app/environment';
-	import * as xApi from '../utils/x-api.js';
 
 	export interface DocsContentProps {
 		html: string;
@@ -57,7 +56,6 @@
 	let contentElement = $state(null);
 	let lastContent = $state('');
 	let mounted = $state(false);
-	const xCardApi = xApi as unknown as Record<string, (root?: ParentNode) => void>;
 
 	onMount(() => {
 		mounted = true;
@@ -69,7 +67,6 @@
 		if (!browser || !contentElement) return;
 
 		await tick(); // Wait for DOM to update
-		xCardApi.enhanceXCardVideos?.(contentElement);
 
 		const headingElements = contentElement.querySelectorAll('h1, h2, h3, h4, h5, h6');
 		const extractedHeadings = [];
