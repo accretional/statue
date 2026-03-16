@@ -1,13 +1,12 @@
 <script>
 	import { page } from '$app/stores';
 	import { tick } from 'svelte';
-	import { embedEnhancer } from 'statue-ssg/embeds/action';
-	import Warning from 'statue-ssg/components/Warning.svelte';
-	import ContentHeader from 'statue-ssg/components/ContentHeader.svelte';
-	import ContentBody from 'statue-ssg/components/ContentBody.svelte';
-	import DocsLayout from 'statue-ssg/components/DocsLayout.svelte';
-	import DocsContent from 'statue-ssg/components/DocsContent.svelte';
-	import BlogPostLayout from 'statue-ssg/components/BlogPostLayout.svelte';
+	import Warning from 'statue-ssg/components/Warning.svelte'
+import ContentHeader from 'statue-ssg/components/ContentHeader.svelte'
+import ContentBody from 'statue-ssg/components/ContentBody.svelte'
+import DocsLayout from 'statue-ssg/components/DocsLayout.svelte'
+import DocsContent from 'statue-ssg/components/DocsContent.svelte'
+import BlogPostLayout from 'statue-ssg/components/BlogPostLayout.svelte';
 
 	// Import all MDX files at build time - use non-eager import to avoid build errors
 	const mdxModules = import.meta.glob('/content/**/*.mdx');
@@ -87,118 +86,104 @@
 	{/if}
 </svelte:head>
 
-<div use:embedEnhancer>
-	{#if isMdxContent}
-		<!-- MDX Content - Layout determined by layoutType -->
-		{#if layoutType === 'docs'}
-			<DocsLayout
-				sidebarItems={data.sidebarItems || []}
-				{headings}
-				{activePath}
-				sidebarTitle="Docs"
-			>
-				<div bind:this={mdxContainer}>
-					{#if data.content?.metadata?.title}
-						<header class="mb-8 pb-8 border-(--color-border)">
-							<h1 class="text-3xl sm:text-4xl font-bold text-(--color-foreground) mb-4">
-								{data.content.metadata.title}
-							</h1>
-							{#if data.content?.metadata?.description}
-								<p class="text-lg text-muted leading-relaxed">
-									{data.content.metadata.description}
-								</p>
-							{/if}
-						</header>
-					{/if}
-					<div class="prose prose-docs max-w-none pb-16">
-						{@render mdxComponent?.()}
-					</div>
-				</div>
-			</DocsLayout>
-		{:else if layoutType === 'blog'}
-			<div class="min-h-screen bg-(--color-background)">
-				<div class="container mx-auto px-4 py-16">
-					<div class="max-w-4xl mx-auto prose prose-invert">
-						{@render mdxComponent?.()}
-					</div>
-				</div>
-			</div>
-		{:else}
-			<div
-				class="min-h-screen text-white bg-linear-to-b from-(--color-hero-from) via-(--color-hero-via) to-(--color-hero-to)"
-			>
-				<div class="container mx-auto px-4 py-16">
-					<div class="max-w-6xl mx-auto prose prose-invert">
-						{@render mdxComponent?.()}
-					</div>
-				</div>
-			</div>
-		{/if}
-	{:else if data.content}
-		<!-- Markdown Content - Layout determined by layoutType -->
-		{#if layoutType === 'docs'}
-			<DocsLayout
-				sidebarItems={data.sidebarItems || []}
-				{headings}
-				{activePath}
-				sidebarTitle="Docs"
-			>
-				{#if data.content.metadata.warning}
-					<div class="mb-6">
-						<Warning warning={data.content.metadata.warning} />
-					</div>
-				{/if}
-
-				<DocsContent
-					content={data.content.content}
-					title={data.content.metadata.title}
-					description={data.content.metadata.description}
-					lastUpdated={data.content.metadata.date}
-					bind:headings
-				/>
-			</DocsLayout>
-		{:else if layoutType === 'blog'}
-			<BlogPostLayout
-				title={data.content.metadata.title}
-				description={data.content.metadata.description}
-				date={data.content.metadata.date}
-				author={data.content.metadata.author}
-				authorAvatar={data.content.metadata.authorAvatar}
-				thumbnail={data.content.metadata.thumbnail}
-				tags={data.content.metadata.tags}
-				content={data.content.content}
-				backLink={getBackLink(data.content.directory)}
-				backLinkText={getBackLinkText(data.content.directory)}
-			/>
-		{:else}
-			<div
-				class="min-h-screen text-white bg-linear-to-b from-(--color-hero-from) via-(--color-hero-via) to-(--color-hero-to)"
-			>
-				<div class="container mx-auto px-4 py-16">
-					<div class="max-w-6xl mx-auto">
-						<ContentHeader
-							title={data.content.metadata.title}
-							date={data.content.metadata.date}
-							author={data.content.metadata.author}
-							backLink={getBackLink(data.content.directory)}
-							backLinkText={getBackLinkText(data.content.directory)}
-						/>
-
-						{#if data.content.metadata.warning}
-							<Warning warning={data.content.metadata.warning} />
+{#if isMdxContent}
+	<!-- MDX Content - Layout determined by layoutType -->
+	{#if layoutType === 'docs'}
+		<DocsLayout sidebarItems={data.sidebarItems || []} {headings} {activePath} sidebarTitle="Docs">
+			<div bind:this={mdxContainer}>
+				{#if data.content?.metadata?.title}
+					<header class="mb-8 pb-8 border-(--color-border)">
+						<h1 class="text-3xl sm:text-4xl font-bold text-(--color-foreground) mb-4">
+							{data.content.metadata.title}
+						</h1>
+						{#if data.content?.metadata?.description}
+							<p class="text-lg text-muted leading-relaxed">
+								{data.content.metadata.description}
+							</p>
 						{/if}
-
-						<ContentBody content={data.content.content} />
-					</div>
+					</header>
+				{/if}
+				<div class="prose prose-docs max-w-none pb-16">
+					{@render mdxComponent?.()}
 				</div>
 			</div>
-		{/if}
+		</DocsLayout>
+	{:else if layoutType === 'blog'}
+		<div class="min-h-screen bg-(--color-background)">
+			<div class="container mx-auto px-4 py-16">
+				<div class="max-w-4xl mx-auto prose prose-invert">
+					{@render mdxComponent?.()}
+				</div>
+			</div>
+		</div>
 	{:else}
-		<div class="bg-yellow-100 p-4 rounded-md my-8 max-w-prose mx-auto">
-			<h2 class="text-xl font-bold text-yellow-700">DEBUG: Content is undefined or empty</h2>
-			<p class="my-2">URL: {$page.url.pathname}</p>
-			<p class="my-2">Params: {JSON.stringify($page.params)}</p>
-			<p class="my-2">Data: {JSON.stringify(data)}</p>
+		<div class="min-h-screen text-white bg-linear-to-b from-(--color-hero-from) via-(--color-hero-via) to-(--color-hero-to)">
+			<div class="container mx-auto px-4 py-16">
+				<div class="max-w-6xl mx-auto prose prose-invert">
+					{@render mdxComponent?.()}
+				</div>
+			</div>
 		</div>
 	{/if}
-</div>
+{:else if data.content}
+	<!-- Markdown Content - Layout determined by layoutType -->
+	{#if layoutType === 'docs'}
+		<DocsLayout sidebarItems={data.sidebarItems || []} {headings} {activePath} sidebarTitle="Docs">
+			{#if data.content.metadata.warning}
+				<div class="mb-6">
+					<Warning warning={data.content.metadata.warning} />
+				</div>
+			{/if}
+
+			<DocsContent
+				content={data.content.content}
+				title={data.content.metadata.title}
+				description={data.content.metadata.description}
+				lastUpdated={data.content.metadata.date}
+				bind:headings
+			/>
+		</DocsLayout>
+	{:else if layoutType === 'blog'}
+		<BlogPostLayout
+			title={data.content.metadata.title}
+			description={data.content.metadata.description}
+			date={data.content.metadata.date}
+			author={data.content.metadata.author}
+			authorAvatar={data.content.metadata.authorAvatar}
+			thumbnail={data.content.metadata.thumbnail}
+			tags={data.content.metadata.tags}
+			content={data.content.content}
+			backLink={getBackLink(data.content.directory)}
+			backLinkText={getBackLinkText(data.content.directory)}
+		/>
+	{:else}
+		<div
+			class="min-h-screen text-white bg-linear-to-b from-(--color-hero-from) via-(--color-hero-via) to-(--color-hero-to)"
+		>
+			<div class="container mx-auto px-4 py-16">
+				<div class="max-w-6xl mx-auto">
+					<ContentHeader
+						title={data.content.metadata.title}
+						date={data.content.metadata.date}
+						author={data.content.metadata.author}
+						backLink={getBackLink(data.content.directory)}
+						backLinkText={getBackLinkText(data.content.directory)}
+					/>
+
+					{#if data.content.metadata.warning}
+						<Warning warning={data.content.metadata.warning} />
+					{/if}
+
+					<ContentBody content={data.content.content} />
+				</div>
+			</div>
+		</div>
+	{/if}
+{:else}
+	<div class="bg-yellow-100 p-4 rounded-md my-8 max-w-prose mx-auto">
+		<h2 class="text-xl font-bold text-yellow-700">DEBUG: Content is undefined or empty</h2>
+		<p class="my-2">URL: {$page.url.pathname}</p>
+		<p class="my-2">Params: {JSON.stringify($page.params)}</p>
+		<p class="my-2">Data: {JSON.stringify(data)}</p>
+	</div>
+{/if}

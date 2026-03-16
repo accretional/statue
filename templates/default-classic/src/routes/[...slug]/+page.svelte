@@ -1,11 +1,10 @@
 <script>
 	import { page } from '$app/stores';
-	import { embedEnhancer } from 'statue-ssg/embeds/action';
-	import Warning from 'statue-ssg/components/Warning.svelte';
-	import ContentHeader from 'statue-ssg/components/ContentHeader.svelte';
-	import ContentBody from 'statue-ssg/components/ContentBody.svelte';
-	import DocsLayout from 'statue-ssg/components/DocsLayout.svelte';
-	import DocsContent from 'statue-ssg/components/DocsContent.svelte';
+	import Warning from 'statue-ssg/components/Warning.svelte'
+import ContentHeader from 'statue-ssg/components/ContentHeader.svelte'
+import ContentBody from 'statue-ssg/components/ContentBody.svelte'
+import DocsLayout from 'statue-ssg/components/DocsLayout.svelte'
+import DocsContent from 'statue-ssg/components/DocsContent.svelte';
 	import BlogPostHeader from '$lib/components/BlogPostHeader.svelte';
 	import BlogPostContent from '$lib/components/BlogPostContent.svelte';
 
@@ -38,105 +37,96 @@
 	{/if}
 </svelte:head>
 
-<div use:embedEnhancer>
-	{#if data.notFound}
-		{#if isDocsContent || activePath.startsWith('/docs')}
-			<DocsLayout
-				sidebarItems={data.sidebarItems || []}
-				{activePath}
-				sidebarTitle="Docs"
-				showToc={false}
-				headings={[]}
-			>
-				<div class="text-center py-12">
-					<h1 class="text-2xl font-bold text-(--color-foreground) mb-4">Page Not Found</h1>
-					<p class="text-(--color-muted)">
-						The documentation page you're looking for doesn't exist.
-					</p>
-					<a href="/docs" class="mt-4 inline-block text-(--color-primary) hover:underline">
-						Back to Documentation
-					</a>
-				</div>
-			</DocsLayout>
-		{:else}
-			<div class="bg-red-100 p-4 rounded-md my-8 max-w-prose mx-auto">
-				<h2 class="text-xl font-bold text-red-700">DEBUG: Content not found</h2>
-				<p class="my-2">URL: {$page.url.pathname}</p>
-				<p class="my-2">Params: {JSON.stringify($page.params)}</p>
-				<p class="my-2">Data: {JSON.stringify(data)}</p>
+{#if data.notFound}
+	{#if isDocsContent || activePath.startsWith('/docs')}
+		<DocsLayout
+			sidebarItems={data.sidebarItems || []}
+			{activePath}
+			sidebarTitle="Docs"
+			showToc={false}
+			headings={[]}
+		>
+			<div class="text-center py-12">
+				<h1 class="text-2xl font-bold text-(--color-foreground) mb-4">Page Not Found</h1>
+				<p class="text-(--color-muted)">The documentation page you're looking for doesn't exist.</p>
+				<a href="/docs" class="mt-4 inline-block text-(--color-primary) hover:underline">
+					Back to Documentation
+				</a>
 			</div>
-		{/if}
-	{:else if data.content}
-		{#if isDocsContent}
-			<DocsLayout
-				sidebarItems={data.sidebarItems || []}
-				{headings}
-				{activePath}
-				sidebarTitle="Docs"
-			>
-				{#if data.content.metadata.warning}
-					<div class="mb-6">
-						<Warning warning={data.content.metadata.warning} />
-					</div>
-				{/if}
-
-				<DocsContent
-					content={data.content.content}
-					title={data.content.metadata.title}
-					description={data.content.metadata.description}
-					lastUpdated={data.content.metadata.date}
-					bind:headings
-				/>
-			</DocsLayout>
-		{:else if isBlogContent}
-			<div class="blog-post-layout">
-				<div class="blog-post-container">
-					<BlogPostHeader
-						title={data.content.metadata.title}
-						description={data.content.metadata.description}
-						date={data.content.metadata.date}
-						author={data.content.metadata.author}
-						authorAvatar={data.content.metadata.authorAvatar}
-						thumbnail={data.content.metadata.thumbnail}
-						backLink={getBackLink(data.content.directory)}
-						backLinkText={getBackLinkText(data.content.directory)}
-					/>
-
-					<BlogPostContent content={data.content.content} />
-				</div>
-			</div>
-		{:else}
-			<div
-				class="min-h-screen text-white bg-linear-to-b from-(--color-hero-from) via-(--color-hero-via) to-(--color-hero-to)"
-			>
-				<div class="container mx-auto px-4 py-16">
-					<div class="max-w-6xl mx-auto">
-						<ContentHeader
-							title={data.content.metadata.title}
-							date={data.content.metadata.date}
-							author={data.content.metadata.author}
-							backLink={getBackLink(data.content.directory)}
-							backLinkText={getBackLinkText(data.content.directory)}
-						/>
-
-						{#if data.content.metadata.warning}
-							<Warning warning={data.content.metadata.warning} />
-						{/if}
-
-						<ContentBody content={data.content.content} />
-					</div>
-				</div>
-			</div>
-		{/if}
+		</DocsLayout>
 	{:else}
-		<div class="bg-yellow-100 p-4 rounded-md my-8 max-w-prose mx-auto">
-			<h2 class="text-xl font-bold text-yellow-700">DEBUG: Content is undefined or empty</h2>
+		<div class="bg-red-100 p-4 rounded-md my-8 max-w-prose mx-auto">
+			<h2 class="text-xl font-bold text-red-700">DEBUG: Content not found</h2>
 			<p class="my-2">URL: {$page.url.pathname}</p>
 			<p class="my-2">Params: {JSON.stringify($page.params)}</p>
 			<p class="my-2">Data: {JSON.stringify(data)}</p>
 		</div>
 	{/if}
-</div>
+{:else if data.content}
+	{#if isDocsContent}
+		<DocsLayout sidebarItems={data.sidebarItems || []} {headings} {activePath} sidebarTitle="Docs">
+			{#if data.content.metadata.warning}
+				<div class="mb-6">
+					<Warning warning={data.content.metadata.warning} />
+				</div>
+			{/if}
+
+			<DocsContent
+				content={data.content.content}
+				title={data.content.metadata.title}
+				description={data.content.metadata.description}
+				lastUpdated={data.content.metadata.date}
+				bind:headings
+			/>
+		</DocsLayout>
+	{:else if isBlogContent}
+		<div class="blog-post-layout">
+			<div class="blog-post-container">
+				<BlogPostHeader
+					title={data.content.metadata.title}
+					description={data.content.metadata.description}
+					date={data.content.metadata.date}
+					author={data.content.metadata.author}
+					authorAvatar={data.content.metadata.authorAvatar}
+					thumbnail={data.content.metadata.thumbnail}
+					backLink={getBackLink(data.content.directory)}
+					backLinkText={getBackLinkText(data.content.directory)}
+				/>
+
+				<BlogPostContent content={data.content.content} />
+			</div>
+		</div>
+	{:else}
+		<div
+			class="min-h-screen text-white bg-linear-to-b from-(--color-hero-from) via-(--color-hero-via) to-(--color-hero-to)"
+		>
+			<div class="container mx-auto px-4 py-16">
+				<div class="max-w-6xl mx-auto">
+					<ContentHeader
+						title={data.content.metadata.title}
+						date={data.content.metadata.date}
+						author={data.content.metadata.author}
+						backLink={getBackLink(data.content.directory)}
+						backLinkText={getBackLinkText(data.content.directory)}
+					/>
+
+					{#if data.content.metadata.warning}
+						<Warning warning={data.content.metadata.warning} />
+					{/if}
+
+					<ContentBody content={data.content.content} />
+				</div>
+			</div>
+		</div>
+	{/if}
+{:else}
+	<div class="bg-yellow-100 p-4 rounded-md my-8 max-w-prose mx-auto">
+		<h2 class="text-xl font-bold text-yellow-700">DEBUG: Content is undefined or empty</h2>
+		<p class="my-2">URL: {$page.url.pathname}</p>
+		<p class="my-2">Params: {JSON.stringify($page.params)}</p>
+		<p class="my-2">Data: {JSON.stringify(data)}</p>
+	</div>
+{/if}
 
 <style>
 	.blog-post-layout {
