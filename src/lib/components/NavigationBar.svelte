@@ -3,7 +3,9 @@
   import Search from './Search.svelte';
 
   export interface NavigationBarProps {
-    logo?: string;
+    logo?: string | boolean | null;
+    logoHeight?: string;
+    showNameWithLogo?: boolean;
     siteName: string;
     items: Array<{
       label: string;
@@ -33,6 +35,8 @@
 
   let {
     logo = null,
+    logoHeight = '2rem',
+    showNameWithLogo = false,
     siteName = 'Site',
     items = [],
     navbarItems = [],
@@ -93,26 +97,28 @@
     <div class="flex items-center justify-between h-16">
       <div class="flex items-center">
         <a href="/" class="flex items-center space-x-2">
-          <!-- Logo: true = default SVG, string = custom image, false/null = no logo -->
+          <!-- Logo: true = default SVG, string = image/SVG URL, false/null = no logo -->
           {#if logo === true}
-            <div class="text-[var(--color-primary)] w-8 h-8">
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <div class="text-[var(--color-primary)]" style="height: {logoHeight}; width: auto;">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="height: 100%; width: auto;">
                 <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
                 <path d="M8 12H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                 <path d="M12 8L12 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
               </svg>
             </div>
           {:else if logo && typeof logo === 'string'}
-            <img src={logo} alt={siteTitle || siteName} class="w-8 h-8 object-contain" />
+            <img src={logo} alt={siteTitle || siteName} style="height: {logoHeight}; width: auto;" />
           {/if}
-          {#if siteTitle}
-            <span class="font-bold text-xl text-[var(--color-foreground)]">
-              {siteTitle}
-            </span>
-          {:else if siteName}
-            <span class="font-bold text-xl text-[var(--color-foreground)]">
-              {siteName}
-            </span>
+          {#if !logo || showNameWithLogo}
+            {#if siteTitle}
+              <span class="font-bold text-xl text-[var(--color-foreground)]">
+                {siteTitle}
+              </span>
+            {:else if siteName}
+              <span class="font-bold text-xl text-[var(--color-foreground)]">
+                {siteName}
+              </span>
+            {/if}
           {/if}
         </a>
       </div>
