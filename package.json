@@ -95,7 +95,7 @@
 		"esbuild": "^0.27.4",
 		"eslint": "^8.56.0",
 		"eslint-plugin-svelte": "^2.35.1",
-		"jsdom": "^23.2.0",
+		"jsdom": "^29.0.2",
 		"orval": "^8.6.2",
 		"pagefind": "^1.1.1",
 		"playwright": "^1.57.0",
