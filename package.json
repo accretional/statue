@@ -88,7 +88,7 @@
 		"@tailwindcss/postcss": "^4.1.14",
 		"@testing-library/jest-dom": "^6.9.1",
 		"@testing-library/svelte": "^5.3.1",
-		"@types/node": "^22.13.13",
+		"@types/node": "^25.5.2",
 		"@typescript-eslint/parser": "^8.0.0",
 		"@vitest/browser-playwright": "^4.1.0",
 		"autoprefixer": "^10.4.21",
