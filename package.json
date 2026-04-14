@@ -81,6 +81,7 @@
 		"generate-api": "orval"
 	},
 	"devDependencies": {
+		"@eslint/js": "^10.0.1",
 		"@sveltejs/adapter-auto": "^7.0.0",
 		"@sveltejs/adapter-static": "^3.0.10",
 		"@sveltejs/kit": "^2.49.2",
@@ -93,8 +94,9 @@
 		"@vitest/browser-playwright": "^4.1.0",
 		"autoprefixer": "^10.4.21",
 		"esbuild": "^0.27.4",
-		"eslint": "^8.56.0",
-		"eslint-plugin-svelte": "^2.35.1",
+		"eslint": "^10.2.0",
+		"eslint-plugin-svelte": "^3.17.0",
+		"globals": "^17.5.0",
 		"jsdom": "^29.0.2",
 		"orval": "^8.6.2",
 		"pagefind": "^1.1.1",
