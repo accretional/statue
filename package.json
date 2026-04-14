@@ -93,7 +93,7 @@
 		"@vitest/browser-playwright": "^4.1.0",
 		"autoprefixer": "^10.4.21",
 		"esbuild": "^0.27.4",
-		"eslint": "^8.56.0",
+		"eslint": "^10.2.0",
 		"eslint-plugin-svelte": "^2.35.1",
 		"jsdom": "^29.0.2",
 		"orval": "^8.6.2",
