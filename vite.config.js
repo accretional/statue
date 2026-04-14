@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import { sveltekit } from '@sveltejs/kit/vite';
+import tailwindcss from '@tailwindcss/vite';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import fs from 'fs';
@@ -20,7 +21,7 @@ const serveResources = () => ({
 });
 
 export default defineConfig({
-	plugins: [sveltekit(), serveResources()],
+	plugins: [tailwindcss(), sveltekit(), serveResources()],
 
 	optimizeDeps: {
 		exclude: ['@sqlite.org/sqlite-wasm']
