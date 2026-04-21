@@ -125,7 +125,7 @@
 		"@mdi/js": "^7.4.47",
 		"@neodrag/svelte": "^2.0.0",
 		"@sqlite.org/sqlite-wasm": "^3.46.1-build5",
-		"@stripe/stripe-js": "^8.9.0",
+		"@stripe/stripe-js": "^9.2.0",
 		"@types/three": "^0.182.0",
 		"bits-ui": "^2.15.5",
 		"chalk": "^5.4.1",
