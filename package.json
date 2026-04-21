@@ -135,7 +135,7 @@
 		"docx-preview": "^0.3.7",
 		"dotted-map": "^2.2.3",
 		"fs-extra": "^11.3.0",
-		"glob": "^11.1.0",
+		"glob": "^13.0.6",
 		"globby": "^16.1.0",
 		"gray-matter": "^4.0.3",
 		"highlight.js": "^11.11.1",
