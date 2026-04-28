@@ -126,7 +126,7 @@
 		"@neodrag/svelte": "^2.0.0",
 		"@sqlite.org/sqlite-wasm": "^3.46.1-build5",
 		"@stripe/stripe-js": "^9.2.0",
-		"@types/three": "^0.182.0",
+		"@types/three": "^0.184.0",
 		"bits-ui": "^2.15.5",
 		"chalk": "^5.4.1",
 		"clsx": "^2.1.1",
@@ -154,7 +154,7 @@
 		"swiper": "^12.1.0",
 		"tailwind-merge": "^3.4.0",
 		"tailwind-variants": "^3.2.2",
-		"three": "^0.182.0"
+		"three": "^0.184.0"
 	},
 	"keywords": [
 		"static-site-generator",
