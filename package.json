@@ -10,6 +10,7 @@
 			"svelte": "./src/lib/index.ts"
 		},
 		"./cms/*": "./src/lib/cms/*",
+		"./embeds/*": "./src/lib/embeds/*",
 		"./components/*": "./src/lib/components/*",
 		"./themes/*": "./src/lib/themes/*",
 		"./styles.css": "./src/lib/index.css",
